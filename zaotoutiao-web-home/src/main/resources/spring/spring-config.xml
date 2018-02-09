@@ -20,9 +20,6 @@
 
     <mvc:annotation-driven/>
 
-    <!-- DB服务 -->
-    <import resource="classpath:spring/spring-mybatis.xml"/>
-
     <!-- 自身服务 -->
     <import resource="classpath:spring/spring-core-transaction.xml"/>
 

@@ -20,23 +20,11 @@
 
     <mvc:annotation-driven/>
 
-    <!-- DB服务 -->
-    <import resource="classpath:spring/spring-mybatis.xml"/>
-
-    <!-- 自身服务 -->
-    <import resource="classpath:spring/spring-core-transaction.xml"/>
-
     <!-- Dubbo服务 -->
     <import resource="classpath:spring/spring-dubbo-service.xml"/>
 
     <!-- 插件服务 -->
     <import resource="classpath:spring/spring-common-client.xml"/>
-
-    <!-- 扩展服务 -->
-    <import resource="classpath:spring/spring-extend.xml"/>
-
-    <!-- 序列服务 -->
-    <import resource="classpath:spring/spring-sequence.xml"/>
 
     <!--RabbitMQ服务-->
     <import resource="classpath:spring/spring-rabbitmq.xml"/>

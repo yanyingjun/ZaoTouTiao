@@ -4,6 +4,8 @@
  */
 package com.zhishun.zaotoutiao.biz.service.user.impl;
 
+import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -16,6 +18,11 @@ public class Test001 {
         //读取配置文件
         new ClassPathXmlApplicationContext(new String[]{"spring/spring-dubbo-service.xml"});
         System.out.println("provider服务已注册");
+
+        ApplicationContext ac =
+                new ClassPathXmlApplicationContext("spring/spring-mybatis.xml");
+        UserMapper fm = (UserMapper)ac.getBean("userMapper");
+        System.out.println(fm);
         //使线程阻塞
         System.in.read();
     }

@@ -14,10 +14,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="zaotoutiao-core-model" />
-    <orderEntry type="module" module-name="zaotoutiao-common-base" />
     <orderEntry type="module" module-name="zaotoutiao-common-client" />
     <orderEntry type="module" module-name="zaotoutiao-common-util" />
+    <orderEntry type="module" module-name="zaotoutiao-core-model" />
+    <orderEntry type="module" module-name="zaotoutiao-common-base" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:4.2.6.RELEASE" level="project" />

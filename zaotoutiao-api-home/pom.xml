@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.zhishun.zaotoutiao</groupId>
-            <artifactId>zaotoutiao-biz-service</artifactId>
+            <artifactId>zaotoutiao-core-service</artifactId>
             <version>${zaotoutiao.version}</version>
         </dependency>
     </dependencies>

@@ -140,39 +140,6 @@ public class User implements Serializable {
      */
     private String oppenId;
 
-    public User() {}
-
-    /**
-     * 构造方法
-     */
-    public User(Long userId, String name, String nickName, String telephone, String account, String password, Long parentId, Long gold, BigDecimal money, String headPath, String birthday, Integer sex, String myInvitation, Integer isOnline, String createDate, String job, String educational, String lastVisitDate, String code, String pushTime1, String pushTime2, String pushTime3, String pushTime4, String wechatId, String oppenId) {
-        this.userId = userId;
-        this.name = name;
-        this.nickName = nickName;
-        this.telephone = telephone;
-        this.account = account;
-        this.password = password;
-        this.parentId = parentId;
-        this.gold = gold;
-        this.money = money;
-        this.headPath = headPath;
-        this.birthday = birthday;
-        this.sex = sex;
-        this.myInvitation = myInvitation;
-        this.isOnline = isOnline;
-        this.createDate = createDate;
-        this.job = job;
-        this.educational = educational;
-        this.lastVisitDate = lastVisitDate;
-        this.code = code;
-        this.pushTime1 = pushTime1;
-        this.pushTime2 = pushTime2;
-        this.pushTime3 = pushTime3;
-        this.pushTime4 = pushTime4;
-        this.wechatId = wechatId;
-        this.oppenId = oppenId;
-    }
-
     /**
      * Getter method for property <tt>userId</tt>.
      *

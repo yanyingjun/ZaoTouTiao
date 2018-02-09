@@ -4,47 +4,29 @@
  */
 package com.zhishun.zaotoutiao.biz.service.user.impl;
 
-import com.zhishun.zaotoutiao.common.base.core.BaseCoreService;
-import com.zhishun.zaotoutiao.common.dal.mapper.UserMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.service.user.UserBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * @author 闫迎军(YanYingJun)
- * @version $Id: UserServiceImpl, v0.1 2018年02月08日 10:45闫迎军(YanYingJun) Exp $
+ * @version $Id: UserBizServiceImpl, v0.1 2018年02月09日 13:21闫迎军(YanYingJun) Exp $
  */
 
-@Service("userBizServiceImpl")
-public class UserBizServiceImpl implements UserBizService {
+@Service
+public class UserBizServiceImpl implements UserBizService{
 
+    @Autowired
     private UserMapper userMapper;
-
-
-    /**
-     * Getter method for property <tt>userMapper</tt>.
-     *
-     * @return property value of userMapper
-     */
-    public UserMapper getUserMapper() {
-        return userMapper;
-    }
-
-    /**
-     * Setter method for property <tt>userMapper</tt>.
-     *
-     * @param userMapper value to be assigned to property userMapper
-     */
-    public void setUserMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
 
     @Override
     public int countPageByParam(User user) {
-        return userMapper.deleteByPrimaryKey(user.getUserId());
+        return 0;
     }
 
     @Override
@@ -74,10 +56,7 @@ public class UserBizServiceImpl implements UserBizService {
 
     @Override
     public User getById(User user) {
-        if(userMapper == null){
-            user.setName("张三");
-            return user;
-        }
-        return userMapper.selectByPrimaryKey(user.getUserId());
+        return userMapper.selectByPrimaryKey((long)19);
+        //return null;
     }
 }

@@ -2,11 +2,6 @@ package com.zhishun.zaotoutiao.biz.service.user.impl;
 
 /**
  * 贷款申请任务类
- *
- * @author 夏庆峰
- * @version $Id: LoanApplyTask, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年11月23日 16:49 夏庆峰 Exp $
  */
 /*public class LoanApplyTask implements Runnable {
 
