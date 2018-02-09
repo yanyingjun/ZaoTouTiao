@@ -3,10 +3,6 @@ package com.zhishun.zaotoutiao.core.model.enums;
 /**
  * 状态枚举
  *
- * @author 曹柏青
- * @version $Id: StatusEnum, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年11月06日 17:16 曹柏青 Exp $
  */
 public enum StatusEnum {
 

@@ -2,10 +2,7 @@ package com.zhishun.zaotoutiao.common.base.dal;
 
 import java.util.List;
 
-/**
- * @author WangYaL
- * @dateTime 2017年08月17日 15:29
- */
+
 public interface BaseMapper<VOT, QT> {
     /**
      * 统计

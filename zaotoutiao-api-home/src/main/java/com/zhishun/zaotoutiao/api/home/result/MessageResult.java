@@ -3,10 +3,6 @@ package com.zhishun.zaotoutiao.api.home.result;
 /**
  * 控制器统一返回消息
  *
- * @author 朱思雷
- * @version $Id: MessageResult, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年09月12日 17:27
  */
 public class MessageResult {
 

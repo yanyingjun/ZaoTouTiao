@@ -11,10 +11,6 @@ import java.util.Date;
 /**
  * 时间工具类
  *
- * @author 曹柏青
- * @version $Id: DateUtil, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年10月23日 20:27 曹柏青 Exp $
  */
 public class DateUtil {
 

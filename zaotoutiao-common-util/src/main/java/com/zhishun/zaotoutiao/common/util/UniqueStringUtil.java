@@ -5,10 +5,6 @@ import java.util.Random;
 /**
  * 唯一字符串生成类
  *
- * @author 朱思雷
- * @version $Id: UniqueStringUtil, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年09月14日 19:42
  */
 public class UniqueStringUtil {
 

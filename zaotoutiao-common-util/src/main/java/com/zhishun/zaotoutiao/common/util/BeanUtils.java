@@ -11,10 +11,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
-/**
- * @author WangYaL
- * @dateTime 2017年08月21日 14:55
- */
 public class BeanUtils extends org.springframework.beans.BeanUtils {
 
     /**

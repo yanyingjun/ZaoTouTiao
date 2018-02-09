@@ -6,10 +6,6 @@ import com.zhishun.zaotoutiao.common.base.pagination.PageBean;
 
 import java.util.List;
 
-/**
- * @author WangYaL
- * @dateTime 2017年08月17日 15:30
- */
 public abstract class BaseCoreServiceImpl<VOT, QT, MAPPER extends BaseMapper> implements BaseCoreService<VOT, QT> {
 
     protected MAPPER mapper;

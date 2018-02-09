@@ -18,8 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 渠道配置表 - 控制层
  *
- * @author 王家龙（WangJiaLong）
- * @version $Id: ChannelMsgVO, v0.1 2017年08月17日 20:30 王家龙（WangJiaLong） Exp $
  */
 @Controller
 public class ChannelMsgController extends BaseController {

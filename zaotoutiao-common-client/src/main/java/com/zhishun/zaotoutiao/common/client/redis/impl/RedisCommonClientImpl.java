@@ -1,7 +1,3 @@
-/**
- * @company 杭州信牛网络科技有限公司
- * @copyright Copyright (c) 2012-2017
- */
 package com.zhishun.zaotoutiao.common.client.redis.impl;
 
 import com.zhishun.zaotoutiao.common.client.redis.RedisCommonClient;
@@ -23,9 +19,6 @@ import java.util.Set;
 
 /**
  * Redis - 客户端 - 接口实现
- *
- * @author 侯俊昌（HouJunChang）
- * @version $Id: RedisCommonClientImpl.java, v 0.1 2017年3月18日 下午2:33:41 侯俊昌（HouJunChang） Exp $
  */
 /*
 @Service

@@ -6,9 +6,7 @@ package com.zhishun.zaotoutiao.web.home.result;
 
 /**
  * 执行信息结果
- * 
- * @author 侯俊昌（HouJunChang）
- * @version $Id: MessageResult.java, v 0.1 2016年12月30日 下午11:46:50 侯俊昌（HouJunChang） Exp $
+ *
  */
 public class MessageResult {
 

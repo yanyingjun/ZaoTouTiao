@@ -10,10 +10,6 @@ import java.util.Properties;
 /**
  * 读取配置文件工具类
  *
- * @author 朱思雷
- * @version $Id: PropertiesUtil, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年09月07日 10:36
  */
 public class PropertiesUtil {
 

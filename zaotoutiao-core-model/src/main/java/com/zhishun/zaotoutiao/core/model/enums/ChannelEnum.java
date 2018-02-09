@@ -3,10 +3,6 @@ package com.zhishun.zaotoutiao.core.model.enums;
 /**
  * 三方渠道枚举类
  *
- * @author 朱思雷
- * @version $Id: ChannelEnum, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年09月13日 12:14
  */
 public enum ChannelEnum {
 

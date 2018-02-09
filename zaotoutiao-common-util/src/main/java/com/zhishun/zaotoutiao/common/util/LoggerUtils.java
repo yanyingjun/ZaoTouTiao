@@ -6,10 +6,6 @@ import org.slf4j.Logger;
 /**
  * 日志工具类，对公司现有日志工具类进行了改进
  *
- * @author 曹柏青
- * @version $Id: LoggerUtils, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年11月15日 14:08 曹柏青 Exp $
  */
 public class LoggerUtils {
 

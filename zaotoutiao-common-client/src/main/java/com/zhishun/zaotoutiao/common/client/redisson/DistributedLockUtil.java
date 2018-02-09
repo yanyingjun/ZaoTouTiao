@@ -8,10 +8,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * Redisson分布式锁 工具类
  *
- * @author 曹柏青
- * @version $Id: DistributedLockUtil, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年11月02日 10:57 曹柏青 Exp $
  */
 public class DistributedLockUtil {
 

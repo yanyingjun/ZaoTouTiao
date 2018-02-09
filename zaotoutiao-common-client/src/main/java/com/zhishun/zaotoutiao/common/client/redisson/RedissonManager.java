@@ -11,10 +11,6 @@ import org.slf4j.LoggerFactory;
 /**
  * redisson管理类
  *
- * @author 曹柏青
- * @version $Id: RedissonManager, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年11月02日 10:54 曹柏青 Exp $
  */
 public class RedissonManager {
 
