@@ -1,7 +1,3 @@
-/**
- * @company 杭州信牛网络科技有限公司
- * @copyright Copyright (c) 2012-2016
- */
 package com.zhishun.zaotoutiao.common.util;
 
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
@@ -12,9 +8,7 @@ import java.util.List;
 
 /**
  * 断言工具类
- * 
- * @author 侯俊昌（HouJunChang）
- * @version $Id: AssertsUtil.java, v 0.1 2016年3月7日 下午8:32:46 侯俊昌（HouJunChang） Exp $
+ *
  */
 public class AssertsUtil {
 

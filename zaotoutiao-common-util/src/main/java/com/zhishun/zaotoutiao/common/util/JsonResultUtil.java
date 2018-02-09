@@ -7,10 +7,6 @@ import java.util.List;
 /**
  * 统一JSON返回信息工具类
  *
- * @author 朱思雷
- * @version $Id: JsonResultUtil, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年09月07日 21:01
  */
 public class JsonResultUtil {
 

@@ -7,8 +7,6 @@ import java.util.*;
 
 /**
  * MAP工具类
- * @author：WangYaL on 2016/4/22 13:16
- * 邮箱：1007486445@qq.com
  */
 public class MapUtil {
 

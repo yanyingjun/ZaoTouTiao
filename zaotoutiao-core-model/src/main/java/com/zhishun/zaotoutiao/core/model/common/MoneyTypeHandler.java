@@ -18,10 +18,6 @@ import java.util.Date;
  * 这里要注意的是javaType为Money类型的，jdbcType必须为
  * DECIMAL或NUMERIC类型，否则该TypeHandler无法处理。
  *
- * @author 曹柏青
- * @version $Id: MoneyTypeHandler, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年12月03日 20:09 曹柏青 Exp $d
  */
 public class MoneyTypeHandler extends BaseTypeHandler<Money> {
 

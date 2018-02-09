@@ -41,10 +41,6 @@ import java.util.Currency;
  * </ul>
  *
  *
- * @author 曹柏青
- * @version $Id: Money, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年12月01日 11:56 曹柏青 Exp $
  */
 public class Money implements Serializable, Comparable {
 

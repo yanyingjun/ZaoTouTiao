@@ -3,10 +3,7 @@ package com.zhishun.zaotoutiao.common.base.core;
 
 import java.util.List;
 
-/**
- * @author WangYaL
- * @dateTime 2017年08月17日 15:28
- */
+
 public interface BaseCoreService<VOT, QT> {
     /**
      * 统计

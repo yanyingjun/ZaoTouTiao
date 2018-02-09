@@ -10,10 +10,6 @@ import java.util.Properties;
 /**
  * 通用配置(除请求第三方配置外，其他配置读取都放到这)
  *
- * @author 曹柏青
- * @version $Id: CommonConfig, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年11月02日 14:49 曹柏青 Exp $
  */
 public class CommonConfig {
 

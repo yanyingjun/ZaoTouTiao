@@ -21,14 +21,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 亿奇乐业务测试类
- *
- * @author 朱思雷
- * @version $Id: YiQiLeApiTest, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年09月08日 11:02
- */
 public class YiQiLeApiTest extends TestConfig {
 
     protected static final Logger logger = LoggerFactory.getLogger(YiQiLeApiTest.class);

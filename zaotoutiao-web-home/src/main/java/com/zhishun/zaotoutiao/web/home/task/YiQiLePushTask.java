@@ -5,10 +5,6 @@ import org.springframework.stereotype.Component;
 /**
  * 亿奇乐定时任务推送业务
  *
- * @author 朱思雷
- * @version $Id: YiQiLePushTask, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年09月21日 21:10
  */
 @Component
 public class YiQiLePushTask {

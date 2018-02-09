@@ -1,7 +1,3 @@
-/**
- * @company 杭州信牛网络科技有限公司
- * @copyright Copyright (c) 2012-2016
- */
 package com.zhishun.zaotoutiao.core.model.exception;
 
 
@@ -9,9 +5,6 @@ import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 
 /**
  * 自定义异常
- *
- * @author 侯俊昌（HouJunChang）
- * @version $Id: ZhiShunException.java, v 0.1 2016年3月9日 下午9:46:46 侯俊昌（HouJunChang） Exp $
  */
 public class ZhiShunException extends Exception {
 

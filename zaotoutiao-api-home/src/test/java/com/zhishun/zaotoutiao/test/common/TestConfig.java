@@ -7,9 +7,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
  * 运行JUnit的配置
- * 
- * @author WangYaL
- * @dateTime 2017年4月19日 下午3:06:16
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

@@ -41,10 +41,6 @@ import java.util.Map;
 /**
  * HTTP请求工具类
  *
- * @author 朱思雷
- * @version $Id: HttpUtil, v0.1
- * @company 杭州信牛网络科技有限公司
- * @date 2017年09月07日 16:38
  */
 public class HttpUtil {
 
