@@ -1,0 +1,91 @@
+@CHARSET "UTF-8";
+
+body {
+	margin: 0 auto;
+	font-size: 12px;
+	color: #696969;
+}
+
+body, div, a, label, span, tr, td, th, button, input, textarea, select {
+	white-space: normal;
+	word-break: break-all;
+	font-size: 12px;
+	outline: none !important;
+	font-family: "微软雅黑", "Arial", "Helvetica", "sans-serif", "宋体";
+}
+
+body, a, button, div, h1, h2, h3, h4, h5, table, tr, td, input, textarea,
+select {
+	outline: none !important;
+	font-family: "微软雅黑", "Arial", "Helvetica", "sans-serif", "宋体";
+}
+
+a,a:hover {
+	text-decoration: none;
+}
+
+form {
+	outline: none;
+}
+
+.main {
+	margin: 0 auto;
+	width: 1280px;
+	height: auto;
+	overflow: hidden;
+	min-height: 50px;
+	margin-top: 15px;
+}
+
+.main .selfTitle {
+	width: 1200px;
+	height: 30px;
+	margin-bottom: 10px;
+}
+
+.main .selfTitle div {
+	float: left;
+	height: 30px;
+	width: auto;
+	font-size: 16px;
+	border-bottom: #c0c0c0 dashed 1px
+}
+
+.main .selfSearch {
+}
+
+.main .mSearch {
+	margin-bottom: 15px;
+}
+
+input[readOnly='true'],select[readOnly='true'] {
+	background: #EBEBEB;
+	cursor: not-allowed;
+}
+
+.hidden {
+	display: none;
+}
+
+.readonly {
+	top: 69px;
+	z-index: 1;
+	height: 35px;
+	position: absolute;
+	cursor: not-allowed;
+}
+
+input[readonly='true']:focus {
+	border-color: #cccccc!important;
+	outline: 0!important;
+	-webkit-box-shadow: none!important;
+	box-shadow: none!important;
+}
+
+font.blue {
+	color: #6cb5f4
+}
+
+.italic {
+	font-style: italic;
+}
