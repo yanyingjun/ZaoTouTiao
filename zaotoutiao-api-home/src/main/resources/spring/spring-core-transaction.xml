@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-autowire="byName">
+
+    <!-- 配置事务管理器 DataSourceTransactionManager -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置事务 -->
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="query*" propagation="REQUIRED" timeout="5000" read-only="true" rollback-for="Throwable"/>
+            <tx:method name="get*" propagation="REQUIRED" timeout="5000" read-only="true" rollback-for="Throwable"/>
+            <tx:method name="count*" propagation="REQUIRED" timeout="5000" read-only="true" rollback-for="Throwable"/>
+
+            <tx:method name="insert*" propagation="REQUIRED" timeout="5000" read-only="false" rollback-for="Throwable"/>
+            <tx:method name="delete*" propagation="REQUIRED" timeout="5000" read-only="false" rollback-for="Throwable"/>
+            <tx:method name="update*" propagation="REQUIRED" timeout="5000" read-only="false" rollback-for="Throwable"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- 配置AOP切点 -->
+    <aop:config>
+        <aop:pointcut id="transactionPointcut"
+                      expression="execution(* com.zhishun.zaotoutiao.core.service..*Service.*(..)))"/>
+        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
+    </aop:config>
+
+</beans>

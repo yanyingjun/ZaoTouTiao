@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/rabbit
+       http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+
+    <!-- 引入项目配置文件 -->
+    <context:property-placeholder location="classpath:config/config.properties" ignore-unresolvable="true" order="1"/>
+
+    <!--配置connection-factory，指定连接rabbit server参数 -->
+    <rabbit:connection-factory id="rabbitConnectionFactory"
+                               username="${mq.username}"
+                               password="${mq.password}"
+                               host="${mq.host}"
+                               port="${mq.port}"
+                               virtual-host="${mq.vhost}"/>
+
+    <!--通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器上自动生成 -->
+    <rabbit:admin id="rabbitAdmin" connection-factory="rabbitConnectionFactory"/>
+
+    <!-- spring amqp默认的是jackson的一个插件,目的将生产者生产的数据转换为json存入消息队列，由于fastjson的速度快于jackson,这里替换为fastjson的一个实现 -->
+    <bean id="messageConverter" class="com.zhishun.csfroute.biz.service.rabbitmq.FastJsonMessageConverter"/>
+
+    <!--########################通用MQ配置#################################-->
+
+    <!--监听者容器工厂 为注解监听实现 创造监听容器-->
+    <bean id="rabbitListenerContainerFactory"
+          class="org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory">
+        <property name="connectionFactory" ref="rabbitConnectionFactory"/>
+        <property name="acknowledgeMode" value="MANUAL"/>
+    </bean>
+
+    <!--支持rabbitmq注解-->
+    <rabbit:annotation-driven/>
+
+    <!--通用模板-->
+    <rabbit:template id="commonTemplate"
+                     connection-factory="rabbitConnectionFactory"
+                     message-converter="messageConverter"/>
+
+    <!--通用Message模板-->
+    <bean id="rabbitMessagingTemplate" class="org.springframework.amqp.rabbit.core.RabbitMessagingTemplate">
+        <property name="rabbitTemplate" ref="commonTemplate"/>
+    </bean>
+</beans>
