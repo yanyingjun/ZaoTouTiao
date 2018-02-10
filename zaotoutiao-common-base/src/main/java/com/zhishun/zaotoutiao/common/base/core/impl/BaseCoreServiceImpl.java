@@ -2,7 +2,6 @@ package com.zhishun.zaotoutiao.common.base.core.impl;
 
 import com.zhishun.zaotoutiao.common.base.core.BaseCoreService;
 import com.zhishun.zaotoutiao.common.base.dal.BaseMapper;
-import com.zhishun.zaotoutiao.common.base.pagination.PageBean;
 
 import java.util.List;
 

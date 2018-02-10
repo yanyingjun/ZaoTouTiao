@@ -1,12 +1,9 @@
 package com.zhishun.zaotoutiao.web.home.controller.third;
 
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
-import com.zhishun.zaotoutiao.core.service.user.UserBizService;
 import com.zhishun.zaotoutiao.web.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.web.home.constant.request.ChannelMsgReq;
 import com.zhishun.zaotoutiao.web.home.constant.view.ChannelMsgView;
-import com.zhishun.zaotoutiao.web.home.controller.base.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +16,12 @@ import javax.servlet.http.HttpServletRequest;
  * 渠道配置表 - 控制层
  *
  */
-@Controller
-public class ChannelMsgController extends BaseController {
+//@Controller
+//public class ChannelMsgController extends BaseController {
 
 
-    @Autowired
-    private UserBizService userBizService;
+    /*@Autowired
+    private IUserService userBizService;*/
 
 
     /**
@@ -34,7 +31,7 @@ public class ChannelMsgController extends BaseController {
      * @param request         服务请求
      * @return
      */
-    @RequestMapping(value = ChannelMsgReq.CHANNEL_ALLOCATION_MANAGE_REQ, method = RequestMethod.GET)
+    /*@RequestMapping(value = ChannelMsgReq.CHANNEL_ALLOCATION_MANAGE_REQ, method = RequestMethod.GET)
     public String manage(final ModelMap modelMap,
                          HttpServletRequest request) {
 
@@ -53,7 +50,7 @@ public class ChannelMsgController extends BaseController {
         });
 
         return ChannelMsgView.CHANNEL_ALLOCATION_MANAGE_VIEW;
-    }
+    }*/
 
 
 
@@ -243,4 +240,4 @@ public class ChannelMsgController extends BaseController {
         return dataMap;
     }*/
 
-}
+//}

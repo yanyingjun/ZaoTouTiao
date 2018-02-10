@@ -7,8 +7,6 @@ package com.zhishun.zaotoutiao.web.home.callback;
 
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 
-import java.io.IOException;
-
 
 /**
  * 执行模板接口

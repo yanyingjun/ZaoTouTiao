@@ -2,7 +2,7 @@ package com.zhishun.zaotoutiao.common.util;
 
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
-import jodd.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class AssertsUtil {
     public static void isNotBlank(String value, ErrorCodeEnum errorCodeEnum) throws ZhiShunException {
 
         // 校验objValue是否为空，为空则抛出异常
-        if (StringUtil.isBlank(value)) {
+        if (StringUtils.isBlank(value)) {
             throw new ZhiShunException(errorCodeEnum);
         }
     }

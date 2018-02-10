@@ -20,33 +20,4 @@
         </dependency>
     </dependencies>
 
-
-    <build>
-        <finalName>zaotoutiao-api</finalName>
-
-        <filters>
-            <filter>src/main/resources/filters/${profiles.active}.properties</filter>
-        </filters>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>log/*</include>
-                </includes>
-                <excludes>
-                    <exclude>filters/</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-        </resources>
-    </build>
 </project>

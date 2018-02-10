@@ -1,8 +1,7 @@
 package com.zhishun.zaotoutiao.common.util;
 
 
-import jodd.util.StringUtil;
-
+import org.apache.commons.lang3.StringUtils;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,7 +47,7 @@ public class DateUtil {
      */
     public static String toString(Date date, String format) {
 
-        if ((date == null) || StringUtil.isBlank(format)) {
+        if ((date == null) || StringUtils.isBlank(format)) {
             return null;
         }
         SimpleDateFormat formatter = new SimpleDateFormat(format);
@@ -63,8 +62,8 @@ public class DateUtil {
      * @return 转换后的日期对象
      */
     public static Date toDate(String dateStr, String format) {
-        if (StringUtil.isBlank(dateStr)
-                || StringUtil.isBlank(format)
+        if (StringUtils.isBlank(dateStr)
+                || StringUtils.isBlank(format)
                 ) {
             return null;
         }
