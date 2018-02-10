@@ -1,7 +1,10 @@
 package com.zhishun.zaotoutiao.test.third;
 
+import com.alibaba.fastjson.JSON;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.core.model.entity.User;
+import com.zhishun.zaotoutiao.test.common.TestConfig;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -12,15 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @company 杭州信牛网络科技有限公司
  * @date 2017年09月23日 13:41
  */
-//public class YiQiLePushTest extends TestConfig {
+public class YiQiLePushTest extends TestConfig {
 
-    /*@Autowired
+    @Autowired
     private IUserService userService;
 
     @Test
     public void testUser(){
         User user1 = userService.selectByPrimaryKey((long)19);
         System.out.println(JSON.toJSON(user1));
-    }*/
+    }
 
-//}
+}

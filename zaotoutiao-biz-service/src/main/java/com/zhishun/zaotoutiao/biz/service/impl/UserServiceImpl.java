@@ -6,6 +6,8 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.core.model.entity.User;
+import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -18,7 +20,8 @@ import java.io.Serializable;
 @Service
 public class UserServiceImpl implements IUserService{
 
-
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public int deleteByPrimaryKey(Long userId) {
@@ -37,7 +40,7 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public User selectByPrimaryKey(Long userId) {
-        return null;
+        return userMapper.selectByPrimaryKey(userId);
     }
 
     @Override
