@@ -6,6 +6,7 @@
         <artifactId>zaotoutiao</artifactId>
         <groupId>com.zhishun.zaotoutiao</groupId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>war</packaging>
@@ -13,11 +14,19 @@
     <artifactId>zaotoutiao-api-home</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.zhishun.zaotoutiao</groupId>
-            <artifactId>zaotoutiao-core-service</artifactId>
+            <artifactId>zaotoutiao-core-model</artifactId>
             <version>${zaotoutiao.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.zhishun.zaotoutiao</groupId>
+            <artifactId>zaotoutiao-biz-service</artifactId>
+            <version>${zaotoutiao.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
