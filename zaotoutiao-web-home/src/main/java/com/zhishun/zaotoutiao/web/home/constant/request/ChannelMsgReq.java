@@ -14,7 +14,7 @@ public class ChannelMsgReq {
     /**
      * 渠道配置表页面管理 - 请求
      */
-    public static final String CHANNEL_ALLOCATION_MANAGE_REQ = "/channel/manage.htm";
+    public static final String CHANNEL_ALLOCATION_MANAGE_REQ = "/admin/main.htm";
 
     /**
      * 渠道配置表查询 - 请求

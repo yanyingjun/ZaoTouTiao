@@ -14,6 +14,6 @@ public class ChannelMsgView {
     /**
      * 支付渠道配置表页面管理 - 视图
      */
-    public static final String CHANNEL_ALLOCATION_MANAGE_VIEW = "channel/manage";
+    public static final String CHANNEL_ALLOCATION_MANAGE_VIEW = "admin/main";
 
 }

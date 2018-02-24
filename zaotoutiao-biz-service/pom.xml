@@ -6,6 +6,7 @@
         <artifactId>zaotoutiao</artifactId>
         <groupId>com.zhishun.zaotoutiao</groupId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,6 +24,12 @@
         <dependency>
             <groupId>com.zhishun.zaotoutiao</groupId>
             <artifactId>zaotoutiao-common-dal</artifactId>
+            <version>${zaotoutiao.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zhishun.zaotoutiao</groupId>
+            <artifactId>zaotoutiao-common-client</artifactId>
             <version>${zaotoutiao.version}</version>
         </dependency>
 
