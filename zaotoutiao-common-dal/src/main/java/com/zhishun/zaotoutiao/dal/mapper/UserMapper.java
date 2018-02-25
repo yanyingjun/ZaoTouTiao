@@ -6,6 +6,8 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.User;
 
+import java.util.Map;
+
 /**
  * 用户表Mapper接口
  * @author 闫迎军(YanYingJun)
@@ -55,4 +57,11 @@ public interface UserMapper {
      * @return
      */
     int updateByPrimaryKey(User record);
+
+    /**
+     * 根据参数获取用户信息
+     * @param map
+     * @return
+     */
+    User getUserByMap(Map<String,Object> map);
 }

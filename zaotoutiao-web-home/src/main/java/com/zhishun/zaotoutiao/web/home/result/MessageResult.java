@@ -1,6 +1,6 @@
 /**
- * @company 杭州信牛网络科技有限公司
- * @copyright Copyright (c) 2012-2016
+ * @company 杭州智顺文化传播有限公司
+ * @copyright Copyright (c) 2018 - 2018
  */
 package com.zhishun.zaotoutiao.web.home.result;
 

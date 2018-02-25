@@ -24,7 +24,7 @@ public class ZttTest extends TestConfig{
 
     @Test
     public void testUser(){
-        User user1 = userService.selectByPrimaryKey((long)19);
+        User user1 = userService.getUserByUserId((long)19);
         System.out.println(JSON.toJSON(user1));
     }
 }
