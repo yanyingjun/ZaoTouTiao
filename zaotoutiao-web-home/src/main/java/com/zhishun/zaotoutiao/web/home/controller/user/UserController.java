@@ -40,10 +40,10 @@ public class UserController extends BaseController{
 
         });
 
-        return "main";
+        return "index";
     }
 
-    @RequestMapping("test1")
+    /*@RequestMapping("test1")
     public ModelAndView helloHtml(){
         ModelAndView mv = new ModelAndView("login");
         return mv;
@@ -53,5 +53,5 @@ public class UserController extends BaseController{
     public ModelAndView index(){
         ModelAndView mv = new ModelAndView("index");
         return mv;
-    }
+    }*/
 }

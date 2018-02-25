@@ -5,11 +5,13 @@
 package com.zhishun.zaotoutiao.api.home.controller.user;
 
 import com.google.common.collect.Maps;
+import com.sun.javafx.collections.MappingChange;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.UserMsgReq;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
+import com.zhishun.zaotoutiao.common.util.Md5Util;
 import com.zhishun.zaotoutiao.core.model.UserVO;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
@@ -122,33 +124,103 @@ public class UserController extends BaseController{
             @Override
             public void handle() throws Exception {
                 //查询用户信息
+                String password = Md5Util.md5Encode(user.getPassword());
                 User userData = userService.getUserByMap(user.getTelephone());
                 if(StringUtils.isEmpty(user)){
                     dataMap.put("result", "failure");
                     dataMap.put("msg", "用户不存在，请先注册");
                 }else{
-                    Map<String,Object> userMap = Maps.newHashMap();
-                    userMap.put("telephone", user.getTelephone());
-                    userMap.put("password", user.getPassword());
-                    //User user = userService.getUserByMap(map);
-                    /*if(user_login == false){
+                    Boolean userLogin = userService.isUserLogin(user.getTelephone(), password);
+                    if(userLogin == false){
                         dataMap.put("result", "failure");
                         dataMap.put("msg", "密码错误");
                     }else{
                         //更改用户登录状态为在线
                         dataMap.put("result", "success");
                         dataMap.put("msg", "用户存在，直接登录");
-                        if(is_first == 0){
+                        if(userData.getIsOnline() == 0){
                             dataMap.put("isFirstLogin", "true");
                         }else{
                             dataMap.put("isFirstLogin", "false");
                         }
-                        update
+                        userData.setIsOnline(1);
+                        userService.updateUserInfo(userData);
                         dataMap.put("data", userData);
-                    }*/
+                    }
                 }
             }
         });
+        return dataMap;
+    }
+
+    /**
+     * 忘记密码
+     * @param modelMap
+     * @param request
+     * @param userVO
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.USER_FORGET_PASSWORD_REQ, method = RequestMethod.POST)
+    public Map<Object,Object> forgetPassword(final ModelMap modelMap, HttpServletRequest request, final UserVO userVO){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(modelMap, request, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotBlank(userVO.getTelephone(), ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotBlank(userVO.getPassword(), ErrorCodeEnum.PARAMETER_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                String password = Md5Util.md5Encode(userVO.getTelephone());
+                User user = userService.getUserByMap(userVO.getTelephone());
+                if(StringUtils.isEmpty(user)){
+                    dataMap.put("result", "failure");
+                    dataMap.put("msg", "用户不存在，请先注册");
+                }else{
+                    //更新用户密码
+                    user.setPassword(password);
+                    userService.updateUserInfo(user);
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "修改密码成功");
+                    dataMap.put("data", user);
+                }
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 退出登录
+     * @param modelMap
+     * @param request
+     * @param telephone
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.USER_LOGOUT_REQ, method = RequestMethod.POST)
+    public Map<Object,Object> logout(final ModelMap modelMap, HttpServletRequest request, final String telephone){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(modelMap, request, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotBlank(telephone,ErrorCodeEnum.PARAMETER_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                User user = userService.getUserByMap(telephone);
+                //更改用户状态为离线
+                user.setIsOnline(0);
+                userService.updateUserInfo(user);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "成功退出");
+                dataMap.put("data", user);
+            }
+        });
+
         return dataMap;
     }
 

@@ -24,4 +24,19 @@ public interface IUserService {
      */
     User getUserByMap (String telephone);
 
+
+    /**
+     * 用户登录
+     * @param telephone
+     * @param password
+     * @return
+     */
+    Boolean isUserLogin(String telephone, String password);
+
+    /**
+     * 更新用户信息
+     * @param user
+     */
+    void updateUserInfo(User user);
+
 }

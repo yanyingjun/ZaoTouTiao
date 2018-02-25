@@ -45,4 +45,23 @@ public class UserServiceImpl implements IUserService{
         map.put("telephone", telephone);
         return userMapper.getUserByMap(map);
     }
+
+    @Override
+    public Boolean isUserLogin(String telephone, String password) {
+        //查询用户信息
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("telephone", telephone);
+        map.put("password", password);
+        User user = userMapper.getUserByMap(map);
+        if(StringUtils.isEmpty(user)){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    @Override
+    public void updateUserInfo(User user) {
+        userMapper.updateByPrimaryKeySelective(user);
+    }
 }
