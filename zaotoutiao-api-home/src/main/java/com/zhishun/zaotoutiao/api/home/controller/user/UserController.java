@@ -5,7 +5,6 @@
 package com.zhishun.zaotoutiao.api.home.controller.user;
 
 import com.google.common.collect.Maps;
-import com.sun.javafx.collections.MappingChange;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.UserMsgReq;
@@ -17,13 +16,11 @@ import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -44,13 +41,12 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_REGISTER_REQ, method = RequestMethod.POST)
-    public Map<Object, Object> search(final ModelMap modelMap,
-                                      HttpServletRequest request, final User user) {
+    public Map<Object, Object> search(final User user) {
 
         // 定义Map集合对象
         final Map<Object, Object> dataMap = Maps.newHashMap();
 
-        this.excute(modelMap, request, new ControllerCallback() {
+        this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotNull(user, ErrorCodeEnum.PARAMETER_ANOMALY);
@@ -74,12 +70,11 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_EXIST_ACCOUNT_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> existAccount(final ModelMap modelMap,
-                                           HttpServletRequest request, final String telephone){
+    public Map<Object,Object> existAccount(final String telephone){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
-        this.excute(modelMap, request, new ControllerCallback() {
+        this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotBlank(telephone, ErrorCodeEnum.PARAMETER_ANOMALY);
@@ -110,11 +105,10 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_LOGIN_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> login(final ModelMap modelMap,
-                                    HttpServletRequest request, final UserVO user){
+    public Map<Object,Object> login(final UserVO user){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
-        this.excute(modelMap, request, new ControllerCallback() {
+        this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotBlank(user.getTelephone(), ErrorCodeEnum.PARAMETER_ANOMALY);
@@ -161,10 +155,10 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_FORGET_PASSWORD_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> forgetPassword(final ModelMap modelMap, HttpServletRequest request, final UserVO userVO){
+    public Map<Object,Object> forgetPassword(final UserVO userVO){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
-        this.excute(modelMap, request, new ControllerCallback() {
+        this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotBlank(userVO.getTelephone(), ErrorCodeEnum.PARAMETER_ANOMALY);
@@ -200,10 +194,10 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_LOGOUT_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> logout(final ModelMap modelMap, HttpServletRequest request, final String telephone){
+    public Map<Object,Object> logout(final String telephone){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
-        this.excute(modelMap, request, new ControllerCallback() {
+        this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotBlank(telephone,ErrorCodeEnum.PARAMETER_ANOMALY);

@@ -7,18 +7,15 @@ package com.zhishun.zaotoutiao.api.home.controller.user;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
-import com.zhishun.zaotoutiao.api.home.request.UserMsgReq;
 import com.zhishun.zaotoutiao.api.home.request.VideoMsgReq;
 import com.zhishun.zaotoutiao.biz.service.IVideoService;
 import com.zhishun.zaotoutiao.core.model.entity.VideoChannels;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -39,10 +36,10 @@ public class VideoController extends BaseController{
      * @return
      */
     @RequestMapping(value = VideoMsgReq.VIDEO_CHANNELS_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> getVideoChannles(final ModelMap modelMap, HttpServletRequest request){
+    public Map<Object,Object> getVideoChannles(){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
-        this.excute(modelMap, request, new ControllerCallback() {
+        this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
 
@@ -67,10 +64,10 @@ public class VideoController extends BaseController{
      * @return
      */
     @RequestMapping(value = VideoMsgReq.VIDEO_GET_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> getVideos(final ModelMap modelMap, HttpServletRequest request){
+    public Map<Object,Object> getVideos(){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
-        this.excute(modelMap, request, new ControllerCallback() {
+        this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
 
