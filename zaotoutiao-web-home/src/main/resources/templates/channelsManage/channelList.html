@@ -7,7 +7,8 @@
 </head>
 <body>
 
-<table class="layui-hide" id="test"></table>
+<table class="layui-hide" id="channel_table_id"></table>
+<div id="laypage"></div>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -19,41 +20,36 @@
     var pageSize = 10;
     var pageNo = 1;
     //列表查询方法
-    function productsearch(productGroupId,start,limitsize) {
-        layui.use(['table','laypage','laydate'], function(){
-            var table = layui.table,
-                laydate=layui.laydate,
-                laypage = layui.laypage;
+    function channelSearch(name, status, pageNo, pageSize) {
+        layui.use('table', function(){
+            var table = layui.table;
             table.render({
-                elem: '#layui_table_id',
-                url: '<%=path%>/xx/pListQuery.html?pId='+productGroupId+'¤tPage='+ start+'¤tNumber=' + limitsize
-                /*, where:{pagename:start,pagelimit:limitsize} //传参*/
-                , cols: [[
-                    {field: 'id', title: '序号', width: '170', sort: true}
-                    , {field: 'name', title: '导航', width: '450'}
-                    , {field: 'status', title: '状态', width: '100'}
-                    , {field: 'updateDate', title: '操作日期', width: '120', sort: true}
-                    , {field: 'right', title: '操作', width: '100',fixed: 'right', toolbar: '#barDemo'}
-                ]]
-                , page: false
-                , height: 430
-                ,done: function(res, curr, count){
+                elem: '#channel_table_id',
+                url: 'channel/list',
+                where:{name:name,status:status,pageSize:pageSize,pageNo:pageNo},  //传参
+                cols: [[
+                    {field: 'id', title: '序号', width: '170', sort: true},
+                    {field: 'name', title: '导航', width: '250'},
+                    {field: 'status', title: '状态', width: '100'},
+                    {field: 'updateDate', title: '操作日期', width: '120', sort: true},
+                    {field: 'right', title: '操作', width: '200',fixed: 'right', toolbar: '#barDemo'}
+                ]],
+                page: false,
+                height: 430,
+                done: function(res, curr, count){
                     //如果是异步请求数据方式，res即为你接口返回的信息。
                     //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
                     laypage.render({
-                        elem:'laypage'
-                        ,count:count
-                        ,curr:pageNo
-                        ,limit:pageSize
-                        ,layout: ['prev', 'page', 'next', 'skip','count','limit']
-                        ,jump:function (obj,first) {
+                        elem:'laypage',
+                        count:count,
+                        curr:pageNo,
+                        limit:pageSize,
+                        layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+                        jump:function (obj,first) {
                             if(!first){
                                 pageNo = obj.curr;
                                 pageSize = obj.limit;
-                                //console.log("curnum"+curnum);
-                                //console.log("limitcount"+limitcount);
-                                //layer.msg(curnum+"-"+limitcount);
-                                productsearch(productGroupId,pageNo,pageSize);
+                                channelSearch(name, status,pageNo,pageSize);
                             }
                         }
                     })
@@ -84,8 +80,10 @@
 
         });
     }
-    var pId = '${pGBean.pgId }';
-    productsearch(pId, curnum, limitcount);
+    var name = $('#name').val();
+    var status = $('#status').val();
+    channelSearch(name, status, pageNo, pageSize);
+
 </script>
 </body>
 </html>

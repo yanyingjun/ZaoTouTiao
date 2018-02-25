@@ -42,6 +42,6 @@ public class ChannelServiceImpl implements IChannelService{
             map.put("offset", pageRequest.getOffset());
         }
         List<Channels> list = channelsMapper.listChannelsPage(map);
-        PageBuilder.buildPage(pageRequest, list, total);
+        return PageBuilder.buildPage(pageRequest, list, total);
     }
 }

@@ -48,7 +48,8 @@ public class ChannelManageController extends BaseController{
             @Override
             public void handle() throws Exception {
                 Page<Channels> channelsPage = channelService.listChannelsPage(channelsVO, pageRequest);
-                dataMap.put("rows", channelsPage);
+                dataMap.put("total", channelsPage.getTotal());
+                dataMap.put("rows", channelsPage.getRows());
             }
         });
 
