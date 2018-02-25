@@ -11,7 +11,7 @@ import com.zhishun.zaotoutiao.api.home.request.UserMsgReq;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.common.util.Md5Util;
-import com.zhishun.zaotoutiao.core.model.UserVO;
+import com.zhishun.zaotoutiao.core.model.vo.UserVO;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
@@ -36,8 +36,6 @@ public class UserController extends BaseController{
 
     /**
      * 用户注册
-     * @param modelMap
-     * @param request
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_REGISTER_REQ, method = RequestMethod.POST)
@@ -64,8 +62,6 @@ public class UserController extends BaseController{
 
     /**
      * 查询电话是否已存在
-     * @param modelMap
-     * @param request
      * @param telephone
      * @return
      */
@@ -99,8 +95,6 @@ public class UserController extends BaseController{
 
     /**
      * 用户登录
-     * @param modelMap
-     * @param request
      * @param user
      * @return
      */
@@ -149,8 +143,6 @@ public class UserController extends BaseController{
 
     /**
      * 忘记密码
-     * @param modelMap
-     * @param request
      * @param userVO
      * @return
      */
@@ -188,8 +180,6 @@ public class UserController extends BaseController{
 
     /**
      * 退出登录
-     * @param modelMap
-     * @param request
      * @param telephone
      * @return
      */

@@ -20,41 +20,39 @@ public class Channels implements Serializable {
     private Long id;
 
     /**
-     *
+     * 导航ID
      */
     private Integer channelId;
 
     /**
-     *
+     * 导航名称
      */
     private String name;
 
     /**
-     *
+     * 导航排序
      */
     private Integer channelOrder;
 
     /**
-     *
+     * 导航类型
      */
     private Integer channelType;
 
     /**
-     *
+     * 创建时间
      */
     private String createDate;
 
     /**
-     * 构造方法
+     * 更新时间
      */
-    public Channels(Long id, Integer channelId, String name, Integer channelOrder, Integer channelType, String createDate) {
-        this.id = id;
-        this.channelId = channelId;
-        this.name = name;
-        this.channelOrder = channelOrder;
-        this.channelType = channelType;
-        this.createDate = createDate;
-    }
+    private String updateDate;
+
+    /**
+     * 激活状态
+     */
+    private Integer status;
 
     /**
      * Getter method for property <tt>id</tt>.
@@ -162,5 +160,41 @@ public class Channels implements Serializable {
      */
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    /**
+     * Getter method for property <tt>updateDate</tt>.
+     *
+     * @return property value of updateDate
+     */
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    /**
+     * Setter method for property <tt>updateDate</tt>.
+     *
+     * @param updateDate value to be assigned to property updateDate
+     */
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    /**
+     * Getter method for property <tt>status</tt>.
+     *
+     * @return property value of status
+     */
+    public Integer getStatus() {
+        return status;
+    }
+
+    /**
+     * Setter method for property <tt>status</tt>.
+     *
+     * @param status value to be assigned to property status
+     */
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

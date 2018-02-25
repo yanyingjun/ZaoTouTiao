@@ -31,8 +31,6 @@ public class VideoController extends BaseController{
 
     /**
      * 获取视频分类列表
-     * @param modelMap
-     * @param request
      * @return
      */
     @RequestMapping(value = VideoMsgReq.VIDEO_CHANNELS_REQ, method = RequestMethod.POST)
@@ -59,8 +57,6 @@ public class VideoController extends BaseController{
 
     /**
      * 获取视频新闻列表
-     * @param modelMap
-     * @param request
      * @return
      */
     @RequestMapping(value = VideoMsgReq.VIDEO_GET_REQ, method = RequestMethod.POST)
