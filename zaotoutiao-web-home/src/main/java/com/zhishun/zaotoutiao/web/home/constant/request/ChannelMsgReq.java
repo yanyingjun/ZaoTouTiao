@@ -14,4 +14,9 @@ public class ChannelMsgReq {
      * 获取导航列表
      */
     public static final String CHANNLE_MANAGE_REQ = "channel/list";
+
+    /**
+     * 跳转到导航管理页面
+     */
+    public static final String TO_CHANNLE_MANAGE_REQ = "channel/manageView";
 }

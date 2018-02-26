@@ -3,10 +3,22 @@
 <head>
     <meta charset="utf-8">
     <title>table模块快速使用</title>
-    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
 </head>
 <body>
-
+<div class="demoTable">
+    <div class="layui-inline">
+        <input class="layui-input" name="name" id="name" placeholder="关键词" autocomplete="off">
+    </div>
+    <div class="layui-inline">
+        <select name="status" id="status">
+            <option value="">状态</option>
+            <option value="1">激活</option>
+            <option value="0">未激活</option>
+        </select>
+    </div>
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>
 <table class="layui-hide" id="channel_table_id"></table>
 <div id="laypage"></div>
 <script type="text/html" id="barDemo">
@@ -15,18 +27,17 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon"></i>删除</a>
 </script>
 
-<script src="/layui/layui.js"></script>
+<script src="../../static/layui/layui.js"></script>
+<script src="../../static/js/jquery-3.3.1.js" ></script>
 <script>
-    var pageSize = 10;
-    var pageNo = 1;
     //列表查询方法
-    function channelSearch(name, status, pageNo, pageSize) {
+    function channelSearch(name, status) {
         layui.use('table', function(){
             var table = layui.table;
             table.render({
                 elem: '#channel_table_id',
                 url: 'channel/list',
-                where:{name:name,status:status,pageSize:pageSize,pageNo:pageNo},  //传参
+                where:{name:name,status:status},  //传参
                 cols: [[
                     {field: 'id', title: '序号', width: '170', sort: true},
                     {field: 'name', title: '导航', width: '250'},
@@ -42,14 +53,10 @@
                     laypage.render({
                         elem:'laypage',
                         count:count,
-                        curr:pageNo,
-                        limit:pageSize,
                         layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
                         jump:function (obj,first) {
                             if(!first){
-                                pageNo = obj.curr;
-                                pageSize = obj.limit;
-                                channelSearch(name, status,pageNo,pageSize);
+                                channelSearch(name, status);
                             }
                         }
                     })
@@ -82,7 +89,7 @@
     }
     var name = $('#name').val();
     var status = $('#status').val();
-    channelSearch(name, status, pageNo, pageSize);
+    channelSearch(name, status);
 
 </script>
 </body>

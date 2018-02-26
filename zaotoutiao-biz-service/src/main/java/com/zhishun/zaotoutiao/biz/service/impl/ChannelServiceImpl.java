@@ -32,13 +32,13 @@ public class ChannelServiceImpl implements IChannelService{
     @Override
     public Page<Channels> listChannelsPage(ChannelsVO channelsVO, PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
-        if(StringUtils.isEmpty(channelsVO)){
+        if(!StringUtils.isEmpty(channelsVO)){
             map.put("name", channelsVO.getName());
             map.put("status", channelsVO.getStatus());
         }
         int total = channelsMapper.countChannels(map);
         if (pageRequest != null) {
-            map.put("limit", pageRequest.getPageNo());
+            map.put("limit", pageRequest.getPageSize());
             map.put("offset", pageRequest.getOffset());
         }
         List<Channels> list = channelsMapper.listChannelsPage(map);

@@ -40,13 +40,13 @@
     </div>
 
     <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
+        <div class="layui-side-scroll" id="larry-nav-side" lay-filter="side">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline" lay-filter="demo">
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">基础信息管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">导航管理</a></dd>
+                        <dd><a href="channel/manageView">导航管理</a></dd>
                         <dd><a href="javascript:;">一级标签</a></dd>
                         <dd><a href="javascript:;">二级标签</a></dd>
                     </dl>
@@ -150,6 +150,7 @@
 </div>
 <script src="../../static/layui/layui.js"></script>
 <script src="../../static/js/jquery-3.3.1.js"></script>
+<script src="../../static/js/larry.js" ></script>
 <script>
     layui.use(['element','layer'], function(){
         var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块

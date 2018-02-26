@@ -5,6 +5,7 @@
 package com.zhishun.zaotoutiao.core.model.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 新闻分类表实体
