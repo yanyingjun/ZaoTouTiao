@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/zaotoutiao-common-base/zaotoutiao-common-base.iml" filepath="$PROJECT_DIR$/zaotoutiao-common-base/zaotoutiao-common-base.iml" />
       <module fileurl="file://$PROJECT_DIR$/zaotoutiao-common-client/zaotoutiao-common-client.iml" filepath="$PROJECT_DIR$/zaotoutiao-common-client/zaotoutiao-common-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/zaotoutiao-common-dal/zaotoutiao-common-dal.iml" filepath="$PROJECT_DIR$/zaotoutiao-common-dal/zaotoutiao-common-dal.iml" />
+      <module fileurl="file://E:\workspace\zaotoutiao\zaotoutiao-common-dal\zaotoutiao-common-dal.iml" filepath="E:\workspace\zaotoutiao\zaotoutiao-common-dal\zaotoutiao-common-dal.iml" />
       <module fileurl="file://$PROJECT_DIR$/zaotoutiao-common-util/zaotoutiao-common-util.iml" filepath="$PROJECT_DIR$/zaotoutiao-common-util/zaotoutiao-common-util.iml" />
       <module fileurl="file://$PROJECT_DIR$/zaotoutiao-core-model/zaotoutiao-core-model.iml" filepath="$PROJECT_DIR$/zaotoutiao-core-model/zaotoutiao-core-model.iml" />
       <module fileurl="file://$PROJECT_DIR$/zaotoutiao-core-service/zaotoutiao-core-service.iml" filepath="$PROJECT_DIR$/zaotoutiao-core-service/zaotoutiao-core-service.iml" />

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhishun.zaotoutiao.dal.mapper.InfosMapper">
+  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.Infos">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="infoId" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="infoType" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="algInfo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="channelId" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="catInfoId" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="catInfoName" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hasVideo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="imgType" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="producer" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="publishTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="recId" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="source" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="thumbnails" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="updateTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="videos" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="summary" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tripleImgs" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="h5Url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="web_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hasContent" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="isHot" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="push_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="direct_in" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, infoId, infoType, algInfo, channelId, catInfoId, catInfoName, hasVideo, imgType, 
+    producer, publishTime, recId, source, thumbnails, title, updateTime, videos, summary, 
+    tripleImgs, h5Url, web_url, hasContent, create_date, isHot, push_date, direct_in, 
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from infos
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from infos
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.Infos">
+    insert into infos (id, infoId, infoType, 
+      algInfo, channelId, catInfoId, 
+      catInfoName, hasVideo, imgType, 
+      producer, publishTime, recId, 
+      source, thumbnails, title, 
+      updateTime, videos, summary, 
+      tripleImgs, h5Url, web_url, 
+      hasContent, create_date, isHot, 
+      push_date, direct_in, create_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{infoid,jdbcType=VARCHAR}, #{infotype,jdbcType=VARCHAR}, 
+      #{alginfo,jdbcType=VARCHAR}, #{channelid,jdbcType=INTEGER}, #{catinfoid,jdbcType=INTEGER}, 
+      #{catinfoname,jdbcType=VARCHAR}, #{hasvideo,jdbcType=VARCHAR}, #{imgtype,jdbcType=INTEGER}, 
+      #{producer,jdbcType=VARCHAR}, #{publishtime,jdbcType=TIMESTAMP}, #{recid,jdbcType=VARCHAR}, 
+      #{source,jdbcType=VARCHAR}, #{thumbnails,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{videos,jdbcType=VARCHAR}, #{summary,jdbcType=VARCHAR}, 
+      #{tripleimgs,jdbcType=VARCHAR}, #{h5url,jdbcType=VARCHAR}, #{webUrl,jdbcType=VARCHAR}, 
+      #{hascontent,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{ishot,jdbcType=TINYINT}, 
+      #{pushDate,jdbcType=TIMESTAMP}, #{directIn,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.Infos">
+    insert into infos
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="infoid != null">
+        infoId,
+      </if>
+      <if test="infotype != null">
+        infoType,
+      </if>
+      <if test="alginfo != null">
+        algInfo,
+      </if>
+      <if test="channelid != null">
+        channelId,
+      </if>
+      <if test="catinfoid != null">
+        catInfoId,
+      </if>
+      <if test="catinfoname != null">
+        catInfoName,
+      </if>
+      <if test="hasvideo != null">
+        hasVideo,
+      </if>
+      <if test="imgtype != null">
+        imgType,
+      </if>
+      <if test="producer != null">
+        producer,
+      </if>
+      <if test="publishtime != null">
+        publishTime,
+      </if>
+      <if test="recid != null">
+        recId,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="thumbnails != null">
+        thumbnails,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+      <if test="videos != null">
+        videos,
+      </if>
+      <if test="summary != null">
+        summary,
+      </if>
+      <if test="tripleimgs != null">
+        tripleImgs,
+      </if>
+      <if test="h5url != null">
+        h5Url,
+      </if>
+      <if test="webUrl != null">
+        web_url,
+      </if>
+      <if test="hascontent != null">
+        hasContent,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="ishot != null">
+        isHot,
+      </if>
+      <if test="pushDate != null">
+        push_date,
+      </if>
+      <if test="directIn != null">
+        direct_in,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="infoid != null">
+        #{infoid,jdbcType=VARCHAR},
+      </if>
+      <if test="infotype != null">
+        #{infotype,jdbcType=VARCHAR},
+      </if>
+      <if test="alginfo != null">
+        #{alginfo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelid != null">
+        #{channelid,jdbcType=INTEGER},
+      </if>
+      <if test="catinfoid != null">
+        #{catinfoid,jdbcType=INTEGER},
+      </if>
+      <if test="catinfoname != null">
+        #{catinfoname,jdbcType=VARCHAR},
+      </if>
+      <if test="hasvideo != null">
+        #{hasvideo,jdbcType=VARCHAR},
+      </if>
+      <if test="imgtype != null">
+        #{imgtype,jdbcType=INTEGER},
+      </if>
+      <if test="producer != null">
+        #{producer,jdbcType=VARCHAR},
+      </if>
+      <if test="publishtime != null">
+        #{publishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recid != null">
+        #{recid,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnails != null">
+        #{thumbnails,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="videos != null">
+        #{videos,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="tripleimgs != null">
+        #{tripleimgs,jdbcType=VARCHAR},
+      </if>
+      <if test="h5url != null">
+        #{h5url,jdbcType=VARCHAR},
+      </if>
+      <if test="webUrl != null">
+        #{webUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hascontent != null">
+        #{hascontent,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ishot != null">
+        #{ishot,jdbcType=TINYINT},
+      </if>
+      <if test="pushDate != null">
+        #{pushDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="directIn != null">
+        #{directIn,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.Infos">
+    update infos
+    <set>
+      <if test="infoid != null">
+        infoId = #{infoid,jdbcType=VARCHAR},
+      </if>
+      <if test="infotype != null">
+        infoType = #{infotype,jdbcType=VARCHAR},
+      </if>
+      <if test="alginfo != null">
+        algInfo = #{alginfo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelid != null">
+        channelId = #{channelid,jdbcType=INTEGER},
+      </if>
+      <if test="catinfoid != null">
+        catInfoId = #{catinfoid,jdbcType=INTEGER},
+      </if>
+      <if test="catinfoname != null">
+        catInfoName = #{catinfoname,jdbcType=VARCHAR},
+      </if>
+      <if test="hasvideo != null">
+        hasVideo = #{hasvideo,jdbcType=VARCHAR},
+      </if>
+      <if test="imgtype != null">
+        imgType = #{imgtype,jdbcType=INTEGER},
+      </if>
+      <if test="producer != null">
+        producer = #{producer,jdbcType=VARCHAR},
+      </if>
+      <if test="publishtime != null">
+        publishTime = #{publishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recid != null">
+        recId = #{recid,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnails != null">
+        thumbnails = #{thumbnails,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="videos != null">
+        videos = #{videos,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="tripleimgs != null">
+        tripleImgs = #{tripleimgs,jdbcType=VARCHAR},
+      </if>
+      <if test="h5url != null">
+        h5Url = #{h5url,jdbcType=VARCHAR},
+      </if>
+      <if test="webUrl != null">
+        web_url = #{webUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hascontent != null">
+        hasContent = #{hascontent,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ishot != null">
+        isHot = #{ishot,jdbcType=TINYINT},
+      </if>
+      <if test="pushDate != null">
+        push_date = #{pushDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="directIn != null">
+        direct_in = #{directIn,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhishun.zaotoutiao.core.model.entity.Infos">
+    update infos
+    set infoId = #{infoid,jdbcType=VARCHAR},
+      infoType = #{infotype,jdbcType=VARCHAR},
+      algInfo = #{alginfo,jdbcType=VARCHAR},
+      channelId = #{channelid,jdbcType=INTEGER},
+      catInfoId = #{catinfoid,jdbcType=INTEGER},
+      catInfoName = #{catinfoname,jdbcType=VARCHAR},
+      hasVideo = #{hasvideo,jdbcType=VARCHAR},
+      imgType = #{imgtype,jdbcType=INTEGER},
+      producer = #{producer,jdbcType=VARCHAR},
+      publishTime = #{publishtime,jdbcType=TIMESTAMP},
+      recId = #{recid,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      thumbnails = #{thumbnails,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      videos = #{videos,jdbcType=VARCHAR},
+      summary = #{summary,jdbcType=VARCHAR},
+      tripleImgs = #{tripleimgs,jdbcType=VARCHAR},
+      h5Url = #{h5url,jdbcType=VARCHAR},
+      web_url = #{webUrl,jdbcType=VARCHAR},
+      hasContent = #{hascontent,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      isHot = #{ishot,jdbcType=TINYINT},
+      push_date = #{pushDate,jdbcType=TIMESTAMP},
+      direct_in = #{directIn,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectInfosByType" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM infos
+    WHERE infoType = #{type}
+    order by create_time desc,rand()
+    <if test="startNo != null and endNo != null">
+    limit #{startNo} , #{endNo}
+    </if>
+  </select>
+
+  <select id="selectCountByType" parameterType="map" resultType="int">
+    SELECT
+    count(1)
+    FROM infos
+    where infoType = #{type}
+  </select>
+
+</mapper>

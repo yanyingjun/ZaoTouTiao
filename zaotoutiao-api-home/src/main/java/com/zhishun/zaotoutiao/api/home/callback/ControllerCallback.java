@@ -1,7 +1,3 @@
-/**
- * @company 杭州信牛网络科技有限公司
- * @copyright Copyright (c) 2012-2016
- */
 package com.zhishun.zaotoutiao.api.home.callback;
 
 

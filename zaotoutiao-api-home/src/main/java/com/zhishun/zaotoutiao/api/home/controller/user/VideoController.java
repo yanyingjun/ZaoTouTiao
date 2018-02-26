@@ -8,8 +8,12 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.VideoMsgReq;
+import com.zhishun.zaotoutiao.biz.service.IInfosService;
 import com.zhishun.zaotoutiao.biz.service.IVideoService;
+import com.zhishun.zaotoutiao.common.util.AssertsUtil;
+import com.zhishun.zaotoutiao.core.model.entity.Infos;
 import com.zhishun.zaotoutiao.core.model.entity.VideoChannels;
+import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,14 +33,17 @@ public class VideoController extends BaseController{
     @Autowired
     private IVideoService videoService;
 
+    @Autowired
+    private IInfosService iInfosService;
+
     /**
      * 获取视频分类列表
      * @return
      */
     @RequestMapping(value = VideoMsgReq.VIDEO_CHANNELS_REQ, method = RequestMethod.POST)
     public Map<Object,Object> getVideoChannles(){
-
         final Map<Object,Object> dataMap = Maps.newHashMap();
+
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
@@ -59,19 +66,24 @@ public class VideoController extends BaseController{
      * 获取视频新闻列表
      * @return
      */
-    @RequestMapping(value = VideoMsgReq.VIDEO_GET_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> getVideos(){
+    @RequestMapping(value = VideoMsgReq.VIDEO_GET_REQ, method = RequestMethod.GET)
+    public Map<Object,Object> getVideos(final int pageNo, final int pageSize){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
+                AssertsUtil.isNotNull(pageNo, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(pageSize, ErrorCodeEnum.PARAMETER_ANOMALY);
 
             }
 
             @Override
             public void handle() throws Exception {
-
+                List<Infos> list = iInfosService.getInfosByType("video",pageNo,pageSize);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "获取视频新闻列表成功");
+                dataMap.put("data", list);
             }
         });
 

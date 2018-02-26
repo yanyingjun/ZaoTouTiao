@@ -36,6 +36,7 @@ public class UserController extends BaseController{
 
     /**
      * 用户注册
+     * @param user
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_REGISTER_REQ, method = RequestMethod.POST)
