@@ -1,6 +1,7 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.Infos;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface InfosMapper {
 
     int updateByPrimaryKey(Infos record);
 
-    List<Infos> selectInfosByType(Map map);
+    List<InfosVo> selectInfosByType(Map map);
 
     int selectCountByType(String type);
 }

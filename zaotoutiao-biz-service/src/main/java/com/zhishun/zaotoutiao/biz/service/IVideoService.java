@@ -1,8 +1,9 @@
 package com.zhishun.zaotoutiao.biz.service;
 
-import com.zhishun.zaotoutiao.core.model.entity.VideoChannels;
+        import com.zhishun.zaotoutiao.core.model.entity.VideoChannels;
+        import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 
-import java.util.List;
+        import java.util.List;
 
 /**
  * @author 闫迎军(YanYingJun)
@@ -15,4 +16,14 @@ public interface IVideoService {
      * @return
      */
     List<VideoChannels> listVideoChannels();
+
+    /**
+     * 根据类型查找视频或新闻
+     * @param type
+     * @param channelId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize);
 }

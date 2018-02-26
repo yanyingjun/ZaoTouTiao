@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhishun.zaotoutiao.dal.mapper.InfosMapper">
-  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.Infos">
-    <constructor>
-      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="infoId" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="infoType" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="algInfo" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="channelId" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="catInfoId" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="catInfoName" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="hasVideo" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="imgType" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="producer" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="publishTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="recId" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="source" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="thumbnails" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="updateTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="videos" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="summary" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="tripleImgs" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="h5Url" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="web_url" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="hasContent" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="create_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="isHot" javaType="java.lang.Byte" jdbcType="TINYINT" />
-      <arg column="push_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="direct_in" javaType="java.lang.Byte" jdbcType="TINYINT" />
-      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
+  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.vo.InfosVo">
+      <id column="id" property="id" jdbcType="BIGINT" />
+      <result column="infoId" property="infoid" jdbcType="VARCHAR" />
+      <result column="infoType" property="infotype" jdbcType="VARCHAR" />
+      <result column="algInfo" property="alginfo" jdbcType="VARCHAR" />
+      <result column="channelId" property="channelid" jdbcType="INTEGER" />
+      <result column="catInfoId" property="catinfoid" jdbcType="INTEGER" />
+      <result column="catInfoName" property="catinfoname" jdbcType="VARCHAR" />
+      <result column="hasVideo" property="hasvideo" jdbcType="VARCHAR" />
+      <result column="imgType" property="imgtype" jdbcType="INTEGER" />
+      <result column="producer" property="producer" jdbcType="VARCHAR" />
+      <result column="publishTime" property="publishtime" jdbcType="TIMESTAMP" />
+      <result column="recId" property="recid" jdbcType="VARCHAR" />
+      <result column="source" property="source" jdbcType="VARCHAR" />
+      <result column="thumbnails" property="thumbnails" jdbcType="VARCHAR" />
+      <result column="title" property="title" jdbcType="VARCHAR" />
+      <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+      <result column="videos" property="videos" jdbcType="VARCHAR" />
+      <result column="summary" property="summary" jdbcType="VARCHAR" />
+      <result column="tripleImgs" property="tripleimgs" jdbcType="VARCHAR" />
+      <result column="h5Url" property="h5url" jdbcType="VARCHAR" />
+      <result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+      <result column="hasContent" property="hascontent" jdbcType="INTEGER" />
+      <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+      <result column="isHot" property="ishot" jdbcType="TINYINT" />
+      <result column="push_date" property="pushDate" jdbcType="TIMESTAMP" />
+      <result column="direct_in" property="directIn" jdbcType="TINYINT" />
+      <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List">
     id, infoId, infoType, algInfo, channelId, catInfoId, catInfoName, hasVideo, imgType, 
@@ -356,10 +354,11 @@
 
   <select id="selectInfosByType" parameterType="map" resultMap="BaseResultMap">
     SELECT
+    round(infos.publishTime/10000) as orderTime,
     <include refid="Base_Column_List"/>
     FROM infos
-    WHERE infoType = #{type}
-    order by create_time desc,rand()
+    WHERE infoType = #{type} and channelId = #{channelId}
+    order by publishTime desc,rand()
     <if test="startNo != null and endNo != null">
     limit #{startNo} , #{endNo}
     </if>

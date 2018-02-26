@@ -7,8 +7,8 @@
 package com.zhishun.zaotoutiao.biz.service.impl;
 
 import com.google.common.collect.Maps;
-import com.zhishun.zaotoutiao.biz.service.IInfosService;
-import com.zhishun.zaotoutiao.core.model.entity.Infos;
+import com.zhishun.zaotoutiao.biz.service.INewsService;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,30 +18,25 @@ import java.util.Map;
 
 /**
  * @author BugMan
- * @version $Id: InfosServiceImpl, v0.1 2018年02月25日 16:55BugMan Exp $
+ * @version $Id: NewsServiceImpl, v0.1 2018年02月26日 19:17BugMan Exp $
  */
 
 @Service
-public class InfosServiceImpl implements IInfosService {
+public class NewsServiceImpl implements INewsService {
 
     @Autowired
     private InfosMapper infosMapper;
 
     @Override
-    public List<Infos> getInfosByType(String type, int pageNo, int pageSize) {
+    public List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize) {
         int startNo = (pageNo-1) * pageSize;
         int endNo = pageNo * pageSize;
         Map map = Maps.newHashMap();
         map.put("type",type);
-        map.put("startNo",startNo);
+        map.put("channelId",channelId);
         map.put("endNo",endNo);
-        List<Infos> infosList= infosMapper.selectInfosByType(map);
-        return infosList;
-
-        //PageRequest pageRequest = new PageRequest(pageNo,pageSize);
-        //int total = infosMapper.selectCountByType(type);
-        //Page page= PageBean.buildPage(pageRequest,infosList,total);
-        //return page;
-
+        map.put("startNo",startNo);
+        List<InfosVo> voList= infosMapper.selectInfosByType(map);
+        return voList;
     }
 }

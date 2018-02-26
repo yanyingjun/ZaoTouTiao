@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * @author 闫迎军(YanYingJun)
  * @version $Id: aa, v0.1 2018年02月07日 14:20闫迎军(YanYingJun) Exp $
  */
-public class UserMoneyRecord implements Serializable {
+public class    UserMoneyRecord implements Serializable {
 
     private static final long serialVersionUID = 4905798915650520874L;
     /**
