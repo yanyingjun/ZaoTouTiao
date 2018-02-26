@@ -58,7 +58,6 @@ public class VideoController extends BaseController{
                 dataMap.put("data", list);
             }
         });
-
         return dataMap;
     }
 
