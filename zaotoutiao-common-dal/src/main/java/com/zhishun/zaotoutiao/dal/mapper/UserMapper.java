@@ -5,7 +5,9 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.User;
+import com.zhishun.zaotoutiao.core.model.vo.UserVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,4 +66,35 @@ public interface UserMapper {
      * @return
      */
     User getUserByMap(Map<String,Object> map);
+
+    /**
+     * 获取徒弟列表信息
+     * @param map
+     * @return
+     */
+    List<User> getApprentice(Map<String,Object> map);
+
+    /**
+     * 获取徒弟总记录数
+     * @param map
+     * @return
+     */
+    int countApprentice(Map<String,Object> map);
+
+    /**
+     * 三天未活跃用户列表，每页50
+     * @param map
+     * @return
+     */
+    List<UserVO> getWakeUpApprenticePage(Map<String,Object> map);
+
+    /**
+     * 三天未活跃用户总记录数
+     * @param map
+     * @return
+     */
+    int countWakeUpApprentice(Map<String,Object> map);
+
+
+
 }

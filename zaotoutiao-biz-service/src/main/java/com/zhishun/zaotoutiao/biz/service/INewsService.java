@@ -1,5 +1,7 @@
 package com.zhishun.zaotoutiao.biz.service;
 
+import com.zhishun.zaotoutiao.common.base.pagination.Page;
+import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 
 import java.util.List;
@@ -20,4 +22,12 @@ public interface INewsService {
      * @return
      */
     List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize);
+
+    /**
+     * 获取用户历史记录
+     * @param userId
+     * @param pageRequest
+     * @return
+     */
+    Page<InfosVo> listLookRecordPage(Long userId, PageRequest pageRequest);
 }

@@ -5,6 +5,11 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
+import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 public interface UserGoldRecordMapper {
     /**
@@ -54,4 +59,41 @@ public interface UserGoldRecordMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(UserGoldRecord record);
+
+    /**
+     * 根据用户id查询金币来源去向
+     * @param userId
+     * @return
+     */
+    List<UserGoldRecordVO> getUserGoldRecord(Long userId);
+
+    /**
+     * 根据用户id查询用户昨天收入金币数
+     * @param userId
+     * @return
+     */
+    BigDecimal getGoldYesterday(Long userId);
+
+    /**
+     * 根据用户id查询用户当天收入金币数
+     * @param userId
+     * @return
+     */
+    BigDecimal getGoldAll(Long userId);
+
+    /**
+     * 查询该评论是否已经获得过奖励
+     * @param map
+     * @return
+     */
+    UserGoldRecord getCommentsHasGold(Map<String,Object> map);
+
+    /**
+     * 查询今天评论获得的金币数
+     * @param userId
+     * @return
+     */
+    int getTodayCommentsGold(Long userId);
+
+
 }

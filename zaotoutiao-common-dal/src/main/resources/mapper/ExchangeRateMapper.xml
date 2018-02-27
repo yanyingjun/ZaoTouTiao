@@ -220,4 +220,10 @@
       awaken_user_gold = #{awakenUserGold,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getExchangeRate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from exchange_rate
+  </select>
 </mapper>

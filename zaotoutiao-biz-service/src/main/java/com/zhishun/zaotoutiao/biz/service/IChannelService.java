@@ -3,6 +3,7 @@ package com.zhishun.zaotoutiao.biz.service;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
+import com.zhishun.zaotoutiao.core.model.entity.UserChannels;
 import com.zhishun.zaotoutiao.core.model.vo.ChannelsVO;
 
 import java.util.List;
@@ -18,4 +19,39 @@ public interface IChannelService {
      * @return
      */
     Page<Channels> listChannelsPage(ChannelsVO channelsVO, PageRequest pageRequest);
+
+    /**
+     * 新增导航
+     * @param channelsVO
+     * @return
+     */
+    int addChannel(ChannelsVO channelsVO);
+
+    /**
+     * 修改导航
+     * @param channelsVO
+     * @return
+     */
+    int updateChannel(ChannelsVO channelsVO);
+
+    /**
+     * 获取我的频道信息
+     * @param userId
+     * @return
+     */
+    UserChannels getUserChannel(Long userId);
+
+    /**
+     * 根据ID获取我的频道列表
+     * @param id
+     * @return
+     */
+    Channels getChannelById(Long id);
+
+    /**
+     * 修改我的频道列表
+     * @param userId
+     * @return
+     */
+    int updateUserChannel(UserChannels userChannels);
 }

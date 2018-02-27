@@ -8,10 +8,14 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.INewsService;
+import com.zhishun.zaotoutiao.common.base.pagination.Page;
+import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
+import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -38,5 +42,18 @@ public class NewsServiceImpl implements INewsService {
         map.put("startNo",startNo);
         List<InfosVo> voList= infosMapper.selectInfosByType(map);
         return voList;
+    }
+
+    @Override
+    public Page<InfosVo> listLookRecordPage(Long userId, PageRequest pageRequest) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("userId", userId);
+        int count = infosMapper.countLookRecord(map);
+        if(!StringUtils.isEmpty(pageRequest)){
+            map.put("offset", pageRequest.getOffset());
+            map.put("limit", pageRequest.getPageSize());
+        }
+        List<InfosVo> list = infosMapper.listLookRecordPage(map);
+        return PageBuilder.buildPage(pageRequest, list, count);
     }
 }

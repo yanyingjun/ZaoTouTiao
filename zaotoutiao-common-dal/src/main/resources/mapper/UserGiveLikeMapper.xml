@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhishun.zaotoutiao.dal.mapper.UserGiveLikeMapper">
+  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.UserGiveLike">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="userId" jdbcType="BIGINT" property="userid" />
+    <result column="commentsId" jdbcType="BIGINT" property="commentsid" />
+    <result column="is_like" jdbcType="TINYINT" property="isLike" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createdate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userId, commentsId, is_like, createDate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_give_like
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user_give_like
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserGiveLike">
+    insert into user_give_like (id, userId, commentsId, 
+      is_like, createDate)
+    values (#{id,jdbcType=BIGINT}, #{userid,jdbcType=BIGINT}, #{commentsid,jdbcType=BIGINT}, 
+      #{isLike,jdbcType=TINYINT}, #{createdate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserGiveLike">
+    insert into user_give_like
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="commentsid != null">
+        commentsId,
+      </if>
+      <if test="isLike != null">
+        is_like,
+      </if>
+      <if test="createdate != null">
+        createDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="commentsid != null">
+        #{commentsid,jdbcType=BIGINT},
+      </if>
+      <if test="isLike != null">
+        #{isLike,jdbcType=TINYINT},
+      </if>
+      <if test="createdate != null">
+        #{createdate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserGiveLike">
+    update user_give_like
+    <set>
+      <if test="userid != null">
+        userId = #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="commentsid != null">
+        commentsId = #{commentsid,jdbcType=BIGINT},
+      </if>
+      <if test="isLike != null">
+        is_like = #{isLike,jdbcType=TINYINT},
+      </if>
+      <if test="createdate != null">
+        createDate = #{createdate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserGiveLike">
+    update user_give_like
+    set userId = #{userid,jdbcType=BIGINT},
+      commentsId = #{commentsid,jdbcType=BIGINT},
+      is_like = #{isLike,jdbcType=TINYINT},
+      createDate = #{createdate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="getUserGiveLike" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_give_like
+    <where>
+       <if test="commentsId != null">
+         commentsId = #{commentsId}
+       </if>
+       <if test="userId != null">
+         and userId = #{userId}
+       </if>
+    </where>
+  </select>
+
+  <select id="countUserGiveLike" parameterType="java.lang.Long" resultType="int">
+    SELECT count(id) as count FROM user_give_like WHERE commentsId = #{commentsId} AND is_like = 1
+  </select>
+</mapper>

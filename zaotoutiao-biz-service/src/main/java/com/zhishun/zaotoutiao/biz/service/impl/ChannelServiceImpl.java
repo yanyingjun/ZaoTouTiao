@@ -9,13 +9,18 @@ import com.zhishun.zaotoutiao.biz.service.IChannelService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
+import com.zhishun.zaotoutiao.common.util.BeanMapUtil;
+import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
+import com.zhishun.zaotoutiao.core.model.entity.UserChannels;
 import com.zhishun.zaotoutiao.core.model.vo.ChannelsVO;
 import com.zhishun.zaotoutiao.dal.mapper.ChannelsMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserChannelsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +33,9 @@ public class ChannelServiceImpl implements IChannelService{
 
     @Autowired
     private ChannelsMapper channelsMapper;
+
+    @Autowired
+    private UserChannelsMapper userChannelsMapper;
 
     @Override
     public Page<Channels> listChannelsPage(ChannelsVO channelsVO, PageRequest pageRequest) {
@@ -43,5 +51,40 @@ public class ChannelServiceImpl implements IChannelService{
         }
         List<Channels> list = channelsMapper.listChannelsPage(map);
         return PageBuilder.buildPage(pageRequest, list, total);
+    }
+
+    @Override
+    public int addChannel(ChannelsVO channelsVO) {
+        Channels channels = new Channels();
+        BeanMapUtil.copy(channelsVO, channels);
+        channels.setChannelType(channelsVO.getChannelOrder());
+        channels.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        channels.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        channels.setStatus(0);
+        return channelsMapper.insertSelective(channels);
+    }
+
+    @Override
+    public int updateChannel(ChannelsVO channelsVO) {
+        Channels channels = new Channels();
+        BeanMapUtil.copy(channelsVO, channels);
+        channels.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        channels.setStatus(channelsVO.getStatus());
+        return channelsMapper.updateByPrimaryKeySelective(channels);
+    }
+
+    @Override
+    public UserChannels getUserChannel(Long userId) {
+        return userChannelsMapper.getUserChannels(userId);
+    }
+
+    @Override
+    public Channels getChannelById(Long id) {
+        return channelsMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int updateUserChannel(UserChannels userChannels) {
+        return userChannelsMapper.updateByPrimaryKeySelective(userChannels);
     }
 }

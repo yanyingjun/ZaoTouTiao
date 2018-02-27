@@ -55,4 +55,21 @@ public class UserController extends BaseController{
         ModelAndView mv = new ModelAndView("common/index");
         return mv;
     }
+    @RequestMapping("test3")
+    public ModelAndView main(){
+        ModelAndView mv = new ModelAndView("common/main");
+        return mv;
+    }
+
+    @RequestMapping("test4")
+    public ModelAndView table1(){
+        ModelAndView mv = new ModelAndView("common/tab");
+        return mv;
+    }
+
+    @RequestMapping("test5")
+    public ModelAndView table2(){
+        ModelAndView mv = new ModelAndView("common/table");
+        return mv;
+    }
 }

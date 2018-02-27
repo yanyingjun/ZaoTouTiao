@@ -22,11 +22,57 @@ public class InfosVo extends Infos{
 
     private Date orderTime;
 
+    /**
+     * 连续阅读时间
+     */
+    private String readContinuousDay;
+
+    /**
+     * 阅读时间
+     */
+    private String readCreateDate;
+
     public Date getOrderTime() {
         return orderTime;
     }
 
     public void setOrderTime(Date orderTime) {
         this.orderTime = orderTime;
+    }
+
+    /**
+     * Getter method for property <tt>readContinuousDay</tt>.
+     *
+     * @return property value of readContinuousDay
+     */
+    public String getReadContinuousDay() {
+        return readContinuousDay;
+    }
+
+    /**
+     * Setter method for property <tt>readContinuousDay</tt>.
+     *
+     * @param readContinuousDay value to be assigned to property readContinuousDay
+     */
+    public void setReadContinuousDay(String readContinuousDay) {
+        this.readContinuousDay = readContinuousDay;
+    }
+
+    /**
+     * Getter method for property <tt>readCreateDate</tt>.
+     *
+     * @return property value of readCreateDate
+     */
+    public String getReadCreateDate() {
+        return readCreateDate;
+    }
+
+    /**
+     * Setter method for property <tt>readCreateDate</tt>.
+     *
+     * @param readCreateDate value to be assigned to property readCreateDate
+     */
+    public void setReadCreateDate(String readCreateDate) {
+        this.readCreateDate = readCreateDate;
     }
 }

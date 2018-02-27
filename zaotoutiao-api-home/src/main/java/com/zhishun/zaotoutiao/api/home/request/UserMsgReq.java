@@ -35,4 +35,59 @@ public class UserMsgReq {
      */
     public static final String USER_LOGOUT_REQ = "/user/logout";
 
+    /**
+     * 获取用户信息
+     */
+    public static final String USER_GET_REQ = "/user/get";
+
+    /**
+     * 修改用户信息
+     */
+    public static final String USER_SET_REQ = "/user/set";
+
+    /**
+     * 我的收入
+     */
+    public static final String MY_INCOME_REQ = "/my/income";
+
+    /**
+     * 修改密码
+     */
+    public static final String PASSWORD_UPDATE_REQ = "/password/update";
+
+    /**
+     * 获取我关注的频道
+     */
+    public static final String MY_CHANNELS_GET_REQ = "/my/channels/get";
+
+    /**
+     * 更改我关注的频道
+     */
+    public static final String MY_CHANNELS_SET_REQ = "/my/channels/set";
+
+    /**
+     * 收徒，填写邀请码，绑定师徒关系
+     */
+    public static final String RECRUIT_SET_REQ = "/recruit/set";
+
+    /**
+     * 获取徒弟列表信息
+     */
+    public static final String APPRENTICE_GET_REQ = "/apprentice/get";
+
+    /**
+     * 待唤醒徒弟列表
+     */
+    public static final String WAKE_UP_APPRENTICE_LIST_GET = "/warkUp/apprentice/list";
+
+    /**
+     * 获取用户历史记录
+     */
+    public static final String LOOK_RECORD_GET = "/look/record/get";
+
+    /**
+     * 发送验证码
+     */
+    public static final String SEND_SMS_CODE = "/send/smsCode";
+
 }

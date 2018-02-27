@@ -46,7 +46,7 @@ public abstract class BaseController {
         // 封装参数
         dataMap.put("appName", messageResult.getAppName());
         dataMap.put("success", messageResult.isSuccess() + "");
-        dataMap.put("message", messageResult.getErrorMessage() + "<" + messageResult.getErrorCode() + ">");
+        dataMap.put("msg", messageResult.getErrorMessage() + "<" + messageResult.getErrorCode() + ">");
         dataMap.put("status", messageResult.getStatus());
 
         return dataMap;
