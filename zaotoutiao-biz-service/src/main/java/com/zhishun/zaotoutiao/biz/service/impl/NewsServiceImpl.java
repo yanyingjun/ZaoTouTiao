@@ -11,7 +11,11 @@ import com.zhishun.zaotoutiao.biz.service.INewsService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
+import com.zhishun.zaotoutiao.core.model.entity.Channels;
+import com.zhishun.zaotoutiao.core.model.entity.Content;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.dal.mapper.ChannelsMapper;
+import com.zhishun.zaotoutiao.dal.mapper.ContentMapper;
 import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,21 @@ public class NewsServiceImpl implements INewsService {
     @Autowired
     private InfosMapper infosMapper;
 
+    @Autowired
+    private ChannelsMapper channelsMapper;
+
+    @Autowired
+    private ContentMapper contentMapper;
+
+
+    /**
+     * 根据类型级分类ID返回新闻列表信息
+     * @param type
+     * @param channelId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @Override
     public List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize) {
         int startNo = (pageNo-1) * pageSize;
@@ -42,6 +61,21 @@ public class NewsServiceImpl implements INewsService {
         map.put("startNo",startNo);
         List<InfosVo> voList= infosMapper.selectInfosByType(map);
         return voList;
+    }
+
+    /**
+     * 获得新闻分类列表信息
+     * @return
+     */
+    @Override
+    public List<Channels> listChannels() {
+        return channelsMapper.listChannels();
+    }
+
+
+    @Override
+    public Content getNewsByInfoId(String infoId) {
+        return contentMapper.selectByInfoId(infoId);
     }
 
     @Override

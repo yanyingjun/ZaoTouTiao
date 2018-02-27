@@ -3,6 +3,8 @@ package com.zhishun.zaotoutiao.biz.service;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.entity.Channels;
+import com.zhishun.zaotoutiao.core.model.entity.Content;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
 public interface INewsService {
 
     /**
-     * 根据类型查找视频或新闻
+     * 根据类型、channelId查找视频或新闻
      * @param type
      * @param channelId
      * @param pageNo
@@ -23,6 +25,17 @@ public interface INewsService {
      */
     List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize);
 
+    /**
+     * 获取新闻分类列表
+     * @return
+     */
+    List<Channels> listChannels();
+
+    /**
+     * 根据infoId 获取新闻
+     * @param infoId
+     */
+    Content getNewsByInfoId(String infoId);
     /**
      * 获取用户历史记录
      * @param userId

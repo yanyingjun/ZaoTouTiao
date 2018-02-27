@@ -17,4 +17,24 @@ public class NewsMsgReq {
      * 获取新闻列表
      */
     public static final String NEWS_GET_REQ = "/news/get";
+
+    /**
+     * 获取视频分类列表
+     */
+    public static final String NEWS_CHANNELS_REQ = "/news/channels";
+
+    /**
+     * 根据infoId 获取新闻（参数可以有UserId）
+     */
+    public static final String NEWS_CONTENT_REQ = "/news/content";
+
+    /**
+     * 获取最新评论和评论点赞信息
+     */
+    public static final String NEW_COMMENT_REQ = "/comment/new";
+
+    /**
+     * 获取热门评论和评论点赞信息
+     */
+    public static final String HOT_COMMENT_REQ = "/comment/hot";
 }

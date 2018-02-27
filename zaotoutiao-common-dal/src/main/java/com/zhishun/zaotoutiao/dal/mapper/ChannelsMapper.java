@@ -67,4 +67,6 @@ public interface ChannelsMapper {
      * @return
      */
     int countChannels(Map<String,Object> map);
+
+    List<Channels> listChannels();
 }

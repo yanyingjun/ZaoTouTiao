@@ -189,4 +189,12 @@
       </if>
     </where>
   </select>
+
+  <select id="listChannels" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM channels
+    order By channelOrder ASC
+  </select>
+
 </mapper>
