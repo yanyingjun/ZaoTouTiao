@@ -10,7 +10,6 @@
       <arg column="create_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
     </constructor>
   </resultMap>
-
   <sql id="Base_Column_List">
     id, infoId, content, html_content, create_date
   </sql>

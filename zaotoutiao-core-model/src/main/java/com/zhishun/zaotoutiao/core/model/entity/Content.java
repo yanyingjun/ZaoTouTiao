@@ -2,7 +2,6 @@ package com.zhishun.zaotoutiao.core.model.entity;
 
 import java.util.Date;
 
-
 public class Content {
     private Long id;
 
