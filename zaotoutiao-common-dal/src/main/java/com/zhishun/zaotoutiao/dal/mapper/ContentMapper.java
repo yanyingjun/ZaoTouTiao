@@ -2,6 +2,7 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.Content;
 
+
 public interface ContentMapper {
     int deleteByPrimaryKey(Long id);
 
