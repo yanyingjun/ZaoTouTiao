@@ -371,4 +371,19 @@
     where infoType = #{type}
   </select>
 
+  <select id="listLookRecordPage" parameterType="map" resultMap="BaseResultMap">
+    select i.*,u.create_date as readCreateDate,u.read_continuous_day as readContinuousDay
+    from user_read_record as u LEFT JOIN infos as i ON u.infoId = i.infoId
+    WHERE userId = #{userId} ORDER BY readCreateDate desc
+    <if test="offset != null and limit != null">
+      limit #{offset},#{limit}
+    </if>
+  </select>
+
+  <select id="countLookRecord" parameterType="map" resultType="int">
+    select count(i.id)
+    from user_read_record as u LEFT JOIN infos as i ON u.infoId = i.infoId
+    WHERE userId = #{userId} ORDER BY readCreateDate desc
+  </select>
+
 </mapper>

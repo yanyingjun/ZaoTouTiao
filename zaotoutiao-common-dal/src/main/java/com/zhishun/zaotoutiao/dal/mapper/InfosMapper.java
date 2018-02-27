@@ -23,4 +23,18 @@ public interface InfosMapper {
     List<InfosVo> selectInfosByType(Map map);
 
     int selectCountByType(String type);
+
+    /**
+     * 获取用户历史记录
+     * @param map
+     * @return
+     */
+    List<InfosVo> listLookRecordPage(Map<String,Object> map);
+
+    /**
+     * 获取用户历史总记录数
+     * @param map
+     * @return
+     */
+    int countLookRecord(Map<String,Object> map);
 }

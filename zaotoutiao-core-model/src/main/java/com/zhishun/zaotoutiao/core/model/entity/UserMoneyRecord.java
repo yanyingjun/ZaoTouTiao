@@ -51,19 +51,6 @@ public class    UserMoneyRecord implements Serializable {
     private Long apprenticeId;
 
     /**
-     * 构造方法
-     */
-    public UserMoneyRecord(Long id, Long userId, Integer type, BigDecimal money, Integer source, String createDate, Long apprenticeId) {
-        this.id = id;
-        this.userId = userId;
-        this.type = type;
-        this.money = money;
-        this.source = source;
-        this.createDate = createDate;
-        this.apprenticeId = apprenticeId;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

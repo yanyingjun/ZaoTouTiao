@@ -54,4 +54,11 @@ public interface UserChannelsMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(UserChannels record);
+
+    /**
+     * 获取我的频道信息
+     * @param id
+     * @return
+     */
+    UserChannels getUserChannels(Long id);
 }

@@ -5,6 +5,10 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserMoneyRecord;
+import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public interface UserMoneyRecordMapper {
     /**
@@ -54,4 +58,25 @@ public interface UserMoneyRecordMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(UserMoneyRecord record);
+
+    /**
+     * 根据id查询零钱来源去向（最近三天）
+     * @param userId
+     * @return
+     */
+    List<UserMoneyRecordVO> getUserMoneyRecord(Long userId);
+
+    /**
+     * 根据用户id查询用户昨天收入零钱数
+     * @param userId
+     * @return
+     */
+    BigDecimal getMoneyYesterday(Long userId);
+
+    /**
+     * 根据用户id查询用户当天收入零钱数
+     * @param userId
+     * @return
+     */
+    BigDecimal getMoneyAll(Long userId);
 }

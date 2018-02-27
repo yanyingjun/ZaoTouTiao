@@ -54,4 +54,10 @@ public interface ExchangeRateMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(ExchangeRate record);
+
+    /**
+     * 获取金币汇率
+     * @return
+     */
+    ExchangeRate getExchangeRate();
 }

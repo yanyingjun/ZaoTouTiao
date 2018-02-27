@@ -30,15 +30,6 @@ public class UserChannels implements Serializable {
     private String channels;
 
     /**
-     * 构造方法
-     */
-    public UserChannels(Long id, Long userId, String channels) {
-        this.id = id;
-        this.userId = userId;
-        this.channels = channels;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

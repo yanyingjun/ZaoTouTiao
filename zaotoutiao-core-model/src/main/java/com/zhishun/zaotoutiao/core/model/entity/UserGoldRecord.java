@@ -61,21 +61,6 @@ public class UserGoldRecord implements Serializable {
     private Long shareId;
 
     /**
-     * 构造方法
-     */
-    public UserGoldRecord(Long id, Long userId, Byte type, Long gold, Integer source, String createDate, Long apprenticeId, String infoId, Long shareId) {
-        this.id = id;
-        this.userId = userId;
-        this.type = type;
-        this.gold = gold;
-        this.source = source;
-        this.createDate = createDate;
-        this.apprenticeId = apprenticeId;
-        this.infoId = infoId;
-        this.shareId = shareId;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id
