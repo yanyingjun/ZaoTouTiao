@@ -90,4 +90,9 @@ public class UserMsgReq {
      */
     public static final String SEND_SMS_CODE = "/send/smsCode";
 
+    /**
+     * 根据type类型删除用户相关通知信息
+     */
+    public static final String DELETE_INFORMATION_BY_TYPE = "del/user/information";
+
 }

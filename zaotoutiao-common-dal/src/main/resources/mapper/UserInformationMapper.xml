@@ -183,4 +183,10 @@
       is_read = #{isRead,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <delete id="deleteByType" parameterType="map">
+    DELETE FROM user_information
+    WHERE userId = #{userId}
+    and type = #{type}
+  </delete>
 </mapper>

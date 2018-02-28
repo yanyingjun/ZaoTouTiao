@@ -15,6 +15,7 @@ import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserVO;
 import com.zhishun.zaotoutiao.dal.mapper.UserGoldRecordMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserInformationMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserMoneyRecordMapper;
 import org.slf4j.Logger;
@@ -45,6 +46,9 @@ public class UserServiceImpl implements IUserService{
 
     @Autowired
     private UserMoneyRecordMapper userMoneyRecordMapper;
+
+    @Autowired
+    private UserInformationMapper userInformationMapper;
 
     @Override
     public User getUserByUserId(Long userId) {
@@ -157,5 +161,20 @@ public class UserServiceImpl implements IUserService{
         }
         List<UserVO> list = userMapper.getWakeUpApprenticePage(map);
         return PageBuilder.buildPage(pageRequest, list, count);
+    }
+
+    @Override
+    public String delUserInformation(int userId, String type) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("userId",userId);
+        map.put("type",type);
+        int result = userInformationMapper.deleteByType(map);
+        if(result == 0){
+            return "通知列表已经为空！";
+        }else if(result > 0){
+            return "删除成功！";
+        }else{
+            return "删除失败";
+        }
     }
 }

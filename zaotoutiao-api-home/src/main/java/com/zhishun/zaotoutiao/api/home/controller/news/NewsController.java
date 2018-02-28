@@ -149,6 +149,7 @@ public class NewsController extends BaseController{
             @Override
             public void handle() throws Exception {
                 List<InfosVo> commentVOList = iCommentService.getNewCommentVO(infoId,userId,pageNo,pageSize);
+                //循环添加isMyLike（自己是否点赞）
                 for(InfosVo infosVo:commentVOList){
                     int commentsId = infosVo.getCommentsId();
                     Boolean isMyLike = iCommentService.isMyLike(userId,commentsId);
@@ -186,6 +187,7 @@ public class NewsController extends BaseController{
             @Override
             public void handle() throws Exception {
                 List<InfosVo> commentVOList = iCommentService.getHotCommentVO(infoId,userId,pageNo,pageSize);
+                //循环添加commentsId
                 for(InfosVo infosVo:commentVOList){
                     int commentsId = infosVo.getCommentsId();
                     Boolean isMyLike = iCommentService.isMyLike(userId,commentsId);
@@ -222,6 +224,7 @@ public class NewsController extends BaseController{
             @Override
             public void handle() throws Exception {
                 List<InfosVo> infosVoList = iNewsService.searchNewsByKeyword(keyword,pageNo,pageSize);
+                //循环添加留言数
                 for(InfosVo infosVo:infosVoList){
                     String infoid = infosVo.getInfoid();
                     int commentsNum = iCommentService.getCommentsNumByInfoId(infoid);

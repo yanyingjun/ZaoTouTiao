@@ -39,7 +39,6 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public List<InfosVo> getNewCommentVO(String infoId, int userId, int pageNo, int pageSize) {
-
         int startNo = (pageNo-1) * pageSize;
         int endNo = pageNo * pageSize;
         Map<String,Object> map = Maps.newHashMap();
@@ -75,6 +74,7 @@ public class CommentServiceImpl implements ICommentService {
         map.put("userId",userId);
         map.put("commentsId",commentsId);
         UserGiveLike result = userGiveLikeMapper.getUserGiveLike(map);
+        //判断自己是否点赞
         if(null != result && result.getIsLike() == 1){
             return true;
         }else{

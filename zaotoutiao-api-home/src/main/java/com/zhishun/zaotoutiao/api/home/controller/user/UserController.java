@@ -261,7 +261,7 @@ public class UserController extends BaseController{
 
     /**
      * 用户信息修改
-     * @param userId
+     * @param userVO
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_SET_REQ, method = RequestMethod.POST)
@@ -365,7 +365,7 @@ public class UserController extends BaseController{
 
     /**
      * 修改密码
-     * @param userId
+     * @param userVO
      * @return
      */
     @RequestMapping(value = UserMsgReq.PASSWORD_UPDATE_REQ, method = RequestMethod.POST)
@@ -550,6 +550,36 @@ public class UserController extends BaseController{
                 dataMap.put("msg", "相关信息返回成功");
                 dataMap.put("data", page.getRows());
                 dataMap.put("total", page.getTotal());
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 根据type类型删除用户相关通知信息
+     * @param userId
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.DELETE_INFORMATION_BY_TYPE, method = RequestMethod.POST)
+    public Map<Object,Object> noticeDel(final int userId ,final String type){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(type, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                //返回执行的结果
+                String result = userService.delUserInformation(userId,type);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "相关信息返回成功");
+                dataMap.put("data", result);
             }
         });
 

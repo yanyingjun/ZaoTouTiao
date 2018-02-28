@@ -134,4 +134,12 @@ public interface IUserService {
      */
     Page<UserVO> getWakeUpApprenticePage(Long userId, PageRequest pageRequest);
 
+    /**
+     * 根据type类型删除用户相关通知信息
+     * @param userId
+     * @param type
+     * @return
+     */
+    String delUserInformation(int userId, String type);
+
 }

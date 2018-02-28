@@ -130,6 +130,7 @@ public class NewsServiceImpl implements INewsService {
         map.put("endNo",endNo);
         List<InfosVo> infosVoList = infosMapper.getCollectList(map);
         return infosVoList;
+
     }
 
 
