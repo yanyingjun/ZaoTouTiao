@@ -191,6 +191,7 @@ public class NewsController extends BaseController{
                 dataMap.put("date", commentVOList);
             }
         });
+
         return dataMap;
     }
 }
