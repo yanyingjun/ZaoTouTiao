@@ -51,4 +51,11 @@ public interface InfosMapper {
      */
     List<InfosVo> getHotComments(Map<String,Object> map);
 
+    /**
+     * 搜索新闻
+     * @param map
+     * @return
+     */
+    List<InfosVo> searchNewsByKeyword(Map<String,Object> map);
+
 }

@@ -43,4 +43,13 @@ public interface INewsService {
      * @return
      */
     Page<InfosVo> listLookRecordPage(Long userId, PageRequest pageRequest);
+
+    /**
+     * 根据关键词搜索新闻
+     * @param keyword
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    List<InfosVo> searchNewsByKeyword(String keyword,int pageNo,int pageSize);
 }

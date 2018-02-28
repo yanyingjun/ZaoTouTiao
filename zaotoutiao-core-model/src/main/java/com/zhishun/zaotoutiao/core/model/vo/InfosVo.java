@@ -26,6 +26,9 @@ public class InfosVo extends Infos{
     //自己是否点赞
     private boolean isMyLike;
 
+    //评论数
+    private int commentsNum;
+
     //user
     private String headPath;
 
@@ -39,6 +42,14 @@ public class InfosVo extends Infos{
     private int likes;
 
     private Date createDate;
+
+    public int getCommentsNum() {
+        return commentsNum;
+    }
+
+    public void setCommentsNum(int commentsNum) {
+        this.commentsNum = commentsNum;
+    }
 
     public boolean isMyLike() {
         return isMyLike;

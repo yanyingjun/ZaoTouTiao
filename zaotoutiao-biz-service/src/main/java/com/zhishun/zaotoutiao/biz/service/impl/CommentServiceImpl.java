@@ -11,6 +11,7 @@ import com.zhishun.zaotoutiao.biz.service.ICommentService;
 import com.zhishun.zaotoutiao.core.model.entity.UserGiveLike;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserCommentsMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserGiveLikeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.Map;
 /**
  * @author BugMan
  * @version $Id: CommentServiceImpl, v0.1 2018年02月27日 15:01BugMan Exp $
+ * 用户评论点赞相关信息
  */
 
 @Service
@@ -31,6 +33,9 @@ public class CommentServiceImpl implements ICommentService {
 
     @Autowired
     private UserGiveLikeMapper userGiveLikeMapper;
+
+    @Autowired
+    private UserCommentsMapper userCommentsMapper;
 
     @Override
     public List<InfosVo> getNewCommentVO(String infoId, int userId, int pageNo, int pageSize) {
@@ -63,6 +68,7 @@ public class CommentServiceImpl implements ICommentService {
         return commentVOList;
     }
 
+
     @Override
     public Boolean isMyLike(int userId, int commentsId) {
         Map<String,Object> map = Maps.newHashMap();
@@ -74,5 +80,10 @@ public class CommentServiceImpl implements ICommentService {
         }else{
             return false;
         }
+    }
+
+    @Override
+    public int getCommentsNumByInfoId(String infoId) {
+        return userCommentsMapper.getCommentsNumByInfoId(infoId);
     }
 }

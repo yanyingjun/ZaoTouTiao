@@ -28,4 +28,11 @@ public interface ICommentService {
      * @return
      */
     Boolean isMyLike (int userId, int commentsId);
+
+    /**
+     * 获得新闻的评论数
+     * @param infoId
+     * @return
+     */
+    int getCommentsNumByInfoId(String infoId);
 }

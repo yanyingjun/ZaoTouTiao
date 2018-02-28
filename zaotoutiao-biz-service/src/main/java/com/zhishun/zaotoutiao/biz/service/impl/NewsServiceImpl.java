@@ -90,4 +90,26 @@ public class NewsServiceImpl implements INewsService {
         List<InfosVo> list = infosMapper.listLookRecordPage(map);
         return PageBuilder.buildPage(pageRequest, list, count);
     }
+
+    /**
+     * 根据关键词搜索新闻
+     * @param keyword
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public List<InfosVo> searchNewsByKeyword(String keyword, int pageNo, int pageSize) {
+        Map<String,Object> map = Maps.newHashMap();
+        keyword = new StringBuilder().append("%").append(keyword).append("%").toString();
+        int startNo = (pageNo-1) * pageSize;
+        int endNo = pageNo * pageSize;
+        map.put("keyword",keyword);
+        map.put("startNo",startNo);
+        map.put("endNo",endNo);
+        List<InfosVo> infosVoList = infosMapper.searchNewsByKeyword(map);
+        return infosVoList;
+    }
+
+
 }

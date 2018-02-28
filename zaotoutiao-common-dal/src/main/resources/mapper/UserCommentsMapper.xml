@@ -113,4 +113,9 @@
       and userId = #{userId}
     </if>
   </select>
+
+  <select id="getCommentsNumByInfoId" parameterType="java.lang.String" resultType="int">
+    select count(0) FROM user_comments
+    WHERE infoId = #{infoId}
+  </select>
 </mapper>

@@ -25,4 +25,6 @@ public interface UserCommentsMapper {
      * @return
      */
     UserComments getUserCommnetsInfo(Map<String,Object> map);
+
+    int getCommentsNumByInfoId(String infoId);
 }

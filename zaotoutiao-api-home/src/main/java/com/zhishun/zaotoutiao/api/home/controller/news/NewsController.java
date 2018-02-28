@@ -61,6 +61,11 @@ public class NewsController extends BaseController{
             @Override
             public void handle() throws Exception {
                 List<InfosVo> list = iNewsService.getInfosByType("article",channelId ,pageNo,pageSize);
+                for(InfosVo infosVo:list){
+                    String infoid = infosVo.getInfoid();
+                    int commentsNum = iCommentService.getCommentsNumByInfoId(infoid);
+                    infosVo.setCommentsNum(commentsNum);
+                }
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取新闻列表成功");
                 dataMap.put("data", list);
@@ -189,6 +194,42 @@ public class NewsController extends BaseController{
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取热门评论和评论点赞信息成功");
                 dataMap.put("date", commentVOList);
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 搜索新闻
+     * @param keyword
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = NewsMsgReq.SEARCH_NEWS, method = RequestMethod.POST)
+    public Map<Object,Object> searchNews(final String keyword, final int pageNo, final int pageSize){
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotNull(keyword, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(pageNo, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(pageSize, ErrorCodeEnum.PARAMETER_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                List<InfosVo> infosVoList = iNewsService.searchNewsByKeyword(keyword,pageNo,pageSize);
+                for(InfosVo infosVo:infosVoList){
+                    String infoid = infosVo.getInfoid();
+                    int commentsNum = iCommentService.getCommentsNumByInfoId(infoid);
+                    infosVo.setCommentsNum(commentsNum);
+                }
+                dataMap.put("result", "success");
+                dataMap.put("msg", "搜索新闻成功");
+                dataMap.put("date", infosVoList);
             }
         });
 

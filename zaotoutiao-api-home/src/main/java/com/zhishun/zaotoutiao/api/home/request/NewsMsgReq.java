@@ -37,4 +37,9 @@ public class NewsMsgReq {
      * 获取热门评论和评论点赞信息
      */
     public static final String HOT_COMMENT_REQ = "/comment/hot";
+
+    /**
+     * 搜索新闻
+     */
+        public static final String SEARCH_NEWS = "search/news";
 }

@@ -404,4 +404,11 @@
     ORDER BY user_comments.likes desc,user_comments.createDate desc limit #{startNo},#{endNo}
   </select>
 
+  <select id="searchNewsByKeyword" parameterType="map" resultMap="BaseResultMap">
+    select * from infos
+    WHERE title like #{keyword}
+    ORDER BY updateTime
+    DESC LIMIT #{startNo},#{endNo}
+  </select>
+
 </mapper>
