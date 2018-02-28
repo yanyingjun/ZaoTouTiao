@@ -74,7 +74,7 @@
             <!--<columnOverride column="html_content" jdbcType="VARCHAR" />-->
         <!--</table>-->
 
-        <table tableName="user_information" domainObjectName="UserInformation" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="static_task_list" domainObjectName="staticTaskList" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
 
         <!-- geelynote mybatis插件的搭建 -->
     </context>
