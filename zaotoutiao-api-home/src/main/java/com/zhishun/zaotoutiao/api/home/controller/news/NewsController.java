@@ -10,6 +10,7 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.NewsMsgReq;
+import com.zhishun.zaotoutiao.biz.service.ICommentService;
 import com.zhishun.zaotoutiao.biz.service.INewsService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
@@ -18,7 +19,6 @@ import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +37,8 @@ public class NewsController extends BaseController{
     @Autowired
     private INewsService iNewsService;
 
-
+    @Autowired
+    private ICommentService iCommentService;
 
     /**
      * 获取新闻列表
@@ -142,8 +143,52 @@ public class NewsController extends BaseController{
 
             @Override
             public void handle() throws Exception {
+                List<InfosVo> commentVOList = iCommentService.getNewCommentVO(infoId,userId,pageNo,pageSize);
+                for(InfosVo infosVo:commentVOList){
+                    int commentsId = infosVo.getCommentsId();
+                    Boolean isMyLike = iCommentService.isMyLike(userId,commentsId);
+                    infosVo.setMyLike(isMyLike);
+                }
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取最新评论和评论点赞信息成功");
+                dataMap.put("date", commentVOList);
+            }
+        });
+        return dataMap;
+    }
+
+    /**
+     * 获取热门评论和评论点赞信息
+     * @param infoId
+     * @param userId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = NewsMsgReq.HOT_COMMENT_REQ, method = RequestMethod.POST)
+    public Map<Object,Object> getHotComment(final String infoId, final int userId, final int pageNo, final int pageSize){
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotNull(infoId, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(userId, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(pageNo, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(pageSize, ErrorCodeEnum.PARAMETER_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                List<InfosVo> commentVOList = iCommentService.getHotCommentVO(infoId,userId,pageNo,pageSize);
+                for(InfosVo infosVo:commentVOList){
+                    int commentsId = infosVo.getCommentsId();
+                    Boolean isMyLike = iCommentService.isMyLike(userId,commentsId);
+                    infosVo.setMyLike(isMyLike);
+                }
+                dataMap.put("result", "success");
+                dataMap.put("msg", "获取热门评论和评论点赞信息成功");
+                dataMap.put("date", commentVOList);
             }
         });
         return dataMap;

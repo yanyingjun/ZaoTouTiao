@@ -20,7 +20,83 @@ import java.util.Date;
 
 public class InfosVo extends Infos{
 
+    //排序时间
     private Date orderTime;
+
+    //自己是否点赞
+    private boolean isMyLike;
+
+    //user
+    private String headPath;
+
+    private String nickName;
+
+    //user_comment
+    private int commentsId;
+
+    private String content;
+
+    private int likes;
+
+    private Date createDate;
+
+    public boolean isMyLike() {
+        return isMyLike;
+    }
+
+    public void setMyLike(boolean myLike) {
+        isMyLike = myLike;
+    }
+
+    public int getCommentsId() {
+        return commentsId;
+    }
+
+    public void setCommentsId(int commentsId) {
+        this.commentsId = commentsId;
+    }
+
+    public String getHeadPath() {
+        return headPath;
+    }
+
+    public void setHeadPath(String headPath) {
+        this.headPath = headPath;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    @Override
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    @Override
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     /**
      * 连续阅读时间

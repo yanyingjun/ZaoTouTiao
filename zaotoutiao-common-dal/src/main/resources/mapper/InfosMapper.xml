@@ -386,4 +386,22 @@
     WHERE userId = #{userId} ORDER BY readCreateDate desc
   </select>
 
+  <select id="getNewComments" parameterType="map" resultMap="BaseResultMap">
+    SELECT user.headpath, user.nickName, user_comments.id AS commentsId, user_comments.content, user_comments.likes, user_comments.createDate, infos.*
+    FROM user, user_comments, infos
+    WHERE user_comments.infoId = #{infoId}
+    AND user.userId = user_comments.userId
+    AND user_comments.infoId = infos.infoId
+    ORDER BY user_comments.createDate desc limit #{startNo},#{endNo}
+  </select>
+
+  <select id="getHotComments" parameterType="map" resultMap="BaseResultMap">
+    SELECT user.headpath, user.nickName, user_comments.id AS commentsId, user_comments.content, user_comments.likes, user_comments.createDate, infos.*
+    FROM user, user_comments, infos
+    WHERE user_comments.infoId = #{infoId}
+    AND user.userId = user_comments.userId
+    AND user_comments.infoId = infos.infoId
+    ORDER BY user_comments.likes desc,user_comments.createDate desc limit #{startNo},#{endNo}
+  </select>
+
 </mapper>
