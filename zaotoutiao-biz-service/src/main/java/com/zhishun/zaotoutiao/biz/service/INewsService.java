@@ -52,4 +52,14 @@ public interface INewsService {
      * @return
      */
     List<InfosVo> searchNewsByKeyword(String keyword,int pageNo,int pageSize);
+
+    /**
+     * 获取收藏列表
+     * @param infoType
+     * @param userId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    List<InfosVo> getCollectList(String infoType, int userId, int pageNo, int pageSize);
 }

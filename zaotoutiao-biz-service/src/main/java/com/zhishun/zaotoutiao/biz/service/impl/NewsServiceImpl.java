@@ -111,5 +111,26 @@ public class NewsServiceImpl implements INewsService {
         return infosVoList;
     }
 
+    /**
+     * 获取收藏列表
+     * @param infoType
+     * @param userId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public List<InfosVo> getCollectList(String infoType, int userId, int pageNo, int pageSize) {
+        Map<String,Object> map = Maps.newHashMap();
+        int startNo = (pageNo-1) * pageSize;
+        int endNo = pageNo * pageSize;
+        map.put("infoType",infoType);
+        map.put("userId",userId);
+        map.put("startNo",startNo);
+        map.put("endNo",endNo);
+        List<InfosVo> infosVoList = infosMapper.getCollectList(map);
+        return infosVoList;
+    }
+
 
 }

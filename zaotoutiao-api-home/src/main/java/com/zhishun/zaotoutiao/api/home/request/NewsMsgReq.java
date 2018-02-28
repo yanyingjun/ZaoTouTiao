@@ -41,5 +41,10 @@ public class NewsMsgReq {
     /**
      * 搜索新闻
      */
-        public static final String SEARCH_NEWS = "search/news";
+    public static final String SEARCH_NEWS = "search/news";
+
+    /**
+     * 新闻收藏
+     */
+    public static final String COLLECT_GET = "collect/get";
 }

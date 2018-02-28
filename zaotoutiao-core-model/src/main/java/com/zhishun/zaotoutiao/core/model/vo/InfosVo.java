@@ -8,7 +8,6 @@ package com.zhishun.zaotoutiao.core.model.vo;
 
 import com.zhishun.zaotoutiao.core.model.entity.Infos;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -42,6 +41,40 @@ public class InfosVo extends Infos{
     private int likes;
 
     private Date createDate;
+
+    /**
+     * 收藏相关
+     */
+    private int userCollectId;
+
+    private Date collectCreateDate;
+
+    //channels.name as type
+    private String type;
+
+    public int getUserCollectId() {
+        return userCollectId;
+    }
+
+    public void setUserCollectId(int userCollectId) {
+        this.userCollectId = userCollectId;
+    }
+
+    public Date getCollectCreateDate() {
+        return collectCreateDate;
+    }
+
+    public void setCollectCreateDate(Date collectCreateDate) {
+        this.collectCreateDate = collectCreateDate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public int getCommentsNum() {
         return commentsNum;

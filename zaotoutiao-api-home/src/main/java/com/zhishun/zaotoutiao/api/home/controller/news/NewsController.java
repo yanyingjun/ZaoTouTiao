@@ -235,4 +235,37 @@ public class NewsController extends BaseController{
 
         return dataMap;
     }
+
+    /**
+     * 获取收藏列表
+     * @param infoType
+     * @param userId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = NewsMsgReq.COLLECT_GET, method = RequestMethod.GET)
+    public Map<Object,Object> collectGet(final String infoType, final int userId, final int pageNo, final int pageSize){
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotNull(infoType, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(userId, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(pageNo, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(pageSize, ErrorCodeEnum.PARAMETER_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                List<InfosVo> infosVoList = iNewsService.getCollectList(infoType,userId,pageNo,pageSize);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "获取收藏列表成功");
+                dataMap.put("date", infosVoList);
+            }
+        });
+
+        return dataMap;
+    }
 }

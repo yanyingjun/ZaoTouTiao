@@ -58,4 +58,12 @@ public interface InfosMapper {
      */
     List<InfosVo> searchNewsByKeyword(Map<String,Object> map);
 
+
+    /**
+     * 获取收藏列表
+     * @param map
+     * @return
+     */
+    List<InfosVo> getCollectList(Map<String, Object> map);
+
 }

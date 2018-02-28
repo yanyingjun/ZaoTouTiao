@@ -411,4 +411,17 @@
     DESC LIMIT #{startNo},#{endNo}
   </select>
 
+  <select id="getCollectList" parameterType="map" resultMap="BaseResultMap">
+    SELECT user_collect.id as userCollectId,user_collect.create_date as collectCreateDate,infos.*,channels.name as type
+    FROM infos
+    left join user_collect on infos.infoId = user_collect.infosId
+    left join channels ON channels.channelId = infos.channelId
+    left join user on user.userId = user_collect.userId
+    where  user.userId = #{userId}
+    and infos.infoType = #{infoType}
+    ORDER BY collectCreateDate desc
+    limit #{startNo},#{endNo}
+  </select>
+
+
 </mapper>
