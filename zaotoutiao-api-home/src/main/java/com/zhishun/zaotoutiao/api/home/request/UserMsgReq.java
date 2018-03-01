@@ -91,6 +91,91 @@ public class UserMsgReq {
     public static final String SEND_SMS_CODE = "/send/smsCode";
 
     /**
+     * 阅读获取金币
+     */
+    public static final String READ_GOLD_GET = "/read/gold";
+
+    /**
+     * 用户签到
+     */
+    public static final String SIGN_IN = "/sign/in";
+
+    /**
+     * 获取我的页面广告图片和链接
+     */
+    public static final String AD_GET = "/ad/get";
+
+    /**
+     * 获取职业列表信息
+     */
+    public static final String JOBS_GET = "/jobs/get";
+
+    /**
+     * 常见问题
+     */
+    public static final String FAQ_GET = "/faq/get";
+
+    /**
+     * 怎么获得金币奖励
+     */
+    public static final String HOW_GET_GOLD = "/how/getGold";
+
+    /**
+     * 清空用户历史记录
+     */
+    public static final String LOOK_RECORD_DEL = "/record/del";
+
+    /**
+     * 添加或删除收藏
+     */
+    public static final String COLLECT_SET = "/collect/set";
+
+    /**
+     * 开宝箱
+     */
+    public static final String OPEN_TREASURE = "/open/treasure";
+
+    /**
+     * 周排行和总排行列表
+     */
+    public static final String GOLD_RANKINGS = "/gold/rankings";
+
+    /**
+     * 徒弟进贡排行榜
+     */
+    public static final String APPRENTICE_PAY_RANKING = "/apprentice/pay/ranking";
+
+    /**
+     * 用户消息通知
+     */
+    public static final String MSG_GET = "/msg/get";
+
+    /**
+     * 用户经纬度设置
+     */
+    public static final String LOCATION_SET = "/location/set";
+
+    /**
+     * 提现申请
+     */
+    public static final String WITHDRAWALS_APPLICATION = "/withdrawals/application";
+
+    /**
+     * 用户公告通知
+     */
+    public static final String NOTICE_GET = "/notice/get";
+
+    /**
+     * 建议与反馈常见问题列表
+     */
+    public static final String FEEDBACK_FAQ_GET = "/feedback/faq/get";
+
+    /**
+     * 用户建议与反馈提交
+     */
+    public static final String FEEDBACK_PUBLISH_ADD = "/feedback/publish/add";
+
+    /**
      * 根据type类型删除用户相关通知信息
      */
     public static final String DELETE_INFORMATION_BY_TYPE = "del/user/information";

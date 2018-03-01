@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhishun.zaotoutiao.dal.mapper.UserReadRecordMapper">
+  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="userId" jdbcType="BIGINT" property="userId" />
+    <result column="infoId" jdbcType="VARCHAR" property="infoId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="infoType" jdbcType="VARCHAR" property="infoType" />
+    <result column="read_continuous_day" jdbcType="INTEGER" property="readContinuousDay" />
+    <result column="is_request_gold" jdbcType="INTEGER" property="isRequestGold" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userId, infoId, create_date, infoType, read_continuous_day, is_request_gold
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_read_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user_read_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord">
+    insert into user_read_record (id, userId, infoId, 
+      create_date, infoType, read_continuous_day, 
+      is_request_gold)
+    values (#{id,jdbcType=BIGINT}, #{userid,jdbcType=BIGINT}, #{infoid,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{infotype,jdbcType=VARCHAR}, #{readContinuousDay,jdbcType=INTEGER}, 
+      #{isRequestGold,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord">
+    insert into user_read_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        userId,
+      </if>
+      <if test="infoId != null">
+        infoId,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="infoType != null">
+        infoType,
+      </if>
+      <if test="readContinuousDay != null">
+        read_continuous_day,
+      </if>
+      <if test="isRequestGold != null">
+        is_request_gold,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="infoId != null">
+        #{infoId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="infoType != null">
+        #{infoType,jdbcType=VARCHAR},
+      </if>
+      <if test="readContinuousDay != null">
+        #{readContinuousDay,jdbcType=INTEGER},
+      </if>
+      <if test="isRequestGold != null">
+        #{isRequestGold,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord">
+    update user_read_record
+    <set>
+      <if test="userId != null">
+        userId = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="infoId != null">
+        infoId = #{infoId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="infoType != null">
+        infoType = #{infoType,jdbcType=VARCHAR},
+      </if>
+      <if test="readContinuousDay != null">
+        read_continuous_day = #{readContinuousDay,jdbcType=INTEGER},
+      </if>
+      <if test="isRequestGold != null">
+        is_request_gold = #{isRequestGold,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord">
+    update user_read_record
+    set userId = #{userId,jdbcType=BIGINT},
+      infoId = #{infoId,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      infoType = #{infoType,jdbcType=VARCHAR},
+      read_continuous_day = #{readContinuousDay,jdbcType=INTEGER},
+      is_request_gold = #{isRequestGold,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="getUserReadRecord" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_read_record
+    <where>
+      <if test="userId != null">
+        userId = #{userId}
+      </if>
+      <if test="infoId != null">
+        and infoId = #{infoId}
+      </if>
+      <if test="isRequestGold != null">
+        and is_request_gold = #{isRequestGold}
+      </if>
+    </where>
+  </select>
+
+  <select id="updateReadRecord" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord" resultMap="BaseResultMap">
+    update SET is_request_gold = #{isRequestGold}
+    where userId = #{userId} and infoId = #{infoId}
+  </select>
+
+  <select id="isReadThreeToday" parameterType="long" resultMap="BaseResultMap">
+    SELECT * FROM user_read_record WHERE userId = #{userId} AND  TO_DAYS( NOW( ) ) - TO_DAYS( create_date) &lt;= 0
+  </select>
+
+  <select id="isReadFive" parameterType="long" resultMap="BaseResultMap">
+    SELECT * FROM user_read_record WHERE userId = #{userId}
+  </select>
+
+  <delete id="delUserReadRecord" parameterType="java.lang.Long">
+    delete from user_read_record
+    where userId = #{userId}
+  </delete>
+</mapper>

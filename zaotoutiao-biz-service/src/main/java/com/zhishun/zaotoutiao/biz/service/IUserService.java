@@ -2,8 +2,8 @@ package com.zhishun.zaotoutiao.biz.service;
 
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
-import com.zhishun.zaotoutiao.core.model.entity.User;
-import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
+import com.zhishun.zaotoutiao.core.model.entity.*;
+import com.zhishun.zaotoutiao.core.model.vo.StaticIndustrysVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserVO;
@@ -42,10 +42,17 @@ public interface IUserService {
     Boolean isUserLogin(String telephone, String password);
 
     /**
-     * 更新用户信息
+     * 更新用户
      * @param user
+     * @return
      */
-    void updateUserInfo(User user);
+    int updateUser(User user);
+
+    /**
+     * 更新用户金币
+     * @param userId
+     */
+    void updateUserInfo(Long userId, int gold);
 
     /**
      * 根据参数查询用户信息
@@ -121,10 +128,13 @@ public interface IUserService {
 
     /**
      * 添加金币新增记录
-     * @param userGoldRecord
+     * @param source
+     * @param userId
+     * @param gold
+     * @param apprenticeId
      * @return
      */
-    int addUserGoldRecord(UserGoldRecord userGoldRecord);
+    int addUserGoldRecord(int source, Long userId, Long gold, Long apprenticeId);
 
     /**
      * 三天未活跃用户列表,每页50
@@ -133,6 +143,134 @@ public interface IUserService {
      * @return
      */
     Page<UserVO> getWakeUpApprenticePage(Long userId, PageRequest pageRequest);
+
+    /**
+     * 判断用户是否阅读过该新闻，并请求加过金币
+     * @param userId
+     * @param infoId
+     * @return
+     */
+    int isRead(Long userId, Long infoId);
+
+    /**
+     * 判断是否超过活动时间
+     * @param readActivityDays
+     * @param userId
+     * @return
+     */
+    User isSurpassingActivtiy(int readActivityDays, Long userId);
+
+    /**
+     * 判断今天是否已经获取新手阅读奖励
+     * @param userId
+     * @return
+     */
+    UserGoldRecord isGetNewbieGoldToday(Long userId);
+
+    /**
+     * 判断当天阅读是否大于三篇
+     * @param userId
+     * @return
+     */
+    List<UserReadRecord> isReadThreeToday(Long userId);
+
+    /**
+     * 获取用户当天获得的金币总数
+     * @param userId
+     * @param source
+     * @return
+     */
+    int getReadGoldToday(Long userId, int source);
+
+    /**
+     * 根据名称获取金币配置
+     * @param name
+     * @return
+     */
+    StaticGoldConfig getReadGoldConfig(String name);
+
+    /**
+     * 判断昨天是否阅读
+     * @param userId
+     * @return
+     */
+    List<UserReadRecord> isReadFive(Long userId);
+
+    /**
+     * 判断师傅是否是首次收徒
+     * @param userId
+     * @return
+     */
+    User isParentFirstRecruit(Long userId);
+
+    /**
+     * 给师傅添加收徒奖励零钱和奖励记录零钱（首次）
+     * @param source
+     * @param userId
+     * @param money
+     * @param apprenticeId
+     * @return
+     */
+    int addUserMoneyRecord(int source, Long userId, BigDecimal money, Long apprenticeId);
+
+    /**
+     * 为用户添加零钱
+     * @param userId
+     * @param money
+     * @return
+     */
+    int updateUserMoneyRecord(Long userId, BigDecimal money);
+
+    /**
+     * 判断是否已经收到收徒奖励
+     * @param userId
+     * @param parentId
+     * @return
+     */
+    UserGoldRecord isGiveParentRecruitGold(Long userId, Long parentId);
+
+    /**
+     * 判断三天内是否添加过唤醒金币
+     * @param userId
+     * @param source
+     * @return
+     */
+    UserGoldRecord getWeekupThreeDayGetGold(Long userId, int source);
+
+    /**
+     * 判断三天内是否有师傅唤醒自己
+     * @param userId
+     * @param type
+     * @return
+     */
+    UserShare getWeekupThreeDay(Long userId, String type);
+
+    /**
+     * 根据用户id查询金币来源去向
+     * @param userId
+     * @return
+     */
+    UserGoldRecord getUserGoldRecordInfo(Long userId);
+
+    /**
+     * 获取职业列表
+     * @return
+     */
+    List<StaticIndustrysVO> listStaticIndustrys();
+
+    /**
+     * 请求用户历史记录
+     * @param userId
+     * @return
+     */
+    int delUserReadRecord(Long userId);
+
+    /**
+     * 获取徒弟数
+     * @param parentId
+     * @return
+     */
+    int getApprenticeSum(Long parentId);
 
     /**
      * 根据type类型删除用户相关通知信息

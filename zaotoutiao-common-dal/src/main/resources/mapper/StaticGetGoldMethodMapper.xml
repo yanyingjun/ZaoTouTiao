@@ -124,4 +124,8 @@
       skip_url = #{skipUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="listGoldMethod" resultMap="BaseResultMap">
+    SELECT * FROM static_get_gold_method
+  </select>
 </mapper>

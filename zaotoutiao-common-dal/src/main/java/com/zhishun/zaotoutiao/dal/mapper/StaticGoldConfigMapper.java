@@ -7,6 +7,7 @@ package com.zhishun.zaotoutiao.dal.mapper;
 import com.zhishun.zaotoutiao.core.model.entity.StaticGoldConfig;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StaticGoldConfigMapper {
     /**
@@ -62,4 +63,25 @@ public interface StaticGoldConfigMapper {
      * @return
      */
     List<StaticGoldConfig> listGoldConfig();
+
+    /**
+     * 根据名称获取金币配置
+     * @param name
+     * @return
+     */
+    StaticGoldConfig getReadGoldConfig(String name);
+
+    /**
+     * 根据连续签到天数查询签到奖励
+     * @param map
+     * @return
+     */
+    StaticGoldConfig getSignInGold(Map<String,Object> map);
+
+    /**
+     * 获取签到奖励列表
+     * @return
+     */
+    List<StaticGoldConfig> listStaticGoldConfig();
+
 }

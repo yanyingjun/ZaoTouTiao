@@ -25,14 +25,6 @@ public class StaticIndustrys implements Serializable {
     private String name;
 
     /**
-     * 构造方法
-     */
-    public StaticIndustrys(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

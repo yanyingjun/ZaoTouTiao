@@ -5,6 +5,9 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.StaticFaq;
+import com.zhishun.zaotoutiao.core.model.vo.StaticFaqVO;
+
+import java.util.List;
 
 public interface StaticFaqMapper {
     /**
@@ -54,4 +57,10 @@ public interface StaticFaqMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(StaticFaq record);
+
+    /**
+     * 获取文章类常见问题
+     * @return
+     */
+    List<StaticFaqVO> listFaq();
 }

@@ -2,11 +2,14 @@ package com.zhishun.zaotoutiao.biz.service;
 
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
+import com.zhishun.zaotoutiao.core.model.entity.Infos;
+import com.zhishun.zaotoutiao.core.model.entity.StaticHtml;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.entity.Content;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author BugMan
@@ -43,6 +46,20 @@ public interface INewsService {
      * @return
      */
     Page<InfosVo> listLookRecordPage(Long userId, PageRequest pageRequest);
+
+    /**
+     * 根据新闻ID获取新闻信息
+     * @param infoId
+     * @return
+     */
+    Infos getInfosByMap(Long infoId);
+
+    /**
+     * 获取新闻详情
+     * @param name
+     * @return
+     */
+    StaticHtml getStaticHtml(String name);
 
     /**
      * 根据关键词搜索新闻

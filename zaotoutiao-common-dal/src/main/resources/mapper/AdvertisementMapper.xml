@@ -148,4 +148,11 @@
       type = #{type,jdbcType=VARCHAR}
     where ad_id = #{adId,jdbcType=BIGINT}
   </update>
+
+  <select id="dealWithAds" resultMap="BaseResultMap">
+    SELECT *
+    FROM advertisement AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM advertisement)-(SELECT MIN(id) FROM advertisement))+(SELECT MIN(id) FROM advertisement)) AS id) AS t2
+    WHERE t1.id >= t2.id
+    ORDER BY t1.id LIMIT 1;
+  </select>
 </mapper>

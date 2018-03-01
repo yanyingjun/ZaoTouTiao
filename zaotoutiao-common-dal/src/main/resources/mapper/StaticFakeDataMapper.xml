@@ -159,4 +159,11 @@
       content4 = #{content4,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="weekRankings" resultType="map">
+    SELECT static_fake_data.content as userId , static_fake_data.content3 as weekSum ,
+    static_fake_data.content2 as apprenticeSum , static_fake_data.content1 as name
+    FROM static_fake_data WHERE type = 'week_rankings'
+    GROUP BY userId ORDER BY sum(week_sum) DESC LIMIT 0,100
+  </select>
 </mapper>

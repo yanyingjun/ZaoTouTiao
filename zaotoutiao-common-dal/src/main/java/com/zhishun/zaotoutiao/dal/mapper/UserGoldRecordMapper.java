@@ -95,5 +95,67 @@ public interface UserGoldRecordMapper {
      */
     int getTodayCommentsGold(Long userId);
 
+    /**
+     * 判断今天是否已经获取新手阅读奖励
+     * @param userId
+     * @return
+     */
+    UserGoldRecord isGetNewbieGoldToday(Long userId);
+
+    /**
+     * 获取用户当天获得的金币总数
+     * @param map
+     * @return
+     */
+    int getReadGoldToday(Map<String,Object> map);
+
+    /**
+     * 判断师傅已经收到收徒奖励
+     * @param map
+     * @return
+     */
+    UserGoldRecord isGiveParentRecruitGold(Map<String,Object> map);
+
+    /**
+     * 判断三天内是否添加过唤醒金币
+     * @param map
+     * @return
+     */
+    UserGoldRecord getWeekupThreeDayGetGold(Map<String,Object> map);
+
+    /**
+     * 根据用户id查询金币来源去向
+     * @param userId
+     * @return
+     */
+    UserGoldRecord getUserGoldRecordInfo(Long userId);
+
+    /**
+     * 获取用户当天获得的金币总数
+     * @param map
+     * @return
+     */
+    int getOpenGoldToday(Map<String,Object> map);
+
+    /**
+     * 计算时间差
+     * @param userId
+     * @return
+     */
+    Map leadTime(Long userId);
+
+    /**
+     * 计算下次开宝箱时间
+     * @param userId
+     * @return
+     */
+    Map leadTimeTwo(Long userId);
+
+    /**
+     * 根据用户获取金币
+     * @param userId
+     * @return
+     */
+    List<UserGoldRecord> listUserGoldRecord(Long userId);
 
 }

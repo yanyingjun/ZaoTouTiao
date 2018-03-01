@@ -114,6 +114,22 @@
     </if>
   </select>
 
+  <delete id="delUserComments" parameterType="map">
+    delete from user_comments
+    where userId = #{userId}
+    <if test="id != null">
+      and id = #{id}
+    </if>
+  </delete>
+
+  <select id="getUserCommentsByInfoId" parameterType="string" resultMap="BaseResultMap">
+    select * from user_comments WHERE infoId = #{infoId}
+  </select>
+
+  <select id="countUserComments" parameterType="string" resultType="int">
+    select count(*) as comments_num from user_comments WHERE infoId = #{infoId}
+  </select>
+
   <select id="getCommentsNumByInfoId" parameterType="java.lang.String" resultType="int">
     select count(0) FROM user_comments
     WHERE infoId = #{infoId}

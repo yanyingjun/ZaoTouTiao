@@ -9,11 +9,13 @@ import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
-import com.zhishun.zaotoutiao.core.model.entity.User;
-import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
+import com.zhishun.zaotoutiao.common.util.DateUtil;
+import com.zhishun.zaotoutiao.core.model.entity.*;
+import com.zhishun.zaotoutiao.core.model.vo.StaticIndustrysVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserVO;
+import com.zhishun.zaotoutiao.dal.mapper.*;
 import com.zhishun.zaotoutiao.dal.mapper.UserGoldRecordMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserInformationMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
@@ -25,8 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author 闫迎军(YanYingJun)
@@ -46,6 +48,21 @@ public class UserServiceImpl implements IUserService{
 
     @Autowired
     private UserMoneyRecordMapper userMoneyRecordMapper;
+
+    @Autowired
+    private UserReadRecordMapper userReadRecordMapper;
+
+    @Autowired
+    private StaticGoldConfigMapper staticGoldConfigMapper;
+
+    @Autowired
+    private UserShareMapper userShareMapper;
+
+    @Autowired
+    private StaticIndustrysMapper staticIndustrysMapper;
+
+    @Autowired
+    private StaticJobsMapper staticJobsMapper;
 
     @Autowired
     private UserInformationMapper userInformationMapper;
@@ -78,7 +95,15 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public void updateUserInfo(User user) {
+    public int updateUser(User user) {
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public void updateUserInfo(Long userId, int gold) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        BigDecimal newGold = new BigDecimal(gold).add(new BigDecimal(user.getGold()));
+        user.setGold(newGold.longValue());
         userMapper.updateByPrimaryKeySelective(user);
     }
 
@@ -146,11 +171,6 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public int addUserGoldRecord(UserGoldRecord userGoldRecord) {
-        return userGoldRecordMapper.insertSelective(userGoldRecord);
-    }
-
-    @Override
     public Page<UserVO> getWakeUpApprenticePage(Long userId, PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("userId", userId);
@@ -161,6 +181,154 @@ public class UserServiceImpl implements IUserService{
         }
         List<UserVO> list = userMapper.getWakeUpApprenticePage(map);
         return PageBuilder.buildPage(pageRequest, list, count);
+    }
+
+    @Override
+    public int isRead(Long userId, Long infoId) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("userId", userId);
+        map.put("infoId", infoId);
+        UserReadRecord userReadRecord = userReadRecordMapper.getUserReadRecord(map);
+        map.put("isRequestGold", 1);
+        UserReadRecord userReadRecord1 = userReadRecordMapper.getUserReadRecord(map);
+        if(StringUtils.isEmpty(userReadRecord1)){
+            //判断是否添加到阅读列表
+            if(StringUtils.isEmpty(userReadRecord)){
+                return 0;
+            }else{
+                userReadRecord.setIsRequestGold(1);
+                userReadRecordMapper.updateReadRecord(userReadRecord);
+                return 2;
+            }
+        }else {
+            return 1;
+        }
+    }
+
+    @Override
+    public User isSurpassingActivtiy(int readActivityDays, Long userId) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("readActivityDays", readActivityDays);
+        map.put("userId", userId);
+        return userMapper.isSurpassingActivtiy(map);
+    }
+
+    @Override
+    public UserGoldRecord isGetNewbieGoldToday(Long userId) {
+        return userGoldRecordMapper.isGetNewbieGoldToday(userId);
+    }
+
+    @Override
+    public List<UserReadRecord> isReadThreeToday(Long userId) {
+        return userReadRecordMapper.isReadThreeToday(userId);
+    }
+
+    @Override
+    public int addUserGoldRecord(int source, Long userId, Long gold, Long apprenticeId) {
+        UserGoldRecord userGoldRecord = new UserGoldRecord();
+        userGoldRecord = new UserGoldRecord();
+        userGoldRecord.setSource(source);
+        userGoldRecord.setUserId(userId);
+        userGoldRecord.setGold(gold);
+        userGoldRecord.setType((byte)1);
+        userGoldRecord.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        return userGoldRecordMapper.insertSelective(userGoldRecord);
+    }
+
+    @Override
+    public int getReadGoldToday(Long userId, int source) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd 00:00:00");
+        String zeroDay = sdf.format(new Date());
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("userId", userId);
+        map.put("source", source);
+        map.put("zeroDay", zeroDay);
+        return userGoldRecordMapper.getReadGoldToday(map);
+    }
+
+    @Override
+    public StaticGoldConfig getReadGoldConfig(String name) {
+        return staticGoldConfigMapper.getReadGoldConfig(name);
+    }
+
+    @Override
+    public List<UserReadRecord> isReadFive(Long userId) {
+        return userReadRecordMapper.isReadFive(userId);
+    }
+
+    @Override
+    public User isParentFirstRecruit(Long userId) {
+        return userMapper.isParentFirstRecruit(userId);
+    }
+
+    @Override
+    public int addUserMoneyRecord(int source, Long userId, BigDecimal money, Long apprenticeId) {
+        UserMoneyRecord userMoneyRecord = new UserMoneyRecordVO();
+        userMoneyRecord.setSource(source);
+        userMoneyRecord.setUserId(userId);
+        userMoneyRecord.setApprenticeId(apprenticeId);
+        userMoneyRecord.setType(1);
+        userMoneyRecord.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        return userMoneyRecordMapper.insertSelective(userMoneyRecord);
+    }
+
+    @Override
+    public int updateUserMoneyRecord(Long userId, BigDecimal money) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        BigDecimal oldMoney = user.getMoney();
+        //获取新零钱数
+        BigDecimal newMoney = oldMoney.add(money).setScale(2, BigDecimal.ROUND_HALF_UP);
+        user.setMoney(newMoney);
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public UserGoldRecord isGiveParentRecruitGold(Long userId, Long parentId) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("userId", userId);
+        map.put("apprenticeId", parentId);
+        return userGoldRecordMapper.isGiveParentRecruitGold(map);
+    }
+
+    @Override
+    public UserGoldRecord getWeekupThreeDayGetGold(Long userId, int source) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("userId", userId);
+        map.put("source", source);
+        return userGoldRecordMapper.getWeekupThreeDayGetGold(map);
+    }
+
+    @Override
+    public UserShare getWeekupThreeDay(Long userId, String type) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("userId", userId);
+        map.put("type", type);
+        return userShareMapper.getWeekupThreeDay(map);
+    }
+
+    @Override
+    public UserGoldRecord getUserGoldRecordInfo(Long userId) {
+        return userGoldRecordMapper.getUserGoldRecordInfo(userId);
+    }
+
+    @Override
+    public List<StaticIndustrysVO> listStaticIndustrys() {
+        List<StaticIndustrysVO> listVO = staticIndustrysMapper.listStaticIndustrys();
+        for(StaticIndustrysVO vo : listVO){
+            List<StaticJobs> listJobs = staticJobsMapper.listStaticJobs(vo.getId());
+            vo.setListJobs(listJobs);
+        }
+        return listVO;
+    }
+
+    @Override
+    public int delUserReadRecord(Long userId) {
+        return userReadRecordMapper.delUserReadRecord(userId);
+    }
+
+    @Override
+    public int getApprenticeSum(Long parentId) {
+        return userMapper.getApprenticeSum(parentId);
     }
 
     @Override

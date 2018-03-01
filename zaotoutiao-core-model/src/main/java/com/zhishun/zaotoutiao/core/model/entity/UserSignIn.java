@@ -35,16 +35,6 @@ public class UserSignIn implements Serializable {
     private String createDate;
 
     /**
-     * 构造方法
-     */
-    public UserSignIn(Long id, Long userId, Integer signContinuousDay, String createDate) {
-        this.id = id;
-        this.userId = userId;
-        this.signContinuousDay = signContinuousDay;
-        this.createDate = createDate;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

@@ -23,6 +23,21 @@ public class UserGoldRecordVO extends UserGoldRecord{
     private String details;
 
     /**
+     * 金币
+     */
+    private int sumGold;
+
+    /**
+     * 姓名
+     */
+    private String apprenticeName;
+
+    /**
+     * 昵称
+     */
+    private String apprenticeNickName;
+
+    /**
      * Getter method for property <tt>explanation</tt>.
      *
      * @return property value of explanation
@@ -56,5 +71,59 @@ public class UserGoldRecordVO extends UserGoldRecord{
      */
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    /**
+     * Getter method for property <tt>sumGold</tt>.
+     *
+     * @return property value of sumGold
+     */
+    public int getSumGold() {
+        return sumGold;
+    }
+
+    /**
+     * Setter method for property <tt>sumGold</tt>.
+     *
+     * @param sumGold value to be assigned to property sumGold
+     */
+    public void setSumGold(int sumGold) {
+        this.sumGold = sumGold;
+    }
+
+    /**
+     * Getter method for property <tt>apprenticeName</tt>.
+     *
+     * @return property value of apprenticeName
+     */
+    public String getApprenticeName() {
+        return apprenticeName;
+    }
+
+    /**
+     * Setter method for property <tt>apprenticeName</tt>.
+     *
+     * @param apprenticeName value to be assigned to property apprenticeName
+     */
+    public void setApprenticeName(String apprenticeName) {
+        this.apprenticeName = apprenticeName;
+    }
+
+    /**
+     * Getter method for property <tt>apprenticeNickName</tt>.
+     *
+     * @return property value of apprenticeNickName
+     */
+    public String getApprenticeNickName() {
+        return apprenticeNickName;
+    }
+
+    /**
+     * Setter method for property <tt>apprenticeNickName</tt>.
+     *
+     * @param apprenticeNickName value to be assigned to property apprenticeNickName
+     */
+    public void setApprenticeNickName(String apprenticeNickName) {
+        this.apprenticeNickName = apprenticeNickName;
     }
 }

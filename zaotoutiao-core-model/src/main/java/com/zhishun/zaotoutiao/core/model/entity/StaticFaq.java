@@ -60,21 +60,6 @@ public class StaticFaq implements Serializable {
     private Integer orderIndex;
 
     /**
-     * 构造方法
-     */
-    public StaticFaq(Long id, String question, String answer, String createDate, String groups, String type, String videoPath, String skipUrl, Integer orderIndex) {
-        this.id = id;
-        this.question = question;
-        this.answer = answer;
-        this.createDate = createDate;
-        this.groups = groups;
-        this.type = type;
-        this.videoPath = videoPath;
-        this.skipUrl = skipUrl;
-        this.orderIndex = orderIndex;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

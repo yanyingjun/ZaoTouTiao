@@ -108,4 +108,12 @@
   <select id="countUserGiveLike" parameterType="java.lang.Long" resultType="int">
     SELECT count(id) as count FROM user_give_like WHERE commentsId = #{commentsId} AND is_like = 1
   </select>
+
+  <delete id="delUserGiveLike" parameterType="map">
+    delete from user_give_like
+    where userId = #{userId}
+    <if test="commentsId != null">
+      and commentsId = #{commentsId}
+    </if>
+  </delete>
 </mapper>

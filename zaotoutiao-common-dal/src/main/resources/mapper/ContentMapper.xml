@@ -2,17 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhishun.zaotoutiao.dal.mapper.ContentMapper">
   <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.Content">
-    <constructor>
-      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="infoId" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="html_content" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="create_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="infoId" jdbcType="VARCHAR" property="infoId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="html_content" jdbcType="LONGVARCHAR" property="htmlContent" />
   </resultMap>
-
   <sql id="Base_Column_List">
-    id, infoId, content, html_content, create_date
+    id, infoId, create_date, content, html_content
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -25,10 +22,10 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.Content">
-    insert into content (id, infoId, content, 
-      html_content, create_date)
-    values (#{id,jdbcType=BIGINT}, #{infoid,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
-      #{htmlContent,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP})
+    insert into content (id, infoId, create_date,
+      content, html_content)
+    values (#{id,jdbcType=BIGINT}, #{infoId,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},
+      #{content,jdbcType=LONGVARCHAR}, #{htmlContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.Content">
     insert into content
@@ -36,8 +33,11 @@
       <if test="id != null">
         id,
       </if>
-      <if test="infoid != null">
+      <if test="infoId != null">
         infoId,
+      </if>
+      <if test="createDate != null">
+        create_date,
       </if>
       <if test="content != null">
         content,
@@ -45,54 +45,58 @@
       <if test="htmlContent != null">
         html_content,
       </if>
-      <if test="createDate != null">
-        create_date,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="infoid != null">
-        #{infoid,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="htmlContent != null">
-        #{htmlContent,jdbcType=VARCHAR},
+      <if test="infoId != null">
+        #{infoId,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null">
         #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="htmlContent != null">
+        #{htmlContent,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.Content">
     update content
     <set>
-      <if test="infoid != null">
-        infoId = #{infoid,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="htmlContent != null">
-        html_content = #{htmlContent,jdbcType=VARCHAR},
+      <if test="infoId != null">
+        infoId = #{infoId,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null">
         create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="htmlContent != null">
+        html_content = #{htmlContent,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zhishun.zaotoutiao.core.model.entity.Content">
     update content
-    set infoId = #{infoid,jdbcType=VARCHAR},
-      content = #{content,jdbcType=VARCHAR},
-      html_content = #{htmlContent,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP}
+    set infoId = #{infoId,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR},
+      html_content = #{htmlContent,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="getContent" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from content
+    where infoId =#{infoId}
+  </select>
 
   <select id="selectByInfoId" parameterType="String" resultMap="BaseResultMap">
     SELECT

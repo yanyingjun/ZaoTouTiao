@@ -202,4 +202,52 @@
   <select id="getTodayCommentsGold" parameterType="java.lang.Long" resultType="int">
     SELECT sum(gold) as count FROM user_gold_record WHERE source = 5 AND type = 1 AND userId = #{userId} AND DATE_FORMAT( user_gold_record.create_date, '%Y%m%d' ) = DATE_FORMAT( now(), '%Y%m%d' )
   </select>
+
+  <select id="isGetNewbieGoldToday" parameterType="java.lang.Long" resultMap="BaseResultMap">
+      SELECT * FROM user_gold_record WHERE TO_DAYS( NOW( ) ) - TO_DAYS( create_date) &lt;= 0 AND userId = #{userId} AND source = 8
+  </select>
+
+    <select id="getReadGoldToday" parameterType="map" resultType="int">
+        SELECT SUM(gold) as count
+        FROM user_gold_record WHERE userId = #{userId} AND source = #{source} AND create_date &gt; #{zeroDay}
+        group by userId
+    </select>
+
+  <select id="isGiveParentRecruitGold" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM user_gold_record WHERE userId = #{userId} AND apprenticeId = #{apprenticeId} AND source = 6 OR source = 9
+  </select>
+  
+  <select id="getWeekupThreeDayGetGold" parameterType="map" resultMap="BaseResultMap">
+    SELECT *,date_sub(now() ,interval 3 day)  FROM user_gold_record WHERE userId = #{userId} AND source = #{source}
+  </select>
+
+  <select id="getUserGoldRecordInfo" parameterType="long" resultMap="BaseResultMap">
+    SELECT * from user_gold_record where userId = #{userId} order by create_date desc limit 1
+  </select>
+
+  <select id="getOpenGoldToday" parameterType="map" resultType="int">
+    SELECT SUM(gold) as count FROM user_gold_record WHERE userId = #{userId} AND source = #{source} AND create_date > #{zeroDay}
+    group by userId
+  </select>
+
+  <select id="leadTime" parameterType="long" resultType="map">
+    SELECT max(create_date) AS createDate, DATE_ADD(max(create_date), INTERVAL 4 HOUR) AS nextOpen,
+    now() as now, Now() - DATE_ADD(max(create_date), INTERVAL 4 HOUR) as leadSecond,
+    TIMESTAMPDIFF(HOUR, DATE_ADD(max(create_date), INTERVAL 4 HOUR), now()) as leadHours
+    FROM user_gold_record WHERE userId = #{userId} AND source = 4
+  </select>
+
+  <select id="leadTimeTwo" parameterType="long" resultType="map">
+    SELECT now() AS createDate, DATE_ADD(now(), INTERVAL 4 HOUR) AS nextOpen, now() as now,
+    Now() - DATE_ADD(max(create_date), INTERVAL 4 HOUR) as leadSecond,
+    TIMESTAMPDIFF(HOUR, DATE_ADD(max(create_date), INTERVAL 4 HOUR), now()) as leadHours
+    FROM user_gold_record WHERE userId = #{userId} AND source = 4
+  </select>
+
+  <select id="listUserGoldRecord" parameterType="long" resultMap="BaseResultMap">
+    SELECT r.apprenticeId, sum(r.gold) as sumGold, u.name as apprenticeName, u.nickName as apprenticeNickName
+    FROM user_gold_record r LEFT JOIN user u ON r.userId = u.userId
+    WHERE r.userId = #{userId} AND type = 1 AND source = 2
+    GROUP BY r.apprenticeId ORDER BY sumGold DESC LIMIT 0,50
+  </select>
 </mapper>

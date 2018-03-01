@@ -2,12 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhishun.zaotoutiao.dal.mapper.UserCollectMapper">
   <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.UserCollect">
-    <constructor>
-      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="userId" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="infosId" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="create_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="userId" jdbcType="BIGINT" property="userId" />
+    <result column="infosId" jdbcType="VARCHAR" property="infosId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
   </resultMap>
   <sql id="Base_Column_List">
     id, userId, infosId, create_date
@@ -25,7 +23,7 @@
   <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserCollect">
     insert into user_collect (id, userId, infosId, 
       create_date)
-    values (#{id,jdbcType=BIGINT}, #{userid,jdbcType=BIGINT}, #{infosid,jdbcType=VARCHAR}, 
+    (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{infosId,jdbcType=VARCHAR},
       #{createDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserCollect">
@@ -34,10 +32,10 @@
       <if test="id != null">
         id,
       </if>
-      <if test="userid != null">
-        userId,
-      </if>
-      <if test="infosid != null">
+        <if test="userId != null">
+            userId,
+        </if>
+        <if test="infosId != null">
         infosId,
       </if>
       <if test="createDate != null">
@@ -48,11 +46,11 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="userid != null">
-        #{userid,jdbcType=BIGINT},
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
       </if>
-      <if test="infosid != null">
-        #{infosid,jdbcType=VARCHAR},
+      <if test="infosId != null">
+        #{infosId,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null">
         #{createDate,jdbcType=TIMESTAMP},
@@ -62,11 +60,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserCollect">
     update user_collect
     <set>
-      <if test="userid != null">
-        userId = #{userid,jdbcType=BIGINT},
+      <if test="userId != null">
+        userId = #{userId,jdbcType=BIGINT},
       </if>
-      <if test="infosid != null">
-        infosId = #{infosid,jdbcType=VARCHAR},
+      <if test="infosId != null">
+        infosId = #{infosId,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null">
         create_date = #{createDate,jdbcType=TIMESTAMP},
@@ -76,9 +74,26 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserCollect">
     update user_collect
-    set userId = #{userid,jdbcType=BIGINT},
-      infosId = #{infosid,jdbcType=VARCHAR},
+    set userId = #{userId,jdbcType=BIGINT},
+      infosId = #{infosId,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <delete id="delUserCollect" parameterType="java.lang.Long">
+    delete from user_collect
+    where userId = #{userId}
+  </delete>
+
+  <select id="listCollect" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM user_collect WHERE userId = #{userId} and infosId = #{infosId}
+  </select>
+
+  <delete id="delOneCollect" parameterType="map">
+    DELETE FROM user_collect where userId = #{userId} AND infosId = #{infosId}
+  </delete>
+
+  <select id="getUserCollectByParam" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM user_collect WHERE user_collect.infosId = #{infosId} AND user_collect.userId = #{userId}
+  </select>
 </mapper>

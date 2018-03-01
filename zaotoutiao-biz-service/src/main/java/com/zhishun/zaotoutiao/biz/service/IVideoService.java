@@ -1,5 +1,6 @@
 package com.zhishun.zaotoutiao.biz.service;
 
+        import com.zhishun.zaotoutiao.core.model.entity.Infos;
         import com.zhishun.zaotoutiao.core.model.entity.VideoChannels;
         import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 
@@ -26,4 +27,11 @@ public interface IVideoService {
      * @return
      */
     List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize);
+
+    /**
+     * 获取视频相关内容
+     * @param channelId
+     * @return
+     */
+    List<Infos> getRandVideoList(int channelId);
 }

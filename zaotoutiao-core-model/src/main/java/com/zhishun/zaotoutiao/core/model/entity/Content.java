@@ -2,29 +2,16 @@ package com.zhishun.zaotoutiao.core.model.entity;
 
 import java.util.Date;
 
-
 public class Content {
     private Long id;
 
-    private String infoid;
+    private String infoId;
+
+    private Date createDate;
 
     private String content;
 
     private String htmlContent;
-
-    private Date createDate;
-
-    public Content(Long id, String infoid, String content, String htmlContent, Date createDate) {
-        this.id = id;
-        this.infoid = infoid;
-        this.content = content;
-        this.htmlContent = htmlContent;
-        this.createDate = createDate;
-    }
-
-    public Content() {
-        super();
-    }
 
     public Long getId() {
         return id;
@@ -34,28 +21,22 @@ public class Content {
         this.id = id;
     }
 
-    public String getInfoid() {
-        return infoid;
+    /**
+     * Getter method for property <tt>infoId</tt>.
+     *
+     * @return property value of infoId
+     */
+    public String getInfoId() {
+        return infoId;
     }
 
-    public void setInfoid(String infoid) {
-        this.infoid = infoid == null ? null : infoid.trim();
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
-    }
-
-    public String getHtmlContent() {
-        return htmlContent;
-    }
-
-    public void setHtmlContent(String htmlContent) {
-        this.htmlContent = htmlContent == null ? null : htmlContent.trim();
+    /**
+     * Setter method for property <tt>infoId</tt>.
+     *
+     * @param infoId value to be assigned to property infoId
+     */
+    public void setInfoId(String infoId) {
+        this.infoId = infoId;
     }
 
     public Date getCreateDate() {
@@ -64,5 +45,41 @@ public class Content {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    /**
+     * Getter method for property <tt>content</tt>.
+     *
+     * @return property value of content
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * Setter method for property <tt>content</tt>.
+     *
+     * @param content value to be assigned to property content
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    /**
+     * Getter method for property <tt>htmlContent</tt>.
+     *
+     * @return property value of htmlContent
+     */
+    public String getHtmlContent() {
+        return htmlContent;
+    }
+
+    /**
+     * Setter method for property <tt>htmlContent</tt>.
+     *
+     * @param htmlContent value to be assigned to property htmlContent
+     */
+    public void setHtmlContent(String htmlContent) {
+        this.htmlContent = htmlContent;
     }
 }

@@ -6,6 +6,7 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IVideoService;
+import com.zhishun.zaotoutiao.core.model.entity.Infos;
 import com.zhishun.zaotoutiao.core.model.entity.VideoChannels;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
@@ -54,5 +55,10 @@ public class VideoServiceImpl implements IVideoService{
         map.put("startNo",startNo);
         List<InfosVo> voList= infosMapper.selectInfosByType(map);
         return voList;
+    }
+
+    @Override
+    public List<Infos> getRandVideoList(int channelId) {
+        return infosMapper.getRandVideoList(channelId);
     }
 }

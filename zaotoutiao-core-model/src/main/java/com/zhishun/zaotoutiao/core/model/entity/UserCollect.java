@@ -1,56 +1,83 @@
 package com.zhishun.zaotoutiao.core.model.entity;
 
-import java.util.Date;
-
 public class UserCollect {
     private Long id;
 
-    private Long userid;
+    private Long userId;
 
-    private String infosid;
+    private String infosId;
 
-    private Date createDate;
+    private String createDate;
 
-    public UserCollect(Long id, Long userid, String infosid, Date createDate) {
-        this.id = id;
-        this.userid = userid;
-        this.infosid = infosid;
-        this.createDate = createDate;
-    }
-
-    public UserCollect() {
-        super();
-    }
-
+    /**
+     * Getter method for property <tt>id</tt>.
+     *
+     * @return property value of id
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Setter method for property <tt>id</tt>.
+     *
+     * @param id value to be assigned to property id
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getUserid() {
-        return userid;
+    /**
+     * Getter method for property <tt>userId</tt>.
+     *
+     * @return property value of userId
+     */
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    /**
+     * Setter method for property <tt>userId</tt>.
+     *
+     * @param userId value to be assigned to property userId
+     */
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getInfosid() {
-        return infosid;
+    /**
+     * Getter method for property <tt>infosId</tt>.
+     *
+     * @return property value of infosId
+     */
+    public String getInfosId() {
+        return infosId;
     }
 
-    public void setInfosid(String infosid) {
-        this.infosid = infosid == null ? null : infosid.trim();
+    /**
+     * Setter method for property <tt>infosId</tt>.
+     *
+     * @param infosId value to be assigned to property infosId
+     */
+    public void setInfosId(String infosId) {
+        this.infosId = infosId;
     }
 
-    public Date getCreateDate() {
+    /**
+     * Getter method for property <tt>createDate</tt>.
+     *
+     * @return property value of createDate
+     */
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    /**
+     * Setter method for property <tt>createDate</tt>.
+     *
+     * @param createDate value to be assigned to property createDate
+     */
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 }

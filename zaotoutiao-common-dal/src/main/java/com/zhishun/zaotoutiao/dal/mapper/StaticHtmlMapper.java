@@ -62,4 +62,11 @@ public interface StaticHtmlMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(StaticHtml record);
+
+    /**
+     * 获取新闻详情
+     * @param name
+     * @return
+     */
+    StaticHtml getStaticHtml(String name);
 }

@@ -5,6 +5,9 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.StaticIndustrys;
+import com.zhishun.zaotoutiao.core.model.vo.StaticIndustrysVO;
+
+import java.util.List;
 
 public interface StaticIndustrysMapper {
     /**
@@ -54,4 +57,10 @@ public interface StaticIndustrysMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(StaticIndustrys record);
+
+    /**
+     * 获取职业列表
+     * @return
+     */
+    List<StaticIndustrysVO> listStaticIndustrys();
 }

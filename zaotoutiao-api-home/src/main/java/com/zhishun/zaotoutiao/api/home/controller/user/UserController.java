@@ -8,24 +8,17 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.UserMsgReq;
-import com.zhishun.zaotoutiao.biz.service.IExchangeRateService;
-import com.zhishun.zaotoutiao.biz.service.INewsService;
-import com.zhishun.zaotoutiao.biz.service.IUserService;
+import com.zhishun.zaotoutiao.biz.service.*;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.common.util.BeanMapUtil;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.common.util.Md5Util;
-import com.zhishun.zaotoutiao.core.model.entity.ExchangeRate;
-import com.zhishun.zaotoutiao.core.model.entity.User;
-import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
+import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
-import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
-import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
-import com.zhishun.zaotoutiao.core.model.vo.UserVO;
+import com.zhishun.zaotoutiao.core.model.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +48,15 @@ public class UserController extends BaseController{
 
     @Autowired
     private INewsService newsService;
+
+    @Autowired
+    private IGoldRecordService goldRecordService;
+
+    @Autowired
+    private IStaticFakeDataService staticFakeDataService;
+
+    @Autowired
+    private IMoneyRecordService moneyRecordService;
 
     /**
      * 用户注册
@@ -155,7 +157,7 @@ public class UserController extends BaseController{
                             dataMap.put("isFirstLogin", "false");
                         }
                         userData.setIsOnline(1);
-                        userService.updateUserInfo(userData);
+                        userService.updateUser(userData);
                         dataMap.put("data", userData);
                     }
                 }
@@ -190,7 +192,7 @@ public class UserController extends BaseController{
                 }else{
                     //更新用户密码
                     user.setPassword(password);
-                    userService.updateUserInfo(user);
+                    userService.updateUser(user);
                     dataMap.put("result", "success");
                     dataMap.put("msg", "修改密码成功");
                     dataMap.put("data", user);
@@ -221,7 +223,7 @@ public class UserController extends BaseController{
                 User user = userService.getUserByMap(telephone);
                 //更改用户状态为离线
                 user.setIsOnline(0);
-                userService.updateUserInfo(user);
+                userService.updateUser(user);
                 dataMap.put("result", "success");
                 dataMap.put("msg", "成功退出");
                 dataMap.put("data", user);
@@ -261,7 +263,7 @@ public class UserController extends BaseController{
 
     /**
      * 用户信息修改
-     * @param userVO
+     * @param userId
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_SET_REQ, method = RequestMethod.POST)
@@ -300,7 +302,7 @@ public class UserController extends BaseController{
                 if(user == null || user.getUserId().equals(userVO.getUserId())){
                     User user2 = new User();
                     BeanMapUtil.copy(userVO, user2);
-                    userService.updateUserInfo(user2);
+                    userService.updateUser(user2);
                     dataMap.put("result", "success");
                     dataMap.put("msg", "个人信息修改成功");
                     dataMap.put("data", user);
@@ -393,7 +395,7 @@ public class UserController extends BaseController{
                         dataMap.put("msg", "密码错误，请重新输入");
                     }else{
                         user.setPassword(newPassword);
-                        userService.updateUserInfo(user);
+                        userService.updateUser(user);
                         dataMap.put("result", "success");
                         dataMap.put("msg", "修改密码成功");
                         dataMap.put("data", user);
@@ -434,24 +436,16 @@ public class UserController extends BaseController{
                 if(StringUtils.isEmpty(userPar)){
                     //添加师傅id到自己的表里
                     user.setParentId(parent.getUserId());
-                    userService.updateUserInfo(user);
+                    userService.updateUser(user);
                     //查询收徒奖励金币数
                     ExchangeRate exchangeRate = exchangeRateService.getGoldToMoney();
                     String gold = exchangeRate.getRecruitGold().toString();
                     //给师傅添加收徒奖励金
                     BigDecimal goldAll = new BigDecimal(parent.getGold()).add(new BigDecimal(gold));
                     parent.setGold(goldAll.longValue());
-                    userService.updateUserInfo(parent);
+                    userService.updateUser(parent);
                     //添加金币新增记录
-                    UserGoldRecord userGoldRecord = new UserGoldRecord();
-                    userGoldRecord.setGold(Long.valueOf(gold));
-                    userGoldRecord.setSource(6);
-                    userGoldRecord.setUserId(parent.getUserId());
-                    userGoldRecord.setType((byte)1);
-                    userGoldRecord.setApprenticeId(userId);
-                    userGoldRecord.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
-                    userGoldRecord.setShareId((long)0);
-                    userService.addUserGoldRecord(userGoldRecord);
+                    userService.addUserGoldRecord(6, parent.getUserId(), Long.valueOf(gold), userId);
 
                     dataMap.put("msg", "师徒关系绑定成功");
                     dataMap.put("parent_info", parent);
@@ -585,6 +579,439 @@ public class UserController extends BaseController{
 
         return dataMap;
     }
+
+    /**
+     * 阅读获取金币
+     * @param userId
+     * @param infoId
+     * @param infoType
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.READ_GOLD_GET)
+    public Map<Object,Object> readGoldGet(final Long userId, final Long infoId, final String infoType){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotZero(infoId, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotBlank(infoType, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+
+                //判断用户是否阅读过该新闻，并请求过加金币
+                int num = userService.isRead(userId, infoId);
+                int readContinuousDay = 0;
+                if(num == 2){
+                    //新手任务
+                    //判断是否超过活动日期
+                    //判断是否超过活动天数 newbie_read_time < 0为该活动永不过期
+                    ExchangeRate exchangeRate = exchangeRateService.getGoldToMoney();
+                    Integer newBieReadTime = exchangeRate.getNewbieReadTime();
+                    User user = userService.isSurpassingActivtiy(newBieReadTime, userId);
+                    if(!StringUtils.isEmpty(user) && newBieReadTime < 0){
+                        //判断今天是否已经获得过新手奖励
+                        UserGoldRecord userGoldRecord = userService.isGetNewbieGoldToday(userId);
+                        if(StringUtils.isEmpty(userGoldRecord)) {
+                            /**
+                             * 新手阅读任务：三十天时限
+                             首次登陆当天每天阅读3篇以上 200
+                             连续3天  300
+                             连续6天 400
+                             连续9天 500
+                             连续12天 600
+                             连续15天 700
+                             连续18天 800
+                             连续21天 1000
+                             */
+                            int addGoldNum = 0;
+                            if (readContinuousDay < 3) {
+                                addGoldNum = 200;
+                            } else if (readContinuousDay < 6) {
+                                addGoldNum = 300;
+                            } else if (readContinuousDay < 9) {
+                                addGoldNum = 400;
+                            } else if (readContinuousDay < 12) {
+                                addGoldNum = 500;
+                            } else if (readContinuousDay < 15) {
+                                addGoldNum = 600;
+                            } else if (readContinuousDay < 18) {
+                                addGoldNum = 700;
+                            } else if (readContinuousDay < 21) {
+                                addGoldNum = 800;
+                            } else if (readContinuousDay < 30) {
+                                addGoldNum = 1000;
+                            } else {
+                                addGoldNum = 0;
+                            }
+                            //获取用户当天阅读篇数（如果大于三篇）
+                            List<UserReadRecord> urrList = userService.isReadThreeToday(userId);
+                            if (urrList.size() > 3) {
+                                //添加新手阅读金币和金币记录
+                                //新闻阅读奖励类型
+                                int source = 8;
+                                userService.addUserGoldRecord(source, userId, Long.valueOf(addGoldNum), null);
+                                //更新用户金币
+                                userService.updateUserInfo(userId, addGoldNum);
+                                dataMap.put("newBieReadGold", addGoldNum);
+                            } else {
+                                dataMap.put("newBieReadGold", "0");
+                            }
+                        }
+                    }else{
+                        dataMap.put("newBieReadGold", "0");
+                    }
+                    //日常任务
+                    //判断是否给师傅进贡，判断是否算有效徒弟
+
+                    //判断是否超过今天阅读可以获得的最大金币数
+                    //获取用户当天阅读获得的金币总和
+                    int goldToday = userService.getReadGoldToday(userId, 1);
+                    //获取用户当天最大可以获得的金币数
+                    StaticGoldConfig staticGoldConfig = userService.getReadGoldConfig("READ_ARTICLE");
+                    Integer readGoldMax = staticGoldConfig.getHighest();
+                    if(goldToday < readGoldMax){
+                        //获取活动天数
+                        //获取用户注册时间
+                        //判断是否超过活动天数 readActivityDays < 0为该活动永不过期
+                        Integer readActivityDays = exchangeRate.getReadActivityDays();
+                        User user1 = userService.isSurpassingActivtiy(readActivityDays, userId);
+                        if(!StringUtils.isEmpty(user1) || readActivityDays < 0){
+                            //随机为用户添加金币
+                            //获取随机概率
+                            Integer prob = staticGoldConfig.getUnit();
+                            String addGoldNum = staticGoldConfig.getValue();
+                            if(rand(prob) == true){
+                                //添加自己阅读金币和金币记录
+                                //新闻阅读奖励类型
+                                int source = 1;
+                                userService.addUserGoldRecord(source, userId, Long.valueOf(addGoldNum), null);
+                                //更新用户金币
+                                userService.updateUserInfo(userId, Integer.parseInt(addGoldNum));
+                                dataMap.put("result", "success");
+                                dataMap.put("msg", "本次获得金币奖励");
+                                dataMap.put("getGold", addGoldNum);
+                                dataMap.put("data", "true");
+                                dataMap.put("newBieReadGold", 0);
+
+                                //判断是否有师傅
+                                Long parentId = user.getParentId();
+                                if(!StringUtils.isEmpty(parentId) && parentId != 0){
+                                    //判断是否已经阅读超过五篇文章，确定是否有师徒关系
+                                    List<UserReadRecord> listURR = userService.isReadFive(userId);
+                                    if(listURR.size() > 5){
+                                        //为父类添加金币
+                                        StaticGoldConfig sgc = userService.getReadGoldConfig("APPRENTICE_READ_ARTICLE");
+                                        Integer prob1 = sgc.getUnit();
+                                        BigDecimal addParentGoldNum = new BigDecimal(addGoldNum).multiply(new BigDecimal(prob1/100));
+                                        //添加金币和金币记录
+                                        //这里把父类id当作用户id,用户id当作徒弟id,添加的金币作为阅读进贡
+                                        //添加徒弟阅读进贡金币记录
+                                        //徒弟新闻阅读进贡奖励类型
+                                        userService.addUserGoldRecord(2,parentId, addParentGoldNum.longValue(), userId);
+                                        //更新用户金币
+                                        userService.updateUserInfo(parentId, addParentGoldNum.intValue());
+
+                                        //--------收徒奖励 --------
+                                        //获取配置,判断师傅是否是首次收徒
+                                        User user4 = userService.isParentFirstRecruit(parentId);
+                                        if(StringUtils.isEmpty(user4)){
+                                            //给师傅添加收徒奖励和奖励记录（首次）
+                                            Integer addParentGoldNum1 = exchangeRate.getNewbieRecruitGold();
+                                            BigDecimal addParentMoneyNum = exchangeRate.getNewbieRecruitMoney();
+                                            //添加金币和金币记录
+                                            //徒弟为
+                                            userService.addUserGoldRecord(9,parentId, addParentGoldNum1.longValue(), userId);
+                                            //更新用户金币
+                                            userService.updateUserInfo(parentId, addParentGoldNum1.intValue());
+
+                                            //添加零钱和零钱记录
+
+                                            userService.addUserMoneyRecord(3, parentId, addParentMoneyNum, userId);
+                                            userService.updateUserMoneyRecord(parentId, addParentMoneyNum);
+                                        }else{
+                                            //判断师傅已经收到自己的收徒奖励
+                                            UserGoldRecord userGoldRecord1 = userService.isGiveParentRecruitGold(userId, parentId);
+                                            if(StringUtils.isEmpty(userGoldRecord1)){
+                                                //给师傅添加收徒奖励和奖励记录（普通）
+                                                userService.addUserGoldRecord(6,parentId, exchangeRate.getRecruitGold().longValue(), userId);
+                                                userService.updateUserInfo(parentId, exchangeRate.getRecruitGold().intValue());
+
+                                            }
+                                        }
+                                        //判断三天内是否添加过唤醒金币
+                                        UserGoldRecord userGoldRecord1 = userService.getWeekupThreeDayGetGold(userId, 13);
+                                        if(StringUtils.isEmpty(userGoldRecord1)){
+                                            //判断三天内是否有师傅唤醒自己
+                                            // 被唤醒类型
+                                            String type = "AWAKEN";
+                                            UserShare userShare = userService.getWeekupThreeDay(userId, type);
+                                            if(!StringUtils.isEmpty(userShare)){
+                                                //添加金币和金币记录
+                                                //给师傅添加唤醒徒弟奖励金币
+                                                userService.addUserGoldRecord(12,parentId, exchangeRate.getAwakenParentGold().longValue(), userId);
+                                                userService.updateUserInfo(parentId, exchangeRate.getAwakenParentGold().intValue());
+
+                                                //给师徒弟加被唤醒奖励金币
+                                                userService.addUserGoldRecord(13,userId, exchangeRate.getAwakenUserGold().longValue(), userId);
+                                                userService.updateUserInfo(userId, exchangeRate.getAwakenUserGold().intValue());
+                                            }
+
+                                        }
+                                    }
+                                }
+
+                            }else{
+                                dataMap.put("result", "success");
+                                dataMap.put("msg", "本次浏览没获得金币");
+                                dataMap.put("getGold", 0);
+                                dataMap.put("data", false);
+                                dataMap.put("newBieReadGold", 0);
+                            }
+                        }else {
+                            dataMap.put("result", "success");
+                            dataMap.put("msg", "已经过了活动日期");
+                            dataMap.put("getGold", 0);
+                            dataMap.put("data", false);
+                            dataMap.put("newBieReadGold", 0);
+                        }
+                    }else {
+                        dataMap.put("result", "success");
+                        dataMap.put("msg", "已经达到今日最多看新闻获得金币");
+                        dataMap.put("getGold", 0);
+                        dataMap.put("data", false);
+                        dataMap.put("newBieReadGold", 0);
+                    }
+                }else{
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "您已经浏览过该新闻,本次浏览无金币");
+                    dataMap.put("getGold", 0);
+                    dataMap.put("data", false);
+                    dataMap.put("newBieReadGold", 0);
+                }
+
+            }
+        });
+
+        return dataMap;
+    }
+
+
+    /**
+     * 获取职业列表信息
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.JOBS_GET)
+    public Map<Object,Object> jobsGet(){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+
+            }
+
+            @Override
+            public void handle() throws Exception {
+                List<StaticIndustrysVO> listVO = userService.listStaticIndustrys();
+                dataMap.put("result", "success");
+                dataMap.put("msg", "信息返回成功");
+                dataMap.put("data", listVO);
+
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 清空用户历史记录
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.LOOK_RECORD_DEL)
+    public Map<Object,Object> lookRecordDel(final Long userId){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                userService.delUserReadRecord(userId);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "返回信息成功");
+
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 开宝箱
+     * @param userId
+     * @param isSubmit
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.OPEN_TREASURE)
+    public Map<Object,Object> openTreasure(final Long userId, final Long isSubmit){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                //判断是否超过今天开宝箱可以获得的最大金币数
+                //获取用户当天开宝箱获得的金币总和
+                int goldToday = goldRecordService.getOpenGoldToday(userId, 4);
+                //获取用户当天最大可以获得的金币数
+                StaticGoldConfig staticGoldConfig = userService.getReadGoldConfig("OPEN_TREASURE");
+                int openGoldMax = staticGoldConfig.getHighest();
+                if(goldToday < openGoldMax){
+                    //判断时间差
+                    Map leadTime = goldRecordService.leadTime(userId);
+                    //计算下次开宝箱时间
+                    Map leadTime2 = goldRecordService.leadTimeTwo(userId);
+                    if(StringUtils.isEmpty(leadTime.get("createDate"))){
+                        //该用户还没开过宝箱，直接开启宝箱
+                        //添加金币和金币记录
+                        if(isSubmit != 0){
+                            userService.addUserGoldRecord(4,userId, Long.valueOf(staticGoldConfig.getValue()), null);
+                            userService.updateUserInfo(userId, Integer.parseInt(staticGoldConfig.getValue()));
+                            dataMap.put("result", "success");
+                            dataMap.put("msg", "该用户还没开过宝箱,直接开启宝箱");
+                            dataMap.put("data", false);
+                            dataMap.put("getGold", staticGoldConfig.getValue());
+                            dataMap.put("leadTime", leadTime2);
+                        }else{
+                            dataMap.put("result", "success");
+                            dataMap.put("msg", "该用户还没开过宝箱,可以开启宝箱");
+                            dataMap.put("data", true);
+                            dataMap.put("getGold", 0);
+                            dataMap.put("leadTime", leadTime);
+                        }
+                    }else{
+                        String leadSecond = leadTime.get("leadSecond").toString();
+                        if(Integer.parseInt(leadSecond) >= 0){
+                            //可以开宝箱
+                            if(isSubmit != 0){
+                                userService.addUserGoldRecord(4,userId, Long.valueOf(staticGoldConfig.getValue()), null);
+                                userService.updateUserInfo(userId, Integer.parseInt(staticGoldConfig.getValue()));
+                                dataMap.put("result", "success");
+                                dataMap.put("msg", "可以开宝箱，已开");
+                                dataMap.put("data", false);
+                                dataMap.put("getGold", staticGoldConfig.getValue());
+                                dataMap.put("leadTime", leadTime2);
+                            }else{
+                                dataMap.put("result", "success");
+                                dataMap.put("msg", "可以开宝箱");
+                                dataMap.put("data", true);
+                                dataMap.put("getGold", staticGoldConfig.getValue());
+                                dataMap.put("leadTime", leadTime);
+                            }
+                        }else {
+                            //还未到下次开宝箱时间，返回下次开箱时间
+                            dataMap.put("result", "success");
+                            dataMap.put("msg", "还未到下次开宝箱时间，返回下次开箱时间");
+                            dataMap.put("data", false);
+                            dataMap.put("getGold", 0);
+                            dataMap.put("leadTime", leadTime);
+                        }
+                    }
+                }else{
+                    dataMap.put("result", "Failure");
+                    dataMap.put("msg", "已经达到今日最多开宝箱获得金币数");
+                    dataMap.put("data", false);
+                    dataMap.put("getGold", false);
+                }
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 周排行和总排行列表
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.GOLD_RANKINGS)
+    public Map<Object,Object> rankings(){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+
+            }
+
+            @Override
+            public void handle() throws Exception {
+                //周排行
+                List<Map> list = staticFakeDataService.weekRankings();
+                //总排行
+                List<AllRankingVO> listAll = moneyRecordService.allRankings();
+                dataMap.put("result", "success");
+                dataMap.put("msg", "相关信息返回成功");
+                dataMap.put("weekRankings", list);
+                dataMap.put("allRankings", listAll);
+
+            }
+        });
+
+        return dataMap;
+
+    }
+
+    /**
+     * 徒弟进贡排行榜
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.APPRENTICE_PAY_RANKING, method = RequestMethod.GET)
+    public Map<Object,Object> apprenticePayRanking(final Long userId){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                List<UserGoldRecord> list = goldRecordService.listUserGoldRecord(userId);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "徒弟进贡排行榜");
+                dataMap.put("data", list);
+
+            }
+        });
+
+        return dataMap;
+
+    }
+
+
+
+    //随机数
+    public Boolean rand(int prob){
+        int random = (int)(Math.random() * 100);
+        if(random < prob){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
 
 

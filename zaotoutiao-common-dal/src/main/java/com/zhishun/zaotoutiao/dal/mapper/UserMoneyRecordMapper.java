@@ -5,10 +5,12 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserMoneyRecord;
+import com.zhishun.zaotoutiao.core.model.vo.AllRankingVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public interface UserMoneyRecordMapper {
     /**
@@ -79,4 +81,10 @@ public interface UserMoneyRecordMapper {
      * @return
      */
     BigDecimal getMoneyAll(Long userId);
+
+    /**
+     * 总排行
+     * @return
+     */
+    List<AllRankingVO> allRankings();
 }

@@ -52,6 +52,22 @@ public class InfosVo extends Infos{
     //channels.name as type
     private String type;
 
+    /**
+     * 连续阅读时间
+     */
+    private String readContinuousDay;
+
+    /**
+     * 阅读时间
+     */
+    private String readCreateDate;
+
+
+    private String infoId;
+
+    private Long userId;
+
+
     public int getUserCollectId() {
         return userCollectId;
     }
@@ -66,14 +82,6 @@ public class InfosVo extends Infos{
 
     public void setCollectCreateDate(Date collectCreateDate) {
         this.collectCreateDate = collectCreateDate;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public int getCommentsNum() {
@@ -116,41 +124,6 @@ public class InfosVo extends Infos{
         this.nickName = nickName;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    @Override
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    @Override
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    /**
-     * 连续阅读时间
-     */
-    private String readContinuousDay;
-
-    /**
-     * 阅读时间
-     */
-    private String readCreateDate;
 
     public Date getOrderTime() {
         return orderTime;
@@ -194,5 +167,115 @@ public class InfosVo extends Infos{
      */
     public void setReadCreateDate(String readCreateDate) {
         this.readCreateDate = readCreateDate;
+    }
+
+    /**
+     * Getter method for property <tt>type</tt>.
+     *
+     * @return property value of type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * Setter method for property <tt>type</tt>.
+     *
+     * @param type value to be assigned to property type
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * Getter method for property <tt>infoId</tt>.
+     *
+     * @return property value of infoId
+     */
+    public String getInfoId() {
+        return infoId;
+    }
+
+    /**
+     * Setter method for property <tt>infoId</tt>.
+     *
+     * @param infoId value to be assigned to property infoId
+     */
+    public void setInfoId(String infoId) {
+        this.infoId = infoId;
+    }
+
+    /**
+     * Getter method for property <tt>content</tt>.
+     *
+     * @return property value of content
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * Setter method for property <tt>content</tt>.
+     *
+     * @param content value to be assigned to property content
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    /**
+     * Getter method for property <tt>userId</tt>.
+     *
+     * @return property value of userId
+     */
+    public Long getUserId() {
+        return userId;
+    }
+
+    /**
+     * Setter method for property <tt>userId</tt>.
+     *
+     * @param userId value to be assigned to property userId
+     */
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    /**
+     * Getter method for property <tt>likes</tt>.
+     *
+     * @return property value of likes
+     */
+    public int getLikes() {
+        return likes;
+    }
+
+    /**
+     * Setter method for property <tt>likes</tt>.
+     *
+     * @param likes value to be assigned to property likes
+     */
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    /**
+     * Getter method for property <tt>createDate</tt>.
+     *
+     * @return property value of createDate
+     */
+    @Override
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * Setter method for property <tt>createDate</tt>.
+     *
+     * @param createDate value to be assigned to property createDate
+     */
+    @Override
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

@@ -38,6 +38,36 @@ public interface InfosMapper {
     int countLookRecord(Map<String,Object> map);
 
     /**
+     * 根据新闻ID获取新闻信息
+     * @param map
+     * @return
+     */
+    Infos getInfosByMap(Map<String,Object> map);
+
+    /**
+     * 获取我的评论列表
+     * @param map
+     * @return
+     */
+    List<InfosVo> getMyCommentsList(Map<String,Object> map);
+
+    /**
+     * 获取我的评论总记录数
+     * @param map
+     * @return
+     */
+    int countMyCommentsList(Map<String,Object> map);
+
+    /**
+     * 获取视频相关内容
+     * @param channelId
+     * @return
+     */
+    List<Infos> getRandVideoList(int channelId);
+
+
+
+    /**
      * 获取最新评论和评论点赞信息
      * @param map
      * @return

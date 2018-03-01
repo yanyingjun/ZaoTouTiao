@@ -54,4 +54,10 @@ public interface AdvertisementMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(Advertisement record);
+
+    /**
+     * 随机取一条记录
+     * @return
+     */
+    Advertisement dealWithAds();
 }

@@ -160,4 +160,11 @@
     SELECT SUM(money) as moneyCount FROM user_money_record WHERE userId = #{userId}
     AND type = 1 GROUP by userId
   </select>
+
+  <select id="allRankings" resultType="com.zhishun.zaotoutiao.core.model.vo.AllRankingVO">
+    SELECT user_money_record.userId, sum(user_money_record.money) as allSum
+    FROM user_money_record LEFT JOIN user ON user_money_record.userId = user.userId
+    WHERE user_money_record.type = 1 GROUP BY user_money_record.userId
+    ORDER BY sum(user_money_record.money) DESC LIMIT 0,100
+  </select>
 </mapper>

@@ -386,6 +386,40 @@
     WHERE userId = #{userId} ORDER BY readCreateDate desc
   </select>
 
+  <select id="getInfosByMap" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from infos
+    <where>
+      <if test="infoId != null">
+        infoId = #{infoId}
+      </if>
+    </where>
+  </select>
+
+  <select id="getMyCommentsList" parameterType="long" resultMap="BaseResultMap">
+    SELECT user_comments.*,infos.*,channels.name as type
+    FROM infos RIGHT JOIN user_comments ON user_comments.infoId = infos.infoId
+    left join channels ON channels.channelId = infos.channelId
+    left JOIN user ON user_comments.userId = user.userId
+    WHERE user.userId = #{userId}
+    <if test="offset != null and limit != null">
+      limit #{offset},#{limit}
+    </if>
+  </select>
+
+  <select id="countMyCommentsList" parameterType="map" resultType="int">
+    SELECT COUNT(0)
+    FROM infos RIGHT JOIN user_comments ON user_comments.infoId = infos.infoId
+    left join channels ON channels.channelId = infos.channelId
+    left JOIN user ON user_comments.userId = user.userId
+    WHERE user.userId = #{userId}
+  </select>
+
+  <select id="getRandVideoList" parameterType="int" resultMap="BaseResultMap">
+    SELECT * FROM infos WHERE infoType='video' AND channelId = #{channelId} ORDER BY rand() limit 0,6
+  </select>
+
   <select id="getNewComments" parameterType="map" resultMap="BaseResultMap">
     SELECT user.headpath, user.nickName, user_comments.id AS commentsId, user_comments.content, user_comments.likes, user_comments.createDate, infos.*
     FROM user, user_comments, infos

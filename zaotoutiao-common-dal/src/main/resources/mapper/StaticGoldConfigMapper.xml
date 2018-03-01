@@ -153,4 +153,19 @@
     from static_gold_config
     where name = 'COMMENTS'
   </select>
+
+  <select id="getReadGoldConfig" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from static_gold_config
+    WHERE name = #{name}
+  </select>
+
+  <select id="getSignInGold" parameterType="map" resultMap="BaseResultMap">
+    SELECT * from static_gold_config where name = #{name} AND unit = #{unit}
+  </select>
+
+  <select id="listStaticGoldConfig" resultMap="BaseResultMap">
+    select * from static_gold_config where name = 'SIGN_IN' ORDER BY unit ASC
+  </select>
 </mapper>

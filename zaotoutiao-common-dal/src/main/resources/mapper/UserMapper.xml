@@ -418,4 +418,16 @@
     FROM user WHERE parentId != 0 AND userId in (
     SELECT userId from user where parentId = #{userId}  AND  (now()-last_visit_date)/(3600*24) > 3 )
   </select>
+
+  <select id="isSurpassingActivtiy" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM user WHERE TO_DAYS( NOW( ) ) - TO_DAYS( create_date) > #{readActivityDays} AND userId = #{userId}
+  </select>
+
+  <select id="isParentFirstRecruit" parameterType="long" resultMap="BaseResultMap">
+    SELECT * FROM user_gold_record WHERE userId = #{userId} AND source = 6 OR source = 9
+  </select>
+
+  <select id="getApprenticeSum" parameterType="long" resultType="int">
+    select count(*) as count from user where user.parentId = #{parentId}
+  </select>
 </mapper>

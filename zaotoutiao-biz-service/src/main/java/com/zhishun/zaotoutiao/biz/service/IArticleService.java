@@ -1,9 +1,10 @@
 package com.zhishun.zaotoutiao.biz.service;
 
 
-import com.zhishun.zaotoutiao.core.model.entity.UserComments;
-import com.zhishun.zaotoutiao.core.model.entity.UserGiveLike;
+import com.zhishun.zaotoutiao.core.model.entity.*;
+import com.zhishun.zaotoutiao.core.model.vo.StaticFaqVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -77,4 +78,23 @@ public interface IArticleService {
      * @param likes
      */
     void isCommentsLikeGold(Long commentsId, int likes);
+
+    /**
+     * 获取新闻内容
+     * @param infoId
+     * @return
+     */
+    Content getContent(Long infoId);
+
+    /**
+     * 获取文章类常见问题
+     * @return
+     */
+    List<StaticFaqVO> listFaq();
+
+    /**
+     * 怎样获取金币奖励
+     * @return
+     */
+    List<StaticGetGoldMethod> listGoldMethod();
 }

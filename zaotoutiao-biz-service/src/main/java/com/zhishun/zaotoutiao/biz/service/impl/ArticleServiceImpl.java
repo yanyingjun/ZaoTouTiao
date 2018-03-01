@@ -8,6 +8,7 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IArticleService;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.*;
+import com.zhishun.zaotoutiao.core.model.vo.StaticFaqVO;
 import com.zhishun.zaotoutiao.dal.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +40,15 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ContentMapper contentMapper;
+
+    @Autowired
+    private StaticFaqMapper staticFaqMapper;
+
+    @Autowired
+    private StaticGetGoldMethodMapper staticGetGoldMethodMapper;
 
     @Override
     public int addComments(UserComments userComments) {
@@ -142,5 +153,22 @@ public class ArticleServiceImpl implements IArticleService {
                 }
             }
         }
+    }
+
+    @Override
+    public Content getContent(Long infoId) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("infoId",infoId);
+        return contentMapper.getContent(map);
+    }
+
+    @Override
+    public List<StaticFaqVO> listFaq() {
+        return staticFaqMapper.listFaq();
+    }
+
+    @Override
+    public List<StaticGetGoldMethod> listGoldMethod() {
+        return staticGetGoldMethodMapper.listGoldMethod();
     }
 }

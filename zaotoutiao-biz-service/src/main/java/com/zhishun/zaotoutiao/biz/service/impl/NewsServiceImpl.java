@@ -11,12 +11,15 @@ import com.zhishun.zaotoutiao.biz.service.INewsService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
+import com.zhishun.zaotoutiao.core.model.entity.Infos;
+import com.zhishun.zaotoutiao.core.model.entity.StaticHtml;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.entity.Content;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import com.zhishun.zaotoutiao.dal.mapper.ChannelsMapper;
 import com.zhishun.zaotoutiao.dal.mapper.ContentMapper;
 import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
+import com.zhishun.zaotoutiao.dal.mapper.StaticHtmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -34,6 +37,9 @@ public class NewsServiceImpl implements INewsService {
 
     @Autowired
     private InfosMapper infosMapper;
+
+    @Autowired
+    private StaticHtmlMapper staticHtmlMapper;
 
     @Autowired
     private ChannelsMapper channelsMapper;
@@ -89,6 +95,18 @@ public class NewsServiceImpl implements INewsService {
         }
         List<InfosVo> list = infosMapper.listLookRecordPage(map);
         return PageBuilder.buildPage(pageRequest, list, count);
+    }
+
+    @Override
+    public Infos getInfosByMap(Long infoId) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("infoId", infoId);
+        return infosMapper.getInfosByMap(map);
+    }
+
+    @Override
+    public StaticHtml getStaticHtml(String name) {
+        return staticHtmlMapper.getStaticHtml(name);
     }
 
     /**

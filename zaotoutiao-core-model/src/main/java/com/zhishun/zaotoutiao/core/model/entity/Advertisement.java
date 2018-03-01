@@ -51,19 +51,6 @@ public class Advertisement implements Serializable {
     private String type;
 
     /**
-     * 构造方法
-     */
-    public Advertisement(Long adId, String title, String cover, String keywords, String url, String createDate, String type) {
-        this.adId = adId;
-        this.title = title;
-        this.cover = cover;
-        this.keywords = keywords;
-        this.url = url;
-        this.createDate = createDate;
-        this.type = type;
-    }
-
-    /**
      * Getter method for property <tt>adId</tt>.
      *
      * @return property value of adId

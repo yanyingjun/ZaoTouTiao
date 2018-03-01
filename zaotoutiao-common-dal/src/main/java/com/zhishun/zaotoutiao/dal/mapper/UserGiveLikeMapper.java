@@ -32,4 +32,11 @@ public interface UserGiveLikeMapper {
      * @return
      */
     int countUserGiveLike(Long commentsId);
+
+    /**
+     * 删除用户点赞记录
+     * @param map
+     * @return
+     */
+    int delUserGiveLike(Map<String,Object> map);
 }

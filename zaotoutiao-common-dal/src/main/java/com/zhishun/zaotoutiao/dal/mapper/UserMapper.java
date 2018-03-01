@@ -95,6 +95,25 @@ public interface UserMapper {
      */
     int countWakeUpApprentice(Map<String,Object> map);
 
+    /**
+     * 判断是否超过活动时间
+     * @param map
+     * @return
+     */
+    User isSurpassingActivtiy(Map<String,Object> map);
 
+    /**
+     * 判断是否是首次收徒
+     * @param userId
+     * @return
+     */
+    User isParentFirstRecruit(Long userId);
+
+    /**
+     * 获取徒弟数
+     * @param userId
+     * @return
+     */
+    int getApprenticeSum(Long parentId);
 
 }
