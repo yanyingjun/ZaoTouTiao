@@ -15,6 +15,10 @@ import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.common.util.BeanMapUtil;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.common.util.Md5Util;
+import com.zhishun.zaotoutiao.core.model.entity.ExchangeRate;
+import com.zhishun.zaotoutiao.core.model.entity.StaticFakeData;
+import com.zhishun.zaotoutiao.core.model.entity.User;
+import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
@@ -263,7 +267,7 @@ public class UserController extends BaseController{
 
     /**
      * 用户信息修改
-     * @param userId
+     * @param userVO
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_SET_REQ, method = RequestMethod.POST)
@@ -1014,5 +1018,72 @@ public class UserController extends BaseController{
 
 
 
+    /**
+     * 登录随机红包(新人登录红包)
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.REGISTER_MONEY_ADD, method = RequestMethod.GET)
+    public Map<Object,Object> registerMoneyAdd(final Long userId){
 
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                Boolean result = userService.getNewUserMoney(userId);
+                if (result){
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "获得新人登录红包");
+                    dataMap.put("newbieRegisterMoney", 5);
+
+                }else{
+                    dataMap.put("result", "failure");
+                    dataMap.put("msg", "该活动仅限新人，您已经是老用户了");
+                    dataMap.put("newbieRegisterMoney", 0);
+                }
+
+            }
+        });
+
+        return dataMap;
+    }
+
+
+    /**
+     * 根据类型返回信息
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.FAKE_DATE_GET, method = RequestMethod.GET)
+    public Map<Object,Object> fakeDateGet(final String type){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotNull(type, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                List<StaticFakeData> staticFakeDataList = userService.getFakeData(type);
+                if(!staticFakeDataList.isEmpty()) {
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "返回数据成功");
+                    dataMap.put("data", staticFakeDataList);
+                }else{
+                    dataMap.put("result", "failed");
+                    dataMap.put("msg", "未找到相关数据");
+                    dataMap.put("data", staticFakeDataList);
+                }
+            }
+        });
+
+        return dataMap;
+    }
 }

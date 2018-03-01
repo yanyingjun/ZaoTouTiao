@@ -5,6 +5,7 @@
 package com.zhishun.zaotoutiao.core.model.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 假数据列表实体
@@ -53,20 +54,6 @@ public class StaticFakeData implements Serializable {
      * 假数据内容
      */
     private String content4;
-
-    /**
-     * 构造方法
-     */
-    public StaticFakeData(Long id, String content, String content1, String content2, String content3, String type, String createDate, String content4) {
-        this.id = id;
-        this.content = content;
-        this.content1 = content1;
-        this.content2 = content2;
-        this.content3 = content3;
-        this.type = type;
-        this.createDate = createDate;
-        this.content4 = content4;
-    }
 
     /**
      * Getter method for property <tt>id</tt>.

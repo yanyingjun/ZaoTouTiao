@@ -87,4 +87,11 @@ public interface UserMoneyRecordMapper {
      * @return
      */
     List<AllRankingVO> allRankings();
+
+    /**
+     * 获得某个用户是否获得新手红包（1或0）
+     * @param userId
+     * @return
+     */
+    int getNewUserMoney(Long userId);
 }

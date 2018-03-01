@@ -12,6 +12,10 @@ import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.vo.StaticIndustrysVO;
+import com.zhishun.zaotoutiao.core.model.entity.StaticFakeData;
+import com.zhishun.zaotoutiao.core.model.entity.User;
+import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
+import com.zhishun.zaotoutiao.core.model.entity.UserMoneyRecord;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserVO;
@@ -20,15 +24,21 @@ import com.zhishun.zaotoutiao.dal.mapper.UserGoldRecordMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserInformationMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserMoneyRecordMapper;
+import com.zhishun.zaotoutiao.dal.mapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 闫迎军(YanYingJun)
@@ -66,6 +76,9 @@ public class UserServiceImpl implements IUserService{
 
     @Autowired
     private UserInformationMapper userInformationMapper;
+
+    @Autowired
+    private StaticFakeDataMapper staticFakeDataMapper;
 
     @Override
     public User getUserByUserId(Long userId) {
@@ -344,5 +357,48 @@ public class UserServiceImpl implements IUserService{
         }else{
             return "删除失败";
         }
+    }
+
+
+    @Override
+    @Transactional
+    public Boolean getNewUserMoney(Long userId) {
+        int result = userMoneyRecordMapper.getNewUserMoney(userId);
+        if(result > 0){
+            return false;
+        }else{
+            //获得原零钱
+            BigDecimal oldMoney = userMapper.selectByPrimaryKey(userId).getMoney();
+            //获得新零钱数
+            BigDecimal newMoney = new BigDecimal(oldMoney.toString()).add(new BigDecimal("5"));
+            //四舍五入到两位小数存储
+            newMoney.setScale(2, BigDecimal.ROUND_HALF_UP);
+            //存入相应新用户
+            User user = new User();
+            user.setUserId(userId);
+            user.setMoney(newMoney);
+            int countByUpdate = userMapper.updateByPrimaryKeySelective(user);
+            if(countByUpdate > 0){
+                //假如新增成功，添加零钱记录
+                UserMoneyRecord userMoneyRecord = new UserMoneyRecord();
+                userMoneyRecord.setMoney(new BigDecimal("5"));
+                userMoneyRecord.setUserId(userId);
+                userMoneyRecord.setType(1);
+                userMoneyRecord.setSource(0);
+                userMoneyRecord.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                //插入数据库
+                int res = userMoneyRecordMapper.insertSelective(userMoneyRecord);
+                if( 0 == res){
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    @Override
+    public List<StaticFakeData> getFakeData(String type) {
+        List<StaticFakeData> staticFakeDataList = staticFakeDataMapper.selectDataByType(type);
+        return staticFakeDataList;
     }
 }

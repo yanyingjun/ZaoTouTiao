@@ -7,6 +7,7 @@ package com.zhishun.zaotoutiao.dal.mapper;
 import com.zhishun.zaotoutiao.core.model.entity.StaticFakeData;
 
 import java.util.List;
+
 import java.util.Map;
 
 public interface StaticFakeDataMapper {
@@ -57,6 +58,8 @@ public interface StaticFakeDataMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(StaticFakeData record);
+
+    List<StaticFakeData> selectDataByType(String type);
 
     /**
      * 周排行

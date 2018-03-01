@@ -1,8 +1,9 @@
 package com.zhishun.zaotoutiao.core.model.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class StaticTaskList {
+public class StaticTaskList implements Serializable {
     private Long id;
 
     private String question;

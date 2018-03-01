@@ -167,4 +167,9 @@
     WHERE user_money_record.type = 1 GROUP BY user_money_record.userId
     ORDER BY sum(user_money_record.money) DESC LIMIT 0,100
   </select>
+
+  <select id="getNewUserMoney" parameterType="java.lang.Long" resultType="int">
+    SELECT count(0) from user_money_record
+    WHERE userId = #{userId} AND source = 0
+  </select>
 </mapper>

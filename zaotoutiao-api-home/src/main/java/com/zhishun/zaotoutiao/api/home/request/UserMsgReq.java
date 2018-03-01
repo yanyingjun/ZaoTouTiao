@@ -180,4 +180,14 @@ public class UserMsgReq {
      */
     public static final String DELETE_INFORMATION_BY_TYPE = "del/user/information";
 
+    /**
+     * 登录随机红包(新人登录红包)
+     */
+    public static final String REGISTER_MONEY_ADD = "register/money/add";
+
+    /**
+     * 根据类型获得数据
+     */
+    public static final String FAKE_DATE_GET = "fake/date/get";
+
 }

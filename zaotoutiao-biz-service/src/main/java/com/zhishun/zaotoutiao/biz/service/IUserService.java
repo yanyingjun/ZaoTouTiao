@@ -4,6 +4,9 @@ import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.vo.StaticIndustrysVO;
+import com.zhishun.zaotoutiao.core.model.entity.StaticFakeData;
+import com.zhishun.zaotoutiao.core.model.entity.User;
+import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserVO;
@@ -279,5 +282,19 @@ public interface IUserService {
      * @return
      */
     String delUserInformation(int userId, String type);
+
+    /**
+     * 判断是否获取过新人礼包
+     * @param userId
+     * @return
+     */
+    Boolean getNewUserMoney(Long userId);
+
+    /**
+     * 根据类型返回相应的数据信息
+     * @param type
+     * @return
+     */
+    List<StaticFakeData> getFakeData(String type);
 
 }
