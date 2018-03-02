@@ -34,4 +34,11 @@ public interface IVideoService {
      * @return
      */
     List<Infos> getRandVideoList(int channelId);
+
+    /**
+     * 获取新闻
+     * @param infoId
+     * @return
+     */
+    Infos getInfosByInfoId(String infoId);
 }

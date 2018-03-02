@@ -4,9 +4,6 @@ import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.vo.StaticIndustrysVO;
-import com.zhishun.zaotoutiao.core.model.entity.StaticFakeData;
-import com.zhishun.zaotoutiao.core.model.entity.User;
-import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserVO;
@@ -282,6 +279,52 @@ public interface IUserService {
      * @return
      */
     String delUserInformation(int userId, String type);
+
+    /**
+     * 新增用户经纬度
+     * @param userId
+     * @param lat
+     * @param lng
+     * @return
+     */
+    int addUserLocation(Long userId, float lat, float lng);
+
+
+    /**
+     * 获取用户建议与反馈常见问题
+     * @return
+     */
+    List<UserFeedbackFaq> listFeedbackFaq();
+
+    /**
+     * 用户建议与反馈提交
+     * @param userId
+     * @param question
+     * @param imgPath
+     * @return
+     */
+    int addUserFeedbackPublish(Long userId, String question, String imgPath);
+
+    /**
+     * 微信用户注册
+     * @param telephone
+     * @param password
+     * @param wechatId
+     * @param wechatHead
+     * @param wechatName
+     * @return
+     */
+    int addUser(String telephone, String password, String wechatId, String wechatHead, String wechatName);
+
+    /**
+     * 用户信息修改（绑定微信）
+     * @param telephone
+     * @param wechatName
+     * @param wechatId
+     * @param wechatHead
+     * @return
+     */
+    void updateWechatUser(String telephone, String wechatName, String wechatId, String wechatHead);
 
     /**
      * 判断是否获取过新人礼包

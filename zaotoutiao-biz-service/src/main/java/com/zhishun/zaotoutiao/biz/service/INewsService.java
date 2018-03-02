@@ -79,4 +79,10 @@ public interface INewsService {
      * @return
      */
     List<InfosVo> getCollectList(String infoType, int userId, int pageNo, int pageSize);
+
+    /**
+     * 获取24小时热文
+     * @return
+     */
+    List<InfosVo> List24HoursInfos();
 }

@@ -151,5 +151,10 @@ public class NewsServiceImpl implements INewsService {
 
     }
 
+    @Override
+    public List<InfosVo> List24HoursInfos() {
+        return infosMapper.List24HoursInfos();
+    }
+
 
 }

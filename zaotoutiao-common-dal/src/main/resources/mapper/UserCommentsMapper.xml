@@ -134,4 +134,5 @@
     select count(0) FROM user_comments
     WHERE infoId = #{infoId}
   </select>
+
 </mapper>

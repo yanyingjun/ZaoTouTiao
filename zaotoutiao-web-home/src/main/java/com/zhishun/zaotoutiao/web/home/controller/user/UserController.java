@@ -57,7 +57,7 @@ public class UserController extends BaseController{
     }
     @RequestMapping("test3")
     public ModelAndView main(){
-        ModelAndView mv = new ModelAndView("common/main");
+        ModelAndView mv = new ModelAndView("common/index");
         return mv;
     }
 

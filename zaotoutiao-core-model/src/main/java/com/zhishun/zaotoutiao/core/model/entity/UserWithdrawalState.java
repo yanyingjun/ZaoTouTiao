@@ -46,18 +46,6 @@ public class UserWithdrawalState implements Serializable {
     private String billNo;
 
     /**
-     * 构造方法
-     */
-    public UserWithdrawalState(Long id, Long userId, BigDecimal money, Integer status, String createDate, String billNo) {
-        this.id = id;
-        this.userId = userId;
-        this.money = money;
-        this.status = status;
-        this.createDate = createDate;
-        this.billNo = billNo;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

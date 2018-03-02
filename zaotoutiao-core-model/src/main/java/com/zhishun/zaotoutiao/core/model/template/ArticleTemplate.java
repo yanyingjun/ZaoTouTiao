@@ -19,7 +19,7 @@ public class ArticleTemplate {
             "    <title>$title</title>\n" +
             "    <style type='text/css'>\n" +
             "\n" +
-            "            /* main */\n" +
+            "            /* index */\n" +
             "            #main_box{\n" +
             "        min-height: 100%;\n" +
             "        width: 96%;\n" +

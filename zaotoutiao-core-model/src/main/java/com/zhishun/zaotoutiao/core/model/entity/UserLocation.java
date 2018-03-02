@@ -40,17 +40,6 @@ public class UserLocation implements Serializable {
     private String createDate;
 
     /**
-     * 构造方法
-     */
-    public UserLocation(Long locationId, Long userId, Float lat, Float lng, String createDate) {
-        this.locationId = locationId;
-        this.userId = userId;
-        this.lat = lat;
-        this.lng = lng;
-        this.createDate = createDate;
-    }
-
-    /**
      * Getter method for property <tt>locationId</tt>.
      *
      * @return property value of locationId

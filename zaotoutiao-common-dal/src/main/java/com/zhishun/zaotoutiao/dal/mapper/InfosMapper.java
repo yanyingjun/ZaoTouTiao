@@ -96,4 +96,10 @@ public interface InfosMapper {
      */
     List<InfosVo> getCollectList(Map<String, Object> map);
 
+    /**
+     * 获取24小时热文
+     * @return
+     */
+    List<InfosVo> List24HoursInfos();
+
 }

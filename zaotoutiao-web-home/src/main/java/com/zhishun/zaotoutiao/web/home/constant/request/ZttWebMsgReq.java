@@ -11,7 +11,22 @@ package com.zhishun.zaotoutiao.web.home.constant.request;
 public class ZttWebMsgReq {
 
     /**
-     * 登录页面跳转请求
+     * 登录页面请求
      */
-    public static final String ZTT_MANAGE_LOGIN_REQ = "/common/login.htm";
+    public static final String ZTT_MANAGE_LOGIN_REQ = "/login";
+
+    /**
+     * 主页面请求
+     */
+    public static final String ZTT_MANAGE_INDEX_REQ = "/index";
+
+    /**
+     * 工作台
+     */
+    public static final String ZTT_MANAGE_MAIN_REQ = "/main";
+
+    /**
+     * 用户行为统计
+     */
+    public static final String ZTT_USER_BEHAVIOR_REQ = "/behavior";
 }

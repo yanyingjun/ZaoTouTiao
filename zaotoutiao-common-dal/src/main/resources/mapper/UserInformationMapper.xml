@@ -189,4 +189,17 @@
     WHERE userId = #{userId}
     and type = #{type}
   </delete>
+
+  <select id="listInformationPage" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM user_information
+    WHERE type = #{type} AND userId = #{userId}
+    ORDER BY create_date DESC
+    <if test="offset != null and limit != null">
+      limit #{offset}, #{limit}
+    </if>
+  </select>
+
+  <select id="listInformationNew" resultMap="BaseResultMap">
+    select * from user_information WHERE id in (3,4,5,6)
+  </select>
 </mapper>

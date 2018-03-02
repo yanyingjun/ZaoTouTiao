@@ -10,6 +10,7 @@ import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
+import com.zhishun.zaotoutiao.common.util.Md5Util;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.vo.StaticIndustrysVO;
 import com.zhishun.zaotoutiao.core.model.entity.StaticFakeData;
@@ -33,8 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -76,6 +75,18 @@ public class UserServiceImpl implements IUserService{
 
     @Autowired
     private UserInformationMapper userInformationMapper;
+
+    @Autowired
+    private UserLocationMapper userLocationMapper;
+
+    @Autowired
+    private UserFeedbackFaqMapper userFeedbackFaqMapper;
+
+    @Autowired
+    private UserFeedbackPublishMapper userFeedbackPublishMapper;
+
+    @Autowired
+    private UserChannelsMapper userChannelsMapper;
 
     @Autowired
     private StaticFakeDataMapper staticFakeDataMapper;
@@ -356,6 +367,81 @@ public class UserServiceImpl implements IUserService{
             return "删除成功！";
         }else{
             return "删除失败";
+        }
+    }
+
+    @Override
+    public int addUserLocation(Long userId, float lat, float lng) {
+        UserLocation userLocation = new UserLocation();
+        userLocation.setUserId(userId);
+        userLocation.setLat(lat);
+        userLocation.setLng(lng);
+        userLocation.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        return userLocationMapper.insertSelective(userLocation);
+    }
+
+    @Override
+    public List<UserFeedbackFaq> listFeedbackFaq() {
+        return userFeedbackFaqMapper.listFeedbackFaq();
+    }
+
+    @Override
+    public int addUserFeedbackPublish(Long userId, String question, String imgPath) {
+        UserFeedbackPublish userFeedbackPublish = new UserFeedbackPublish();
+        userFeedbackPublish.setUserId(userId);
+        userFeedbackPublish.setQuestion(question);
+        userFeedbackPublish.setImgPath(imgPath);
+        userFeedbackPublish.setCreateDate(new Date());
+        userFeedbackPublish.setIsFinish(0);
+        return userFeedbackPublishMapper.insertSelective(userFeedbackPublish);
+    }
+
+    @Override
+    public int addUser(String telephone, String password, String wechatId, String wechatHead, String wechatName) {
+        password = Md5Util.md5Encode(password);
+        //我的邀请码为我的手机号转16进制
+        String myInvitation = Long.toHexString(Long.valueOf(telephone));
+        String name = 'A' + telephone.substring(3,11);
+        //设置默认头像
+        String headpath = wechatHead;
+        User user = new User();
+        user.setName(name);
+        user.setPassword(password);
+        user.setTelephone(telephone);
+        user.setNickName(wechatName);
+        user.setMyInvitation(myInvitation);
+        user.setHeadPath(headpath);
+        user.setWechatId(wechatId);
+        user.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        int id = userMapper.insertSelective(user);
+
+        //添加用户关注频道
+        UserChannels userChannels = new UserChannels();
+        userChannels.setUserId(Long.valueOf(id));
+        userChannelsMapper.insertSelective(userChannels);
+        return id;
+    }
+
+    @Override
+    public void updateWechatUser(String telephone, String wechatName, String wechatId, String wechatHead) {
+        String nickName = "手机用户_" + telephone.substring(7, 11);
+        String headpath = "http://daoyi-content.oss-cn-hangzhou.aliyuncs.com/default_headpath.png";
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("telephone", telephone);
+        User user = userMapper.getUserByMap(map);
+        //判断是否是之前绑定的状态
+        if(!user.getWechatId().equals(wechatId)){
+            //判断用户是否改变过
+            if(user.getNickName().equals(nickName)){
+                nickName = wechatName;
+                user.setNickName(nickName);
+            }
+            if(user.getHeadPath().equals(headpath)){
+                headpath = wechatHead;
+                user.setHeadPath(headpath);
+            }
+            user.setWechatId(wechatId);
+            userMapper.updateByPrimaryKeySelective(user);
         }
     }
 

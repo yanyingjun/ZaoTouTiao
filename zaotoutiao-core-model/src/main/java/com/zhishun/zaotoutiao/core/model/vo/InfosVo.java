@@ -67,6 +67,7 @@ public class InfosVo extends Infos{
 
     private Long userId;
 
+    private Integer isRead;
 
     public int getUserCollectId() {
         return userCollectId;
@@ -277,5 +278,23 @@ public class InfosVo extends Infos{
     @Override
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    /**
+     * Getter method for property <tt>isRead</tt>.
+     *
+     * @return property value of isRead
+     */
+    public Integer getIsRead() {
+        return isRead;
+    }
+
+    /**
+     * Setter method for property <tt>isRead</tt>.
+     *
+     * @param isRead value to be assigned to property isRead
+     */
+    public void setIsRead(Integer isRead) {
+        this.isRead = isRead;
     }
 }
