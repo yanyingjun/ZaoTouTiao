@@ -59,9 +59,23 @@ public interface UserShareMapper {
 
     /**
      * 判断三天内是否有是否唤醒自己
-     * @param userId
-     * @param type
+     * @param map
      * @return
      */
     UserShare getWeekupThreeDay(Map<String,Object> map);
+
+    /**
+     * 获得最后产生的分享记录
+     * @return
+     */
+    UserShare getLastShare();
+
+    /**
+     * 判断是否大于三小时
+     * @param map
+     * @return
+     */
+    int getTiming(Map<String,Object> map);
+
+    int getNumOfType(Long userId,String shareType);
 }

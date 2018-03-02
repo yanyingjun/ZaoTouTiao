@@ -76,7 +76,7 @@
       <if test="createDate != null" >
         create_date,
       </if>
-      <if test="apprenticeid != null" >
+      <if test="apprenticeId != null" >
         apprenticeId,
       </if>
       <if test="infoId != null" >
@@ -249,5 +249,21 @@
     FROM user_gold_record r LEFT JOIN user u ON r.userId = u.userId
     WHERE r.userId = #{userId} AND type = 1 AND source = 2
     GROUP BY r.apprenticeId ORDER BY sumGold DESC LIMIT 0,50
+  </select>
+
+
+
+  <select id="getShareRecruitGold" parameterType="map" resultType="int">
+    SELECT count(0)
+    FROM user_gold_record
+    WHERE userId = #{userId}
+    and source = #{source}
+    and DATE_FORMAT( create_date, '%Y%m%d' ) = DATE_FORMAT( now(), '%Y%m%d' )
+    order by create_date asc
+  </select>
+
+
+  <select id="getNewDateBySource" parameterType="map" resultType="date">
+    SELECT create_date FROM user_gold_record WHERE userId = #{userId} and source = #{source} order by create_date DESC LIMIT 0,1
   </select>
 </mapper>

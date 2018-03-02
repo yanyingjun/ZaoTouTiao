@@ -245,6 +245,7 @@ public class UserServiceImpl implements IUserService{
         userGoldRecord.setGold(gold);
         userGoldRecord.setType((byte)1);
         userGoldRecord.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        userGoldRecord.setApprenticeId(apprenticeId);
         return userGoldRecordMapper.insertSelective(userGoldRecord);
     }
 

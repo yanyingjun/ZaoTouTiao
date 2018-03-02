@@ -150,4 +150,17 @@
   <select id="getWeekupThreeDay" parameterType="map" resultMap="BaseResultMap">
     SELECT *,date_sub(now() ,interval 3 day)  FROM user_share WHERE userId = #{userId} AND type = #{type}
   </select>
+
+  <select id="getLastShare" resultMap="BaseResultMap">
+    SELECT * FROM user_share
+    WHERE id = (SELECT LAST_INSERT_ID())
+  </select>
+
+  <select id="getTiming" parameterType="map" resultType="int">
+    SELECT (SELECT create_date from user_share WHERE id = #{shareId}) > ((SELECT create_date FROM user_gold_record WHERE userId = #{userId} and source = #{source} order by create_date DESC LIMIT 0,1) + INTERVAL 3 HOUR)
+  </select>
+
+  <select id="getNumOfType" parameterType="map" resultType="int">
+    SELECT count(0) FROM user_share WHERE userId = #{userId} and type = #{shareType}
+  </select>
 </mapper>

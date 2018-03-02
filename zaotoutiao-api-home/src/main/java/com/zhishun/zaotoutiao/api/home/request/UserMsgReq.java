@@ -190,4 +190,8 @@ public class UserMsgReq {
      */
     public static final String FAKE_DATE_GET = "fake/date/get";
 
+    /**
+     * 用户已经阅读(24小时热文)，更改阅读状态
+     */
+    public static final String IS_READ = "is/read";
 }

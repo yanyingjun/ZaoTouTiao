@@ -52,6 +52,8 @@ public class UserShare implements Serializable {
     /**
      * 构造方法
      */
+    public UserShare(){}
+
     public UserShare(Long id, Long userId, String type, String infoId, String source, String apprenticeId, String createDate) {
         this.id = id;
         this.userId = userId;

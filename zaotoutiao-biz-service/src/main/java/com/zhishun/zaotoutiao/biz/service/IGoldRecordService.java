@@ -38,9 +38,39 @@ public interface IGoldRecordService {
     Map leadTimeTwo(Long userId);
 
     /**
-     *
+     * 用户金币记录
      * @param userId
      * @return
      */
     List<UserGoldRecord> listUserGoldRecord(Long userId);
+
+    /**
+     * 返回徒弟分享获得的金币数量
+     * @param userId
+     * @param shareId
+     * @param source
+     * @param gold
+     * @return
+     */
+    int getShareRecruitGold(Long userId, Long shareId, Long source, int gold);
+
+    /**
+     * 返回文章分享获得的金币数
+     * @param userId
+     * @param shareId
+     * @param source
+     * @param gold
+     * @return
+     */
+    int getShareArticleGold(Long userId, Long shareId, Long source, int gold);
+
+    /**
+     * 获取晒收入分享(当天)
+     * @param userId
+     * @param shareId
+     * @param source
+     * @param gold
+     * @return
+     */
+    int getShareIncomeGold(Long userId, Long shareId, Long source, int gold);
 }

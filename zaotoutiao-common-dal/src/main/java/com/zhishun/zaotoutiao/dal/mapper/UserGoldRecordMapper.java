@@ -8,6 +8,7 @@ import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -157,5 +158,18 @@ public interface UserGoldRecordMapper {
      * @return
      */
     List<UserGoldRecord> listUserGoldRecord(Long userId);
+
+    /**
+     * 判断今天加过几次某个来源（source）的金币
+     * @return
+     */
+    int getShareRecruitGold(Map<String,Object> map);
+
+    /**
+     * 根据来源类型获得最新金币变更记录
+     * @param map
+     * @return
+     */
+    Date getNewDateBySource(Map<String,Object> map);
 
 }
