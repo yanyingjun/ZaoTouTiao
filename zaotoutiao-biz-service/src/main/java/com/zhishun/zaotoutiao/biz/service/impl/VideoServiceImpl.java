@@ -61,4 +61,11 @@ public class VideoServiceImpl implements IVideoService{
     public List<Infos> getRandVideoList(int channelId) {
         return infosMapper.getRandVideoList(channelId);
     }
+
+    @Override
+    public Infos getInfosByInfoId(String infoId) {
+        Map map = Maps.newHashMap();
+        map.put("infoId", infoId);
+        return infosMapper.getInfosByMap(map);
+    }
 }

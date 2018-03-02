@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhishun.zaotoutiao.dal.mapper.UserBehaviorMapper">
+  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.UserBehavior">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="download_num" jdbcType="INTEGER" property="downloadNum" />
+    <result column="activation_num" jdbcType="INTEGER" property="activationNum" />
+    <result column="register_num" jdbcType="INTEGER" property="registerNum" />
+    <result column="operation_num" jdbcType="INTEGER" property="operationNum" />
+    <result column="platform_id" jdbcType="TINYINT" property="platformId" />
+    <result column="channel_id" jdbcType="TINYINT" property="channelId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, download_num, activation_num, register_num, operation_num, platform_id, 
+    channel_id, create_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_behavior
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user_behavior
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserBehavior">
+    insert into user_behavior (id, user_id, download_num, 
+      activation_num, register_num, operation_num, 
+      platform_id, channel_id, create_date
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, #{downloadNum,jdbcType=INTEGER}, 
+      #{activationNum,jdbcType=INTEGER}, #{registerNum,jdbcType=INTEGER}, #{operationNum,jdbcType=INTEGER}, 
+      #{platformId,jdbcType=TINYINT}, #{channelId,jdbcType=TINYINT}, #{createDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserBehavior">
+    insert into user_behavior
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="downloadNum != null">
+        download_num,
+      </if>
+      <if test="activationNum != null">
+        activation_num,
+      </if>
+      <if test="registerNum != null">
+        register_num,
+      </if>
+      <if test="operationNum != null">
+        operation_num,
+      </if>
+      <if test="platformId != null">
+        platform_id,
+      </if>
+      <if test="channelId != null">
+        channel_id,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="downloadNum != null">
+        #{downloadNum,jdbcType=INTEGER},
+      </if>
+      <if test="activationNum != null">
+        #{activationNum,jdbcType=INTEGER},
+      </if>
+      <if test="registerNum != null">
+        #{registerNum,jdbcType=INTEGER},
+      </if>
+      <if test="operationNum != null">
+        #{operationNum,jdbcType=INTEGER},
+      </if>
+      <if test="platformId != null">
+        #{platformId,jdbcType=TINYINT},
+      </if>
+      <if test="channelId != null">
+        #{channelId,jdbcType=TINYINT},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserBehavior">
+    update user_behavior
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="downloadNum != null">
+        download_num = #{downloadNum,jdbcType=INTEGER},
+      </if>
+      <if test="activationNum != null">
+        activation_num = #{activationNum,jdbcType=INTEGER},
+      </if>
+      <if test="registerNum != null">
+        register_num = #{registerNum,jdbcType=INTEGER},
+      </if>
+      <if test="operationNum != null">
+        operation_num = #{operationNum,jdbcType=INTEGER},
+      </if>
+      <if test="platformId != null">
+        platform_id = #{platformId,jdbcType=TINYINT},
+      </if>
+      <if test="channelId != null">
+        channel_id = #{channelId,jdbcType=TINYINT},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserBehavior">
+    update user_behavior
+    set user_id = #{userId,jdbcType=BIGINT},
+      download_num = #{downloadNum,jdbcType=INTEGER},
+      activation_num = #{activationNum,jdbcType=INTEGER},
+      register_num = #{registerNum,jdbcType=INTEGER},
+      operation_num = #{operationNum,jdbcType=INTEGER},
+      platform_id = #{platformId,jdbcType=TINYINT},
+      channel_id = #{channelId,jdbcType=TINYINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

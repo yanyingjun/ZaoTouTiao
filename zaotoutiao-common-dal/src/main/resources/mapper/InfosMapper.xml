@@ -457,5 +457,8 @@
     limit #{startNo},#{endNo}
   </select>
 
+  <select id="List24HoursInfos" resultMap="BaseResultMap">
+    SELECT * FROM infos WHERE isHot = 1 AND push_date > DATE_SUB(NOW(),INTERVAL 24 HOUR) ORDER BY push_date DESC
+  </select>
 
 </mapper>

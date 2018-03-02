@@ -6,6 +6,7 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserInformation;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserInformationMapper {
@@ -59,4 +60,17 @@ public interface UserInformationMapper {
 
 
     int deleteByType(Map<String,Object> map);
+
+    /**
+     * 获取用户消息记录
+     * @param map
+     * @return
+     */
+    List<UserInformation> listInformationPage(Map map);
+
+    /**
+     * 获取新用户消息模版
+     * @return
+     */
+    List<UserInformation> listInformationNew();
 }

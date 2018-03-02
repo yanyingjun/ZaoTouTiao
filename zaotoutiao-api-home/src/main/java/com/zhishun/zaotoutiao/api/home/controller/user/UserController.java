@@ -62,6 +62,9 @@ public class UserController extends BaseController{
     @Autowired
     private IMoneyRecordService moneyRecordService;
 
+    @Autowired
+    private IInformationService iInformationService;
+
     /**
      * 用户注册
      * @param user
@@ -1002,6 +1005,89 @@ public class UserController extends BaseController{
 
         return dataMap;
 
+    }
+
+    /**
+     * 用户消息通知
+     * @param userId
+     * @param pageRequest
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.MSG_GET)
+    public Map<Object,Object> msgGet(final Long userId, final PageRequest pageRequest){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                String type = "MSG";
+                List<UserInformation> list = iInformationService.listInformationPage(userId, type, pageRequest);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "相关信息返回成功");
+                dataMap.put("data", list);
+            }
+        });
+
+        return dataMap;
+    }
+
+
+    /**
+     * 用户经纬度设置
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.LOCATION_SET, method = RequestMethod.POST)
+    public Map<Object,Object> locationSet(final Long userId, final float lat, final float lng){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+            }
+
+            @Override
+            public void handle() throws Exception {
+                userService.addUserLocation(userId, lat, lng);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "返回信息成功");
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 用户公告获取（WALLET  钱包 \n  FAQ    常见问题  \n  RECRUIT 收徒界面）
+     * @param userId
+     * @param pageRequest
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.NOTICE_GET)
+    public Map<Object,Object> noticeGet(final Long userId, final PageRequest pageRequest){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                String type = "NOTICE";
+                List<UserInformation> list = iInformationService.listInformationPage(userId, type, pageRequest);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "相关信息返回成功");
+                dataMap.put("data", list);
+            }
+        });
+
+        return dataMap;
     }
 
 

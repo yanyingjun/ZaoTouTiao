@@ -6,6 +6,8 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserWithdrawalState;
 
+import java.util.List;
+
 /**
  * 提现状态-mapper接口
  * @author 闫迎军(YanYingJun)
@@ -53,4 +55,11 @@ public interface UserWithdrawalStateMapper {
      * @return
      */
     int updateByPrimaryKey(UserWithdrawalState record);
+
+    /**
+     * 判断是否有正在申请中的提现
+     * @param userId
+     * @return
+     */
+    List<UserWithdrawalState> getHasApplication(Long userId);
 }
