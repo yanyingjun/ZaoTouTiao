@@ -24,4 +24,9 @@ public class VideoMsgReq {
      * 获取视频相关内容
      */
     public static final String VIDEO_RALATED = "/video/ralated";
+
+    /**
+     * 视频类新闻详情页-webview
+     */
+    public static final String VIEW_VIDEO_HTML = "/view/videoHtml";
 }

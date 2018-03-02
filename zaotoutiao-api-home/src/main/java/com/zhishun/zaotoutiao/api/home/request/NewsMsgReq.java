@@ -47,4 +47,5 @@ public class NewsMsgReq {
      * 新闻收藏
      */
     public static final String COLLECT_GET = "collect/get";
+
 }
