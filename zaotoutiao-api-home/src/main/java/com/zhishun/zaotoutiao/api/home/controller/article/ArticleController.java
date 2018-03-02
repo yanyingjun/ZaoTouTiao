@@ -4,25 +4,21 @@
  */
 package com.zhishun.zaotoutiao.api.home.controller.article;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.ArticleMsgReq;
 import com.zhishun.zaotoutiao.api.home.request.UserMsgReq;
-import com.zhishun.zaotoutiao.biz.service.IArticleService;
-import com.zhishun.zaotoutiao.biz.service.ICommentsService;
-import com.zhishun.zaotoutiao.biz.service.INewsService;
-import com.zhishun.zaotoutiao.biz.service.IUserCollectService;
+import com.zhishun.zaotoutiao.biz.service.*;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
+import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import com.zhishun.zaotoutiao.core.model.vo.Ques;
 import com.zhishun.zaotoutiao.core.model.vo.StaticFaqVO;
-import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +48,12 @@ public class ArticleController extends BaseController{
 
     @Autowired
     private IUserCollectService collectService;
+
+    @Autowired
+    private IJpushService jpushService;
+
+    @Autowired
+    private IFilterNewsService filterNewsService;
 
 
 
@@ -251,7 +253,7 @@ public class ArticleController extends BaseController{
                         "    <title>"+title+"</title>\n" +
                         "    <style type='text/css'>\n" +
                         "\n" +
-                        "            /* main */\n" +
+                        "            /* index */\n" +
                         "            #main_box{\n" +
                         "        min-height: 100%;\n" +
                         "        width: 96%;\n" +
@@ -548,7 +550,7 @@ public class ArticleController extends BaseController{
                         "    <title>"+title+"</title>\n" +
                         "    <style type='text/css'>\n" +
                         "\n" +
-                        "        /* main */\n" +
+                        "        /* index */\n" +
                         "        .main_box{\n" +
                         "            height: 100%;\n" +
                         "        }\n" +
@@ -690,6 +692,104 @@ public class ArticleController extends BaseController{
 
         return dataMap;
 
+    }
+
+    /**
+     * 获取24小时热文
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = ArticleMsgReq.HOT24HOURS_GET, method = RequestMethod.GET)
+    public Map<Object,Object> hot24HoursGet(final Long userId){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                List<InfosVo> list = newsService.List24HoursInfos();
+                List<InfosVo> isToday = Lists.newArrayList();
+                List<InfosVo> yesterday = Lists.newArrayList();
+                for(InfosVo infos : list){
+                    //判断当前用户是否已阅读
+                    UserJpush userJpush = jpushService.getUserJpush(userId, infos.getInfoid());
+                    int read = userJpush.getIsRead();
+                    infos.setIsRead(read);
+                    int day = jpushService.isToday(DateUtil.toString(infos.getPushDate(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                    if(day == 1){
+                        //是今天
+                        isToday.add(infos);
+                    }else{
+                        yesterday.add(infos);
+                    }
+                }
+                dataMap.put("result", "success");
+                dataMap.put("msg", "相关信息返回成功");
+                dataMap.put("today", isToday);
+                dataMap.put("yesterday", yesterday);
+            }
+        });
+
+        return dataMap;
+
+    }
+
+    /**
+     * 用户讨厌文章设置
+     * @param userId
+     * @param type
+     * @param infoId
+     * @param source
+     * @param title
+     * @return
+     */
+    @RequestMapping(value = ArticleMsgReq.HATE_NEWS_SET, method = RequestMethod.GET)
+    public Map<Object,Object> hateNewsSet(final Long userId, final String type, final String infoId,
+                                          final String source, final String title){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotBlank(type, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotBlank(infoId, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotBlank(source, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotBlank(title, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+
+                String[] types = type.replace(" ","").split(",");
+                for(int i=0;i<types.length;i++){
+                    int hade = filterNewsService.countUserFilterNewsByParam(userId, infoId, types[i]);
+                    if(hade == 0){
+                        //之前还没有添加过该条数据
+                        if(types[i].equals("AUTHOR")){
+                            //讨厌该作者
+                            filterNewsService.addUserFilterNews(userId, infoId, types[i], source);
+                        }else if(types[i].equals("NEWSTYPE")){
+                            //讨厌新闻类型
+                            filterNewsService.addUserFilterNews(userId, infoId, types[i], title);
+                        }else if(types[i].equals("HISTORY")){
+                            //已经看过
+                            filterNewsService.addUserFilterNews(userId, infoId, types[i], null);
+                        }else{
+                            filterNewsService.addUserFilterNews(userId, infoId, "HISTORY", null);
+                        }
+                    }
+                }
+                dataMap.put("result", "success");
+                dataMap.put("msg", "已屏蔽该类型新闻");
+            }
+        });
+
+        return dataMap;
     }
 
 
