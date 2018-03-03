@@ -1174,25 +1174,4 @@ public class UserController extends BaseController{
     }
 
 
-    @RequestMapping(value = UserMsgReq.IS_READ, method = RequestMethod.POST)
-    public Map<Object,Object> isRead(final String infoId, final Long userId, final String type){
-
-        final Map<Object,Object> dataMap = Maps.newHashMap();
-        this.excute(dataMap, null, new ControllerCallback() {
-            @Override
-            public void check() throws ZhiShunException {
-                AssertsUtil.isNotNull(infoId, ErrorCodeEnum.SYSTEM_ANOMALY);
-                AssertsUtil.isNotNull(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
-                AssertsUtil.isNotNull(type, ErrorCodeEnum.SYSTEM_ANOMALY);
-            }
-
-            @Override
-            public void handle() throws Exception {
-
-            }
-        });
-
-        return dataMap;
-    }
-
 }

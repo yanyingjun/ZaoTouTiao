@@ -202,4 +202,15 @@
   <select id="listInformationNew" resultMap="BaseResultMap">
     select * from user_information WHERE id in (3,4,5,6)
   </select>
+
+  <update id="updateInformationById" parameterType="map">
+    UPDATE user_information SET is_read = 1
+    WHERE id = #{informationId} AND userId = #{userId}
+  </update>
+
+
+  <select id="getInformationNumByType" parameterType="map" resultType="int">
+    SELECT count(0) FROM user_information
+    WHERE type = #{type} AND userId = #{userId}
+  </select>
 </mapper>

@@ -433,4 +433,9 @@
   <select id="getApprenticeSum" parameterType="long" resultType="int">
     select count(*) as count from user where user.parentId = #{parentId}
   </select>
+
+  <select id="isSurpassingActivity" parameterType="map" resultType="int">
+    SELECT count(0) from user
+    WHERE (TO_DAYS( NOW( ) ) - TO_DAYS( create_date)) &lt; #{readActivityDays} AND userId = #{userId}
+  </select>
 </mapper>

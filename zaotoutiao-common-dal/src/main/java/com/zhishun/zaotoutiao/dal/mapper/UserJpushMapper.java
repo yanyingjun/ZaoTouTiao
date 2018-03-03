@@ -5,6 +5,7 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserJpush;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Map;
 
@@ -70,4 +71,25 @@ public interface UserJpushMapper {
      * @return
      */
     int isToday(String time);
+
+    /**
+     * 根据infoId修改用户消息表
+     * @param map
+     * @return
+     */
+    int updateUserReadByInfoId(Map<String,Object> map);
+
+    /**
+     * 根据informationId修改用户消息表
+     * @param map
+     * @return
+     */
+    int updateUserReadByInformationId(Map<String,Object> map);
+
+    /**
+     * 获取未读热文条数
+     * @param userId
+     * @return
+     */
+    int unreadHotNumGet(Long userId);
 }

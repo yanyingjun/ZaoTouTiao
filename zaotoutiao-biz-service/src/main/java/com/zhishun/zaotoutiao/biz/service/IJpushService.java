@@ -24,4 +24,11 @@ public interface IJpushService {
      * @return
      */
     int isToday(String time);
+
+    /**
+     * 获取未读热文条数
+     * @param userId
+     * @return
+     */
+    int unreadHotNumGet(Long userId);
 }

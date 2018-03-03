@@ -116,4 +116,11 @@ public interface UserMapper {
      */
     int getApprenticeSum(Long parentId);
 
+    /**
+     * 判断是否超过活动时间
+     * @param map
+     * @return
+     */
+    int isSurpassingActivity(Map<String,Object> map);
+
 }

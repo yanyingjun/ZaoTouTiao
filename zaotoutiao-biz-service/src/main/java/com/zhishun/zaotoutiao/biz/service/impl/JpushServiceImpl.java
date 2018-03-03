@@ -38,4 +38,9 @@ public class JpushServiceImpl implements IJpushService{
     public int isToday(String time) {
         return userJpushMapper.isToday(time);
     }
+
+    @Override
+    public int unreadHotNumGet(Long userId) {
+        return userJpushMapper.unreadHotNumGet(userId);
+    }
 }

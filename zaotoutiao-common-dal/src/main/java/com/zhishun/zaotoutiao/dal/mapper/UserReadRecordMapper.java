@@ -54,4 +54,29 @@ public interface UserReadRecordMapper {
      * @return
      */
     int delUserReadRecord(Long userId);
+
+    /**
+     * 判断用户是否浏览过该新闻
+     * @param map
+     * @return
+     */
+    int isRead(Map map);
+
+    /**
+     * 判断昨天是否阅读
+     */
+    List<UserReadRecord> isContinuousReadYesterday(Long userId);
+
+    /**
+     * 新增阅读记录
+     * @param map
+     */
+    void addLookRecord(Map<String, Object> map);
+
+    /**
+     * 判断今天是否阅读
+     * @param userId
+     * @return
+     */
+    int isContinuousReadToday(Long userId);
 }

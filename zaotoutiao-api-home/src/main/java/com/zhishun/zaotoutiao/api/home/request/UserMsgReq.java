@@ -194,4 +194,14 @@ public class UserMsgReq {
      * 用户已经阅读(24小时热文)，更改阅读状态
      */
     public static final String IS_READ = "is/read";
+
+    /**
+     * 获取未读消息公告条数
+     */
+    public static final String UNREAD_MSG_NUM_GET ="unread/msg/num/get";
+
+    /**
+     * 获取未读热文条数
+     */
+    public static final String  UNREAD_HOT_NUM_GET ="unread/hot/num/get";
 }

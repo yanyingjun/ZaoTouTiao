@@ -48,4 +48,11 @@ public class NewsMsgReq {
      */
     public static final String COLLECT_GET = "collect/get";
 
+    /**
+     * 新闻阅读记录添加
+     */
+    public static final String READ_RECORD_ADD = "read/record/add";
+
+
+
 }

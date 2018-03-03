@@ -149,4 +149,24 @@
     delete from user_read_record
     where userId = #{userId}
   </delete>
+
+  <select id="isRead" parameterType="map" resultType="int">
+    SELECT count(0)
+    from user_read_record
+    WHERE  userId = #{userId} AND infoId = #{infoId}
+  </select>
+
+  <select id="isContinuousReadYesterday" parameterType="Long" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from user_read_record WHERE TO_DAYS( NOW( ) ) - TO_DAYS( create_date) &lt;= 1 AND userId = #{userId}
+  </select>
+
+  <insert id="addLookRecord" parameterType="map">
+    INSERT INTO user_read_record(userId,infoId,infoType,read_continuous_day) VALUES (#{userId},#{infoId},#{infoType},#{readContinuousDay})
+  </insert>
+
+  <select id="isContinuousReadToday" parameterType="Long" resultType="int">
+    SELECT COUNT(0)
+    FROM user_read_record WHERE TO_DAYS( NOW( ) ) - TO_DAYS( create_date) &lt;= 0 AND userId = #{userId}
+  </select>
 </mapper>

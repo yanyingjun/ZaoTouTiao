@@ -5,6 +5,7 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserInformation;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -73,4 +74,19 @@ public interface UserInformationMapper {
      * @return
      */
     List<UserInformation> listInformationNew();
+
+
+    /**
+     * 修改用户消息表为已读
+     * @param map
+     * @return
+     */
+    int updateInformationById(Map<String,Object> map);
+
+    /**
+     * 根据类别获取用户消息记录个数
+     * @param map
+     * @return
+     */
+    int getInformationNumByType(Map map);
 }

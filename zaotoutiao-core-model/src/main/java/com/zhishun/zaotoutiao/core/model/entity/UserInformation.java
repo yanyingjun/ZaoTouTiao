@@ -67,6 +67,7 @@ public class UserInformation implements Serializable {
     /**
      * 构造方法
      */
+
     public UserInformation(Long id, Long userId, String type, String title, String content, String url, String createDate, String groups, String subhead, Integer isRead) {
         this.id = id;
         this.userId = userId;

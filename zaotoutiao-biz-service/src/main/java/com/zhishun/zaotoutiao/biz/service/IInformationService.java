@@ -4,6 +4,7 @@ import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.UserInformation;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 闫迎军(YanYingJun)
@@ -31,4 +32,12 @@ public interface IInformationService {
      * @return
      */
     int addUserInformation(UserInformation userInformation);
+
+    /**
+     * 返回用户未读消息公告条数
+     * @param userId
+     * @param type
+     * @return
+     */
+    int selectUserInformationByTypeOrUserId(Long userId, String type);
 }

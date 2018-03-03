@@ -60,4 +60,9 @@ public interface ExchangeRateMapper {
      * @return
      */
     ExchangeRate getExchangeRate();
+
+    /**
+     *
+     */
+    int getNewbieReadTime();
 }

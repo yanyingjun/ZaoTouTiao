@@ -49,4 +49,12 @@ public class InformationServiceImpl implements IInformationService{
     public int addUserInformation(UserInformation information) {
         return userInformationMapper.insertSelective(information);
     }
+
+    @Override
+    public int selectUserInformationByTypeOrUserId(Long userId, String type) {
+        Map map = Maps.newHashMap();
+        map.put("userId",userId);
+        map.put("type",type);
+        return userInformationMapper.getInformationNumByType(map);
+    }
 }

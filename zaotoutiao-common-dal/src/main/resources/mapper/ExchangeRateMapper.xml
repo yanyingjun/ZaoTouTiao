@@ -226,4 +226,9 @@
     <include refid="Base_Column_List" />
     from exchange_rate
   </select>
+
+  <select id="getNewbieReadTime" resultType="int">
+    SELECT newbie_read_time
+    FROM exchange_rate
+  </select>
 </mapper>
