@@ -39,6 +39,11 @@ public class UserBehavior {
      */
     private Integer channelId;
 
+    /**
+     * 是否是首次激活
+     */
+    private Integer isFirstActivation;
+
     private String createDate;
 
     /**
@@ -201,5 +206,23 @@ public class UserBehavior {
      */
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    /**
+     * Getter method for property <tt>isFirstActivation</tt>.
+     *
+     * @return property value of isFirstActivation
+     */
+    public Integer getIsFirstActivation() {
+        return isFirstActivation;
+    }
+
+    /**
+     * Setter method for property <tt>isFirstActivation</tt>.
+     *
+     * @param isFirstActivation value to be assigned to property isFirstActivation
+     */
+    public void setIsFirstActivation(Integer isFirstActivation) {
+        this.isFirstActivation = isFirstActivation;
     }
 }

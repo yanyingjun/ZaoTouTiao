@@ -29,4 +29,9 @@ public class ZttWebMsgReq {
      * 用户行为统计
      */
     public static final String ZTT_USER_BEHAVIOR_REQ = "/behavior";
+
+    /**
+     * 用户行为统计数据请求
+     */
+    public static final String ZTT_BEHAVIOR_LIST_REQ = "/behavior/list";
 }

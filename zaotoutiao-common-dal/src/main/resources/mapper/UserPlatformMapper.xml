@@ -68,4 +68,8 @@
       create_date = #{createDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="listUserPlatform" resultMap="BaseResultMap">
+    select * FROM user_platform
+  </select>
 </mapper>

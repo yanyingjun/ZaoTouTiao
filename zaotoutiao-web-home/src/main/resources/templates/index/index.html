@@ -56,7 +56,7 @@
                         </a>
                     </li>
                     <li class="pf-logout">
-                        <a href="login.html">
+                        <a href="/login">
                             <i class="iconfont">&#xe60e;</i>
                             <span class="pf-opt-name">退出</span>
                         </a>
@@ -155,8 +155,8 @@
                     </a>
                     <ul class="sider-nav-s">
                         <li class="active"><a href="#">操作次数</a></li>
-                        <li class="active"><a href="#">金币来源</a></li>
-                        <li class="active"><a href="#">零钱明细</a></li>
+                        <li><a href="#">金币来源</a></li>
+                        <li><a href="#">零钱明细</a></li>
                     </ul>
                 </li>
                 <li>
@@ -166,8 +166,8 @@
                         <i class="iconfont">&#xe642;</i>
                     </a>
                     <ul class="sider-nav-s">
-                        <li class="active"><a href="#">新增用户</a></li>
-                        <li class="active"><a href="#">用户存留</a></li>
+                        <li class="active"><a href="javascript:void(0);" onclick="Open('新增用户', '/behavior')">新增用户</a></li>
+                        <li><a href="#">用户存留</a></li>
                     </ul>
                 </li>
                 <li>
@@ -178,8 +178,8 @@
                     </a>
                     <ul class="sider-nav-s">
                         <li class="active"><a href="#">推送列表</a></li>
-                        <li class="active"><a href="#">违禁词库</a></li>
-                        <li class="active"><a href="#">评论管理</a></li>
+                        <li><a href="#">违禁词库</a></li>
+                        <li><a href="#">评论管理</a></li>
                     </ul>
                 </li>
                 <li>
@@ -190,8 +190,8 @@
                     </a>
                     <ul class="sider-nav-s">
                         <li class="active"><a href="#">金币统计</a></li>
-                        <li class="active"><a href="#">零钱统计</a></li>
-                        <li class="active"><a href="#">可提现用户列表</a></li>
+                        <li><a href="#">零钱统计</a></li>
+                        <li><a href="#">可提现用户列表</a></li>
                     </ul>
                 </li>
                 <li>
@@ -202,17 +202,19 @@
                     </a>
                     <ul class="sider-nav-s">
                         <li class="active"><a href="#">新增用户</a></li>
-                        <li class="active"><a href="#">用户存留</a></li>
+                        <li><a href="#">用户存留</a></li>
                     </ul>
                 </li>
             </ul>
         </div>
 
-        <div id="pf-page">
-            <div class="easyui-tabs1" style="width:100%;height:100%;">
-                <div title="首页" style="padding:10px 5px 5px 10px;">
-                    <iframe class="page-iframe" src="/main" frameborder="no"   border="no" height="100%" width="100%" scrolling="auto"></iframe>
-                </div>
+        <div id="pf-page" region="center">
+                <div class="easyui-tabs" fit="true" border="false" id="tabs">
+                    <div title="首页" style="padding:10px 5px 5px 10px;">
+                        <iframe class="page-iframe" src="/main" frameborder="no"   border="no" height="100%" width="100%" scrolling="auto"></iframe>
+                    </div>
+
+
                 <!--<div title="采购组织" style="padding:10px 5px 5px 10px;" data-options="closable:true">
                     <iframe class="page-iframe" src="index.html" frameborder="no"   border="no" height="100%" width="100%" scrolling="auto"></iframe>
                 </div>
@@ -246,7 +248,6 @@
 
 <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="/static/js/jquery.easyui.min.js"></script>
-<!-- <script type="text/javascript" src="js/menu.js"></script> -->
 <script type="text/javascript" src="/static/js/main.js"></script>
 <!--[if IE 7]>
 <script type="text/javascript">
@@ -259,7 +260,21 @@
 
 
 <script type="text/javascript">
-    $('.easyui-tabs1').tabs({
+
+    //在右边center区域打开菜单，新增tab
+    function Open(text, url) {
+        if ($('#tabs').tabs('exists', text)) {
+            $('#tabs').tabs('select', text);
+        } else {
+            $('#tabs').tabs('add', {
+                title : text,
+                closable : true,
+                content : '<iframe class="page-iframe" src="'+url+'" frameborder="no"   border="no" height="100%" width="100%" scrolling="auto"></iframe>'
+            });
+        }
+    }
+
+    /*$('.easyui-tabs1').tabs({
         tabHeight: 44,
         onSelect:function(title,index){
             var currentTab = $('.easyui-tabs1').tabs("getSelected");
@@ -267,7 +282,7 @@
                 currentTab.find("iframe").attr("src",currentTab.find("iframe").attr("src"));
             }
         }
-    })
+    })*/
     $(window).resize(function(){
         $('.tabs-panels').height($("#pf-page").height()-46);
         $('.panel-body').height($("#pf-page").height()-76)

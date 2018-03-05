@@ -340,4 +340,12 @@ public interface IUserService {
      */
     List<StaticFakeData> getFakeData(String type);
 
+    /**
+     * 新增用户
+     * @param telephone
+     * @param password
+     * @return
+     */
+    int addUserInfo(String telephone, String password);
+
 }

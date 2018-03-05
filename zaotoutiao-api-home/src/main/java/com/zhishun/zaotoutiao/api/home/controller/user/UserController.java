@@ -67,11 +67,12 @@ public class UserController extends BaseController{
 
     /**
      * 用户注册
-     * @param user
+     * @param telephone
+     * @param password
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_REGISTER_REQ, method = RequestMethod.POST)
-    public Map<Object, Object> search(final User user) {
+    public Map<Object, Object> search(final String telephone, final String password) {
 
         // 定义Map集合对象
         final Map<Object, Object> dataMap = Maps.newHashMap();
@@ -79,12 +80,27 @@ public class UserController extends BaseController{
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
-                AssertsUtil.isNotNull(user, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(telephone, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(password, ErrorCodeEnum.PARAMETER_ANOMALY);
             }
             @Override
             public void handle() throws Exception {
                 //业务逻辑
-
+                User user = userService.getUserByMap(telephone);
+                if(StringUtils.isEmpty(user)){
+                    dataMap.put("msg", "新增用户成功");
+                    int userId = userService.addUserInfo(telephone, password);
+                    //为用户添加消息和公告
+                    List<UserInformation> listInformation = iInformationService.listInformationNew();
+                    for(UserInformation userInfo : listInformation){
+                        userInfo.setUserId(Long.valueOf(userId));
+                        iInformationService.addUserInformation(userInfo);
+                    }
+                    dataMap.put("data", user);
+                }else{
+                    dataMap.put("msg", "用户已存在，请直接登录");
+                    dataMap.put("data", null);
+                }
             }
 
         });
@@ -1172,6 +1188,5 @@ public class UserController extends BaseController{
 
         return dataMap;
     }
-
 
 }

@@ -79,4 +79,13 @@
       create_date = #{createDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="listPlatformChannelByPlatformId" parameterType="int" resultMap="BaseResultMap">
+    SELECT * from platform_channel
+    <where>
+      <if test="_parameter != null and _parameter != 0">
+        platform_id = #{_parameter}
+      </if>
+    </where>
+  </select>
 </mapper>
