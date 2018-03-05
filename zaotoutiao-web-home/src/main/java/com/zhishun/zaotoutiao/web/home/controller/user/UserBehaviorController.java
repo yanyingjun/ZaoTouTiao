@@ -5,15 +5,11 @@
 package com.zhishun.zaotoutiao.web.home.controller.user;
 
 import com.google.common.collect.Maps;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIGlobalBinding;
 import com.zhishun.zaotoutiao.biz.service.IPlatformWebService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
-import com.zhishun.zaotoutiao.common.util.ValueEnumUtil;
 import com.zhishun.zaotoutiao.core.model.entity.PlatformChannel;
-import com.zhishun.zaotoutiao.core.model.entity.UserBehavior;
 import com.zhishun.zaotoutiao.core.model.entity.UserPlatform;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
-import com.zhishun.zaotoutiao.core.model.enums.PlatformEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.core.model.vo.UserBehaviorVO;
 import com.zhishun.zaotoutiao.web.home.callback.ControllerCallback;
