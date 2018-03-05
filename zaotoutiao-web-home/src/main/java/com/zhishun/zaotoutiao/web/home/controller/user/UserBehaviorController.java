@@ -43,36 +43,7 @@ public class UserBehaviorController extends BaseController{
      */
     @RequestMapping(value = ZttWebMsgReq.ZTT_USER_BEHAVIOR_REQ)
     public ModelAndView behavior(){
-        String type = "today";
         ModelAndView mv = new ModelAndView(ZttWebMsgView.ZTT_USER_BEHAVIOR_VIEW);
-        List<UserBehaviorVO> list = platformWebService.listBehaviorByType(0,0, type, null, null);
-        //下载量
-        int countDownLoadNum = 0;
-        //激活
-        int countActivationNum = 0;
-        //注册
-        int countRegisterNum = 0;
-        //操作次数
-        int countOperationNum = 0;
-        for(UserBehaviorVO userBehaviorVO : list){
-            countDownLoadNum += userBehaviorVO.getDownloadNum();
-            countActivationNum += userBehaviorVO.getActivationNum();
-            countRegisterNum += userBehaviorVO.getRegisterNum();
-            countOperationNum += userBehaviorVO.getOperationNum();
-        }
-        //激活率
-        BigDecimal countActivationRateNum = new BigDecimal(countActivationNum).divide(new BigDecimal(countDownLoadNum),2,BigDecimal.ROUND_HALF_UP);
-        //注册率
-        BigDecimal countRegisterRateNum = new BigDecimal(countRegisterNum).divide(new BigDecimal(countActivationNum),2, BigDecimal.ROUND_HALF_UP);
-
-        mv.addObject("countDownLoadNum", countDownLoadNum);
-        mv.addObject("countActivationNum", countActivationNum);
-        mv.addObject("countRegisterNum", countRegisterNum);
-        mv.addObject("countOperationNum", countOperationNum);
-        mv.addObject("countActivationRateNum", countActivationRateNum);
-        mv.addObject("countRegisterRateNum", countRegisterRateNum);
-
-
         return mv;
     }
 
