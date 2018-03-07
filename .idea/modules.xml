@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/zaotoutiao.iml" filepath="$PROJECT_DIR$/.idea/zaotoutiao.iml" />
       <module fileurl="file://$PROJECT_DIR$/zaotoutiao-api-home/zaotoutiao-api-home.iml" filepath="$PROJECT_DIR$/zaotoutiao-api-home/zaotoutiao-api-home.iml" />
       <module fileurl="file://$PROJECT_DIR$/zaotoutiao-biz-service/zaotoutiao-biz-service.iml" filepath="$PROJECT_DIR$/zaotoutiao-biz-service/zaotoutiao-biz-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/zaotoutiao-common-base/zaotoutiao-common-base.iml" filepath="$PROJECT_DIR$/zaotoutiao-common-base/zaotoutiao-common-base.iml" />

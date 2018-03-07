@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="zaotoutiao-biz-service:war">
-    <output-path>$PROJECT_DIR$/zaotoutiao-biz-service/target</output-path>
-    <root id="archive" name="zaotoutiao.war">
-      <element id="artifact" artifact-name="zaotoutiao-biz-service:war exploded" />
-    </root>
-  </artifact>
-</component>

@@ -81,21 +81,6 @@ public class ExchangeRate implements Serializable {
     /**
      * 构造方法
      */
-    public ExchangeRate(Integer id, Integer recruitGold, BigDecimal recruitMoney, Integer newbieRecruitGold, BigDecimal newbieRecruitMoney, Integer registLoginGold, Integer registLoginMoney, BigDecimal goldToMoney, Integer signActivityDays, Integer readActivityDays, Integer newbieReadTime, Integer awakenParentGold, Integer awakenUserGold) {
-        this.id = id;
-        this.recruitGold = recruitGold;
-        this.recruitMoney = recruitMoney;
-        this.newbieRecruitGold = newbieRecruitGold;
-        this.newbieRecruitMoney = newbieRecruitMoney;
-        this.registLoginGold = registLoginGold;
-        this.registLoginMoney = registLoginMoney;
-        this.goldToMoney = goldToMoney;
-        this.signActivityDays = signActivityDays;
-        this.readActivityDays = readActivityDays;
-        this.newbieReadTime = newbieReadTime;
-        this.awakenParentGold = awakenParentGold;
-        this.awakenUserGold = awakenUserGold;
-    }
 
     /**
      * Getter method for property <tt>id</tt>.
