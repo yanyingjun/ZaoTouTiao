@@ -3,6 +3,7 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserComments;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserCommentsMapper {
@@ -47,5 +48,22 @@ public interface UserCommentsMapper {
      */
     int countUserComments(String infoId);
 
+    /**
+     * 获取某条新闻的全部评论数
+     * @param infoId
+     * @return
+     */
     int getCommentsNumByInfoId(String infoId);
+
+    /**
+     * 获取所有新闻列表
+     * @return
+     */
+    List<UserComments> getCommentsList();
+
+    /**
+     * 根据搜索关键词获得相关新闻列表
+     * @return
+     */
+    List<UserComments> getCommentsByKeywordList(String keyword);
 }

@@ -102,4 +102,5 @@ public interface InfosMapper {
      */
     List<InfosVo> List24HoursInfos();
 
+    String getInfoTitle(String infoId);
 }

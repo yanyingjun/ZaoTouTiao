@@ -461,4 +461,9 @@
     SELECT * FROM infos WHERE isHot = 1 AND push_date > DATE_SUB(NOW(),INTERVAL 24 HOUR) ORDER BY push_date DESC
   </select>
 
+  <select id="getInfoTitle" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT title
+    FROM infos
+    WHERE infoId = #{infoId}
+  </select>
 </mapper>

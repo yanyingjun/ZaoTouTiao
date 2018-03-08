@@ -44,10 +44,10 @@
             },
             success:function(data){
                 if(data==1){
-                    $.messager.alert('My Title','修改成功！请刷新查看当年汇率~','info');
+                    $.messager.alert('修改汇率请求','修改成功！请刷新查看当年汇率~','info');
                     //window.location.reload();
                 }else if(data=='0'){
-                    $.messager.alert('My Title','修改失败！','error');
+                    $.messager.alert('修改汇率请求','修改失败！','error');
                 }
             }
         });

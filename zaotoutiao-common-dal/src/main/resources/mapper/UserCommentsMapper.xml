@@ -135,4 +135,16 @@
     WHERE infoId = #{infoId}
   </select>
 
+  <select id="getCommentsList" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM user_comments
+  </select>
+
+  <select id="getCommentsByKeywordList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT user_comments.*,infos.title,infos.infoId,user.nickName,user.userId
+    FROM user_comments
+    JOIN infos ON infos.infoId = user_comments.infoId
+    JOIN user ON user.userId = user_comments.userId
+    WHERE user.nickName like #{keyword} or infos.title like #{keyword} or user_comments.content like #{keyword}
+  </select>
 </mapper>

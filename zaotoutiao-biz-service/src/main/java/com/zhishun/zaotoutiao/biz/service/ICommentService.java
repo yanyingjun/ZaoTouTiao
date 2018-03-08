@@ -1,6 +1,7 @@
 package com.zhishun.zaotoutiao.biz.service;
 
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
 
 import java.util.List;
 
@@ -35,4 +36,11 @@ public interface ICommentService {
      * @return
      */
     int getCommentsNumByInfoId(String infoId);
+
+    /**
+     * 获取新闻列表（可以根据关键词搜索）
+     * @param keyword
+     * @return
+     */
+    List<UserCommentsVO> getUserListOrByKey(String keyword);
 }
