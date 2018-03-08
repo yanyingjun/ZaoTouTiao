@@ -33,6 +33,16 @@ public class UserVO extends User{
     private String spanDays;
 
     /**
+     * 未登录用户数量
+     */
+    private Integer notLoginNum;
+
+    /**
+     * 分组日期
+     */
+    private String times;
+
+    /**
      * Getter method for property <tt>oldPassword</tt>.
      *
      * @return property value of oldPassword
@@ -102,5 +112,41 @@ public class UserVO extends User{
      */
     public void setSpanDays(String spanDays) {
         this.spanDays = spanDays;
+    }
+
+    /**
+     * Getter method for property <tt>notLoginNum</tt>.
+     *
+     * @return property value of notLoginNum
+     */
+    public Integer getNotLoginNum() {
+        return notLoginNum;
+    }
+
+    /**
+     * Setter method for property <tt>notLoginNum</tt>.
+     *
+     * @param notLoginNum value to be assigned to property notLoginNum
+     */
+    public void setNotLoginNum(Integer notLoginNum) {
+        this.notLoginNum = notLoginNum;
+    }
+
+    /**
+     * Getter method for property <tt>times</tt>.
+     *
+     * @return property value of times
+     */
+    public String getTimes() {
+        return times;
+    }
+
+    /**
+     * Setter method for property <tt>times</tt>.
+     *
+     * @param times value to be assigned to property times
+     */
+    public void setTimes(String times) {
+        this.times = times;
     }
 }

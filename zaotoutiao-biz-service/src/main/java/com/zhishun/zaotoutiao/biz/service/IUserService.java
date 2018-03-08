@@ -348,4 +348,15 @@ public interface IUserService {
      */
     int addUserInfo(String telephone, String password);
 
+    /**
+     * 可提现用户列表
+     * @param keyWord
+     * @param channelId
+     * @param createDate
+     * @param money
+     * @param pageRequest
+     * @return
+     */
+    Page<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal money, PageRequest pageRequest);
+
 }

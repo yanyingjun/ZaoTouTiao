@@ -266,4 +266,219 @@
   <select id="getNewDateBySource" parameterType="map" resultType="date">
     SELECT create_date FROM user_gold_record WHERE userId = #{userId} and source = #{source} order by create_date DESC LIMIT 0,1
   </select>
+
+  <select id="listGoldCount" parameterType="map" resultMap="BaseResultMap">
+    <if test='type == "today"'>
+      select DATE_FORMAT(create_date,'%Y-%m-%d:%H') times, sum(gold) as sumGold FROM user_gold_record
+      WHERE DateDiff(now(),create_date)=0
+        <if test="source != null">
+          and source = #{source}
+        </if>
+        <if test="isNewOrOld != null">
+          <if test = 'isNewOrOld == "oldVisitors"'>
+            and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) &lt; 1
+          </if>
+          <if test='isNewOrOld == "newVisitors"'>
+            and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) = 1
+          </if>
+        </if>
+        <if test="channelId != null">
+          and a.channel_id = #{channelId}
+        </if>
+        group by times
+    </if>
+    <if test='type == "yesterday"'>
+      select DATE_FORMAT(create_date,'%Y-%m-%d:%H') times, sum(gold) as sumGold FROM user_gold_record
+      WHERE DateDiff(now(),create_date) = 1
+      <if test="source != null">
+        and source = #{source}
+      </if>
+      <if test="isNewOrOld != null">
+        <if test = 'isNewOrOld == "oldVisitors"'>
+          and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) &lt; 1
+        </if>
+        <if test='isNewOrOld == "newVisitors"'>
+          and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) = 1
+        </if>
+      </if>
+      <if test="channelId != null">
+        and channel_id = #{channelId}
+      </if>
+      group by times
+    </if>
+    <if test='type == "sevenDays"'>
+      select DATE_FORMAT(create_date,'%Y-%m-%d') times, sum(gold) as sumGold FROM user_gold_record
+      WHERE DateDiff(now(),create_date) &lt;=7
+      <if test="source != null">
+        and source = #{source}
+      </if>
+      <if test="isNewOrOld != null">
+        <if test = 'isNewOrOld == "oldVisitors"'>
+          and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) &lt; 1
+        </if>
+        <if test='isNewOrOld == "newVisitors"'>
+          and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) = 1
+        </if>
+      </if>
+      <if test="channelId != null">
+        and channel_id = #{channelId}
+      </if>
+      group by times
+    </if>
+    <if test='type == "thirtyDays"'>
+      select DATE_FORMAT(create_date,'%Y-%m-%d') times, sum(gold) as sumGold FROM user_gold_record
+      WHERE DateDiff(now(),create_date) &lt;=30
+      <if test="source != null">
+        and source = #{source}
+      </if>
+      <if test="isNewOrOld != null">
+        <if test = 'isNewOrOld == "oldVisitors"'>
+          and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) &lt; 1
+        </if>
+        <if test='isNewOrOld == "newVisitors"'>
+          and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) = 1
+        </if>
+      </if>
+      <if test="channelId != null">
+        and channel_id = #{channelId}
+      </if>
+      group by times
+    </if>
+    <if test='type == "weeks"'>
+      select DATE_FORMAT(create_date,'%Y-%u') times, sum(gold) as sumGold FROM user_gold_record
+      <where>
+        <if test="source != null">
+          source = #{source}
+        </if>
+        <if test="isNewOrOld != null">
+          <if test = 'isNewOrOld == "oldVisitors"'>
+            and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) &lt; 1
+          </if>
+          <if test='isNewOrOld == "newVisitors"'>
+            and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) = 1
+          </if>
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+        <if test="startDate != null">
+          and create_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+          and create_date &lt;= #{endDate}
+        </if>
+      </where>
+      group by times;
+    </if>
+    <if test='type == "months"'>
+      select DATE_FORMAT(create_date,'%Y-%m') times, sum(gold) as sumGold FROM user_gold_record
+      <where>
+        <if test="source != null">
+          source = #{source}
+        </if>
+        <if test="isNewOrOld != null">
+          <if test = 'isNewOrOld == "oldVisitors"'>
+            and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) &lt; 1
+          </if>
+          <if test='isNewOrOld == "newVisitors"'>
+            and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) = 1
+          </if>
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+        <if test="startDate != null">
+          and create_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+          and create_date &lt;= #{endDate}
+        </if>
+      </where>
+      group by times;
+    </if>
+    <if test='type == "days"'>
+      select DATE_FORMAT(create_date,'%Y-%m-%d') times, sum(gold) as sumGold FROM user_gold_record
+      <where>
+        <if test="source != null">
+          source = #{source}
+        </if>
+        <if test="isNewOrOld != null">
+          <if test = 'isNewOrOld == "oldVisitors"'>
+            and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) &lt; 1
+          </if>
+          <if test='isNewOrOld == "newVisitors"'>
+            and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) = 1
+          </if>
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+        <if test="startDate != null">
+          and create_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+          and create_date &lt;= #{endDate}
+        </if>
+      </where>
+      group by times;
+    </if>
+    <if test='type == "hours"'>
+      select DATE_FORMAT(create_date,'%Y-%m-%d:%H') times, sum(gold) as sumGold FROM user_gold_record
+      <where>
+        <if test="source != null">
+          source = #{source}
+        </if>
+        <if test="isNewOrOld != null">
+          <if test = 'isNewOrOld == "oldVisitors"'>
+            and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) &lt; 1
+          </if>
+          <if test='isNewOrOld == "newVisitors"'>
+            and DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) = 1
+          </if>
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+        <if test="startDate != null">
+          and create_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+          and create_date &lt;= #{endDate}
+        </if>
+      </where>
+      group by times;
+    </if>
+  </select>
+
+  <select id="listGoldCountBySource" parameterType="map" resultMap="BaseResultMap">
+      select sum(gold) as sumGold,source from user_gold_record where source not in (7)
+    <if test='type == "today"'>
+       and DateDiff(now(),create_date)=0
+    </if>
+    <if test='type == "yesterday"'>
+       and DateDiff(now(),create_date) = 1
+    </if>
+    <if test='type == "sevenDays"'>
+       and DateDiff(now(),create_date) &lt;=7
+    </if>
+    <if test='type == "thirtyDays"'>
+       and DateDiff(now(),create_date) &lt;=30
+    </if>
+    <if test="startDate != null">
+       and create_date &gt;= #{startDate}
+    </if>
+    <if test="endDate != null">
+       and create_date &lt;= #{endDate}
+    </if>
+    <if test="isNewOrOld != null">
+      <if test = 'isNewOrOld == "oldVisitors"'>
+        and  user_gold_record.userId in (select userId from user where DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) &lt; 1)
+      </if>
+      <if test='isNewOrOld == "newVisitors"'>
+        and user_gold_record.userId in (select userId from user where DATEDIFF(DATE_SUB(create_date,INTERVAL -1 DAY), NOW() ) = 1)
+      </if>
+    </if>
+    GROUP BY source
+  </select>
+
 </mapper>

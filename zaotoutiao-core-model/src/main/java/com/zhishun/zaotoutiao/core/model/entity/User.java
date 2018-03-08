@@ -141,6 +141,16 @@ public class User implements Serializable {
     private String oppenId;
 
     /**
+     * 平台ID
+     */
+    private Integer platformId;
+
+    /**
+     * 平台对应的渠道ID
+     */
+    private Integer channelId;
+
+    /**
      * Getter method for property <tt>userId</tt>.
      *
      * @return property value of userId
@@ -588,5 +598,41 @@ public class User implements Serializable {
      */
     public void setOppenId(String oppenId) {
         this.oppenId = oppenId;
+    }
+
+    /**
+     * Getter method for property <tt>platformId</tt>.
+     *
+     * @return property value of platformId
+     */
+    public Integer getPlatformId() {
+        return platformId;
+    }
+
+    /**
+     * Setter method for property <tt>platformId</tt>.
+     *
+     * @param platformId value to be assigned to property platformId
+     */
+    public void setPlatformId(Integer platformId) {
+        this.platformId = platformId;
+    }
+
+    /**
+     * Getter method for property <tt>channelId</tt>.
+     *
+     * @return property value of channelId
+     */
+    public Integer getChannelId() {
+        return channelId;
+    }
+
+    /**
+     * Setter method for property <tt>channelId</tt>.
+     *
+     * @param channelId value to be assigned to property channelId
+     */
+    public void setChannelId(Integer channelId) {
+        this.channelId = channelId;
     }
 }

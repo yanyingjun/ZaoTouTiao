@@ -6,6 +6,8 @@ package com.zhishun.zaotoutiao.core.model.vo;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserMoneyRecord;
 
+import java.math.BigDecimal;
+
 /**
  * @author 闫迎军(YanYingJun)
  * @version $Id: UserMoneyRecordVO, v0.1 2018年02月26日 19:39闫迎军(YanYingJun) Exp $
@@ -21,6 +23,16 @@ public class UserMoneyRecordVO extends UserMoneyRecord{
      * 详情
      */
     private String details;
+
+    /**
+     * 分组时间
+     */
+    private String times;
+
+    /**
+     * 零钱总数量
+     */
+    private BigDecimal sumMoney;
 
     /**
      * Getter method for property <tt>explanation</tt>.
@@ -56,5 +68,41 @@ public class UserMoneyRecordVO extends UserMoneyRecord{
      */
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    /**
+     * Getter method for property <tt>times</tt>.
+     *
+     * @return property value of times
+     */
+    public String getTimes() {
+        return times;
+    }
+
+    /**
+     * Setter method for property <tt>times</tt>.
+     *
+     * @param times value to be assigned to property times
+     */
+    public void setTimes(String times) {
+        this.times = times;
+    }
+
+    /**
+     * Getter method for property <tt>sumMoney</tt>.
+     *
+     * @return property value of sumMoney
+     */
+    public BigDecimal getSumMoney() {
+        return sumMoney;
+    }
+
+    /**
+     * Setter method for property <tt>sumMoney</tt>.
+     *
+     * @param sumMoney value to be assigned to property sumMoney
+     */
+    public void setSumMoney(BigDecimal sumMoney) {
+        this.sumMoney = sumMoney;
     }
 }

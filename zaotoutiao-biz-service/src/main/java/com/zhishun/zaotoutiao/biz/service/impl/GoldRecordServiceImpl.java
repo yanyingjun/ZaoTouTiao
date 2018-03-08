@@ -10,6 +10,7 @@ import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
+import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.dal.mapper.UserGoldRecordMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserShareMapper;
@@ -17,6 +18,7 @@ import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -187,6 +189,63 @@ public class GoldRecordServiceImpl implements IGoldRecordService{
 
         }
         return 0;
+    }
+
+    @Override
+    public Map countUserGoldAndMoney(String type, String startDate, String endDate) {
+        Map map = Maps.newHashMap();
+        if(!StringUtils.isEmpty(type)){
+            map.put("type", type);
+        }
+        if(!StringUtils.isEmpty(startDate)){
+            map.put("startDate", startDate);
+        }
+        if(!StringUtils.isEmpty(endDate)){
+            map.put("endDate", endDate);
+        }
+        return userMapper.countUserGoldAndMoney(map);
+    }
+
+    @Override
+    public List<UserGoldRecordVO> listGoldCount(int channelId, String source, String type, String isNewAndOld, String startDate, String endDate) {
+        Map map = Maps.newHashMap();
+        if(!StringUtils.isEmpty(channelId) && channelId != 0){
+            map.put("channelId", channelId);
+        }
+        if(!StringUtils.isEmpty(source)){
+            map.put("source", source);
+        }
+        if(!StringUtils.isEmpty(type)){
+            map.put("type", type);
+        }
+        if(!StringUtils.isEmpty(isNewAndOld) && !isNewAndOld.equals("wholeUser")){
+            map.put("isNewOrOld", isNewAndOld);
+        }
+        if(!StringUtils.isEmpty(startDate)){
+            map.put("startDate", startDate);
+        }
+        if(!StringUtils.isEmpty(endDate)){
+            map.put("endDate", endDate);
+        }
+        return userGoldRecordMapper.listGoldCount(map);
+    }
+
+    @Override
+    public List<UserGoldRecordVO> listGoldCountBySource(String isNewAndOld, String type, String startDate, String endDate) {
+        Map map = Maps.newHashMap();
+        if(!StringUtils.isEmpty(type)){
+            map.put("type", type);
+        }
+        if(!StringUtils.isEmpty(isNewAndOld) && !isNewAndOld.equals("wholeUser")){
+            map.put("isNewOrOld", isNewAndOld);
+        }
+        if(!StringUtils.isEmpty(startDate)){
+            map.put("startDate", startDate);
+        }
+        if(!StringUtils.isEmpty(endDate)){
+            map.put("endDate", endDate);
+        }
+        return userGoldRecordMapper.listGoldCountBySource(map);
     }
 
     /**

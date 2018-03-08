@@ -34,4 +34,55 @@ public class ZttWebMsgReq {
      * 用户行为统计数据请求
      */
     public static final String ZTT_BEHAVIOR_LIST_REQ = "/behavior/list";
+
+    /**
+     * 用户存留页面请求
+     */
+    public static final String ZTT_USER_RETENTION_REQ = "/retention";
+
+    /**
+     * 用户存留数据请求
+     */
+    public static final String ZTT_RETENTION_LIST_REQ = "/retention/list";
+
+    /**
+     * 金币统计页面请求
+     */
+    public static final String ZTT_USER_GOLD_REQ = "/userGold";
+
+    /**
+     * 金币统计数据请求
+     */
+    public static final String ZTT_GOLD_LIST_REQ = "/userGold/list";
+
+    /**
+     * 按日按周按月金币统计数据请求
+     */
+    public static final String ZTT_GOLD_LISTGROUP_REQ = "/userGold/listGroup";
+
+    /**
+     * 零钱统计页面请求
+     */
+    public static final String ZTT_USER_MONEY_REQ = "/userMoney";
+
+    /**
+     * 零钱统计数据请求
+     */
+    public static final String ZTT_MONEY_LIST_REQ = "/userMoney/list";
+
+    /**
+     * 按日按周按月零钱统计数据请求
+     */
+    public static final String ZTT_MONEY_LISTGROUP_REQ = "/userMoney/listGroup";
+
+    /**
+     * 用户可提现列表页面请求
+     */
+    public static final String ZTT_CAN_BE_PRESENTED_USER_REQ = "/bePresentedUser";
+
+    /**
+     * 可提现用户列表
+     */
+    public static final String ZTT_CAN_BE_PRESENTED_USER_LIST_REQ = "/bePresentedUser/list";
+
 }

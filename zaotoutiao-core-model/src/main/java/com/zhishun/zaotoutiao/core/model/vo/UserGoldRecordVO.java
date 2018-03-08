@@ -38,6 +38,11 @@ public class UserGoldRecordVO extends UserGoldRecord{
     private String apprenticeNickName;
 
     /**
+     * 分组时间
+     */
+    private String times;
+
+    /**
      * Getter method for property <tt>explanation</tt>.
      *
      * @return property value of explanation
@@ -125,5 +130,23 @@ public class UserGoldRecordVO extends UserGoldRecord{
      */
     public void setApprenticeNickName(String apprenticeNickName) {
         this.apprenticeNickName = apprenticeNickName;
+    }
+
+    /**
+     * Getter method for property <tt>times</tt>.
+     *
+     * @return property value of times
+     */
+    public String getTimes() {
+        return times;
+    }
+
+    /**
+     * Setter method for property <tt>times</tt>.
+     *
+     * @param times value to be assigned to property times
+     */
+    public void setTimes(String times) {
+        this.times = times;
     }
 }

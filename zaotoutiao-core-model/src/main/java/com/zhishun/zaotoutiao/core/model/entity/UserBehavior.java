@@ -44,6 +44,11 @@ public class UserBehavior {
      */
     private Integer isFirstActivation;
 
+    /**
+     * 是否点开APP
+     */
+    private Integer isOpenApp;
+
     private String createDate;
 
     /**
@@ -224,5 +229,23 @@ public class UserBehavior {
      */
     public void setIsFirstActivation(Integer isFirstActivation) {
         this.isFirstActivation = isFirstActivation;
+    }
+
+    /**
+     * Getter method for property <tt>isOpenApp</tt>.
+     *
+     * @return property value of isOpenApp
+     */
+    public Integer getIsOpenApp() {
+        return isOpenApp;
+    }
+
+    /**
+     * Setter method for property <tt>isOpenApp</tt>.
+     *
+     * @param isOpenApp value to be assigned to property isOpenApp
+     */
+    public void setIsOpenApp(Integer isOpenApp) {
+        this.isOpenApp = isOpenApp;
     }
 }

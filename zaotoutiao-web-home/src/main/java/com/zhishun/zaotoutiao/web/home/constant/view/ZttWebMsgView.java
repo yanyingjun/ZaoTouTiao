@@ -29,4 +29,24 @@ public class ZttWebMsgView {
      * 用户行为统计
      */
     public static final String ZTT_USER_BEHAVIOR_VIEW = "user/behavior";
+
+    /**
+     * 用户存留
+     */
+    public static final String ZTT_USER_RETENTION_VIEW = "user/retention";
+
+    /**
+     * 金币统计
+     */
+    public static final String ZTT_USER_GOLD_VIEW = "finance/user_gold";
+
+    /**
+     * 零钱统计
+     */
+    public static final String ZTT_USER_MONEY_VIEW = "finance/user_money";
+
+    /**
+     * 用户可提现列表
+     */
+    public static final String ZTT_CAN_BE_PRESENTED_USER_VIEW = "finance/user_presented";
 }

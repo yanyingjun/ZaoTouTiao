@@ -26,4 +26,11 @@ public interface UserBehaviorMapper {
      * @return
      */
     List<UserBehavior> listBehaviorByType(Map<String,Object> map);
+
+    /**
+     * 统计打开APP人数
+     * @param map
+     * @return
+     */
+    List<UserBehavior> listOpenAppCount(Map<String,Object> map);
 }

@@ -39,6 +39,11 @@ public class DateUtil {
     public static final String SINGLE_DATE_FORMAT = "MM-dd-yyyy";
 
     /**
+     * 斜线日期
+     */
+    public static final String SLASH_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss";
+
+    /**
      * 根据传入的格式将日期对象转成对应格式的日期字符串
      *
      * @param date   日期对象
@@ -116,5 +121,41 @@ public class DateUtil {
         nowDate = calendar.getTime();
         String yDate = DateUtil.toString(nowDate, "yyyy-MM-dd");
         return yDate;
+    }
+
+    /**
+     * 日期格式化
+     * @return
+     */
+    public static String getDateFormat(String time){
+        Date date1 = DateUtil.toDate(time, DateUtil.SLASH_DATE_FORMAT);
+        return DateUtil.toString(date1, DEFAULT_DATETIME_FORMAT);
+    }
+
+    /**
+     * 通过时间秒毫秒数判断两个时间的间隔
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public static int differentDaysByMillisecond(String startDate, String endDate){
+        Date date1 = DateUtil.toDate(startDate, DateUtil.SLASH_DATE_FORMAT);
+        Date date2 = DateUtil.toDate(endDate, DateUtil.SLASH_DATE_FORMAT);
+        int days = (int) ((date2.getTime() - date1.getTime()) / (1000*3600*24));
+        return days;
+    }
+
+    /**
+     * 10位秒级时间戳
+     * @param date
+     * @return
+     */
+    public static Long getSenndTimestamp(Date date){
+        if(null == date){
+            return 0L;
+        }else{
+            String timestamp = String.valueOf(date.getTime()/1000);
+            return Long.valueOf(timestamp);
+        }
     }
 }

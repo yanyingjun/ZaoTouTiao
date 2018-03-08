@@ -172,4 +172,18 @@ public interface UserGoldRecordMapper {
      */
     Date getNewDateBySource(Map<String,Object> map);
 
+    /**
+     * 按日期分组统计金币数量
+     * @param map
+     * @return
+     */
+    List<UserGoldRecordVO> listGoldCount(Map map);
+
+    /**
+     * 按金币来源统计金币数量
+     * @param map
+     * @return
+     */
+    List<UserGoldRecordVO> listGoldCountBySource(Map map);
+
 }
