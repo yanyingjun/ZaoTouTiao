@@ -24,8 +24,8 @@
                 <a href="#" class="easyui-linkbutton" id="days" data-options="toggle:true,group:'g1'" onclick="getListBehavior('days')">按日</a>
                 <a href="#" class="easyui-linkbutton" id="weeks" data-options="toggle:true,group:'g1'" onclick="getListBehavior('weeks')">按周</a>
                 <a href="#" class="easyui-linkbutton" id="months" data-options="toggle:true,group:'g1'" onclick="getListBehavior('months')">按月</a>
-                开始时间<input class="easyui-datebox" name="startDate" id="startDate" data-options="required:true" />
-                结束时间<input class="easyui-datebox" name="endDate" id="endDate"  data-options="required:true"/></td>
+                开始时间<input class="easyui-datetimebox" name="startDate" id="startDate" data-options="required:true" />
+                结束时间<input class="easyui-datetimebox" name="endDate" id="endDate"  data-options="required:true"/></td>
                 <a href="#" class="easyui-linkbutton" id="hours" data-options="toggle:true,group:'g1'" onclick="getListBehavior('hours')">查询</a>
             </div>
             <table style="padding-top: 5px;">
@@ -156,19 +156,19 @@ $('#index').combobox({
 
 function showbehaviorInfo(){
     var type;
-    if($('#today').val() == '今天'){
+    if($('#today').text() == '今天'){
         type = 'today';
-    }else if($('#yesterday').val() == '昨天'){
+    }else if($('#yesterday').text() == '昨天'){
         type = 'yesterday';
-    }else if($('#sevenDays').val() == '最近7天'){
+    }else if($('#sevenDays').text() == '最近7天'){
         type = 'sevenDays';
-    }else if($('#thirtyDays').val() == '最近30天'){
+    }else if($('#thirtyDays').text() == '最近30天'){
         type = 'thirtyDays';
-    }else if($('#days').val() == '按日'){
+    }else if($('#days').text() == '按日'){
         type = 'days';
-    }else if($('#weeks').val() == '按周'){
+    }else if($('#weeks').text() == '按周'){
         type = 'weeks';
-    }else if($('#months').val() == '按月'){
+    }else if($('#months').text() == '按月'){
         type = 'months';
     }else{
         type = 'hours';
@@ -182,8 +182,8 @@ $(function(){
 function getListBehavior(type){
     var channelId = $('#channelId').combobox('getValue');
     var platformId = $('#platformId').combobox('getValue');
-    var startDate = $('#startDate').val();
-    var endDate = $('#endDate').val();
+    var startDate = $('#startDate').datetimebox("getValue");
+    var endDate = $('#endDate').datetimebox("getValue");
     var index = $('#index').combobox('getValue');
     var name = '';
     $.ajax({

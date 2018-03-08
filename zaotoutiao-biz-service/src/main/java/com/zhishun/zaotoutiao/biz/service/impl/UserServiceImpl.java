@@ -515,4 +515,28 @@ public class UserServiceImpl implements IUserService{
 
         return id;
     }
+
+    @Override
+    public Page<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal money, PageRequest pageRequest) {
+        Map map = Maps.newHashMap();
+        if(!StringUtils.isEmpty(keyWord)){
+            map.put("keyWord", keyWord);
+        }
+        if(!StringUtils.isEmpty(channelId)){
+            map.put("channelId", channelId);
+        }
+        if(!StringUtils.isEmpty(createDate)){
+            map.put("createDate", createDate);
+        }
+        if(!StringUtils.isEmpty(money)){
+            map.put("money", money);
+        }
+        int total = userMapper.countCanBePresentedUser(map);
+        if(!StringUtils.isEmpty(pageRequest)){
+            map.put("offset", pageRequest.getOffset());
+            map.put("limit", pageRequest.getPageSize());
+        }
+        List<UserVO> list = userMapper.listCanBePresentedUser(map);
+        return PageBuilder.buildPage(pageRequest, list, total);
+    }
 }

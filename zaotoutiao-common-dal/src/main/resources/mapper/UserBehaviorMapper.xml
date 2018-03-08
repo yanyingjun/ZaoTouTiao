@@ -12,10 +12,11 @@
     <result column="channel_id" jdbcType="TINYINT" property="channelId" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="is_first_activation" jdbcType="TINYINT" property="isFirstActivation"/>
+    <result column="is_open_app" property="isOpenApp" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Base_Column_List">
     id, user_id, download_num, activation_num, register_num, operation_num, platform_id, 
-    channel_id, create_date, is_first_activation
+    channel_id, create_date, is_first_activation, is_open_app
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -30,12 +31,12 @@
   <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserBehavior">
     insert into user_behavior (id, user_id, download_num, 
       activation_num, register_num, operation_num, 
-      platform_id, channel_id, create_date, is_first_activation
+      platform_id, channel_id, create_date, is_first_activation, is_open_app
       )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, #{downloadNum,jdbcType=INTEGER}, 
       #{activationNum,jdbcType=INTEGER}, #{registerNum,jdbcType=INTEGER}, #{operationNum,jdbcType=INTEGER}, 
       #{platformId,jdbcType=TINYINT}, #{channelId,jdbcType=TINYINT}, #{createDate,jdbcType=TIMESTAMP},
-      #{isFirstActivation, jdbcType=TINYINT}
+      #{isFirstActivation, jdbcType=TINYINT}, #{isOpenApp, jdbcType=TINYINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserBehavior">
@@ -69,7 +70,10 @@
         create_date,
       </if>
       <if test="isFirstActivation != null">
-        is_first_activation
+        is_first_activation,
+      </if>
+      <if test="isOpenApp != nul">
+        is_open_app
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -103,6 +107,9 @@
       <if test="isFirstActivation != null">
         #{isFirstActivation, jdbcType=TINYINT},
       </if>
+      <if test="isOpenApp != null">
+        #{isOpenApp, jdbcType=TINYINT}
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserBehavior">
@@ -133,7 +140,10 @@
         create_date = #{createDate,jdbcType=TIMESTAMP},
       </if>
       <if test="isFirstActivation != null">
-        is_first_activation = #{isFirstActivation}
+        is_first_activation = #{isFirstActivation},
+      </if>
+      <if test="isOpenApp != null">
+        is_open_app = #{isOpenApp}
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -148,7 +158,8 @@
       platform_id = #{platformId,jdbcType=TINYINT},
       channel_id = #{channelId,jdbcType=TINYINT},
       create_date = #{createDate,jdbcType=TIMESTAMP},
-      is_first_activation = #{isFirstActivation}
+      is_first_activation = #{isFirstActivation},
+      is_open_app = #{isOpenApp}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -164,10 +175,10 @@
         SUM(operation_num) as operationNum,platform_id, channel_id from user_behavior
         <where>
           <if test="platformId != null">
-            a.platform_id = #{platformId}
+            platform_id = #{platformId}
           </if>
           <if test="channelId != null">
-            and a.channel_id = #{channelId}
+            and channel_id = #{channelId}
           </if>
         </where>
         GROUP BY user_id) as a WHERE DateDiff(now(),a.create_date)=0
@@ -184,10 +195,10 @@
         SUM(operation_num) as operationNum,platform_id, channel_id from user_behavior
         <where>
           <if test="platformId != null">
-            a.platform_id = #{platformId}
+            platform_id = #{platformId}
           </if>
           <if test="channelId != null">
-            and a.channel_id = #{channelId}
+            and channel_id = #{channelId}
           </if>
         </where>
         GROUP BY user_id) as a WHERE DateDiff(now(),create_date) = 1
@@ -204,10 +215,10 @@
         SUM(operation_num) as operationNum,platform_id, channel_id from user_behavior
         <where>
           <if test="platformId != null">
-            a.platform_id = #{platformId}
+            platform_id = #{platformId}
           </if>
           <if test="channelId != null">
-            and a.channel_id = #{channelId}
+            and channel_id = #{channelId}
           </if>
         </where>
         GROUP BY user_id) as a WHERE DateDiff(now(),create_date) &lt;=7
@@ -224,10 +235,10 @@
         SUM(operation_num) as operationNum,platform_id, channel_id from user_behavior
         <where>
           <if test="platformId != null">
-            a.platform_id = #{platformId}
+            platform_id = #{platformId}
           </if>
           <if test="channelId != null">
-            and a.channel_id = #{channelId}
+            and channel_id = #{channelId}
           </if>
         </where>
         GROUP BY user_id) as a WHERE DateDiff(now(),create_date) &lt;=30
@@ -337,5 +348,146 @@
         GROUP BY user_id) as a
         group by times;
       </if>
+
   </select>
+
+  <select id="listOpenAppCount" parameterType="map" resultMap="BaseResultMap">
+    <if test='type == "today"'>
+      select DATE_FORMAT(a.create_date,'%Y-%m-%d:%H') times,count(a.is_open_app) as isOpenApp
+      from (select create_date,is_open_app,platform_id, channel_id  from user_behavior
+      <where>
+        <if test="platformId != null">
+          platform_id = #{platformId}
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+      </where>
+      GROUP BY DATE_FORMAT(create_date,'%Y-%m-%d:%H'),user_id) as a WHERE DateDiff(now(),a.create_date)=0
+      group by times
+    </if>
+    <if test='type == "yesterday"'>
+      select DATE_FORMAT(a.create_date,'%Y-%m-%d:%H') times,count(a.is_open_app) as isOpenApp
+      from (select create_date,is_open_app,platform_id, channel_id  from user_behavior
+      <where>
+        <if test="platformId != null">
+          platform_id = #{platformId}
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+      </where>
+      GROUP BY DATE_FORMAT(create_date,'%Y-%m-%d:%H'),user_id) as a WHERE DateDiff(now(),create_date) = 1
+      group by times
+    </if>
+    <if test='type == "sevenDays"'>
+      select DATE_FORMAT(create_date,'%Y-%m-%d') times,count(a.is_open_app) as isOpenApp
+      from (select create_date,is_open_app,platform_id, channel_id  from user_behavior
+      <where>
+        <if test="platformId != null">
+          platform_id = #{platformId}
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+      </where>
+      GROUP BY DATE_FORMAT(create_date,'%Y-%m-%d'),user_id) as a WHERE DateDiff(now(),create_date) &lt;=7
+      group by times
+    </if>
+    <if test='type == "thirtyDays"'>
+      select DATE_FORMAT(create_date,'%Y-%m-%d') times,count(a.is_open_app) as isOpenApp
+      from (select create_date,is_open_app,platform_id, channel_id  from user_behavior
+      <where>
+        <if test="platformId != null">
+          platform_id = #{platformId}
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+      </where>
+      GROUP BY DATE_FORMAT(create_date,'%Y-%m-%d'),user_id) as a WHERE DateDiff(now(),create_date) &lt;=30
+      group by times
+    </if>
+    <if test='type == "weeks"'>
+      select DATE_FORMAT(create_date,'%Y-%u') times,count(a.is_open_app) as isOpenApp
+      from (select create_date,is_open_app,platform_id, channel_id  from user_behavior
+      <where>
+        <if test="platformId != null">
+          platform_id = #{platformId}
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+        <if test="startDate != null">
+          and create_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+          and create_date &lt;= #{endDate}
+        </if>
+      </where>
+      GROUP BY DATE_FORMAT(create_date,'%Y-%m-%d'),user_id) as a
+      group by times;
+    </if>
+    <if test='type == "months"'>
+      select DATE_FORMAT(create_date,'%Y-%m') times,count(a.is_open_app) as isOpenApp
+      from (select create_date,is_open_app,platform_id, channel_id  from user_behavior
+      <where>
+        <if test="platformId != null">
+          platform_id = #{platformId}
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+        <if test="startDate != null">
+          and create_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+          and create_date &lt;= #{endDate}
+        </if>
+      </where>
+      GROUP BY DATE_FORMAT(create_date,'%Y-%m-%d'),user_id) as a
+      group by times;
+    </if>
+    <if test='type == "days"'>
+      select DATE_FORMAT(create_date,'%Y-%m-%d') times,count(a.is_open_app) as isOpenApp
+      from (select create_date,is_open_app,platform_id, channel_id  from user_behavior
+      <where>
+        <if test="platformId != null">
+          platform_id = #{platformId}
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+        <if test="startDate != null">
+          and create_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+          and create_date &lt;= #{endDate}
+        </if>
+      </where>
+      GROUP BY DATE_FORMAT(create_date,'%Y-%m-%d'),user_id) as a
+      group by times;
+    </if>
+    <if test='type == "hours"'>
+      select DATE_FORMAT(create_date,'%Y-%m-%d:%H') times,count(a.is_open_app) as isOpenApp
+      from (select create_date,is_open_app,platform_id, channel_id  from user_behavior
+      <where>
+        <if test="platformId != null">
+          platform_id = #{platformId}
+        </if>
+        <if test="channelId != null">
+          and channel_id = #{channelId}
+        </if>
+        <if test="startDate != null">
+          and create_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+          and create_date &lt;= #{endDate}
+        </if>
+      </where>
+      GROUP BY DATE_FORMAT(create_date,'%Y-%m-%d:%H'),user_id) as a
+      group by times;
+    </if>
+  </select>
+
 </mapper>

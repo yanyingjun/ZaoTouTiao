@@ -5,6 +5,7 @@
 package com.zhishun.zaotoutiao.biz.service;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
+import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 
 import java.util.List;
 import java.util.Map;
@@ -73,4 +74,32 @@ public interface IGoldRecordService {
      * @return
      */
     int getShareIncomeGold(Long userId, Long shareId, Long source, int gold);
+
+    /**
+     * 统计用户所获得的金币和零钱
+     * @param type
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    Map countUserGoldAndMoney(String type, String startDate, String endDate);
+
+    /**
+     * 按日期分组统计金币数量
+     * @param channelId 渠道
+     * @param source 金币来源
+     * @param type 时间段
+     * @param isNewAndOld 新老用户
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return
+     */
+    List<UserGoldRecordVO> listGoldCount(int channelId, String source, String type, String isNewAndOld, String startDate, String endDate);
+
+    /**
+     * 按金币来源统计金币数量
+     * @param map
+     * @return
+     */
+    List<UserGoldRecordVO> listGoldCountBySource(String isNewAndOld, String type, String startDate, String endDate);
 }

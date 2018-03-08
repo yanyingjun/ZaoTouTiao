@@ -6,6 +6,7 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserMoneyRecord;
 import com.zhishun.zaotoutiao.core.model.vo.AllRankingVO;
+import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
 
 import java.math.BigDecimal;
@@ -94,4 +95,18 @@ public interface UserMoneyRecordMapper {
      * @return
      */
     int getNewUserMoney(Long userId);
+
+    /**
+     * 按日期分组统计零钱数量
+     * @param map
+     * @return
+     */
+    List<UserMoneyRecordVO> listMoneyCount(Map map);
+
+    /**
+     * 按金币来源统计零钱数量
+     * @param map
+     * @return
+     */
+    List<UserMoneyRecordVO> listMoneyCountBySource(Map map);
 }

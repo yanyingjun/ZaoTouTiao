@@ -7,11 +7,13 @@ package com.zhishun.zaotoutiao.web.home.controller.user;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IPlatformWebService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
+import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.PlatformChannel;
 import com.zhishun.zaotoutiao.core.model.entity.UserPlatform;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.core.model.vo.UserBehaviorVO;
+import com.zhishun.zaotoutiao.core.model.vo.UserVO;
 import com.zhishun.zaotoutiao.web.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.web.home.constant.request.ZttWebMsgReq;
 import com.zhishun.zaotoutiao.web.home.constant.view.ZttWebMsgView;
@@ -44,6 +46,16 @@ public class UserBehaviorController extends BaseController{
     @RequestMapping(value = ZttWebMsgReq.ZTT_USER_BEHAVIOR_REQ)
     public ModelAndView behavior(){
         ModelAndView mv = new ModelAndView(ZttWebMsgView.ZTT_USER_BEHAVIOR_VIEW);
+        return mv;
+    }
+
+    /**
+     * 跳转到用户存留页面
+     * @return
+     */
+    @RequestMapping(value = ZttWebMsgReq.ZTT_USER_RETENTION_REQ)
+    public ModelAndView retention(){
+        ModelAndView mv = new ModelAndView(ZttWebMsgView.ZTT_USER_RETENTION_VIEW);
         return mv;
     }
 
@@ -107,8 +119,28 @@ public class UserBehaviorController extends BaseController{
                 if(!StringUtils.isEmpty(platformId)){
                     platformId1 = platformId;
                 }
-                List<UserBehaviorVO> list = platformWebService.listBehaviorByType(Integer.parseInt(platformId1),Integer.parseInt(channelId1), type, startDate, endDate);
-                if(!type.equals("days") || !type.equals("weeks") || !type.equals("months")){
+                String daysType = null;
+                String startDate1 = null;
+                String endDate1 = null;
+                if(!StringUtils.isEmpty(startDate) && !StringUtils.isEmpty(endDate)){
+                    startDate1 = DateUtil.getDateFormat(startDate);
+                    endDate1 = DateUtil.getDateFormat(endDate);
+                    int days = DateUtil.differentDaysByMillisecond(startDate, endDate);
+                    if(days < 1){
+                        daysType = "hours";
+
+                    }else if( days >= 1 && days < 7){
+                        daysType = "days";
+                    }else if(days >= 7 && days < 30){
+                        daysType = "weeks";
+                    }else{
+                        daysType = "months";
+                    }
+                }else{
+                    daysType = type;
+                }
+                List<UserBehaviorVO> list = platformWebService.listBehaviorByType(Integer.parseInt(platformId1),Integer.parseInt(channelId1), daysType, startDate1, endDate1);
+                if(!type.equals("days") && !type.equals("weeks") && !type.equals("months")){
                     //下载量
                     int countDownLoadNum = 0;
                     //激活
@@ -136,6 +168,86 @@ public class UserBehaviorController extends BaseController{
                     dataMap.put("countRegisterRateNum", countRegisterRateNum);
                 }
                 dataMap.put("list", list);
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 获取用户存留信息
+     * @param platformId 平台
+     * @param channelId 渠道
+     * @param type 时间类型
+     * @param activeType 活跃类型
+     * @return
+     */
+    @RequestMapping(value = ZttWebMsgReq.ZTT_RETENTION_LIST_REQ)
+    @ResponseBody
+    public Map<Object,Object> listRetention(final String platformId, final String channelId, final String type, final String activeType, final String startDate, final String endDate){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotBlank(type, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                String channelId1 = "0";
+                String platformId1 = "0";
+                if(!StringUtils.isEmpty(channelId)){
+                    channelId1 = channelId;
+                }
+                if(!StringUtils.isEmpty(platformId)){
+                    platformId1 = platformId;
+                }
+                String daysType = null;
+                String startDate1 = null;
+                String endDate1 = null;
+                if(!StringUtils.isEmpty(startDate) && !StringUtils.isEmpty(endDate)){
+                    startDate1 = DateUtil.getDateFormat(startDate);
+                    endDate1 = DateUtil.getDateFormat(endDate);
+                    int days = DateUtil.differentDaysByMillisecond(startDate, endDate);
+                    if(days < 1){
+                        daysType = "hours";
+                    }else if( days >= 1 && days < 7){
+                        daysType = "days";
+                    }else if(days >= 7 && days < 30){
+                        daysType = "weeks";
+                    }else{
+                        daysType = "months";
+                    }
+                }else{
+                    daysType = type;
+                }
+
+                //活跃用户数量
+                int activeNum = 0;
+                //未登录用户数量
+                int notLoginNum = 0;
+
+                List<UserBehaviorVO> listBeh = platformWebService.listOpenAppCount(Integer.parseInt(platformId1),Integer.parseInt(channelId1), daysType, startDate1, endDate1);
+                if(!type.equals("days") && !type.equals("weeks") && !type.equals("months")){
+
+                    for(UserBehaviorVO userBehaviorVO : listBeh){
+                        activeNum += userBehaviorVO.getIsOpenApp();
+                    }
+                    dataMap.put("activeNum", activeNum);
+                }
+                List<UserVO> listUser = platformWebService.listUserCount(Integer.parseInt(platformId1),Integer.parseInt(channelId1), daysType, startDate1, endDate1);
+                if(!type.equals("days") && !type.equals("weeks") && !type.equals("months")){
+                    for(UserVO userVO : listUser){
+                        notLoginNum += userVO.getNotLoginNum();
+                    }
+                    dataMap.put("notLoginNum", notLoginNum);
+                }
+                if(activeType.equals("active")){
+                    dataMap.put("list", listBeh);
+                }else{
+                    dataMap.put("list", listUser);
+                }
             }
         });
 

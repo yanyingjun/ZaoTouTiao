@@ -123,4 +123,32 @@ public interface UserMapper {
      */
     int isSurpassingActivity(Map<String,Object> map);
 
+    /**
+     * 统计
+     * @param map
+     * @return
+     */
+    List<User> listUserCount(Map<String,Object> map);
+
+    /**
+     * 统计用户金币和零钱
+     * @param map
+     * @return
+     */
+    Map countUserGoldAndMoney(Map map);
+
+    /**
+     * 可提现用户列表
+     * @param map
+     * @return
+     */
+    List<UserVO> listCanBePresentedUser(Map map);
+
+    /**
+     * 获取可提现用户总记录数
+     * @param map
+     * @return
+     */
+    int countCanBePresentedUser(Map map);
+
 }

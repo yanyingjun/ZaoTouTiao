@@ -7,11 +7,14 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IPlatformWebService;
 import com.zhishun.zaotoutiao.core.model.entity.PlatformChannel;
+import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.entity.UserBehavior;
 import com.zhishun.zaotoutiao.core.model.entity.UserPlatform;
 import com.zhishun.zaotoutiao.core.model.vo.UserBehaviorVO;
+import com.zhishun.zaotoutiao.core.model.vo.UserVO;
 import com.zhishun.zaotoutiao.dal.mapper.PlatformChannelMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserBehaviorMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserPlatformMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,9 @@ public class PlatformWebServiceImpl implements IPlatformWebService{
 
     @Autowired
     private UserBehaviorMapper userBehaviorMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public List<UserPlatform> listUserPlatform() {
@@ -65,5 +71,47 @@ public class PlatformWebServiceImpl implements IPlatformWebService{
             map.put("endDate", endDate);
         }
         return userBehaviorMapper.listBehaviorByType(map);
+    }
+
+    @Override
+    public List<UserBehaviorVO> listOpenAppCount(int platformId, int channelId, String type, String startDate, String endDate){
+        Map map = Maps.newHashMap();
+        if(!StringUtils.isEmpty(platformId) && platformId != 0){
+            map.put("platformId", platformId);
+        }
+        if(!StringUtils.isEmpty(channelId) && channelId != 0){
+            map.put("channelId", channelId);
+        }
+        if(!StringUtils.isEmpty(type)){
+            map.put("type", type);
+        }
+        if(!StringUtils.isEmpty(startDate)){
+            map.put("startDate", startDate);
+        }
+        if(!StringUtils.isEmpty(endDate)){
+            map.put("endDate", endDate);
+        }
+        return userBehaviorMapper.listOpenAppCount(map);
+    }
+
+    @Override
+    public List<UserVO> listUserCount(int platformId, int channelId, String type, String startDate, String endDate){
+        Map map = Maps.newHashMap();
+        if(!StringUtils.isEmpty(platformId) && platformId != 0){
+            map.put("platformId", platformId);
+        }
+        if(!StringUtils.isEmpty(channelId) && channelId != 0){
+            map.put("channelId", channelId);
+        }
+        if(!StringUtils.isEmpty(type)){
+            map.put("type", type);
+        }
+        if(!StringUtils.isEmpty(startDate)){
+            map.put("startDate", startDate);
+        }
+        if(!StringUtils.isEmpty(endDate)){
+            map.put("endDate", endDate);
+        }
+        return userMapper.listUserCount(map);
     }
 }
