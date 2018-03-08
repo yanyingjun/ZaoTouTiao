@@ -51,4 +51,16 @@ public class CommentController {
     public List<UserCommentsVO> exchangeRate(@RequestParam(value="keyword",defaultValue = "") String keyword){
         return iCommentService.getUserListOrByKey(keyword);
     }
+
+    /**
+     * 根据评论删除用户留言
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = CommentMsgReq.COMMENTS_DELETE_BY_ID)
+    @ResponseBody
+    public int delComments(String id){
+        Long getId = Long.valueOf(id);
+        return iCommentService.delComments(getId);
+    }
 }

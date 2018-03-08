@@ -23,4 +23,9 @@ public class CommentMsgReq {
      */
     public static final String COMMENTS_LIST_REQ = "/comments/list";
 
+    /**
+     * 根据id删除用户留言
+     */
+    public static final String COMMENTS_DELETE_BY_ID = "/delete/comments";
+
 }

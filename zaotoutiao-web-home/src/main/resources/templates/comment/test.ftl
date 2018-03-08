@@ -11,7 +11,7 @@
 <body>
 <#--<h2>评论管理</h2>-->
 <div class="container">
-    <table id="dg" class="easyui-datagrid" style="width:100%;height:554px" url="/comments/list" title="全部评论列表" data-options="
+    <table id="dg" style="width:100%;height:554px" title="全部评论列表" data-options="
                 rownumbers:true,
                 singleSelect:false,
                 autoRowHeight:false,
@@ -35,7 +35,7 @@
     </table>
     <div id="tb" style="padding:0 30px;">
         关键字: <input id="search" class="easyui-textbox" type="text" name="code" style="width:166px;height:35px;line-height:35px;"/>
-        <a href="#" onclick="toSearch()" id="bt_search_btn" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true">查询</a>
+        <a href="#" id="bt_search_btn" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true">查询</a>
     </div>
 </div>
 
@@ -147,9 +147,9 @@
     $(function () {
 
         $('#dg').datagrid({url:"/comments/list"}).datagrid('clientPaging');
-//        $('#bt_search_btn').click(function() {
-//            $('#dg').datagrid('load', $('#search').val());
-//        });
+        $('#bt_search_btn').click(function() {
+            $('#dg').datagrid('load', $('#search').val());
+        });
 
     });
 
@@ -168,39 +168,90 @@
     }
 
     //function toSearch() {
-        //var url = "/comments/list?keyword="+$('#search').val();
-        //$('#dg').datagrid({url:"/comments/list?keyword="+$('#search').val()});
-        //$('#dg').datagrid('reload');
+    //var url = "/comments/list?keyword="+$('#search').val();
+    //$('#dg').datagrid({url:"/comments/list?keyword="+$('#search').val()});
+    //$('#dg').datagrid('reload');
     //}
     function toSearch(){
-            //$('#dg').datagrid({data:data}).datagrid('reload');
-
-        $('#dg').datagrid('load',{
-            keyword: $('#search').val()
-        })
+        $.post("/comments/list",{keyword:$('#search').val()},function (data) {
+            $('#dg').datagrid({data:data}).datagrid('reload');
+        },"json")
+//        $('#dg').datagrid('load',{
+//            keyword: $('#search').val()
+//        })
     }
 
-//    function getData(){
-//        var rows = [];
-//        $.post("/comments/list", function(data) {
-//            for(var i=1; i<=800; i++){
-//                rows.push({
-//                    nickName: '10695',
-//                    content: '南京天泽星网股份有限公司',
-//                    createDate: '正式',
-//                    tltle: '光纤通信设备配件',
-//                    full: '√',
-//                    id: '√'
-//                });
-//            }
-//        });
-//        return rows;
-//    }
+    //    function getData(){
+    //        var rows = [];
+    //        $.post("/comments/list", function(data) {
+    //            for(var i=1; i<=800; i++){
+    //                rows.push({
+    //                    nickName: '10695',
+    //                    content: '南京天泽星网股份有限公司',
+    //                    createDate: '正式',
+    //                    tltle: '光纤通信设备配件',
+    //                    full: '√',
+    //                    id: '√'
+    //                });
+    //            }
+    //        });
+    //        return rows;
+    //    }
 
-//    $(function(){
-//        $('#dg').datagrid({data:getData()}).datagrid('clientPaging');
-//    });
+    //    $(function(){
+    //        $('#dg').datagrid({data:getData()}).datagrid('clientPaging');
+    //    });
 
+
+
+
+    $(function(){
+        $('#bt_grid').datagrid({
+            fit: true,
+            border: false,
+            url: _ROOT_ + '/article/findArticleList',
+            pagination: true,
+            checkbox:true,
+            singleSelect:false,
+            fitColumns:true,
+            columns: [[
+                {field: 'ck', width:10,checkbox: true,title: '全选'},
+                {field: 'title', title: '文章标题', width:50, align: 'center'},
+                {field: 'name', title: '栏目', width:50, align: 'center'},
+                {field: 'realName', title: '创建人', width:50, align: 'center'},
+                {field: 'updateTime', title: '发布时间', width:50, align: 'center'},
+                {field: 'id', title: '操作', width: 110, align: 'center', formatter: function(value,row,index) {
+                    var str = '';
+                    if(row.isRecommend == 0){
+                        str += ' <a title="推荐" onclick="articleIsCommend('+ value +',\'确定推荐吗?\',\'updateArticleIsRecommend\')" class="img-btn icon-recommend" kid=' + value + '>推荐</a>&nbsp;&nbsp;';
+                    }else{
+                        str += '<a title="取消推荐" onclick="cancelIsCommend('+ value +',\'cancelArticleIsRecommend\')" class="img-btn icon-cancel-recommend" kid=' + value + '>取消推荐</a>&nbsp;&nbsp;';
+                    }
+                    if(row.status == 0){
+                        str += '<a title="发布" onclick="articleIsCommend('+ value +',\'确定发布吗?\',\'updateArticleStatus\');" class="img-btn icon-status" kid=' + value + '>发布</a>&nbsp;&nbsp;';
+                    }else{
+                        str += '<a title="取消发布" onclick="cancelIsCommend('+ value +',\'cancelArticleStatus\')" class="img-btn icon-cancel-status" kid=' + value + '>取消发布</a>&nbsp;&nbsp;';
+                    }
+                    str += '<a title="编辑" onclick="editArticle('+ value +')" class="img-btn icon-edit" kid=' + value + '>编辑</a>&nbsp;&nbsp;'+
+                            '<a title="删除" onclick="articleIsCommend('+ value +',\'确定删除吗?\',\'delArticle\')" class="img-btn icon-delete" kid=' + value + '>删除</a>';
+                    return str;
+                }
+                }
+            ]],
+            onLoadSuccess: function(data) {
+                if(data){
+                    $.each(data.rows, function(index, item){
+                        if(item.checked){
+                            $('#bt_grid').datagrid('checkRow', index);
+                        }
+                    });
+                }
+            }
+        });
+        $('#bt_search_btn').click(function() {
+            $('#bt_grid').datagrid('load', $('#fyh_search_from').toJsonNotEmpty());
+        });
+    });
 </script>
 
 </body>

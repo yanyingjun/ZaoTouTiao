@@ -135,4 +135,9 @@ public class CommentServiceImpl implements ICommentService {
         return userCommentsVOList;
     }
 
+    @Override
+    public int delComments(Long id) {
+        return userCommentsMapper.deleteByPrimaryKey(id);
+    }
+
 }

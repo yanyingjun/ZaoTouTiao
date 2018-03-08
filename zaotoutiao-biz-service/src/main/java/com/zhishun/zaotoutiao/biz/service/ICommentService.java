@@ -43,4 +43,11 @@ public interface ICommentService {
      * @return
      */
     List<UserCommentsVO> getUserListOrByKey(String keyword);
+
+    /**
+     * 根据评论删除用户留言
+     * @param id
+     * @return
+     */
+    int delComments(Long id);
 }
