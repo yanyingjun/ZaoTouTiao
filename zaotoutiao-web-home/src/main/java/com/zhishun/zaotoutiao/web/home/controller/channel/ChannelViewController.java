@@ -30,7 +30,7 @@ public class ChannelViewController extends BaseController{
      * @param request
      * @return
      */
-    @RequestMapping(value = ChannelMsgReq.TO_CHANNLE_MANAGE_REQ, method = RequestMethod.GET)
+    @RequestMapping(value = ChannelMsgReq.TO_CHANNEL_MANAGE_REQ, method = RequestMethod.GET)
     public String manage(final ModelMap modelMap,
                          HttpServletRequest request) {
 
@@ -46,6 +46,31 @@ public class ChannelViewController extends BaseController{
         });
 
         return ChannelMsgView.CHANNEL_MANAGE_VIEW;
+    }
+
+
+    /**
+     * 新增导航
+     * @param modelMap
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = ChannelMsgReq.CHANNEL_ADD_REQ)
+    public String addChannelView(final ModelMap modelMap,
+                         HttpServletRequest request) {
+
+        this.excute(modelMap, request, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+
+            }
+            @Override
+            public void handle() throws Exception {
+
+            }
+        });
+
+        return ChannelMsgView.ADD_CHANNEL_VIEW;
     }
 
 }

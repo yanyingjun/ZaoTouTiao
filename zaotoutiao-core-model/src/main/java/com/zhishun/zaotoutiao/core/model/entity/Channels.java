@@ -56,6 +56,32 @@ public class Channels implements Serializable {
     private Integer status;
 
     /**
+     * 类型
+     */
+    private Integer appType;
+
+    /**
+     * 父类Id
+     */
+    private Integer parentId;
+
+    public Integer getAppType() {
+        return appType;
+    }
+
+    public void setAppType(Integer appType) {
+        this.appType = appType;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
+    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

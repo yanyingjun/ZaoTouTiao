@@ -13,6 +13,11 @@ public class ChannelMsgView {
     /**
      * 导航管理
      */
-    public static final String CHANNEL_MANAGE_VIEW = "common/channelList";
+    public static final String CHANNEL_MANAGE_VIEW = "common/channel";
+
+    /**
+     * 新增导航
+     */
+    public static final String ADD_CHANNEL_VIEW = "common/add_channel";
 
 }

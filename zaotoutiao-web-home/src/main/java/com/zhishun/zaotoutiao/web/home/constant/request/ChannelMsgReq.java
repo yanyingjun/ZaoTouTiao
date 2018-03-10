@@ -13,12 +13,12 @@ public class ChannelMsgReq {
     /**
      * 获取导航列表
      */
-    public static final String CHANNLE_MANAGE_REQ = "/channel/list";
+    public static final String CHANNEL_MANAGE_REQ = "/channel/list";
 
     /**
      * 跳转到导航管理页面
      */
-    public static final String TO_CHANNLE_MANAGE_REQ = "/channel/manageView";
+    public static final String TO_CHANNEL_MANAGE_REQ = "/channel/manageView";
 
     /**
      * 新增导航
@@ -40,6 +40,29 @@ public class ChannelMsgReq {
      */
     public static final String TWO_LEVEL_LABEL = "/label/two";
 
+    /**
+     * 更新导航状态
+     */
+    public static final String UPDATE_CHANNEL_STATUS = "/update/channel/status";
 
+    /**
+     * 删除导航
+     */
+    public static final String DELETE_CHANNEL = "/delete/channel";
+
+    /**
+     * 导航排序
+     */
+    public static final String CHANNEL_ORDER = "/do/channel/order";
+
+    /**
+     * 更新导航名称
+     */
+    public static final String UPDATE_CHANNEL_NAME ="/update/channel/name";
+
+    /**
+     * 新增导航
+     */
+    public static final String ADD_CHANNEL_REQ = "/add/channel/do";
 
 }

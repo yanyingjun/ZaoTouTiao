@@ -21,6 +21,16 @@ public interface IChannelService {
     Page<Channels> listChannelsPage(ChannelsVO channelsVO, PageRequest pageRequest);
 
     /**
+     * 获取导航列表
+     * @param name
+     * @param status
+     * @param appType
+     * @param parentId
+     * @return
+     */
+    List<Channels> getChannelsList(String name, Integer status, Integer appType, Integer parentId);
+
+    /**
      * 新增导航
      * @param channelsVO
      * @return
@@ -54,4 +64,33 @@ public interface IChannelService {
      * @return
      */
     int updateUserChannel(UserChannels userChannels);
+
+    /**
+     * 更新导航
+     * @param channels
+     * @return
+     */
+    int updateChannels(Channels channels);
+
+    /**
+     * 根据id删除导航
+     * @param id
+     * @return
+     */
+    int deleteChannelById(Long id);
+
+    /**
+     * 导航排序
+     * @param id
+     * @param channelOrderChangeNum
+     * @return
+     */
+    int channelsOrder(Long id, int channelOrderChangeNum);
+
+    /**
+     * 新增导航
+     * @param channels
+     * @return
+     */
+    int addTheChannel(Channels channels);
 }

@@ -144,12 +144,9 @@
         })
     })(jQuery);
 
+    //数据分页
     $(function () {
-
         $('#dg').datagrid({url:"/comments/list"}).datagrid('clientPaging');
-//        $('#bt_search_btn').click(function() {
-//            $('#dg').datagrid('load', $('#search').val());
-//        });
 
     });
 

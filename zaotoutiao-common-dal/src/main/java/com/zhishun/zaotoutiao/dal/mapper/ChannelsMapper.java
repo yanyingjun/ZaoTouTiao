@@ -61,6 +61,7 @@ public interface ChannelsMapper {
      */
     List<Channels> listChannelsPage(Map<String,Object> map);
 
+    List<Channels> getChannelsList(Map<String,Object>map);
     /**
      * 根据条件获取导航总记录数
      * @param map
@@ -68,5 +69,28 @@ public interface ChannelsMapper {
      */
     int countChannels(Map<String,Object> map);
 
+    /**
+     * 导航列表
+     * @return
+     */
     List<Channels> listChannels();
+
+    /**
+     * 获取排序较小的导航
+     * @return
+     */
+    Channels getSmallerOrder(int oldOrderNum);
+
+    /**
+     * 获取排序较大的导航
+     * @param oldOrderNum
+     * @return
+     */
+    Channels getBiggerOrder(int oldOrderNum);
+
+    /**
+     * 获取排序最大的导航
+     * @return
+     */
+    Channels getMaxOrder();
 }

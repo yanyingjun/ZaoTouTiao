@@ -34,23 +34,24 @@
     function submitForm(){
         if($('#exchange').val()>0.025 || $('#exchange').val()<0){
             $.messager.alert('提示','输入的值在0~0.025之间','error');
-        }
-        $('#ff').form('submit',{
-            url:"/change/exchange",
-            onSubmit: function(){
-                // 传参数
-                // do some check
-                // return false to prevent submit;
-            },
-            success:function(data){
-                if(data==1){
-                    $.messager.alert('修改汇率请求','修改成功！请刷新查看当年汇率~','info');
-                    //window.location.reload();
-                }else if(data=='0'){
-                    $.messager.alert('修改汇率请求','修改失败！','error');
+        }else{
+            $('#ff').form('submit',{
+                url:"/change/exchange",
+                onSubmit: function(){
+                    // 传参数
+                    // do some check
+                    // return false to prevent submit;
+                },
+                success:function(data){
+                    if(data==1){
+                        $.messager.alert('修改汇率请求','修改成功！请刷新查看当年汇率~','info');
+                        //window.location.reload();
+                    }else if(data=='0'){
+                        $.messager.alert('修改汇率请求','修改失败！','error');
+                    }
                 }
-            }
-        });
+            });
+        }
         //window.location.reload();
     }
     function clearForm(){

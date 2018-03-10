@@ -54,6 +54,16 @@ public class ChannelServiceImpl implements IChannelService{
     }
 
     @Override
+    public List<Channels> getChannelsList(String name, Integer status, Integer appType, Integer parentId) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("name",name);
+        map.put("status",status);
+        map.put("appType",appType);
+        map.put("parentId",parentId);
+        return channelsMapper.getChannelsList(map);
+    }
+
+    @Override
     public int addChannel(ChannelsVO channelsVO) {
         Channels channels = new Channels();
         BeanMapUtil.copy(channelsVO, channels);
@@ -86,5 +96,67 @@ public class ChannelServiceImpl implements IChannelService{
     @Override
     public int updateUserChannel(UserChannels userChannels) {
         return userChannelsMapper.updateByPrimaryKeySelective(userChannels);
+    }
+
+    @Override
+    public int updateChannels(Channels channels) {
+        return channelsMapper.updateByPrimaryKeySelective(channels);
+    }
+
+    @Override
+    public int deleteChannelById(Long id) {
+        return channelsMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int channelsOrder(Long id, int channelOrderChangeNum) {
+        Channels channels = channelsMapper.selectByPrimaryKey(id);
+        int oldOrderNum = channels.getChannelOrder();
+        int newOrderNum = 0;
+
+        Channels biggerOrderNum = channelsMapper.getBiggerOrder(oldOrderNum);
+        if(channelOrderChangeNum == 1){
+            //得到调换位置的另一个较小channelOrder的导航
+            Channels smallerOrder = channelsMapper.getSmallerOrder(oldOrderNum);
+            if(null != smallerOrder){
+                newOrderNum = smallerOrder.getChannelOrder();
+                channels.setChannelOrder(newOrderNum);
+                channels.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                channelsMapper.updateByPrimaryKeySelective(channels);
+                smallerOrder.setChannelOrder(oldOrderNum);
+                smallerOrder.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                channelsMapper.updateByPrimaryKeySelective(smallerOrder);
+            }
+            return 1;
+        }else if(channelOrderChangeNum == 2){
+            //得到调换位置的另一个较大channelOrder的导航
+            Channels biggerOrder = channelsMapper.getBiggerOrder(oldOrderNum);
+            if(null != biggerOrder){
+                newOrderNum = biggerOrder.getChannelOrder();
+                channels.setChannelOrder(newOrderNum);
+                channels.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                channelsMapper.updateByPrimaryKeySelective(channels);
+                biggerOrder.setChannelOrder(oldOrderNum);
+                biggerOrder.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                channelsMapper.updateByPrimaryKeySelective(biggerOrder);
+            }
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * 新增导航
+     * @param channels
+     * @return
+     */
+    @Override
+    public int addTheChannel(Channels channels) {
+        channels.setParentId(0);
+        channels.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        channels.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        //新增排序数字最大，排在最后面
+        channels.setChannelOrder(channelsMapper.getMaxOrder().getChannelOrder()+1);
+        return channelsMapper.insertSelective(channels);
     }
 }
