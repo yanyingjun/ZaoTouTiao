@@ -23,7 +23,7 @@ public class Channels implements Serializable {
     /**
      * 导航ID
      */
-    private Integer channelId;
+    private String channelId;
 
     /**
      * 导航名称
@@ -63,7 +63,7 @@ public class Channels implements Serializable {
     /**
      * 父类Id
      */
-    private Integer parentId;
+    private Long parentId;
 
     public Integer getAppType() {
         return appType;
@@ -73,11 +73,11 @@ public class Channels implements Serializable {
         this.appType = appType;
     }
 
-    public Integer getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
@@ -104,7 +104,7 @@ public class Channels implements Serializable {
      *
      * @return property value of channelId
      */
-    public Integer getChannelId() {
+    public String getChannelId() {
         return channelId;
     }
 
@@ -113,7 +113,7 @@ public class Channels implements Serializable {
      *
      * @param channelId value to be assigned to property channelId
      */
-    public void setChannelId(Integer channelId) {
+    public void setChannelId(String channelId) {
         this.channelId = channelId;
     }
 

@@ -22,6 +22,32 @@ public class ChannelsVO extends Channels{
      */
     private String typeName;
 
+    /**
+     * 导航标签（如果已经是导航了为空）
+     */
+    private String ancestryTab;
+
+    /**
+     * 一级标签
+     */
+    private String parentTab;
+
+    public String getParentTab() {
+        return parentTab;
+    }
+
+    public void setParentTab(String parentTab) {
+        this.parentTab = parentTab;
+    }
+
+    public String getAncestryTab() {
+        return ancestryTab;
+    }
+
+    public void setAncestryTab(String ancestryTab) {
+        this.ancestryTab = ancestryTab;
+    }
+
     public String getStatusName() {
         return statusName;
     }
