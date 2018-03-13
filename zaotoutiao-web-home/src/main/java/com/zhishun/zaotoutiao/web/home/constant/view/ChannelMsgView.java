@@ -20,4 +20,24 @@ public class ChannelMsgView {
      */
     public static final String ADD_CHANNEL_VIEW = "common/add_channel";
 
+    /**
+     * 一级标签
+     */
+    public static final String FIRST_TABS_VIEW = "common/first_tabs";
+
+    /**
+     * 二级标签
+     */
+    public static final String SECOND_TABS_VIEW = "common/second_tabs";
+
+    /**
+     * 新增一级标签
+     */
+    public static final String ADD_FIRST_TAB_VIEW = "common/add_first_tab";
+
+    /**
+     * 新增二级标签
+     */
+    public static final String ADD_SECOND_TAB_VIEW = "common/add_second_tab";
+
 }

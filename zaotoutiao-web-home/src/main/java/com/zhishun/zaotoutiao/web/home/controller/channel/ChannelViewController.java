@@ -73,4 +73,97 @@ public class ChannelViewController extends BaseController{
         return ChannelMsgView.ADD_CHANNEL_VIEW;
     }
 
+    /**
+     * 一级标签
+     * @param modelMap
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = ChannelMsgReq.FIRST_TABS_REQ)
+    public String firstTabs(final ModelMap modelMap,
+                           HttpServletRequest request){
+        this.excute(modelMap, request, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+
+            }
+            @Override
+            public void handle() throws Exception {
+
+            }
+        });
+
+        return ChannelMsgView.FIRST_TABS_VIEW;
+    }
+
+    /**
+     * 二级标签
+     * @param modelMap
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = ChannelMsgReq.SECOND_TABS_REQ)
+    public String secondTabs(final ModelMap modelMap,
+                            HttpServletRequest request){
+        this.excute(modelMap, request, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+
+            }
+            @Override
+            public void handle() throws Exception {
+
+            }
+        });
+
+        return ChannelMsgView.SECOND_TABS_VIEW;
+    }
+
+
+    /**
+     * 新增一级标签
+     * @param modelMap
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = ChannelMsgReq.ADD_FIRST_TAB_REQ)
+    public String addFirstTab(final ModelMap modelMap,
+                             HttpServletRequest request){
+        this.excute(modelMap, request, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+
+            }
+            @Override
+            public void handle() throws Exception {
+
+            }
+        });
+
+        return ChannelMsgView.ADD_FIRST_TAB_VIEW;
+    }
+
+
+    /**
+     * 新增二级标签
+     * @param modelMap
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = ChannelMsgReq.ADD_SECOND_TAB_REQ)
+    public String addSecondTab(final ModelMap modelMap,
+                              HttpServletRequest request){
+        this.excute(modelMap, request, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+
+            }
+            @Override
+            public void handle() throws Exception {
+
+            }
+        });
+
+        return ChannelMsgView.ADD_SECOND_TAB_VIEW;
+    }
 }

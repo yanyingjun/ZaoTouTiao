@@ -269,13 +269,12 @@
         and name LIKE CONCAT('%', #{name}, '%')
       </if>
       <if test="parentId !=null">
-        and parnetId = #{parentId}
+        and parentId = #{parentId}
       </if>
       <if test="appType !=null">
         and appType = #{appType}
       </if>
-
-      order by channelOrder asc
     </where>
+    order by channelOrder asc
   </select>
 </mapper>

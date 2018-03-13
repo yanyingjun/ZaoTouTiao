@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>导航管理</title>
+    <title>一级标签</title>
     <link href="/static/css/base.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/uimaker/easyui.css">
     <link rel="stylesheet" href="/static/uimaker/icon.css">
 </head>
 <body>
 <div class="container">
-    <table id="dg" class="easyui-datagrid" style="width:100%;height:554px" url="/channel/list" title="新闻/视频导航管理" data-options="
+    <table id="dg" class="easyui-datagrid" style="width:100%;height:554px" url="/first/tab/list" title="一级标签管理" data-options="
                 rownumbers:true,
                 singleSelect:false,
                 autoRowHeight:false,
@@ -24,9 +24,9 @@
                 pageSize:10">
         <thead>
         <tr>
-            <th field="name" width="200">导航</th>
-            <th field="statusName" width="260">状态</th>
-            <th field="typeName" width="260">类型</th>
+            <th field="parentTab" width="200">导航</th>
+            <th field="name" width="200">一级标签</th>
+            <th field="typeName" width="200">类别</th>
             <th field="updateDate" width="200">操作时间</th>
             <th field="_operate" width="100" data-options="align:'center',formatter:formatOperate">操作</th>
         </tr>
@@ -35,21 +35,24 @@
     <div id="tb" style="padding:0 30px;">
         <label for="search">关键字: </label>
         <input id="search" class="easyui-textbox" type="text" name="code" style="width:166px;height:35px;line-height:35px;"/>
-        <label for="status">状态：</label>
-        <select id="status" name="status" style="height:35px; width: 100px; text-align: center">
-            <option value="">全部</option>
-            <option value="1">激活</option>
-            <option value="0">下架</option>
-        </select>
-
-        <label for="appType">类型：</label>
+        <label for="parentId">导航：</label>
+        <input id="parentId" class="easyui-combobox"
+               name="parentId"
+               data-options="
+					url:'/channel/list',
+					method:'get',
+					valueField:'id',
+					textField:'name',
+					panelHeight:'auto'
+			">
+        <label for="appType">类别：</label>
         <select id="appType" name="appType" style="height:35px; width: 100px; text-align: center">
             <option value="">全部</option>
             <option value="1">新闻</option>
             <option value="0">视频</option>
         </select>
         <a href="#" onclick="toSearch()" id="bt_search_btn" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true">查询</a>
-        <a href="javascript:void(0);" onclick="parent.Open('新增导航', '/channel/add')" class="easyui-linkbutton">新增</a>
+        <a href="javascript:void(0);" onclick="parent.Open('新增一级标签', '/add/first/tab')" class="easyui-linkbutton">新增</a>
     </div>
 </div>
 
@@ -161,19 +164,12 @@
 
     //数据分页
     $(function () {
-        $('#dg').datagrid({url:"/channel/list"}).datagrid('clientPaging');
+        $('#dg').datagrid({url:"/first/tab/list"}).datagrid('clientPaging');
 
     });
     function formatOperate(val,row,index){
-        var status;
-        if(row.statusName=="下架"){
-            status= '激活'
-        }else{
-            status= '下架'
-        }
-        return  '<a href="#" onclick="doOrder()">排序</a>&nbsp;&nbsp;' +
-                '<a href="#" onclick="changeStatus('+row.id+','+row.status+')">'+status+'</a>&nbsp;&nbsp;' +
-                '<a href="#" onclick="doEdit('+row.id+',\''+row.name+'\')">编辑</a>&nbsp;&nbsp;' +
+
+        return  '<a href="#" onclick="doEdit('+row.id+',\''+row.name+'\')">编辑</a>&nbsp;&nbsp;' +
                 '<a href="#" onclick="del('+row.id+')">删除</a>';
     }
     //删除
@@ -191,75 +187,41 @@
         $('#dlg').dialog('open');
     }
 
-    //更新状态
-    function changeStatus(id,status) {
-        var newStatus;
-        if(status === 1){
-            newStatus=0;
-        }else if(status === 0){
-            newStatus=1;
-        }
-        $.post("/update/channel/status",{id:id,status:newStatus},function (data) {
-            if (data === 1) {
-                $.messager.alert('请求更新状态', '更新成功！', 'info');
-            } else {
-                $.messager.alert('请求更新状态', '更新失败！', 'error');
-            }
-            $('#dg').datagrid('reload');
-        },"json")
-    }
-
     //查询
     function toSearch(){
         $('#dg').datagrid('load',{
             name: $('#search').val(),
-            status: $('#status').val(),
+            parentId: $('#parentId').combobox('getValue'),
             appType: $('#appType').val()
         })
     }
 
-    //上移、下移
-    function doOrderById(id,channelOrderChangeNum) {
-        $.post("/do/channel/order",{id:id,channelOrderChangeNum:channelOrderChangeNum},function (data) {
-            if (data === 1) {
-                //$.messager.alert('请求删除导航', '删除成功！', 'info');
-                $('#ggg').datagrid('reload');
-            } else {
-                $.messager.alert('更新排序', '请求失败！', 'error');
-            }
-        },"json")
-    }
-    formatss = function (val,row,index){
-        var up = 1;//上移
-        var down = 2;//下移
-        return  '<a href="#" onclick="doOrderById('+row.id+','+up+')">上移</a>&nbsp;&nbsp;'+
-                '<a href="#" onclick="doOrderById('+row.id+','+down+')">下移</a>';
-    };
-
     //编辑
     doEdit = function (id,name){
         $('#editId').val(id);
-        $('#editChannelName').val(name) ;
+        $('#editChannelName').val(name);
         $('#edit').dialog('open');
     };
     //编辑提交
     function submitForm(){
         if($('#editChannelName').val().length < 2){
             $.messager.alert('提示','您的名称太短了','error');
+        }else if($('#parentIdd').combobox('getValue') =='' || $('#parentIdd').combobox('getValue') == null){
+            $.messager.alert('提示','请输入您标签的导航','error')
         }else{
             $('#ff').form('submit',{
-                url:"/update/channel/name",
+                url:"/update/tab",
                 onSubmit: function(){
 
                 },
                 success:function(data){
-                    if(data==1){
-                        $.messager.alert('更新导航请求','更新成功！','info');
+                    if(data == 1){
+                        $.messager.alert('更新标签请求','更新成功！','info');
                         $('#edit').dialog('close');
                         $('#dg').datagrid('reload');
                         //window.location.reload();
-                    }else if(data=='0'){
-                        $.messager.alert('更新导航请求','更新失败！','error');
+                    }else if(data =='0'){
+                        $.messager.alert('更新标签请求','更新失败！','error');
                     }
                 }
             });
@@ -268,28 +230,26 @@
     }
 
 </script>
-<div id="dlg" class="easyui-dialog" title="导航排序" data-options="closed:true" style="width:720px;height:550px;padding:10px;">
-    <table id="ggg" class="easyui-datagrid" title="导航列表" style="width:690px;height:490px"
-           data-options="singleSelect:true,collapsible:true,url:'/channel/list'">
-        <thead>
-        <tr>
-            <th data-options="field:'name',width:80">名称</th>
-            <th data-options="field:'statusName',width:100">状态</th>
-            <th data-options="field:'typeName',width:100">类型</th>
-            <th data-options="field:'updateDate',width:200">操作时间</th>
-            <th data-options="field:'ss',formatter:formatss,width:200,align:'center'">排序</th>
-        </tr>
-        </thead>
-    </table>
-</div>
 
-<div id="edit" class="easyui-dialog" title="导航编辑" data-options="closed:true" style="width:422px;height:260px;padding:10px;">
+<div id="edit" class="easyui-dialog" title="导航编辑" data-options="closed:true" style="width:422px;height:270px;padding:10px;">
         <div style="padding:10px 60px 20px 60px">
             <form id="ff" method="post">
                 <table cellpadding="5">
                     <tr>
-                        <td>导航名称:</td>
+                        <td>标签名称:</td>
                         <td><input type="text" id="editChannelName" name="editChannelName"  style="height:35px;"><br /><input style="display: none" name="editId" id="editId" /></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>导航</td>
+                        <td><input id="parentIdd" class="easyui-combobox" name="parentIdd" data-options="
+					url:'/channel/list',
+					method:'get',
+					valueField:'id',
+					textField:'name',
+					panelHeight:'auto'"></td>
                     </tr>
                 </table>
             </form>

@@ -94,5 +94,10 @@ public interface ChannelsMapper {
      */
     Channels getMaxOrder();
 
+    /**
+     * 获得标签列表
+     * @param map
+     * @return
+     */
     List<Channels> getTabList(Map map);
 }

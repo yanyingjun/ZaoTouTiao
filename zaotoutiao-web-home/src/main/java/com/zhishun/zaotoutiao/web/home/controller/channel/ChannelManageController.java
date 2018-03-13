@@ -4,11 +4,13 @@
  */
 package com.zhishun.zaotoutiao.web.home.controller.channel;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IChannelService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
+import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
@@ -23,13 +25,11 @@ import com.zhishun.zaotoutiao.web.home.controller.base.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author 闫迎军(YanYingJun)
@@ -83,7 +83,7 @@ public class ChannelManageController extends BaseController{
      */
     @RequestMapping(value = ChannelMsgReq.CHANNEL_MANAGE_REQ)
     @ResponseBody
-    public List<ChannelsVO> getChannelsList(final String name, final Integer status, final Integer appType, @RequestParam(value="parentId",defaultValue = "0") final Integer parentId){
+    public List<ChannelsVO> getChannelsList(final String name, final Integer status, final Integer appType, @RequestParam(value="parentId",defaultValue = "0") final Long parentId){
 
         List<Channels> channelsList = channelService.getChannelsList(name,status,appType,parentId);
         List<ChannelsVO> channelsVOList = new ArrayList<ChannelsVO>();
@@ -180,8 +180,64 @@ public class ChannelManageController extends BaseController{
     }
 
 
+    /**
+     * 获取一级标签列表
+     * @param name
+     * @param parentId
+     * @param appType
+     * @return
+     */
+    @RequestMapping(value = ChannelMsgReq.FIRST_TAB_LIST_REQ)
+    @ResponseBody
+    public List<ChannelsVO> getFirstTabList(final String name, final Long parentId, final Integer appType){
+        List<ChannelsVO> allChannelsVOList = channelService.getTabs(name,parentId,appType);
+        List<ChannelsVO> channelsVOList = Lists.newArrayList();
+        for(ChannelsVO channelsVO : allChannelsVOList){
+            if(StringUtils.isEmpty(channelsVO.getAncestryTab())){
+                channelsVOList.add(channelsVO);
+            }
+        }
+        return channelsVOList;
+    }
+
+    /**
+     * 获取二级标签列表
+     * @param name
+     * @param parentId
+     * @param appType
+     * @return
+     */
+    @RequestMapping(value = ChannelMsgReq.SECOND_TAB_LIST_REQ)
+    @ResponseBody
+    public List<ChannelsVO> getSecondTabList(final String name, final Long parentId, final Integer appType){
+        List<ChannelsVO> allChannelsVOList = channelService.getTabs(name,parentId,appType);
+        List<ChannelsVO> channelsVOList = Lists.newArrayList();
+        for(ChannelsVO channelsVO : allChannelsVOList){
+            if(!StringUtils.isEmpty(channelsVO.getAncestryTab())){
+                channelsVOList.add(channelsVO);
+            }
+        }
+        return channelsVOList;
+    }
 
 
+    /**
+     * 更新标签
+     * @param editId
+     * @param editChannelName
+     * @param parentIdd
+     * @return
+     */
+    @RequestMapping(value = ChannelMsgReq.UPDATE_TAB_REQ)
+    @ResponseBody
+    public int updateTab(final Long editId, final String editChannelName, final Long parentIdd){
+        Channels channels = new Channels();
+        channels.setId(editId);
+        channels.setName(editChannelName);
+        channels.setParentId(parentIdd);
+        channels.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        return channelService.updateChannels(channels);
+    }
 
 
 

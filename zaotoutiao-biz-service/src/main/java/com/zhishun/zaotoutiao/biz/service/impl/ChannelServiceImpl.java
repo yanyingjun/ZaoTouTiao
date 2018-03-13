@@ -4,6 +4,7 @@
  */
 package com.zhishun.zaotoutiao.biz.service.impl;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IChannelService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +56,7 @@ public class ChannelServiceImpl implements IChannelService{
     }
 
     @Override
-    public List<Channels> getChannelsList(String name, Integer status, Integer appType, Integer parentId) {
+    public List<Channels> getChannelsList(String name, Integer status, Integer appType, Long parentId) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("name",name);
         map.put("status",status);
@@ -102,6 +104,9 @@ public class ChannelServiceImpl implements IChannelService{
     public int updateChannels(Channels channels) {
         return channelsMapper.updateByPrimaryKeySelective(channels);
     }
+
+
+
 
     @Override
     public int deleteChannelById(Long id) {
@@ -152,11 +157,44 @@ public class ChannelServiceImpl implements IChannelService{
      */
     @Override
     public int addTheChannel(Channels channels) {
-        channels.setParentId(0);
         channels.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
         channels.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
         //新增排序数字最大，排在最后面
         channels.setChannelOrder(channelsMapper.getMaxOrder().getChannelOrder()+1);
         return channelsMapper.insertSelective(channels);
     }
+
+    @Override
+    public List<ChannelsVO> getTabs(String name, Long parentId, Integer appType) {
+        Map map = Maps.newHashMap();
+        map.put("name",name);
+        map.put("parentId",parentId);
+        map.put("appType",appType);
+        List<ChannelsVO> channelsVOList = Lists.newArrayList();
+        List<Channels> channelsList = channelsMapper.getTabList(map);
+        for(Channels channels : channelsList){
+            ChannelsVO channelsVO = new ChannelsVO();
+            channelsVO.setName(channels.getName());
+            channelsVO.setId(channels.getId());
+            channelsVO.setUpdateDate(channels.getUpdateDate());
+            //设置类别名
+            if(channels.getAppType() == 1){
+                channelsVO.setTypeName("文章");
+            }else if(channels.getAppType() == 0){
+                channelsVO.setTypeName("新闻");
+            }
+            //设置上一级标签名称
+            channelsVO.setParentTab(channelsMapper.selectByPrimaryKey(channels.getParentId()).getName());
+            //假如该列表是二级标签，那么上一级标签还有导航名
+            Long showId = channelsMapper.selectByPrimaryKey(channels.getParentId()).getParentId();
+            if(0 != showId){
+                //设置导航标签名
+                channelsVO.setAncestryTab(channelsMapper.selectByPrimaryKey(showId).getName());
+            }
+            channelsVOList.add(channelsVO);
+        }
+        return channelsVOList;
+    }
+
+
 }

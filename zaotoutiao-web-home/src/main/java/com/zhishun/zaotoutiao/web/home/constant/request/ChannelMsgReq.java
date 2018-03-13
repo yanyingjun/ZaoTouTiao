@@ -65,4 +65,38 @@ public class ChannelMsgReq {
      */
     public static final String ADD_CHANNEL_REQ = "/add/channel/do";
 
+    /**
+     * 一级标签页面
+     */
+    public static final String FIRST_TABS_REQ = "/first/tab";
+
+    /**
+     * 二级标签页面
+     */
+    public static final String SECOND_TABS_REQ ="/second/tab";
+
+    /**
+     * 获取一级标签列表
+     */
+    public static final String FIRST_TAB_LIST_REQ = "/first/tab/list";
+
+    /**
+     * 获取二级标签列表
+     */
+    public static final String SECOND_TAB_LIST_REQ = "/second/tab/list";
+
+    /**
+     * 更新标签
+     */
+    public static final String UPDATE_TAB_REQ = "/update/tab";
+
+    /**
+     * 新增一级标签
+     */
+    public static final String ADD_FIRST_TAB_REQ = "/add/first/tab";
+
+    /**
+     * 新增二级标签
+     */
+    public static final String ADD_SECOND_TAB_REQ = "/add/second/tab";
 }

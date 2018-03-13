@@ -28,7 +28,7 @@ public interface IChannelService {
      * @param parentId
      * @return
      */
-    List<Channels> getChannelsList(String name, Integer status, Integer appType, Integer parentId);
+    List<Channels> getChannelsList(String name, Integer status, Integer appType, Long parentId);
 
     /**
      * 新增导航
@@ -93,4 +93,7 @@ public interface IChannelService {
      * @return
      */
     int addTheChannel(Channels channels);
+
+
+    List<ChannelsVO> getTabs(String name, Long parentId, Integer appType);
 }
