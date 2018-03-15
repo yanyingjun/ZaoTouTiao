@@ -210,6 +210,7 @@
     </where>
   </select>
 
+
   <select id="updateReadRecord" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord" resultMap="BaseResultMap">
     update SET is_request_gold = #{isRequestGold}
     where userId = #{userId} and infoId = #{infoId}
