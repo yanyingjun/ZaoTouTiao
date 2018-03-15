@@ -30,7 +30,7 @@ public interface ICommentsService {
      * @param userId
      * @return
      */
-    int delMyComments(Long userId, Long commentsId);
+    int delMyComments(Long userId, String infoId);
 
     /**
      * 删除评论相关的点赞记录

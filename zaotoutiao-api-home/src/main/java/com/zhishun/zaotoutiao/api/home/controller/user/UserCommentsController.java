@@ -71,21 +71,28 @@ public class UserCommentsController extends BaseController{
      * @return
      */
     @RequestMapping(value = ArticleMsgReq.MY_COMMENTS_DEL)
-    public Map<Object,Object> myCommentsDel(final Long userId, final Long commentsId){
+    public Map<Object,Object> myCommentsDel(final Long userId, final Long commentsId, final String infoId){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotZero(commentsId, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(infoId, ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
-                commentsService.delMyComments(userId, commentsId);
+                int res = commentsService.delMyComments(userId, infoId);
                 commentsService.delUserGiveLike(userId, commentsId);
-                dataMap.put("result", "success");
-                dataMap.put("msg", "返回信息成功");
+                if(res == 1) {
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "返回信息成功");
+                }else{
+                    dataMap.put("result", "failure");
+                    dataMap.put("msg", "删除失败");
+                }
             }
         });
 

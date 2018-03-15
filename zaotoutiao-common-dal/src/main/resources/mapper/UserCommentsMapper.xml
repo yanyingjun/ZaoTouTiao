@@ -117,9 +117,7 @@
   <delete id="delUserComments" parameterType="map">
     delete from user_comments
     where userId = #{userId}
-    <if test="id != null">
-      and id = #{id}
-    </if>
+      and infoId = #{infoId}
   </delete>
 
   <select id="getUserCommentsByInfoId" parameterType="string" resultMap="BaseResultMap">

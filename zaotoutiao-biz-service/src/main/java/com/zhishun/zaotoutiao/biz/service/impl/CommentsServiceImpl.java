@@ -51,12 +51,11 @@ public class CommentsServiceImpl implements ICommentsService{
     }
 
     @Override
-    public int delMyComments(Long userId, Long commentsId) {
+    public int delMyComments(Long userId, String infoId) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("userId", userId);
-        if(!StringUtils.isEmpty(commentsId)){
-            map.put("commentsId", commentsId);
-        }
+        map.put("infoId", infoId);
+
         return userCommentsMapper.delUserComments(map);
     }
 
