@@ -81,9 +81,7 @@ public class UserReadController extends BaseController {
 
     /**
      * 阅读记录添加
-     * @param userId
-     * @param infoId
-     * @param infoType
+     * @param userReadRecord
      * @return
      */
     @RequestMapping(value = NewsMsgReq.READ_RECORD_ADD, method = RequestMethod.POST)
@@ -102,6 +100,7 @@ public class UserReadController extends BaseController {
                 AssertsUtil.isNotNull(userReadRecord.getSource(), ErrorCodeEnum.SYSTEM_ANOMALY);
                 AssertsUtil.isNotNull(userReadRecord.getImgUrl(), ErrorCodeEnum.SYSTEM_ANOMALY);
                 AssertsUtil.isNotNull(userReadRecord.getUrl(), ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(userReadRecord.getBrowsing(), ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override

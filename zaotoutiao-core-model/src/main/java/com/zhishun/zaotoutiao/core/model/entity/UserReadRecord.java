@@ -52,13 +52,13 @@ public class UserReadRecord {
     /**
      * 用户行为
      */
-    private String browsing;
+    private Integer browsing;
 
-    public String getBrowsing() {
+    public Integer getBrowsing() {
         return browsing;
     }
 
-    public void setBrowsing(String browsing) {
+    public void setBrowsing(Integer browsing) {
         this.browsing = browsing;
     }
 

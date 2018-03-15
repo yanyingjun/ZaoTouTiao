@@ -448,7 +448,7 @@ public class UserServiceImpl implements IUserService{
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor={RuntimeException.class, Exception.class})
     public Boolean getNewUserMoney(Long userId) {
         int result = userMoneyRecordMapper.getNewUserMoney(userId);
         if(result > 0){

@@ -64,22 +64,6 @@ public class UserInformation implements Serializable {
      */
     private Integer isRead;
 
-    /**
-     * 构造方法
-     */
-
-    public UserInformation(Long id, Long userId, String type, String title, String content, String url, String createDate, String groups, String subhead, Integer isRead) {
-        this.id = id;
-        this.userId = userId;
-        this.type = type;
-        this.title = title;
-        this.content = content;
-        this.url = url;
-        this.createDate = createDate;
-        this.groups = groups;
-        this.subhead = subhead;
-        this.isRead = isRead;
-    }
 
     /**
      * Getter method for property <tt>id</tt>.
