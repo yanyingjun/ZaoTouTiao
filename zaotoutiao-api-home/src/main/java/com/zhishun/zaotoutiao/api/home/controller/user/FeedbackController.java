@@ -71,7 +71,6 @@ public class FeedbackController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-
                 userService.addUserFeedbackPublish(userId, question, imgPath);
                 dataMap.put("result", "success");
                 dataMap.put("msg", "相关信息返回成功");

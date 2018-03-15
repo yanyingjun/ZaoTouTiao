@@ -9,9 +9,16 @@
     <result column="infoType" jdbcType="VARCHAR" property="infoType" />
     <result column="read_continuous_day" jdbcType="INTEGER" property="readContinuousDay" />
     <result column="is_request_gold" jdbcType="INTEGER" property="isRequestGold" />
+    <result column="channelId" jdbcType="VARCHAR" property="channelId" />
+    <result column="label" jdbcType="VARCHAR" property="label"/>
+    <result column="title" jdbcType="VARCHAR" property="title"/>
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="imgUrl" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="browsing" jdbcType="INTEGER" property="browsing" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, userId, infoId, create_date, infoType, read_continuous_day, is_request_gold
+    id, userId, infoId, create_date, infoType, read_continuous_day, is_request_gold, channelId, label, title, source, imgUrl, url, browsing
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -26,10 +33,11 @@
   <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord">
     insert into user_read_record (id, userId, infoId, 
       create_date, infoType, read_continuous_day, 
-      is_request_gold)
+      is_request_gold, channelId, label, title, source, imgUrl, url, browsing)
     values (#{id,jdbcType=BIGINT}, #{userid,jdbcType=BIGINT}, #{infoid,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{infotype,jdbcType=VARCHAR}, #{readContinuousDay,jdbcType=INTEGER}, 
-      #{isRequestGold,jdbcType=INTEGER})
+      #{isRequestGold,jdbcType=INTEGER},#{channelId,jdbcType=VARCHAR},#{label,jdbcType=VARCHAR},
+      #{title,jdbcType=VARCHAR},#{source,jdbcType=VARCHAR},#{imgUrl,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{browsing,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord">
     insert into user_read_record
@@ -55,6 +63,27 @@
       <if test="isRequestGold != null">
         is_request_gold,
       </if>
+        <if test="channelId != null">
+            channelId,
+        </if>
+        <if test="label != null">
+            label,
+        </if>
+        <if test="title != null">
+            title,
+        </if>
+        <if test="source != null">
+            source,
+        </if>
+      <if test="imgUrl != null">
+        imgUrl,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="browsing != null">
+        browsing,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -77,6 +106,27 @@
       </if>
       <if test="isRequestGold != null">
         #{isRequestGold,jdbcType=INTEGER},
+      </if>
+        <if test="channelId != null">
+            #{channelId,jdbcType=VARCHAR},
+        </if>
+        <if test="label != null">
+            #{label,jdbcType=VARCHAR},
+        </if>
+        <if test="title != null">
+            #{title,jdbcType=VARCHAR},
+        </if>
+        <if test="source != null">
+            #{source,jdbcType=VARCHAR},
+        </if>
+      <if test="imgUrl != null">
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="browsing != null">
+        #{browsing,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -101,6 +151,27 @@
       <if test="isRequestGold != null">
         is_request_gold = #{isRequestGold,jdbcType=INTEGER},
       </if>
+        <if test="channelId != null">
+            channelId = #{channelId,jdbcType=VARCHAR},
+        </if>
+        <if test="label != null">
+            label = #{label,jdbcType=VARCHAR},
+        </if>
+        <if test="title != null">
+            title = #{title,jdbcType=VARCHAR},
+        </if>
+        <if test="source != null">
+            source = #{source,jdbcType=VARCHAR},
+        </if>
+      <if test="imgUrl != null">
+        imgUrl = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="browsing != null">
+        browsing = #{browsing,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -111,7 +182,14 @@
       create_date = #{createDate,jdbcType=TIMESTAMP},
       infoType = #{infoType,jdbcType=VARCHAR},
       read_continuous_day = #{readContinuousDay,jdbcType=INTEGER},
-      is_request_gold = #{isRequestGold,jdbcType=INTEGER}
+      is_request_gold = #{isRequestGold,jdbcType=INTEGER},
+      channelId = #{channelId,jdbcType=VARCHAR},
+      label = #{label,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      imgUrl = #{imgUrl,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      browsing = #{browsing,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -162,7 +240,7 @@
   </select>
 
   <insert id="addLookRecord" parameterType="map">
-    INSERT INTO user_read_record(userId,infoId,infoType,read_continuous_day) VALUES (#{userId},#{infoId},#{infoType},#{readContinuousDay})
+    INSERT INTO user_read_record(userId,infoId,infoType,read_continuous_day,channelId,label,title,source) VALUES (#{userId},#{infoId},#{infoType},#{readContinuousDay},#{channelId},#{label},#{title},#{source})
   </insert>
 
   <select id="isContinuousReadToday" parameterType="Long" resultType="int">

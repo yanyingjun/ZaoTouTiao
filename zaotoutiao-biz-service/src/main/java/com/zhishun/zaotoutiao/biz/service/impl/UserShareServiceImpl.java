@@ -9,6 +9,7 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IGoldRecordService;
 import com.zhishun.zaotoutiao.biz.service.IUserShareService;
+import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.entity.UserShare;
 import com.zhishun.zaotoutiao.dal.mapper.UserGoldRecordMapper;
@@ -61,6 +62,9 @@ public class UserShareServiceImpl implements IUserShareService{
             //返回更新结果
             userShare = userShareMapper.getLastShare();
         }
+        String date = userShare.getCreateDate();
+        Date date1 = DateUtil.toDate(date,DateUtil.DEFAULT_DATETIME_FORMAT);
+        userShare.setCreateDate(DateUtil.toString(date1, DateUtil.DEFAULT_DATETIME_FORMAT));
         return userShare;
     }
 

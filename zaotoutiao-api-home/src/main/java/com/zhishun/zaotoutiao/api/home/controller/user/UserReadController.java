@@ -15,6 +15,7 @@ import com.zhishun.zaotoutiao.biz.service.IInformationService;
 import com.zhishun.zaotoutiao.biz.service.IJpushService;
 import com.zhishun.zaotoutiao.biz.service.IUserReadService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
+import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,23 +87,35 @@ public class UserReadController extends BaseController {
      * @return
      */
     @RequestMapping(value = NewsMsgReq.READ_RECORD_ADD, method = RequestMethod.POST)
-    public Map<Object,Object> readRecordAdd( final Long userId,final String infoId ,final String infoType){
+    public Map<Object,Object> readRecordAdd(final UserReadRecord userReadRecord){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
-                AssertsUtil.isNotNull(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
-                AssertsUtil.isNotNull(infoId, ErrorCodeEnum.SYSTEM_ANOMALY);
-                AssertsUtil.isNotNull(infoType, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(userReadRecord.getUserId(), ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(userReadRecord.getInfoId(), ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(userReadRecord.getInfoType(), ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(userReadRecord.getChannelId(), ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(userReadRecord.getLabel(), ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(userReadRecord.getTitle(), ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(userReadRecord.getSource(), ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(userReadRecord.getImgUrl(), ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(userReadRecord.getUrl(), ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
-                iUserReadService.readRecordAdd(userId,infoId,infoType);
-                dataMap.put("result", "success");
-                dataMap.put("msg", "阅读记录添加成功");
-                dataMap.put("data","true");
+                int res = iUserReadService.readRecordAdd(userReadRecord);
+                if(res == 1) {
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "阅读记录添加成功");
+                    dataMap.put("data", "true");
+                }else{
+                    dataMap.put("result", "failure");
+                    dataMap.put("msg", "阅读记录添加失败");
+                    dataMap.put("data", "false");
+                }
             }
         });
 

@@ -1,5 +1,7 @@
 package com.zhishun.zaotoutiao.biz.service;
 
+import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
+
 /**
  * @author BugMan
  * @version $Id: IUserReadService, v0.1 2018年03月02日 17:27BugMan Exp $
@@ -18,9 +20,7 @@ public interface IUserReadService {
 
     /**
      * 新闻阅读记录添加
-     * @param userId
-     * @param infoId
-     * @param infoType
+     * @param userReadRecord
      */
-    void readRecordAdd(Long userId,String infoId ,String infoType);
+    int readRecordAdd(UserReadRecord userReadRecord);
 }

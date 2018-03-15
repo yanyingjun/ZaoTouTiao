@@ -1,8 +1,10 @@
 package com.zhishun.zaotoutiao.core.model.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 public class UserReadRecord {
+
     private Long id;
 
     private Long userId;
@@ -16,6 +18,97 @@ public class UserReadRecord {
     private Integer readContinuousDay;
 
     private Integer isRequestGold;
+
+    /**
+     * 导航channelId
+     */
+    private String channelId;
+
+    /**
+     * 关键词
+     */
+    private String label;
+
+    /**
+     * 资源标题
+     */
+    private String title;
+
+    /**
+     * 资源来源
+     */
+    private String source;
+
+    /**
+     * 图片地址
+     */
+    private String imgUrl;
+
+    /**
+     * 新闻链接
+     */
+    private String url;
+
+    /**
+     * 用户行为
+     */
+    private String browsing;
+
+    public String getBrowsing() {
+        return browsing;
+    }
+
+    public void setBrowsing(String browsing) {
+        this.browsing = browsing;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 
     /**
      * Getter method for property <tt>id</tt>.

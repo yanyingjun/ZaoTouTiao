@@ -66,7 +66,7 @@ public class UserShareController extends BaseController {
     }
 
     /**
-     *
+     * 用户分享成功后调用
      * @param userId
      * @param shareId
      * @return

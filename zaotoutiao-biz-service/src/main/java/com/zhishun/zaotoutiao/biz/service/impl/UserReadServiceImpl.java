@@ -71,59 +71,67 @@ public class UserReadServiceImpl implements IUserReadService {
     }
 
     @Override
-    public void readRecordAdd(Long userId, String infoId, String infoType) {
-        //判断用户是否浏览过该新闻
-        if(!isRead(userId,infoId)){
-            //新手任务
-            //判断是否超过活动日期
-            //判断是否超过活动天数newbie_read_time < 0为该活动永不过期
-            int newbieReadTime = getNewbieReadTime();
-            Map<String,Object> map = Maps.newHashMap();
-            List<UserReadRecord> userReadRecordList = userReadRecordMapper.isContinuousReadYesterday(userId);
-            map.put("readActivityDays",newbieReadTime);
-            map.put("userId",userId);
-            Map<String,Object> maps = Maps.newHashMap();
-            maps.put("userId",userId);
-            maps.put("infoId",infoId);
-            maps.put("infoType",infoType);
-            int readContinuousDay = 0;
-            //查询连续阅读天数
-            if(userReadRecordList.size() > 0){
-                readContinuousDay = userReadRecordList.get(0).getReadContinuousDay();
-            }
-            if(userMapper.isSurpassingActivity(map) > 0 ||  newbieReadTime < 0){
-                //查询昨天是否已经阅读
-                if(userReadRecordList.size() <= 0){
-                    if(readContinuousDay >= 3 ){
-                        //如果超过三天，则从三天继续
-                        maps.put("readContinuousDay",readContinuousDay);
-                        userReadRecordMapper.addLookRecord(maps);
-                    }else{
-                        //没有连续阅读,重头开始
-                        maps.put("readContinuousDay",1);
-                        userReadRecordMapper.addLookRecord(maps);
-                    }
-                }else{
-                    //判断今天是否已阅读
-                    if(userReadRecordMapper.isContinuousReadToday(userId) > 0){
-                        maps.put("readContinuousDay",readContinuousDay);
-                        userReadRecordMapper.addLookRecord(maps);
-                    }else{
-                        //天数 +1
-                        maps.put("readContinuousDay",readContinuousDay+1);
-                        userReadRecordMapper.addLookRecord(maps);
-                    }
-                }
-            }else{
-                //活动过期，按照阅读天数继续添加
-                //添加到浏览记录
-                //添加到历史记录列表
-                //查询连续阅读天数
-                maps.put("readContinuousDay",readContinuousDay);
-                userReadRecordMapper.addLookRecord(maps);
-            }
+    public int readRecordAdd(UserReadRecord userReadRecord) {
+            return userReadRecordMapper.insertSelective(userReadRecord);
 
-        }
+        //判断用户是否浏览过该新闻
+        //if(!isRead(userId,infoId)){
+        //    //新手任务
+        //    //判断是否超过活动日期
+        //    //判断是否超过活动天数newbie_read_time < 0为该活动永不过期
+        //    int newbieReadTime = getNewbieReadTime();
+        //    Map<String,Object> map = Maps.newHashMap();
+        //    List<UserReadRecord> userReadRecordList = userReadRecordMapper.isContinuousReadYesterday(userId);
+        //    map.put("readActivityDays",newbieReadTime);
+        //    map.put("userId",userId);
+        //    Map<String,Object> maps = Maps.newHashMap();
+        //    maps.put("userId",userId);
+        //    maps.put("infoId",infoId);
+        //    maps.put("infoType",infoType);
+        //    maps.put("channelId",channelId);
+        //    maps.put("label",label);
+        //    maps.put("title",title);
+        //    maps.put("source",source);
+        //    int readContinuousDay = 0;
+        //    //查询连续阅读天数
+        //    if(userReadRecordList.size() > 0){
+        //        readContinuousDay = userReadRecordList.get(0).getReadContinuousDay();
+        //    }
+        //    if(userMapper.isSurpassingActivity(map) > 0 ||  newbieReadTime < 0){
+        //        //查询昨天是否已经阅读
+        //        if(userReadRecordList.size() <= 0){
+        //            if(readContinuousDay >= 3 ){
+        //                //如果超过三天，则从三天继续
+        //                maps.put("readContinuousDay",readContinuousDay+1);
+        //                userReadRecordMapper.addLookRecord(maps);
+        //            }else{
+        //                //没有连续阅读,重头开始
+        //                maps.put("readContinuousDay",1);
+        //                userReadRecordMapper.addLookRecord(maps);
+        //            }
+        //        }else{
+        //            //判断今天是否已阅读
+        //            if(userReadRecordMapper.isContinuousReadToday(userId) > 0){
+        //                maps.put("readContinuousDay",readContinuousDay);
+        //                userReadRecordMapper.addLookRecord(maps);
+        //            }else{
+        //                //天数 +1
+        //                maps.put("readContinuousDay",readContinuousDay+1);
+        //                userReadRecordMapper.addLookRecord(maps);
+        //            }
+        //        }
+        //    }else{
+        //        //活动过期，按照阅读天数继续添加
+        //        //添加到浏览记录
+        //        //添加到历史记录列表
+        //        //查询连续阅读天数
+        //        maps.put("readContinuousDay",readContinuousDay);
+        //        userReadRecordMapper.addLookRecord(maps);
+        //    }
+        //    return true;
+        //}else{
+        //    return false;
+        //}
     }
 
     /**
