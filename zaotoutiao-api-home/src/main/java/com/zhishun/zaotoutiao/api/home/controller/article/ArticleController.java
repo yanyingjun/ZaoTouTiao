@@ -496,6 +496,7 @@ public class ArticleController extends BaseController{
      * 怎么获得金币奖励
      * @return
      */
+    @RequestMapping(value = UserMsgReq.HOW_GET_GOLD, method = RequestMethod.GET)
     public Map<Object,Object> howGetGold(){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
