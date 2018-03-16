@@ -64,7 +64,6 @@ public class UserInformation implements Serializable {
      */
     private Integer isRead;
 
-
     /**
      * Getter method for property <tt>id</tt>.
      *

@@ -18,6 +18,8 @@ import com.zhishun.zaotoutiao.biz.service.IInformationService;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.biz.service.IWithdrawalService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
+import com.zhishun.zaotoutiao.common.util.BeanMapUtil;
+import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.common.util.RedPackUtil;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.MalformedParameterizedTypeException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -311,6 +314,7 @@ public class WithdrawalsController extends BaseController{
      * @param wechatId
      * @return
      */
+    @RequestMapping(value = WeChatMsgReq.USER_REGISTER_WECHAT)
     public Map<Object,Object> userRegisterWechat(final String telephone, final String wechatId,
                                                  final String password, final String wechatHead, final String wechatName){
 
@@ -333,27 +337,39 @@ public class WithdrawalsController extends BaseController{
                     //判断微信是否已经绑定
                     if(StringUtils.isEmpty(user1)){
                         //微信还不存在
-                        int userId = userService.addUser(telephone, password, wechatId, wechatHead, wechatName);
+                        Long userId = userService.addUser(telephone, password, wechatId, wechatHead, wechatName);
                         //为新用户新增金币和零钱
                         ExchangeRate exchangeRate = exchangeRateService.getGoldToMoney();
 
                         //为用户添加消息和公告
-                        List<UserInformation> listInformation = iInformationService.listInformationNew();
-                        for(UserInformation userInfo : listInformation){
-                            userInfo.setUserId(Long.valueOf(userId));
-                            iInformationService.addUserInformation(userInfo);
+                        List<UserInformationTemplate> listInformation = iInformationService.listInformationNew();
+                        for(UserInformationTemplate userInfo : listInformation){
+                            UserInformation userInformation = new UserInformation();
+                            BeanMapUtil.copy(userInfo, userInformation);
+                            userInformation.setId(null);
+                            userInformation.setUserId(userId);
+                            userInformation.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                            iInformationService.addUserInformation(userInformation);
                         }
-
+                        User user2 = userService.getUserByMap(telephone);
                         //查询是否是第一次登录
-                        if(user.getIsOnline() == 0){
+                        if(user2.getIsOnline() == 0){
                             dataMap.put("isFirstLogin", true);
                         }else{
                             dataMap.put("isFirstLogin", false);
                         }
                         dataMap.put("result", "success");
                         dataMap.put("msg", "新增用户成功");
-                        dataMap.put("data", user);
+                        dataMap.put("data", user2);
+                    }else{
+                        dataMap.put("result", "success");
+                        dataMap.put("msg", "微信号已绑定");
+                        dataMap.put("data", user1);
                     }
+                }else{
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "手机号已注册，暂时不能用微信号注册");
+                    dataMap.put("data", user);
                 }
 
             }

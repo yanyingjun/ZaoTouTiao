@@ -8,6 +8,7 @@ import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.UserComments;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
 
 import java.util.List;
 
@@ -53,4 +54,48 @@ public interface ICommentsService {
      * @return
      */
     int countUserComments(String infoId);
+
+    /**
+     * 添加评论
+     */
+    int addComments(UserComments userComments);
+
+    /**
+     * 获取最新评论和评论点赞信息
+     */
+    List<UserCommentsVO> getNewCommentVO(String infoId, int userId, int pageNo, int pageSize);
+
+    /**
+     * 获取热门评论和评论点赞信息
+     */
+    List<UserCommentsVO> getHotCommentVO(String infoId, int userId, int pageNo, int pageSize);
+
+    /**
+     * 查看该评论自己是否点赞
+     * @param userId
+     * @param commentsId
+     * @return
+     */
+    Boolean isMyLike (int userId, Long commentsId);
+
+    /**
+     * 获得新闻的评论数
+     * @param infoId
+     * @return
+     */
+    int getCommentsNumByInfoId(String infoId);
+
+    /**
+     * 获取新闻列表（可以根据关键词搜索）
+     * @param keyword
+     * @return
+     */
+    List<UserCommentsVO> getUserListOrByKey(String keyword);
+
+    /**
+     * 根据评论删除用户留言
+     * @param id
+     * @return
+     */
+    int delComments(Long id);
 }

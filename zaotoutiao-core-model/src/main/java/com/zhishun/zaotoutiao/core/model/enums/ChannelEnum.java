@@ -1,57 +1,56 @@
 package com.zhishun.zaotoutiao.core.model.enums;
 
+import com.zhishun.zaotoutiao.common.base.core.ValueEnum;
+
 /**
- * 三方渠道枚举类
+ * 渠道分类
  *
  */
-public enum ChannelEnum {
+public enum ChannelEnum implements ValueEnum<Integer>{
 
     /**
-     * 亿奇乐
+     * 视频
      */
-    YI_QI_LE("1", "亿奇乐"),
+    VIDEO(0, "视频"),
 
     /**
-     * 考拉
+     * 新闻
      */
-    KAO_LA("2", "考拉"),
+    NEWS(1, "新闻"),
 
     /**
-     * 微贷
+     * 广告
      */
-    WEI_DAI("3", "微贷"),
-
-    /**
-     * 国美
-     */
-    GUO_MEI("4", "国美");
+    AD(2, "广告");
 
     /**
      * 渠道编码
      */
-    private String code;
+    private Integer value;
 
     /**
      * 渠道名称
      */
     private String name;
 
-    ChannelEnum(String code, String name) {
-        this.code = code;
+    ChannelEnum(Integer value, String name) {
+        this.value = value;
         this.name = name;
     }
 
-    public String getCode() {
-        return this.code;
+    @Override
+    public Integer getValue() {
+        return this.value;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
 
-    public static ChannelEnum getChannelEnumByCode(String code) {
+    public static ChannelEnum getChannelEnumByCode(String value) {
         for (ChannelEnum channelEnum : ChannelEnum.values()) {
-            if (channelEnum.getCode().equals(code)) {
+            if (channelEnum.getValue().equals(value)) {
                 return channelEnum;
             }
         }

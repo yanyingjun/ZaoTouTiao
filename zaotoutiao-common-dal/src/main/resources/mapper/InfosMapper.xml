@@ -371,21 +371,6 @@
     where infoType = #{type}
   </select>
 
-  <select id="listLookRecordPage" parameterType="map" resultMap="BaseResultMap">
-    select i.*,u.create_date as readCreateDate,u.read_continuous_day as readContinuousDay
-    from user_read_record as u LEFT JOIN infos as i ON u.infoId = i.infoId
-    WHERE userId = #{userId} ORDER BY readCreateDate desc
-    <if test="offset != null and limit != null">
-      limit #{offset},#{limit}
-    </if>
-  </select>
-
-  <select id="countLookRecord" parameterType="map" resultType="int">
-    select count(i.id)
-    from user_read_record as u LEFT JOIN infos as i ON u.infoId = i.infoId
-    WHERE userId = #{userId} ORDER BY readCreateDate desc
-  </select>
-
   <select id="getInfosByMap" parameterType="map" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -420,41 +405,11 @@
     SELECT * FROM infos WHERE infoType='video' AND channelId = #{channelId} ORDER BY rand() limit 0,6
   </select>
 
-  <select id="getNewComments" parameterType="map" resultMap="BaseResultMap">
-    SELECT user.headpath, user.nickName, user_comments.id AS commentsId, user_comments.content, user_comments.likes, user_comments.createDate, infos.*
-    FROM user, user_comments, infos
-    WHERE user_comments.infoId = #{infoId}
-    AND user.userId = user_comments.userId
-    AND user_comments.infoId = infos.infoId
-    ORDER BY user_comments.createDate desc limit #{startNo},#{endNo}
-  </select>
-
-  <select id="getHotComments" parameterType="map" resultMap="BaseResultMap">
-    SELECT user.headpath, user.nickName, user_comments.id AS commentsId, user_comments.content, user_comments.likes, user_comments.createDate, infos.*
-    FROM user, user_comments, infos
-    WHERE user_comments.infoId = #{infoId}
-    AND user.userId = user_comments.userId
-    AND user_comments.infoId = infos.infoId
-    ORDER BY user_comments.likes desc,user_comments.createDate desc limit #{startNo},#{endNo}
-  </select>
-
   <select id="searchNewsByKeyword" parameterType="map" resultMap="BaseResultMap">
     select * from infos
     WHERE title like #{keyword}
     ORDER BY updateTime
     DESC LIMIT #{startNo},#{endNo}
-  </select>
-
-  <select id="getCollectList" parameterType="map" resultMap="BaseResultMap">
-    SELECT user_collect.id as userCollectId,user_collect.create_date as collectCreateDate,infos.*,channels.name as type
-    FROM infos
-    left join user_collect on infos.infoId = user_collect.infosId
-    left join channels ON channels.channelId = infos.channelId
-    left join user on user.userId = user_collect.userId
-    where  user.userId = #{userId}
-    and infos.infoType = #{infoType}
-    ORDER BY collectCreateDate desc
-    limit #{startNo},#{endNo}
   </select>
 
   <select id="List24HoursInfos" resultMap="BaseResultMap">

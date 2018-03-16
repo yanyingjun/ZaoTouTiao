@@ -43,6 +43,21 @@ public class UserVO extends User{
     private String times;
 
     /**
+     * 徒弟数量
+     */
+    private Integer apprenticeNum;
+
+    /**
+     * 阅读篇数
+     */
+    private Integer readNumber;
+
+    /**
+     * 渠道名称
+     */
+    private String channelName;
+
+    /**
      * Getter method for property <tt>oldPassword</tt>.
      *
      * @return property value of oldPassword
@@ -148,5 +163,59 @@ public class UserVO extends User{
      */
     public void setTimes(String times) {
         this.times = times;
+    }
+
+    /**
+     * Getter method for property <tt>apprenticeNum</tt>.
+     *
+     * @return property value of apprenticeNum
+     */
+    public Integer getApprenticeNum() {
+        return apprenticeNum;
+    }
+
+    /**
+     * Setter method for property <tt>apprenticeNum</tt>.
+     *
+     * @param apprenticeNum value to be assigned to property apprenticeNum
+     */
+    public void setApprenticeNum(Integer apprenticeNum) {
+        this.apprenticeNum = apprenticeNum;
+    }
+
+    /**
+     * Getter method for property <tt>readNumber</tt>.
+     *
+     * @return property value of readNumber
+     */
+    public Integer getReadNumber() {
+        return readNumber;
+    }
+
+    /**
+     * Setter method for property <tt>readNumber</tt>.
+     *
+     * @param readNumber value to be assigned to property readNumber
+     */
+    public void setReadNumber(Integer readNumber) {
+        this.readNumber = readNumber;
+    }
+
+    /**
+     * Getter method for property <tt>channelName</tt>.
+     *
+     * @return property value of channelName
+     */
+    public String getChannelName() {
+        return channelName;
+    }
+
+    /**
+     * Setter method for property <tt>channelName</tt>.
+     *
+     * @param channelName value to be assigned to property channelName
+     */
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
     }
 }

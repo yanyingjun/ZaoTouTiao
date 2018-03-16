@@ -85,4 +85,9 @@ public class ZttWebMsgReq {
      */
     public static final String ZTT_CAN_BE_PRESENTED_USER_LIST_REQ = "/bePresentedUser/list";
 
+    /**
+     * 更新用户信息
+     */
+    public static final String ZTT_UPDATE_USER_REQ = "/updateUser";
+
 }

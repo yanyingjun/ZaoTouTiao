@@ -50,21 +50,6 @@ public class UserShare implements Serializable {
     private String createDate;
 
     /**
-     * 构造方法
-     */
-    public UserShare(){}
-
-    public UserShare(Long id, Long userId, String type, String infoId, String source, String apprenticeId, String createDate) {
-        this.id = id;
-        this.userId = userId;
-        this.type = type;
-        this.infoId = infoId;
-        this.source = source;
-        this.apprenticeId = apprenticeId;
-        this.createDate = createDate;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

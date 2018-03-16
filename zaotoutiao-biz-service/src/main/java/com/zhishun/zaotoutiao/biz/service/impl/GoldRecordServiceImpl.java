@@ -14,14 +14,11 @@ import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.dal.mapper.UserGoldRecordMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserShareMapper;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -89,16 +86,15 @@ public class GoldRecordServiceImpl implements IGoldRecordService{
             //返回是否大于3小时
             int resNum = userShareMapper.getTiming(map);
             if(1 == resNum || "1".equals(resNum)){
-                Long golds = (long) gold;
                 //更新用户金币
                 User user = new User();
                 user.setUserId(userId);
-                user.setGold(golds);
+                user.setGold(gold);
                 int res =userMapper.updateByPrimaryKeySelective(user);
                 if(0 < res){
                     //新增金币记录
                     int sources = source.intValue();
-                    int resNew = updateUserGold(userId,shareId,sources,golds);
+                    int resNew = updateUserGold(userId,shareId,sources,gold);
                     if(0 < resNew){
                         return gold;
                     }
@@ -106,16 +102,15 @@ public class GoldRecordServiceImpl implements IGoldRecordService{
             }
         }else if(0 == count){
             //第一次
-            Long golds = (long) gold;
             //更新用户金币
             User user = new User();
             user.setUserId(userId);
-            user.setGold(golds);
+            user.setGold(gold);
             int res =userMapper.updateByPrimaryKeySelective(user);
             if(0 < res){
                 //新增金币记录
                 int sources = source.intValue();
-                int resNew = updateUserGold(userId,shareId,sources,golds);
+                int resNew = updateUserGold(userId,shareId,sources,gold);
                 if(0 < resNew){
                     return gold;
                 }
@@ -141,16 +136,15 @@ public class GoldRecordServiceImpl implements IGoldRecordService{
             String shareType = userShareMapper.selectByPrimaryKey(shareId).getType();
             int countOfShare = userShareMapper.getNumOfType(userId,shareType);
             if(3 < countOfShare){
-                Long golds = (long) gold;
                 //更新用户金币
                 User user = new User();
                 user.setUserId(userId);
-                user.setGold(golds);
+                user.setGold(gold);
                 int res =userMapper.updateByPrimaryKeySelective(user);
                 if(0 < res){
                     //新增金币记录
                     int sources = source.intValue();
-                    int resNew = updateUserGold(userId,shareId,sources,golds);
+                    int resNew = updateUserGold(userId,shareId,sources,gold);
                     if(0 < resNew){
                         return gold;
                     }
@@ -172,16 +166,15 @@ public class GoldRecordServiceImpl implements IGoldRecordService{
         //返回当天新增金币记录
         int count = userGoldRecordMapper.getShareRecruitGold(map);
         if(1 > count){
-            Long golds = (long) gold;
             //更新用户金币
             User user = new User();
             user.setUserId(userId);
-            user.setGold(golds);
+            user.setGold(gold);
             int res =userMapper.updateByPrimaryKeySelective(user);
             if(0 < res){
                 //新增金币记录
                 int sources = source.intValue();
-                int resNew = updateUserGold(userId,shareId,sources,golds);
+                int resNew = updateUserGold(userId,shareId,sources,gold);
                 if(0 < resNew){
                     return gold;
                 }
@@ -256,7 +249,7 @@ public class GoldRecordServiceImpl implements IGoldRecordService{
      * @param gold
      * @return
      */
-    private int updateUserGold(Long userId, Long shareId, int source, Long gold){
+    private int updateUserGold(Long userId, Long shareId, int source, int gold){
         UserGoldRecord userGoldRecord =new UserGoldRecord();
         userGoldRecord.setSource(source);
         userGoldRecord.setUserId(userId);

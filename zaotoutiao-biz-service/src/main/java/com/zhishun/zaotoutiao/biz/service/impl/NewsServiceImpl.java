@@ -11,15 +11,9 @@ import com.zhishun.zaotoutiao.biz.service.INewsService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
-import com.zhishun.zaotoutiao.core.model.entity.Infos;
-import com.zhishun.zaotoutiao.core.model.entity.StaticHtml;
-import com.zhishun.zaotoutiao.core.model.entity.Channels;
-import com.zhishun.zaotoutiao.core.model.entity.Content;
+import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
-import com.zhishun.zaotoutiao.dal.mapper.ChannelsMapper;
-import com.zhishun.zaotoutiao.dal.mapper.ContentMapper;
-import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
-import com.zhishun.zaotoutiao.dal.mapper.StaticHtmlMapper;
+import com.zhishun.zaotoutiao.dal.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -46,6 +40,12 @@ public class NewsServiceImpl implements INewsService {
 
     @Autowired
     private ContentMapper contentMapper;
+
+    @Autowired
+    private UserCollectMapper userCollectMapper;
+
+    @Autowired
+    private UserReadRecordMapper userReadRecordMapper;
 
 
     /**
@@ -85,15 +85,15 @@ public class NewsServiceImpl implements INewsService {
     }
 
     @Override
-    public Page<InfosVo> listLookRecordPage(Long userId, PageRequest pageRequest) {
+    public Page<UserReadRecord> listLookRecordPage(Long userId, PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("userId", userId);
-        int count = infosMapper.countLookRecord(map);
+        int count = userReadRecordMapper.countLookRecord(map);
         if(!StringUtils.isEmpty(pageRequest)){
             map.put("offset", pageRequest.getOffset());
             map.put("limit", pageRequest.getPageSize());
         }
-        List<InfosVo> list = infosMapper.listLookRecordPage(map);
+        List<UserReadRecord> list = userReadRecordMapper.listLookRecordPage(map);
         return PageBuilder.buildPage(pageRequest, list, count);
     }
 
@@ -138,15 +138,15 @@ public class NewsServiceImpl implements INewsService {
      * @return
      */
     @Override
-    public List<InfosVo> getCollectList(String infoType, int userId, int pageNo, int pageSize) {
+    public List<UserCollect> getCollectList(String infosType, int userId, int pageNo, int pageSize) {
         Map<String,Object> map = Maps.newHashMap();
         int startNo = (pageNo-1) * pageSize;
         int endNo = pageNo * pageSize;
-        map.put("infoType",infoType);
+        map.put("infosType",infosType);
         map.put("userId",userId);
         map.put("startNo",startNo);
         map.put("endNo",endNo);
-        List<InfosVo> infosVoList = infosMapper.getCollectList(map);
+        List<UserCollect> infosVoList = userCollectMapper.getCollectList(map);
         return infosVoList;
 
     }

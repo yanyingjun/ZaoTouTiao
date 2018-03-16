@@ -50,19 +50,6 @@ public class StaticGoldConfig implements Serializable {
     private Integer highest;
 
     /**
-     * 构造方法
-     */
-    public StaticGoldConfig(Long id, String name, Integer unit, String value, String comments, Integer type, Integer highest) {
-        this.id = id;
-        this.name = name;
-        this.unit = unit;
-        this.value = value;
-        this.comments = comments;
-        this.type = type;
-        this.highest = highest;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

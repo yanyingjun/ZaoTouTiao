@@ -36,16 +36,6 @@ public class StaticRedEnvelope implements Serializable {
     private String createDate;
 
     /**
-     * 构造方法
-     */
-    public StaticRedEnvelope(Long id, BigDecimal money, String content, String createDate) {
-        this.id = id;
-        this.money = money;
-        this.content = content;
-        this.createDate = createDate;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

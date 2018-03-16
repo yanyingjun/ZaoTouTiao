@@ -95,7 +95,7 @@ public class SignInController extends BaseController{
                                     //根据连续签到天数查询签到奖励
                                     StaticGoldConfig staticGoldConfig = signInService.getSignInGold(1);
                                     int gold = Integer.parseInt(staticGoldConfig.getValue());
-                                    userService.addUserGoldRecord(source,userId, Long.valueOf(gold), null);
+                                    userService.addUserGoldRecord(source,userId, gold, null);
                                     userService.updateUserInfo(userId, gold);
                                     dataMap.put("result", "success");
                                     dataMap.put("msg", "已经连续签到超过七天，执行新的签到");
@@ -109,7 +109,7 @@ public class SignInController extends BaseController{
                                     //根据连续签到天数查询签到奖励
                                     StaticGoldConfig staticGoldConfig = signInService.getSignInGold(1);
                                     int gold = Integer.parseInt(staticGoldConfig.getValue());
-                                    userService.addUserGoldRecord(source,userId, Long.valueOf(gold), null);
+                                    userService.addUserGoldRecord(source,userId, gold, null);
                                     userService.updateUserInfo(userId, gold);
                                     dataMap.put("result", "success");
                                     dataMap.put("msg", "正常签到");
@@ -124,7 +124,7 @@ public class SignInController extends BaseController{
                                 //根据连续签到天数查询签到奖励
                                 StaticGoldConfig staticGoldConfig = signInService.getSignInGold(1);
                                 int gold = Integer.parseInt(staticGoldConfig.getValue());
-                                userService.addUserGoldRecord(source,userId, Long.valueOf(gold), null);
+                                userService.addUserGoldRecord(source,userId, gold, null);
                                 userService.updateUserInfo(userId, gold);
                                 dataMap.put("result", "success");
                                 dataMap.put("msg", "未连续签到，从头开始签到");

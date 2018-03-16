@@ -47,7 +47,7 @@ public class ChannelManageController extends BaseController{
      * @return
      */
     //@RequestMapping(value = ChannelMsgReq.CHANNEL_MANAGE_REQ, method = RequestMethod.GET)
-    public Map<Object,Object> listChannelsPage(final String name, final Integer status, final Integer page, final Integer limit){
+    /*public Map<Object,Object> listChannelsPage(final String name, final Integer status, final Integer page, final Integer limit){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
@@ -71,7 +71,7 @@ public class ChannelManageController extends BaseController{
         });
 
         return dataMap;
-    }
+    }*/
 
     /**
      * 获取导航列表
@@ -315,7 +315,7 @@ public class ChannelManageController extends BaseController{
      * 获取一级标签列表
      * @return
      */
-    @RequestMapping(value = ChannelMsgReq.FIRST_LEVEL_LABEL, method = RequestMethod.GET)
+    /*@RequestMapping(value = ChannelMsgReq.FIRST_LEVEL_LABEL, method = RequestMethod.GET)
     public Map<Object,Object> firstLabelPage(final String name, final Integer status, final Integer page, final Integer limit){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
@@ -340,7 +340,7 @@ public class ChannelManageController extends BaseController{
         });
 
         return dataMap;
-    }
+    }*/
 
 
 }

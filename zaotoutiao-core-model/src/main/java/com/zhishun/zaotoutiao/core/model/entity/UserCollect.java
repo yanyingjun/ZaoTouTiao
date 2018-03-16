@@ -1,66 +1,122 @@
 package com.zhishun.zaotoutiao.core.model.entity;
 
+import java.util.Date;
+
 public class UserCollect {
     private Long id;
 
     private Long userId;
 
-    private String infosId;
+    private String title;
 
     private String createDate;
 
-    /**
-     * Getter method for property <tt>id</tt>.
-     *
-     * @return property value of id
-     */
+    private String filter;
+
+    private String url;
+
+    private String author;
+
+    private String rawUrl;
+
+    private String channel;
+
+    private String source;
+
+    private String style;
+
+    private String picUrl;
+
+    private String publishDate;
+
+    private String infosType;
+
     public Long getId() {
         return id;
     }
 
-    /**
-     * Setter method for property <tt>id</tt>.
-     *
-     * @param id value to be assigned to property id
-     */
     public void setId(Long id) {
         this.id = id;
     }
 
-    /**
-     * Getter method for property <tt>userId</tt>.
-     *
-     * @return property value of userId
-     */
     public Long getUserId() {
         return userId;
     }
 
-    /**
-     * Setter method for property <tt>userId</tt>.
-     *
-     * @param userId value to be assigned to property userId
-     */
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    /**
-     * Getter method for property <tt>infosId</tt>.
-     *
-     * @return property value of infosId
-     */
-    public String getInfosId() {
-        return infosId;
+    public String getTitle() {
+        return title;
     }
 
-    /**
-     * Setter method for property <tt>infosId</tt>.
-     *
-     * @param infosId value to be assigned to property infosId
-     */
-    public void setInfosId(String infosId) {
-        this.infosId = infosId;
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
+    }
+
+    public String getFilter() {
+        return filter;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter == null ? null : filter.trim();
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url == null ? null : url.trim();
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author == null ? null : author.trim();
+    }
+
+    public String getRawUrl() {
+        return rawUrl;
+    }
+
+    public void setRawUrl(String rawUrl) {
+        this.rawUrl = rawUrl == null ? null : rawUrl.trim();
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel == null ? null : channel.trim();
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source == null ? null : source.trim();
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style == null ? null : style.trim();
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl == null ? null : picUrl.trim();
     }
 
     /**
@@ -79,5 +135,41 @@ public class UserCollect {
      */
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    /**
+     * Getter method for property <tt>publishDate</tt>.
+     *
+     * @return property value of publishDate
+     */
+    public String getPublishDate() {
+        return publishDate;
+    }
+
+    /**
+     * Setter method for property <tt>publishDate</tt>.
+     *
+     * @param publishDate value to be assigned to property publishDate
+     */
+    public void setPublishDate(String publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    /**
+     * Getter method for property <tt>infosType</tt>.
+     *
+     * @return property value of infosType
+     */
+    public String getInfosType() {
+        return infosType;
+    }
+
+    /**
+     * Setter method for property <tt>infosType</tt>.
+     *
+     * @param infosType value to be assigned to property infosType
+     */
+    public void setInfosType(String infosType) {
+        this.infosType = infosType;
     }
 }

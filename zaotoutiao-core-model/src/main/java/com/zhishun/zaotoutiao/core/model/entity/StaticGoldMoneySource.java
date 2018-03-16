@@ -40,17 +40,6 @@ public class StaticGoldMoneySource implements Serializable {
     private String type;
 
     /**
-     * 构造方法
-     */
-    public StaticGoldMoneySource(Integer id, Integer source, String explanation, String details, String type) {
-        this.id = id;
-        this.source = source;
-        this.explanation = explanation;
-        this.details = details;
-        this.type = type;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

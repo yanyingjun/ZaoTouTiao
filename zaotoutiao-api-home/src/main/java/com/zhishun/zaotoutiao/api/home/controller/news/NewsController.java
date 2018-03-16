@@ -10,14 +10,17 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.NewsMsgReq;
-import com.zhishun.zaotoutiao.biz.service.ICommentService;
+import com.zhishun.zaotoutiao.biz.service.ICommentsService;
 import com.zhishun.zaotoutiao.biz.service.INewsService;
+import com.zhishun.zaotoutiao.biz.service.IVideoService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
-import com.zhishun.zaotoutiao.core.model.entity.Content;
+import com.zhishun.zaotoutiao.core.model.entity.UserCollect;
+import com.zhishun.zaotoutiao.core.model.enums.ChannelEnum;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,7 +41,10 @@ public class NewsController extends BaseController{
     private INewsService iNewsService;
 
     @Autowired
-    private ICommentService iCommentService;
+    private IVideoService videoService;
+
+    @Autowired
+    private ICommentsService iCommentService;
 
     /**
      * 获取新闻列表
@@ -47,7 +53,7 @@ public class NewsController extends BaseController{
      * @param channelId
      * @return
      */
-    @RequestMapping(value = NewsMsgReq.NEWS_GET_REQ , method = RequestMethod.GET)
+    /*@RequestMapping(value = NewsMsgReq.NEWS_GET_REQ , method = RequestMethod.GET)
     public Map<Object,Object> getNews(final int pageNo, final int pageSize, final int channelId){
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
@@ -72,13 +78,13 @@ public class NewsController extends BaseController{
             }
         });
         return dataMap;
-    }
+    }*/
 
     /**
      * 获取新闻分类列表
      * @return
      */
-    @RequestMapping(value = NewsMsgReq.NEWS_CHANNELS_REQ, method = RequestMethod.POST)
+    @RequestMapping(value = NewsMsgReq.NEWS_CHANNELS_REQ, method = RequestMethod.GET)
     public Map<Object,Object> getNewsChannles(){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
@@ -90,7 +96,7 @@ public class NewsController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                List<Channels> list = iNewsService.listChannels();
+                List<Channels> list = videoService.listVideoChannels(1, ChannelEnum.NEWS.getValue());
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取新闻分类列表成功");
                 dataMap.put("data", list);
@@ -104,7 +110,7 @@ public class NewsController extends BaseController{
      * @param infoId
      * @return
      */
-    @RequestMapping(value = NewsMsgReq.NEWS_CONTENT_REQ, method = RequestMethod.POST)
+    /*@RequestMapping(value = NewsMsgReq.NEWS_CONTENT_REQ, method = RequestMethod.POST)
     public Map<Object,Object> getNewsContent(final String infoId){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
@@ -123,7 +129,7 @@ public class NewsController extends BaseController{
             }
         });
         return dataMap;
-    }
+    }*/
 
     /**
      * 获取最新评论和评论点赞信息
@@ -133,7 +139,7 @@ public class NewsController extends BaseController{
      * @param pageSize
      * @return
      */
-    @RequestMapping(value = NewsMsgReq.NEW_COMMENT_REQ, method = RequestMethod.POST)
+    @RequestMapping(value = NewsMsgReq.NEW_COMMENT_REQ, method = RequestMethod.GET)
     public Map<Object,Object> getNewsComment(final String infoId, final int userId, final int pageNo, final int pageSize){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
@@ -148,12 +154,12 @@ public class NewsController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                List<InfosVo> commentVOList = iCommentService.getNewCommentVO(infoId,userId,pageNo,pageSize);
+                List<UserCommentsVO> commentVOList = iCommentService.getNewCommentVO(infoId,userId,pageNo,pageSize);
                 //循环添加isMyLike（自己是否点赞）
-                for(InfosVo infosVo:commentVOList){
-                    int commentsId = infosVo.getCommentsId();
+                for(UserCommentsVO userCommentsVO:commentVOList){
+                    Long commentsId = userCommentsVO.getId();
                     Boolean isMyLike = iCommentService.isMyLike(userId,commentsId);
-                    infosVo.setMyLike(isMyLike);
+                    userCommentsVO.setMyLike(isMyLike);
                 }
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取最新评论和评论点赞信息成功");
@@ -186,12 +192,12 @@ public class NewsController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                List<InfosVo> commentVOList = iCommentService.getHotCommentVO(infoId,userId,pageNo,pageSize);
+                List<UserCommentsVO> commentVOList = iCommentService.getHotCommentVO(infoId,userId,pageNo,pageSize);
                 //循环添加commentsId
-                for(InfosVo infosVo:commentVOList){
-                    int commentsId = infosVo.getCommentsId();
+                for(UserCommentsVO userCommentsVO:commentVOList){
+                    Long commentsId = userCommentsVO.getId();
                     Boolean isMyLike = iCommentService.isMyLike(userId,commentsId);
-                    infosVo.setMyLike(isMyLike);
+                    userCommentsVO.setMyLike(isMyLike);
                 }
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取热门评论和评论点赞信息成功");
@@ -209,7 +215,7 @@ public class NewsController extends BaseController{
      * @param pageSize
      * @return
      */
-    @RequestMapping(value = NewsMsgReq.SEARCH_NEWS, method = RequestMethod.POST)
+    /*@RequestMapping(value = NewsMsgReq.SEARCH_NEWS, method = RequestMethod.POST)
     public Map<Object,Object> searchNews(final String keyword, final int pageNo, final int pageSize){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
@@ -237,32 +243,31 @@ public class NewsController extends BaseController{
         });
 
         return dataMap;
-    }
+    }*/
 
     /**
      * 获取收藏列表
-     * @param infoType
+     * @param infoType news：新闻; video:视频
      * @param userId
      * @param pageNo
      * @param pageSize
      * @return
      */
     @RequestMapping(value = NewsMsgReq.COLLECT_GET, method = RequestMethod.GET)
-    public Map<Object,Object> collectGet(final String infoType, final int userId, final int pageNo, final int pageSize){
+    public Map<Object,Object> collectGet(final String infosType, final int userId, final int pageNo, final int pageSize){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
-                AssertsUtil.isNotNull(infoType, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotNull(infosType, ErrorCodeEnum.PARAMETER_ANOMALY);
                 AssertsUtil.isNotNull(userId, ErrorCodeEnum.PARAMETER_ANOMALY);
                 AssertsUtil.isNotNull(pageNo, ErrorCodeEnum.PARAMETER_ANOMALY);
-                AssertsUtil.isNotNull(pageSize, ErrorCodeEnum.PARAMETER_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
-                List<InfosVo> infosVoList = iNewsService.getCollectList(infoType,userId,pageNo,pageSize);
+                List<UserCollect> infosVoList = iNewsService.getCollectList(infosType,userId,pageNo,pageSize);
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取收藏列表成功");
                 dataMap.put("date", infosVoList);

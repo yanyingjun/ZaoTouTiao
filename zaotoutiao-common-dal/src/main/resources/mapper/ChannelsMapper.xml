@@ -193,9 +193,6 @@
         and status = #{status}
       </if>
     </where>
-    <if test="offset !=null and limit !=null">
-      limit #{offset,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
-    </if>
   </select>
 
   <select id="countChannels" resultType="int" parameterType="map">
@@ -277,4 +274,26 @@
     </where>
     order by channelOrder asc
   </select>
+
+  <select id="getChannelsByChannelId" parameterType="string" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM channels
+    WHERE channelId = #{channelId}
+
+  </select>
+
+  <select id="listVideoChannels" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM channels
+    <where>
+      <if test="status != null">
+        status = #{status}
+      </if>
+      <if test="appType != null">
+        and appType = #{appType}
+      </if>
+    </where>
+  </select>
+
 </mapper>

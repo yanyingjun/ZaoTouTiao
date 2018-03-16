@@ -7,15 +7,24 @@
 package com.zhishun.zaotoutiao.biz.service.impl;
 
 import com.google.common.collect.Maps;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.zhishun.zaotoutiao.biz.service.IUserReadService;
-import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
-import com.zhishun.zaotoutiao.dal.mapper.*;
+import com.zhishun.zaotoutiao.biz.service.IUserService;
+import com.zhishun.zaotoutiao.common.util.DateUtil;
+import com.zhishun.zaotoutiao.common.util.LoggerUtils;
+import com.zhishun.zaotoutiao.core.model.entity.*;
+import com.zhishun.zaotoutiao.dal.mapper.ExchangeRateMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserInformationMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserJpushMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserReadRecordMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +51,7 @@ public class UserReadServiceImpl implements IUserReadService {
     private ExchangeRateMapper exchangeRateMapper;
 
     @Autowired
-    private UserMapper userMapper;
+    private IUserService userService;
 
     @Override
     public boolean isUserRead(String id, Long userId, String type) {
@@ -134,6 +143,11 @@ public class UserReadServiceImpl implements IUserReadService {
         //}
     }
 
+    @Override
+    public UserReadRecord getUserReadRecord(Map map) {
+        return userReadRecordMapper.getUserReadRecord(map);
+    }
+
     /**
      * 判断用户是否浏览过该新闻
      * @param userId
@@ -158,5 +172,91 @@ public class UserReadServiceImpl implements IUserReadService {
      */
     private int getNewbieReadTime(){
         return exchangeRateMapper.getNewbieReadTime();
+    }
+
+    @Override
+    public int CountReadRecord(Long userId){
+        return userReadRecordMapper.isContinuousReadToday(userId);
+    }
+
+    @Override
+    public UserReadRecord maxReadRecord(Long userId) {
+        return userReadRecordMapper.maxReadRecord(userId);
+    }
+
+    @Override
+    @Transactional(rollbackFor={RuntimeException.class, Exception.class})
+    public void readAddGold(Long userId, int gold, User user, ExchangeRate exchangeRate, UserReadRecord userReadRecord){
+        //添加自己阅读金币和金币记录
+        //新闻阅读奖励类型
+
+        int source = 1;
+        userService.addUserGoldRecord(source, userId, gold, null);
+
+        //更新用户金币
+        userService.updateUserInfo(userId, gold);
+        //添加阅读记录
+        userReadRecord.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+        userReadRecordMapper.insertSelective(userReadRecord);
+
+        //判断是否有师傅
+        Long parentId = user.getParentId();
+        if(!StringUtils.isEmpty(parentId) && parentId != 0){
+            //判断是否已经阅读超过五篇文章，确定是否有师徒关系
+            //List<UserReadRecord> listURR = userService.isReadFive(userId);
+
+            //为父类添加金币
+
+            //添加金币和金币记录
+            //这里把父类id当作用户id,用户id当作徒弟id,添加的金币作为阅读进贡
+            //添加徒弟阅读进贡金币记录
+            //徒弟新闻阅读进贡奖励类型
+            userService.addUserGoldRecord(2,parentId, gold, userId);
+            //更新用户金币
+            userService.updateUserInfo(parentId, gold);
+
+            //--------收徒奖励 --------
+            //获取配置,判断师傅是否是首次收徒
+            List<User> user4 = userService.isParentFirstRecruit(parentId);
+            if(StringUtils.isEmpty(user4)){
+                //给师傅添加收徒奖励和奖励记录（首次）
+                Integer parentGoldNum = exchangeRate.getNewbieRecruitGold();
+                BigDecimal parentMoneyNum = exchangeRate.getNewbieRecruitMoney();
+                //添加金币和金币记录
+                userService.addUserGoldRecord(9,parentId, parentGoldNum, userId);
+                //更新用户金币
+                userService.updateUserInfo(parentId, parentGoldNum);
+                //添加零钱和零钱记录
+                userService.addUserMoneyRecord(3, parentId, parentMoneyNum, userId);
+                userService.updateUserMoneyRecord(parentId, parentMoneyNum);
+            }else{
+                //判断师傅已经收到自己的收徒奖励
+                UserGoldRecord userGoldRecord1 = userService.isGiveParentRecruitGold(userId, parentId);
+                if(StringUtils.isEmpty(userGoldRecord1)){
+                    //给师傅添加收徒奖励和奖励记录（普通）
+                    BigDecimal goldNum = new BigDecimal(gold).multiply(new BigDecimal(2));
+                    userService.addUserGoldRecord(6,parentId, goldNum.intValue(), userId);
+                    userService.updateUserInfo(parentId, goldNum.intValue());
+                }
+            }
+            //判断三天内是否添加过唤醒金币
+            UserGoldRecord userGoldRecord = userService.getWeekupThreeDayGetGold(userId, 13);
+            if(StringUtils.isEmpty(userGoldRecord)){
+                //判断三天内是否有师傅唤醒自己
+                // 被唤醒类型
+                String type = "AWAKEN";
+                UserShare userShare = userService.getWeekupThreeDay(userId, type);
+                if(!StringUtils.isEmpty(userShare)){
+                    //添加金币和金币记录
+                    //给师傅添加唤醒徒弟奖励金币
+                    userService.addUserGoldRecord(12,parentId, exchangeRate.getAwakenParentGold(), userId);
+                    userService.updateUserInfo(parentId, exchangeRate.getAwakenParentGold().intValue());
+                    //给师徒弟加被唤醒奖励金币
+                    userService.addUserGoldRecord(13,userId, exchangeRate.getAwakenUserGold(), userId);
+                    userService.updateUserInfo(userId, exchangeRate.getAwakenUserGold().intValue());
+                }
+            }
+        }
+
     }
 }

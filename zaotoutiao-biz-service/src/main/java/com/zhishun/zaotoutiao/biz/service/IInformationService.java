@@ -2,6 +2,7 @@ package com.zhishun.zaotoutiao.biz.service;
 
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.UserInformation;
+import com.zhishun.zaotoutiao.core.model.entity.UserInformationTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ public interface IInformationService {
      * 获取新用户消息模版
      * @return
      */
-    List<UserInformation> listInformationNew();
+    List<UserInformationTemplate> listInformationNew();
 
     /**
      * 添加消息和公告

@@ -58,36 +58,6 @@ public class Infos implements Serializable {
 
     private Date createTime;
 
-    public Infos(Long id, String infoid, String infotype, String alginfo, Integer channelid, Integer catinfoid, String catinfoname, String hasvideo, Integer imgtype, String producer, Date publishtime, String recid, String source, String thumbnails, String title, Date updatetime, String videos, String summary, String tripleimgs, String h5url, String webUrl, Integer hascontent, Date createDate, Byte ishot, Date pushDate, Byte directIn, Date createTime) {
-        this.id = id;
-        this.infoid = infoid;
-        this.infotype = infotype;
-        this.alginfo = alginfo;
-        this.channelid = channelid;
-        this.catinfoid = catinfoid;
-        this.catinfoname = catinfoname;
-        this.hasvideo = hasvideo;
-        this.imgtype = imgtype;
-        this.producer = producer;
-        this.publishtime = publishtime;
-        this.recid = recid;
-        this.source = source;
-        this.thumbnails = thumbnails;
-        this.title = title;
-        this.updatetime = updatetime;
-        this.videos = videos;
-        this.summary = summary;
-        this.tripleimgs = tripleimgs;
-        this.h5url = h5url;
-        this.webUrl = webUrl;
-        this.hascontent = hascontent;
-        this.createDate = createDate;
-        this.ishot = ishot;
-        this.pushDate = pushDate;
-        this.directIn = directIn;
-        this.createTime = createTime;
-    }
-
     public Infos() {
         super();
     }

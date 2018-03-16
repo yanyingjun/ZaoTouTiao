@@ -134,7 +134,7 @@ public interface IUserService {
      * @param apprenticeId
      * @return
      */
-    int addUserGoldRecord(int source, Long userId, Long gold, Long apprenticeId);
+    int addUserGoldRecord(int source, Long userId, int gold, Long apprenticeId);
 
     /**
      * 三天未活跃用户列表,每页50
@@ -143,14 +143,6 @@ public interface IUserService {
      * @return
      */
     Page<UserVO> getWakeUpApprenticePage(Long userId, PageRequest pageRequest);
-
-    /**
-     * 判断用户是否阅读过该新闻，并请求加过金币
-     * @param userId
-     * @param infoId
-     * @return
-     */
-    int isRead(Long userId, Long infoId);
 
     /**
      * 判断是否超过活动时间
@@ -201,7 +193,7 @@ public interface IUserService {
      * @param userId
      * @return
      */
-    User isParentFirstRecruit(Long userId);
+    List<User> isParentFirstRecruit(Long userId);
 
     /**
      * 给师傅添加收徒奖励零钱和奖励记录零钱（首次）
@@ -314,7 +306,7 @@ public interface IUserService {
      * @param wechatName
      * @return
      */
-    int addUser(String telephone, String password, String wechatId, String wechatHead, String wechatName);
+    Long addUser(String telephone, String password, String wechatId, String wechatHead, String wechatName);
 
     /**
      * 用户信息修改（绑定微信）
@@ -346,7 +338,7 @@ public interface IUserService {
      * @param password
      * @return
      */
-    int addUserInfo(String telephone, String password);
+    Long addUserInfo(String telephone, String password, Integer platformId, Integer channelId, String address);
 
     /**
      * 可提现用户列表
@@ -357,6 +349,6 @@ public interface IUserService {
      * @param pageRequest
      * @return
      */
-    Page<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal money, PageRequest pageRequest);
+    Page<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal minMoney, BigDecimal maxMoney, PageRequest pageRequest);
 
 }

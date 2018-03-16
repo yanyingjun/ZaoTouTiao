@@ -41,17 +41,6 @@ public class StaticRecruitMoney implements Serializable {
     private Integer rank;
 
     /**
-     * 构造方法
-     */
-    public StaticRecruitMoney(Long id, Long unit, BigDecimal money, String createDate, Integer rank) {
-        this.id = id;
-        this.unit = unit;
-        this.money = money;
-        this.createDate = createDate;
-        this.rank = rank;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

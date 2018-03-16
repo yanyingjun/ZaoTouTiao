@@ -15,7 +15,7 @@ public class ArticleTemplate {
             "<head>\n" +
             "    <meta charset='utf-8'>\n" +
             "    <meta http-equiv='X-UA-Compatible' content='IE=edge'>\n" +
-            "    <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' >  \n" +
+            "    <meta name='viewport' content='width=Device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' >  \n" +
             "    <title>$title</title>\n" +
             "    <style type='text/css'>\n" +
             "\n" +

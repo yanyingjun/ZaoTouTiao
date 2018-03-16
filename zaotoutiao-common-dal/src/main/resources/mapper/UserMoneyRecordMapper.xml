@@ -146,7 +146,7 @@
   <select id="getUserMoneyRecord" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select u.id, u.userId, u.type, u.source, u.create_date, u.apprenticeId, s.explanation,s.details
     from user_money_record as u
-    LEFT JOIN static_gold_money_source as s ON u.source == s.source
+    LEFT JOIN static_gold_money_source as s ON u.source = s.source
     WHERE s.type = 'money' and u.userId = #{userId}
     and TO_DAYS( NOW( ) ) - TO_DAYS(u.create_date) &lt;= 3  order by u.create_date desc
   </select>

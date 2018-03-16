@@ -33,7 +33,7 @@ public class UserGoldRecord implements Serializable {
     /**
      * 增加或减少的金币
      */
-    private Long gold;
+    private Integer gold;
 
     /**
      * 来源去向（0:注册登录, 1:新闻阅读, 2:徒弟阅读进贡, 3:签到, 4:开宝箱, 5:评论,6:收徒,7:金币转换零钱, 8:新手阅读，9首次收徒，10分享收徒,  11分享文章， 12，唤醒徒弟(师傅奖励) ，13，被唤醒(徒弟奖励)，14，晒收入）
@@ -119,7 +119,7 @@ public class UserGoldRecord implements Serializable {
      *
      * @return property value of gold
      */
-    public Long getGold() {
+    public Integer getGold() {
         return gold;
     }
 
@@ -128,7 +128,7 @@ public class UserGoldRecord implements Serializable {
      *
      * @param gold value to be assigned to property gold
      */
-    public void setGold(Long gold) {
+    public void setGold(Integer gold) {
         this.gold = gold;
     }
 

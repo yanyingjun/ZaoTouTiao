@@ -7,9 +7,6 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IChannelService;
-import com.zhishun.zaotoutiao.common.base.pagination.Page;
-import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
-import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.BeanMapUtil;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
@@ -40,19 +37,13 @@ public class ChannelServiceImpl implements IChannelService{
     private UserChannelsMapper userChannelsMapper;
 
     @Override
-    public Page<Channels> listChannelsPage(ChannelsVO channelsVO, PageRequest pageRequest) {
+    public List<Channels> listChannels(ChannelsVO channelsVO) {
         Map<String,Object> map = Maps.newHashMap();
         if(!StringUtils.isEmpty(channelsVO)){
             map.put("name", channelsVO.getName());
             map.put("status", channelsVO.getStatus());
         }
-        int total = channelsMapper.countChannels(map);
-        if (pageRequest != null) {
-            map.put("limit", pageRequest.getPageSize());
-            map.put("offset", pageRequest.getOffset());
-        }
-        List<Channels> list = channelsMapper.listChannelsPage(map);
-        return PageBuilder.buildPage(pageRequest, list, total);
+        return channelsMapper.listChannelsPage(map);
     }
 
     @Override
@@ -72,7 +63,7 @@ public class ChannelServiceImpl implements IChannelService{
         channels.setChannelType(channelsVO.getChannelOrder());
         channels.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
         channels.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
-        channels.setStatus(0);
+        channels.setStatus(1);
         return channelsMapper.insertSelective(channels);
     }
 
@@ -157,12 +148,32 @@ public class ChannelServiceImpl implements IChannelService{
      */
     @Override
     public int addTheChannel(Channels channels) {
+        channels.setParentId(0L);
         channels.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
         channels.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
         //新增排序数字最大，排在最后面
         channels.setChannelOrder(channelsMapper.getMaxOrder().getChannelOrder()+1);
         return channelsMapper.insertSelective(channels);
     }
+
+    @Override
+    public int addVideoChannel(Channels channels) {
+        return channelsMapper.insertSelective(channels);
+    }
+
+    @Override
+    public Channels getChannelsByChannelId(String channelId) {
+        return channelsMapper.getChannelsByChannelId(channelId);
+    }
+
+    @Override
+    public int updateUserChannelByUserId(Long userId, String channels){
+        Map map = Maps.newHashMap();
+        map.put("userId", userId);
+        map.put("channels", channels);
+        return userChannelsMapper.updateUserChannels(map);
+    }
+
 
     @Override
     public List<ChannelsVO> getTabs(String name, Long parentId, Integer appType) {

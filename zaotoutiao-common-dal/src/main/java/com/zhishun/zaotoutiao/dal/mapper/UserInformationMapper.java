@@ -70,13 +70,6 @@ public interface UserInformationMapper {
     List<UserInformation> listInformationPage(Map map);
 
     /**
-     * 获取新用户消息模版
-     * @return
-     */
-    List<UserInformation> listInformationNew();
-
-
-    /**
      * 修改用户消息表为已读
      * @param map
      * @return

@@ -14,9 +14,10 @@ import com.zhishun.zaotoutiao.biz.service.IVideoService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Advertisement;
+import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.entity.Infos;
 import com.zhishun.zaotoutiao.core.model.entity.UserComments;
-import com.zhishun.zaotoutiao.core.model.entity.VideoChannels;
+import com.zhishun.zaotoutiao.core.model.enums.ChannelEnum;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
@@ -50,7 +51,7 @@ public class VideoController extends BaseController{
      * 获取视频分类列表
      * @return
      */
-    @RequestMapping(value = VideoMsgReq.VIDEO_CHANNELS_REQ, method = RequestMethod.POST)
+    @RequestMapping(value = VideoMsgReq.VIDEO_CHANNELS_REQ, method = RequestMethod.GET)
     public Map<Object,Object> getVideoChannles(){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
@@ -62,7 +63,7 @@ public class VideoController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                List<VideoChannels> list = videoService.listVideoChannels();
+                List<Channels> list = videoService.listVideoChannels(1, ChannelEnum.VIDEO.getValue());
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取视频分类列表成功");
                 dataMap.put("data", list);
@@ -74,7 +75,7 @@ public class VideoController extends BaseController{
     /**
      * 获取视频新闻列表
      * @return
-     */
+     *//*
     @RequestMapping(value = VideoMsgReq.VIDEO_GET_REQ, method = RequestMethod.GET)
     public Map<Object,Object> getVideos(final int pageNo, final int pageSize, final int channelId){
 
@@ -97,7 +98,7 @@ public class VideoController extends BaseController{
         });
 
         return dataMap;
-    }
+    }*/
 
     /**
      * 获取视频相关内容
@@ -105,7 +106,7 @@ public class VideoController extends BaseController{
      * @param infoId
      * @return
      */
-    @RequestMapping(value = VideoMsgReq.VIDEO_RALATED, method = RequestMethod.GET)
+    /*@RequestMapping(value = VideoMsgReq.VIDEO_RALATED, method = RequestMethod.GET)
     public Map<Object,Object> videoRalated(final int channelId, final String infoId){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
@@ -148,7 +149,7 @@ public class VideoController extends BaseController{
 
         return dataMap;
 
-    }
+    }*/
 
     /**
      * 视频类新闻详情页-webview
@@ -157,7 +158,7 @@ public class VideoController extends BaseController{
      * @param isShare
      * @return
      */
-    @RequestMapping(value = VideoMsgReq.VIEW_VIDEO_HTML, method = RequestMethod.GET)
+    /*@RequestMapping(value = VideoMsgReq.VIEW_VIDEO_HTML, method = RequestMethod.GET)
     public Map<Object,Object> viewVideoHtml(final String infoId, final Long userId, final String isShare){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
@@ -185,7 +186,7 @@ public class VideoController extends BaseController{
                             "<head>\n" +
                             "    <meta charset='utf-8'>\n" +
                             "    <meta http-equiv='X-UA-Compatible' content='IE=edge'>\n" +
-                            "    <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' >  \n" +
+                            "    <meta name='viewport' content='width=Device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' >  \n" +
                             "    <title>"+title+"</title>\n" +
                             "    <link rel='stylesheet' href='https://g.alicdn.com/de/prismplayer/1.7.4/skins/default/index.css' />\n" +
                             "    <link rel='stylesheet' type='text/css' href='http://www.ijquery.cn/css/css.css' media='all' />\n" +
@@ -195,7 +196,7 @@ public class VideoController extends BaseController{
                             "    \n" +
                             "    <style type='text/css'>\n" +
                             "\n" +
-                            "        /* index */\n" +
+                            "        /* index *//*n +
                             "        #main_box{\n" +
                             "            min-height: 100%;\n" +
                             "            width: 98%;\n" +
@@ -312,7 +313,7 @@ public class VideoController extends BaseController{
                             "    \n" +
                             "    <video controls poster="+images+" style='width:100%;min-height:200px;height:auto;'>\n" +
                             "       <source src="+content+" type='video/mp4'>\n" +
-                            "       Your browser does not support the video tag.\n" +
+                            "       Your Browser does not support the video tag.\n" +
                             "    </video> \n" +
                             "    \n" +
                             "    <div id='main_box' class='container row'>\n" +
@@ -397,7 +398,7 @@ public class VideoController extends BaseController{
                             "        }]\n" +
                             "    });\n" +
                             "    \n" +
-                            "    */\n" +
+                            "    *//*n +
                             "\n" +
                             "\n" +
                             "</script>\n" +
@@ -407,7 +408,7 @@ public class VideoController extends BaseController{
                             "</body>\n" +
                             "\n" +
                             "</html>";
-                    String strHtml2 = "<link rel='stylesheet' href='https://g.alicdn.com/de/prismplayer/1.7.4/skins/default/index.css' />\n" +
+                    /*String strHtml2 = "<link rel='stylesheet' href='https://g.alicdn.com/de/prismplayer/1.7.4/skins/default/index.css' />\n" +
                             "    <link rel='stylesheet' type='text/css' href='http://www.ijquery.cn/css/css.css' media='all' />\n" +
                             "    <script src='https://g.alicdn.com/de/prismplayer/1.7.4/prism-h5-min.js'></script>\n" +
                             "    <script src='http://daoyi-content.oss-cn-hangzhou.aliyuncs.com/js/html5media.js'></script>";
@@ -418,7 +419,7 @@ public class VideoController extends BaseController{
         });
 
         return dataMap;
-    }
+    }*/
 
 
 }

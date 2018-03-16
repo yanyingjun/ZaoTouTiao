@@ -14,11 +14,6 @@ import java.util.Map;
 public interface IArticleService {
 
     /**
-     * 添加评论
-     */
-    int addComments(UserComments userComments);
-
-    /**
      * 根据ID获取评论
      * @param id
      * @return

@@ -182,7 +182,7 @@
   </select>
 
   <select id="getGoldAll" parameterType="java.lang.Long" resultType="decimal">
-    SELECT SUM(gold) as goldCount as count FROM user_gold_record WHERE userId = #{userId}
+    SELECT SUM(gold) as goldCount FROM user_gold_record WHERE userId = #{userId}
     AND type = 1 group by userId
   </select>
 

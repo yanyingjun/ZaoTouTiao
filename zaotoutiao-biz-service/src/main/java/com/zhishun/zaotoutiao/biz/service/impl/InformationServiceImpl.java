@@ -8,7 +8,9 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IInformationService;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.UserInformation;
+import com.zhishun.zaotoutiao.core.model.entity.UserInformationTemplate;
 import com.zhishun.zaotoutiao.dal.mapper.UserInformationMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserInformationTemplateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -26,6 +28,9 @@ public class InformationServiceImpl implements IInformationService{
     @Autowired
     private UserInformationMapper userInformationMapper;
 
+    @Autowired
+    private UserInformationTemplateMapper userInformationTemplateMapper;
+
 
 
     @Override
@@ -41,8 +46,8 @@ public class InformationServiceImpl implements IInformationService{
     }
 
     @Override
-    public List<UserInformation> listInformationNew() {
-        return userInformationMapper.listInformationNew();
+    public List<UserInformationTemplate> listInformationNew() {
+        return userInformationTemplateMapper.listInformationNew();
     }
 
     @Override

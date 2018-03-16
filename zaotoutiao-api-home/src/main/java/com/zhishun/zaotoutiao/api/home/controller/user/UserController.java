@@ -11,10 +11,7 @@ import com.zhishun.zaotoutiao.api.home.request.UserMsgReq;
 import com.zhishun.zaotoutiao.biz.service.*;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
-import com.zhishun.zaotoutiao.common.util.AssertsUtil;
-import com.zhishun.zaotoutiao.common.util.BeanMapUtil;
-import com.zhishun.zaotoutiao.common.util.DateUtil;
-import com.zhishun.zaotoutiao.common.util.Md5Util;
+import com.zhishun.zaotoutiao.common.util.*;
 import com.zhishun.zaotoutiao.core.model.entity.ExchangeRate;
 import com.zhishun.zaotoutiao.core.model.entity.StaticFakeData;
 import com.zhishun.zaotoutiao.core.model.entity.User;
@@ -65,6 +62,9 @@ public class UserController extends BaseController{
     @Autowired
     private IInformationService iInformationService;
 
+    @Autowired
+    private IUserReadService userReadService;
+
     /**
      * 用户注册
      * @param telephone
@@ -72,7 +72,7 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_REGISTER_REQ, method = RequestMethod.POST)
-    public Map<Object, Object> search(final String telephone, final String password) {
+    public Map<Object, Object> search(final String telephone, final String password, final Integer platformId, final Integer channelId, final String address) {
 
         // 定义Map集合对象
         final Map<Object, Object> dataMap = Maps.newHashMap();
@@ -89,14 +89,18 @@ public class UserController extends BaseController{
                 User user = userService.getUserByMap(telephone);
                 if(StringUtils.isEmpty(user)){
                     dataMap.put("msg", "新增用户成功");
-                    int userId = userService.addUserInfo(telephone, password);
+                    Long userId = userService.addUserInfo(telephone, password, platformId, channelId, address);
                     //为用户添加消息和公告
-                    List<UserInformation> listInformation = iInformationService.listInformationNew();
-                    for(UserInformation userInfo : listInformation){
-                        userInfo.setUserId(Long.valueOf(userId));
-                        iInformationService.addUserInformation(userInfo);
+                    List<UserInformationTemplate> listInformation = iInformationService.listInformationNew();
+                    for(UserInformationTemplate userInfo : listInformation){
+                        UserInformation userInformation = new UserInformation();
+                        BeanMapUtil.copy(userInfo, userInformation);
+                        userInformation.setUserId(userId);
+                        userInformation.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                        iInformationService.addUserInformation(userInformation);
                     }
-                    dataMap.put("data", user);
+                    User userData = userService.getUserByMap(telephone);
+                    dataMap.put("data", userData);
                 }else{
                     dataMap.put("msg", "用户已存在，请直接登录");
                     dataMap.put("data", null);
@@ -113,7 +117,7 @@ public class UserController extends BaseController{
      * @param telephone
      * @return
      */
-    @RequestMapping(value = UserMsgReq.USER_EXIST_ACCOUNT_REQ, method = RequestMethod.POST)
+    @RequestMapping(value = UserMsgReq.USER_EXIST_ACCOUNT_REQ, method = RequestMethod.GET)
     public Map<Object,Object> existAccount(final String telephone){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
@@ -162,7 +166,7 @@ public class UserController extends BaseController{
                 //查询用户信息
                 String password = Md5Util.md5Encode(user.getPassword());
                 User userData = userService.getUserByMap(user.getTelephone());
-                if(StringUtils.isEmpty(user)){
+                if(StringUtils.isEmpty(userData)){
                     dataMap.put("result", "failure");
                     dataMap.put("msg", "用户不存在，请先注册");
                 }else{
@@ -180,6 +184,7 @@ public class UserController extends BaseController{
                             dataMap.put("isFirstLogin", "false");
                         }
                         userData.setIsOnline(1);
+                        userData.setLastVisitDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
                         userService.updateUser(userData);
                         dataMap.put("data", userData);
                     }
@@ -296,9 +301,7 @@ public class UserController extends BaseController{
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
-                AssertsUtil.isNotBlank(userVO.getBirthday(),ErrorCodeEnum.PARAMETER_ANOMALY);
-                AssertsUtil.isNotBlank(userVO.getHeadPath(),ErrorCodeEnum.PARAMETER_ANOMALY);
-                AssertsUtil.isNotBlank(userVO.getNickName(),ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotZero(userVO.getUserId(), ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override
@@ -307,9 +310,11 @@ public class UserController extends BaseController{
                 Pattern emoji = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
                         Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
                 String nickName = userVO.getNickName();
-                Matcher emojiMatcher = emoji.matcher(nickName);
-                if (emojiMatcher.find()) {
-                    nickName = emojiMatcher.replaceAll("*");
+                if(!StringUtils.isEmpty(nickName)){
+                    Matcher emojiMatcher = emoji.matcher(nickName);
+                    if (emojiMatcher.find()) {
+                        nickName = emojiMatcher.replaceAll("*");
+                    }
                 }
 
                 Map<String,Object> map = Maps.newHashMap();
@@ -322,13 +327,14 @@ public class UserController extends BaseController{
                     dataMap.put("msg", "用户不存在");
                 }
 
-                if(user == null || user.getUserId().equals(userVO.getUserId())){
+                if(user == null || user.getUserId().equals(user.getUserId())){
                     User user2 = new User();
                     BeanMapUtil.copy(userVO, user2);
                     userService.updateUser(user2);
+                    User user3 = userService.getUserByUserId(userVO.getUserId());
                     dataMap.put("result", "success");
                     dataMap.put("msg", "个人信息修改成功");
-                    dataMap.put("data", user);
+                    dataMap.put("data", user3);
                 }else{
                     dataMap.put("result", "failure");
                     dataMap.put("msg", "昵称已存在，换个呗");
@@ -358,8 +364,6 @@ public class UserController extends BaseController{
             @Override
             public void handle() throws Exception {
                 User user = userService.getUserByUserId(userId);
-                dataMap.put("result", "success");
-                dataMap.put("msg", "信息返回成功");
                 //金币来源去向
                 List<UserGoldRecordVO> listUGR = userService.getUserGoldRecord(userId);
                 dataMap.put("gold_record", listUGR);
@@ -369,19 +373,27 @@ public class UserController extends BaseController{
                 dataMap.put("user_info", user);
                 //金币零钱汇率
                 ExchangeRate exchangeRate = exchangeRateService.getGoldToMoney();
-                dataMap.put("gold_to_money", new BigDecimal(0.001).divide(exchangeRate.getGoldToMoney()));
+                dataMap.put("gold_to_money", exchangeRate.getGoldToMoney());
                 //昨天金币收入
                 BigDecimal goldCount = userService.getGoldYesterday(userId);
                 dataMap.put("get_gold_yesterday", goldCount);
                 //昨天零钱收入
                 BigDecimal moneyCount = userService.getMoneyYesterday(userId);
-                dataMap.put("get_money_yesterday", moneyCount.setScale(2,BigDecimal.ROUND_HALF_UP));
+                if(!StringUtils.isEmpty(moneyCount)){
+                    moneyCount = moneyCount.setScale(2,BigDecimal.ROUND_HALF_UP);
+                }
+                dataMap.put("get_money_yesterday", moneyCount);
                 //累计金币收入
                 BigDecimal goldCountAll = userService.getGoldAll(userId);
                 dataMap.put("get_gold_all", goldCountAll);
                 //累计零钱收入
                 BigDecimal moneyCountAll = userService.getMoneyAll(userId);
-                dataMap.put("get_money_all", moneyCountAll.setScale(2,BigDecimal.ROUND_HALF_UP));
+                if(!StringUtils.isEmpty(moneyCountAll)){
+                    moneyCountAll =  moneyCountAll.setScale(2,BigDecimal.ROUND_HALF_UP);
+                }
+                dataMap.put("get_money_all", moneyCountAll);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "信息返回成功");
             }
         });
 
@@ -462,13 +474,13 @@ public class UserController extends BaseController{
                     userService.updateUser(user);
                     //查询收徒奖励金币数
                     ExchangeRate exchangeRate = exchangeRateService.getGoldToMoney();
-                    String gold = exchangeRate.getRecruitGold().toString();
+                    int gold = exchangeRate.getRecruitGold();
                     //给师傅添加收徒奖励金
                     BigDecimal goldAll = new BigDecimal(parent.getGold()).add(new BigDecimal(gold));
-                    parent.setGold(goldAll.longValue());
+                    parent.setGold(goldAll.intValue());
                     userService.updateUser(parent);
                     //添加金币新增记录
-                    userService.addUserGoldRecord(6, parent.getUserId(), Long.valueOf(gold), userId);
+                    userService.addUserGoldRecord(6, parent.getUserId(), gold, userId);
 
                     dataMap.put("msg", "师徒关系绑定成功");
                     dataMap.put("parent_info", parent);
@@ -538,7 +550,7 @@ public class UserController extends BaseController{
                 }
                 dataMap.put("result", "success");
                 dataMap.put("msg", "相关信息返回成功");
-                dataMap.put("getWarkUpApprentice", page.getRows());
+                dataMap.put("data", page.getRows());
             }
         });
         return dataMap;
@@ -562,11 +574,10 @@ public class UserController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                Page<InfosVo> page = newsService.listLookRecordPage(userId, pageRequest);
+                Page<UserReadRecord> page = newsService.listLookRecordPage(userId, pageRequest);
                 dataMap.put("result", "success");
                 dataMap.put("msg", "相关信息返回成功");
                 dataMap.put("data", page.getRows());
-                dataMap.put("total", page.getTotal());
             }
         });
 
@@ -606,27 +617,24 @@ public class UserController extends BaseController{
     /**
      * 阅读获取金币
      * @param userId
-     * @param infoId
-     * @param infoType
+     * @param probability 概率
      * @return
      */
-    @RequestMapping(value = UserMsgReq.READ_GOLD_GET)
-    public Map<Object,Object> readGoldGet(final Long userId, final Long infoId, final String infoType){
+    /*@RequestMapping(value = UserMsgReq.READ_GOLD_GET)
+    public Map<Object,Object> readGoldGet(final Long userId, final Integer probability){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
-                AssertsUtil.isNotZero(infoId, ErrorCodeEnum.SYSTEM_ANOMALY);
-                AssertsUtil.isNotBlank(infoType, ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
 
                 //判断用户是否阅读过该新闻，并请求过加金币
-                int num = userService.isRead(userId, infoId);
+                int num = userService.isRead(userId, null);
                 int readContinuousDay = 0;
                 if(num == 2){
                     //新手任务
@@ -635,11 +643,11 @@ public class UserController extends BaseController{
                     ExchangeRate exchangeRate = exchangeRateService.getGoldToMoney();
                     Integer newBieReadTime = exchangeRate.getNewbieReadTime();
                     User user = userService.isSurpassingActivtiy(newBieReadTime, userId);
-                    if(!StringUtils.isEmpty(user) && newBieReadTime < 0){
+                    *//*if(!StringUtils.isEmpty(user) && newBieReadTime < 0){
                         //判断今天是否已经获得过新手奖励
                         UserGoldRecord userGoldRecord = userService.isGetNewbieGoldToday(userId);
                         if(StringUtils.isEmpty(userGoldRecord)) {
-                            /**
+                            *//**//**
                              * 新手阅读任务：三十天时限
                              首次登陆当天每天阅读3篇以上 200
                              连续3天  300
@@ -649,7 +657,7 @@ public class UserController extends BaseController{
                              连续15天 700
                              连续18天 800
                              连续21天 1000
-                             */
+                             *//**//*
                             int addGoldNum = 0;
                             if (readContinuousDay < 3) {
                                 addGoldNum = 200;
@@ -686,7 +694,7 @@ public class UserController extends BaseController{
                         }
                     }else{
                         dataMap.put("newBieReadGold", "0");
-                    }
+                    }*//*
                     //日常任务
                     //判断是否给师傅进贡，判断是否算有效徒弟
 
@@ -820,6 +828,88 @@ public class UserController extends BaseController{
         });
 
         return dataMap;
+    }*/
+
+    /**
+     * 阅读获取金币概率
+     * @param userReadRecord
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.READ_GOLD_GET)
+    public Map<Object,Object> readGoldGet(final UserReadRecord userRead){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotNull(userRead, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+
+                Map<String,Object> map = Maps.newHashMap();
+                map.put("userId", userRead.getUserId());
+                //获取用户当天总得阅读记录数
+                int readNum = userReadService.CountReadRecord(userRead.getUserId());
+                map.put("infoId", userRead.getInfoId());
+                UserReadRecord userReadRecord = userReadService.getUserReadRecord(map);
+
+                ExchangeRate exchangeRate = exchangeRateService.getGoldToMoney();
+                User user = userService.getUserByUserId(userRead.getUserId());
+
+                //判断是否添加到阅读列表
+                if(StringUtils.isEmpty(userReadRecord)){
+                    //随机为用户添加金币
+                    int gold = 0;
+                    //获取随机概率
+                    if(userRead.getBrowsing() == 1){
+                        gold = 0;
+                    }else{
+                        //判断今天的阅读篇数是否小于等于2
+                        if(readNum <= 2){
+                            gold = exchangeRate.getReadDownGold();
+                        }else{
+                            //查看前一篇阅读记录用户的行为
+                            UserReadRecord userReadRecord1 = userReadService.maxReadRecord(userRead.getUserId());
+                            if(userReadRecord1.getBrowsing() == 3){
+                                //金币掉落概率为0.5-0.7
+                                int random = RandomUtil.getRandomIndex();
+                                if(random >= 3){
+                                    gold = exchangeRate.getReadDownGold();
+                                }
+                            }else{
+                                //金币掉落概率为0.5
+                                int random = RandomUtil.getRandomIndex();
+                                if(random >= 5){
+                                    gold = exchangeRate.getReadDownGold();
+                                }
+                            }
+                        }
+                    }
+                    if(gold != 0){
+                        userReadService.readAddGold(userRead.getUserId(), gold, user, exchangeRate, userRead);
+                        dataMap.put("result", "success");
+                        dataMap.put("msg", "本次获得金币奖励");
+                        dataMap.put("getGold", gold);
+                        dataMap.put("data", "true");
+                    }else{
+                        dataMap.put("result", "success");
+                        dataMap.put("msg", "本次浏览没获得金币");
+                        dataMap.put("getGold", 0);
+                        dataMap.put("data", false);
+                        //dataMap.put("newBieReadGold", 0);
+                    }
+                }else{
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "您已经浏览过该新闻,本次浏览无金币");
+                    dataMap.put("getGold", 0);
+                    dataMap.put("data", false);
+                    //dataMap.put("newBieReadGold", 0);
+                }
+            }
+        });
+        return dataMap;
     }
 
 
@@ -909,7 +999,7 @@ public class UserController extends BaseController{
                         //该用户还没开过宝箱，直接开启宝箱
                         //添加金币和金币记录
                         if(isSubmit != 0){
-                            userService.addUserGoldRecord(4,userId, Long.valueOf(staticGoldConfig.getValue()), null);
+                            userService.addUserGoldRecord(4,userId, Integer.valueOf(staticGoldConfig.getValue()), null);
                             userService.updateUserInfo(userId, Integer.parseInt(staticGoldConfig.getValue()));
                             dataMap.put("result", "success");
                             dataMap.put("msg", "该用户还没开过宝箱,直接开启宝箱");
@@ -928,7 +1018,7 @@ public class UserController extends BaseController{
                         if(Integer.parseInt(leadSecond) >= 0){
                             //可以开宝箱
                             if(isSubmit != 0){
-                                userService.addUserGoldRecord(4,userId, Long.valueOf(staticGoldConfig.getValue()), null);
+                                userService.addUserGoldRecord(4,userId, Integer.valueOf(staticGoldConfig.getValue()), null);
                                 userService.updateUserInfo(userId, Integer.parseInt(staticGoldConfig.getValue()));
                                 dataMap.put("result", "success");
                                 dataMap.put("msg", "可以开宝箱，已开");

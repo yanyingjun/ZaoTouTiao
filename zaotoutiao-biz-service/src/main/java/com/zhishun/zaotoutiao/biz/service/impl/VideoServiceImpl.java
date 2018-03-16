@@ -6,11 +6,11 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IVideoService;
+import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.entity.Infos;
-import com.zhishun.zaotoutiao.core.model.entity.VideoChannels;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.dal.mapper.ChannelsMapper;
 import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
-import com.zhishun.zaotoutiao.dal.mapper.VideoChannelsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +26,17 @@ import java.util.Map;
 public class VideoServiceImpl implements IVideoService{
 
     @Autowired
-    private VideoChannelsMapper videoChannelsMapper;
+    private ChannelsMapper channelsMapper;
 
     @Autowired
     private InfosMapper infosMapper;
 
     @Override
-    public List<VideoChannels> listVideoChannels() {
-        return videoChannelsMapper.listVideoChannels();
+    public List<Channels> listVideoChannels(Integer status, Integer appType) {
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("status", status);
+        map.put("appType", appType);
+        return channelsMapper.listVideoChannels(map);
     }
 
     /**

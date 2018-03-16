@@ -40,17 +40,6 @@ public class DispatchChannel implements Serializable {
     private String intro;
 
     /**
-     *
-     */
-    public DispatchChannel(Long id, String name, String apkLink, String code, String intro) {
-        this.id = id;
-        this.name = name;
-        this.apkLink = apkLink;
-        this.code = code;
-        this.intro = intro;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

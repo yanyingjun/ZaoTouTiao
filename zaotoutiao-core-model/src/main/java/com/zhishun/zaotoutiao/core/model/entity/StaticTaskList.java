@@ -18,16 +18,6 @@ public class StaticTaskList implements Serializable {
 
     private String url;
 
-    public StaticTaskList(Long id, String question, String answer, String type, Date createDate, String button, String url) {
-        this.id = id;
-        this.question = question;
-        this.answer = answer;
-        this.type = type;
-        this.createDate = createDate;
-        this.button = button;
-        this.url = url;
-    }
-
     public StaticTaskList() {
         super();
     }

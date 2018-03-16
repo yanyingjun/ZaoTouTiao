@@ -76,6 +76,13 @@ public interface ChannelsMapper {
     List<Channels> listChannels();
 
     /**
+     * 获取视频分类列表
+     * @param map
+     * @return
+     */
+    List<Channels> listVideoChannels(Map map);
+
+    /**
      * 获取排序较小的导航
      * @return
      */
@@ -100,4 +107,11 @@ public interface ChannelsMapper {
      * @return
      */
     List<Channels> getTabList(Map map);
+
+    /**
+     * 获取视频或新闻分类信息
+     * @param channelId
+     * @return
+     */
+    Channels getChannelsByChannelId(String channelId);
 }

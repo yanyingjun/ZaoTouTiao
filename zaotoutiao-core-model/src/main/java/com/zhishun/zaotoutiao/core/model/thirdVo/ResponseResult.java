@@ -30,6 +30,11 @@ public class ResponseResult {
     private String sid;
 
     /**
+     * 数据格式版本
+     */
+    private String version;
+
+    /**
      * Getter method for property <tt>errno</tt>.
      *
      * @return property value of errno
@@ -99,5 +104,23 @@ public class ResponseResult {
      */
     public void setSid(String sid) {
         this.sid = sid;
+    }
+
+    /**
+     * Getter method for property <tt>version</tt>.
+     *
+     * @return property value of version
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * Setter method for property <tt>version</tt>.
+     *
+     * @param version value to be assigned to property version
+     */
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

@@ -2,11 +2,8 @@ package com.zhishun.zaotoutiao.biz.service;
 
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
-import com.zhishun.zaotoutiao.core.model.entity.Infos;
-import com.zhishun.zaotoutiao.core.model.entity.StaticHtml;
+import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
-import com.zhishun.zaotoutiao.core.model.entity.Channels;
-import com.zhishun.zaotoutiao.core.model.entity.Content;
 
 import java.util.List;
 import java.util.Map;
@@ -45,7 +42,7 @@ public interface INewsService {
      * @param pageRequest
      * @return
      */
-    Page<InfosVo> listLookRecordPage(Long userId, PageRequest pageRequest);
+    Page<UserReadRecord> listLookRecordPage(Long userId, PageRequest pageRequest);
 
     /**
      * 根据新闻ID获取新闻信息
@@ -75,10 +72,9 @@ public interface INewsService {
      * @param infoType
      * @param userId
      * @param pageNo
-     * @param pageSize
      * @return
      */
-    List<InfosVo> getCollectList(String infoType, int userId, int pageNo, int pageSize);
+    List<UserCollect> getCollectList(String infosType, int userId, int pageNo, int pageSize);
 
     /**
      * 获取24小时热文

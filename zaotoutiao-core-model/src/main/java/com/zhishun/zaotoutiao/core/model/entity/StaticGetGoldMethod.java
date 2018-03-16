@@ -40,17 +40,6 @@ public class StaticGetGoldMethod implements Serializable {
     private String skipUrl;
 
     /**
-     * 构造方法
-     */
-    public StaticGetGoldMethod(Long id, String step, String details, String buttonName, String skipUrl) {
-        this.id = id;
-        this.step = step;
-        this.details = details;
-        this.buttonName = buttonName;
-        this.skipUrl = skipUrl;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

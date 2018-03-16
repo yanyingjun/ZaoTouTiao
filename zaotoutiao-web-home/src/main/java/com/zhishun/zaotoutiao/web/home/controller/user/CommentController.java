@@ -6,20 +6,16 @@
 
 package com.zhishun.zaotoutiao.web.home.controller.user;
 
-import com.zhishun.zaotoutiao.biz.service.ICommentService;
+import com.zhishun.zaotoutiao.biz.service.ICommentsService;
 import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
 import com.zhishun.zaotoutiao.web.home.constant.request.CommentMsgReq;
 import com.zhishun.zaotoutiao.web.home.constant.view.CommentMsgView;
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import sun.invoke.util.VerifyAccess;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -30,7 +26,7 @@ import java.util.List;
 public class CommentController {
 
     @Autowired
-    private ICommentService iCommentService;
+    private ICommentsService iCommentService;
 
     /**
      * 评论管理

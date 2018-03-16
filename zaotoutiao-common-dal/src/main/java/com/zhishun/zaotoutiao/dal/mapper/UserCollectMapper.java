@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserCollectMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(UserCollect record);
@@ -20,30 +21,9 @@ public interface UserCollectMapper {
     int updateByPrimaryKey(UserCollect record);
 
     /**
-     * 删除用户全部收藏
-     * @param userId
-     * @return
-     */
-    int delUserCollect(Long userId);
-
-    /**
-     * 查询收藏列表
+     * 获取收藏列表
      * @param map
      * @return
      */
-    List<UserCollect> listCollect(Map<String,Object> map);
-
-    /**
-     * 删除单条收藏
-     * @param map
-     * @return
-     */
-    int delOneCollect(Map<String,Object> map);
-
-    /**
-     * 获取用户新闻收藏列表
-     * @param map
-     * @return
-     */
-    UserCollect getUserCollectByParam(Map<String,Object> map);
+    List<UserCollect> getCollectList(Map<String, Object> map);
 }

@@ -55,35 +55,6 @@ public class ArticleController extends BaseController{
     @Autowired
     private IFilterNewsService filterNewsService;
 
-
-
-    /**
-     * 输入评论
-     * @param userComments
-     * @return
-     */
-    @RequestMapping(value = ArticleMsgReq.ADD_COMMENTS_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> addComments(final UserComments userComments){
-
-        final Map<Object,Object> dataMap = Maps.newHashMap();
-        this.excute(dataMap, null, new ControllerCallback() {
-            @Override
-            public void check() throws ZhiShunException {
-                AssertsUtil.isNotNull(userComments, ErrorCodeEnum.SYSTEM_ANOMALY);
-            }
-
-            @Override
-            public void handle() throws Exception {
-                articleService.addComments(userComments);
-                dataMap.put("result", "success");
-                dataMap.put("msg", "评论成功");
-            }
-        });
-
-        return dataMap;
-    }
-
-
     /**
      * 获取文章相关内容
      * @return
@@ -249,7 +220,7 @@ public class ArticleController extends BaseController{
                         "<head>\n" +
                         "    <meta charset='utf-8'>\n" +
                         "    <meta http-equiv='X-UA-Compatible' content='IE=edge'>\n" +
-                        "    <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' >  \n" +
+                        "    <meta name='viewport' content='width=Device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' >  \n" +
                         "    <title>"+title+"</title>\n" +
                         "    <style type='text/css'>\n" +
                         "\n" +
@@ -451,7 +422,7 @@ public class ArticleController extends BaseController{
      * 常见问题
      * @return
      */
-    @RequestMapping(value = UserMsgReq.FAQ_GET)
+    @RequestMapping(value = UserMsgReq.FAQ_GET, method = RequestMethod.GET)
     public Map<Object,Object> faqGet(){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
@@ -547,7 +518,7 @@ public class ArticleController extends BaseController{
                         "<head>\n" +
                         "    <meta charset='utf-8'>\n" +
                         "    <meta http-equiv='X-UA-Compatible' content='IE=edge'>\n" +
-                        "    <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' >  \n" +
+                        "    <meta name='viewport' content='width=Device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' >  \n" +
                         "    <title>"+title+"</title>\n" +
                         "    <style type='text/css'>\n" +
                         "\n" +
@@ -644,7 +615,7 @@ public class ArticleController extends BaseController{
                         "<head>\n" +
                         "    <meta charset='utf-8'>\n" +
                         "    <meta http-equiv='X-UA-Compatible' content='IE=edge'>\n" +
-                        "    <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' >  \n" +
+                        "    <meta name='viewport' content='width=Device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' >  \n" +
                         "    <title>"+title+"</title>\n" +
                         "</head>\n" +
                         "<body>\n" +

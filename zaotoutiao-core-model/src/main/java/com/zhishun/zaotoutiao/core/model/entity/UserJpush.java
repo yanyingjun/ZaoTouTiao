@@ -50,19 +50,6 @@ public class UserJpush implements Serializable {
     private Integer isRead;
 
     /**
-     * 构造方法
-     */
-    public UserJpush(Long id, Long userId, String type, String infoId, Integer informationId, String createDate, Integer isRead) {
-        this.id = id;
-        this.userId = userId;
-        this.type = type;
-        this.infoId = infoId;
-        this.informationId = informationId;
-        this.createDate = createDate;
-        this.isRead = isRead;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

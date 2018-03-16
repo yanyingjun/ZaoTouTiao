@@ -14,12 +14,14 @@ import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.core.model.entity.UserCollect;
+import com.zhishun.zaotoutiao.core.model.entity.UserComments;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -34,6 +36,33 @@ public class UserCommentsController extends BaseController{
 
     @Autowired
     private ICommentsService commentsService;
+
+
+    /**
+     * 输入评论
+     * @param userComments
+     * @return
+     */
+    @RequestMapping(value = ArticleMsgReq.ADD_COMMENTS_REQ, method = RequestMethod.POST)
+    public Map<Object,Object> addComments(final UserComments userComments){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotNull(userComments, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                commentsService.addComments(userComments);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "评论成功");
+            }
+        });
+
+        return dataMap;
+    }
 
 
     /**

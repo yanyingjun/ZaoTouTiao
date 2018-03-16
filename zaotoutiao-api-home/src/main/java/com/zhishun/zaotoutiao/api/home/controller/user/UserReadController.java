@@ -34,13 +34,13 @@ import java.util.Map;
 public class UserReadController extends BaseController {
 
     @Autowired
-    private IUserReadService iUserReadService;
+    private IUserReadService userReadService;
 
     @Autowired
-    private IInformationService iInformationService;
+    private IInformationService informationService;
 
     @Autowired
-    private IJpushService iJpushService;
+    private IJpushService jpushService;
 
     /**
      * 用户已经阅读(24小时热文)，更改阅读状态
@@ -63,7 +63,7 @@ public class UserReadController extends BaseController {
 
             @Override
             public void handle() throws Exception {
-                Boolean result = iUserReadService.isUserRead(id, userId, type);
+                Boolean result = userReadService.isUserRead(id, userId, type);
                 if(result){
                     dataMap.put("result", "success");
                     dataMap.put("msg", "阅读状态修改成功");
@@ -105,7 +105,7 @@ public class UserReadController extends BaseController {
 
             @Override
             public void handle() throws Exception {
-                int res = iUserReadService.readRecordAdd(userReadRecord);
+                int res = userReadService.readRecordAdd(userReadRecord);
                 if(res == 1) {
                     dataMap.put("result", "success");
                     dataMap.put("msg", "阅读记录添加成功");
@@ -138,8 +138,8 @@ public class UserReadController extends BaseController {
 
             @Override
             public void handle() throws Exception {
-                int msgNum = iInformationService.selectUserInformationByTypeOrUserId(userId,"MSG");
-                int noticeNum = iInformationService.selectUserInformationByTypeOrUserId(userId,"NOTICE");
+                int msgNum = informationService.selectUserInformationByTypeOrUserId(userId,"MSG");
+                int noticeNum = informationService.selectUserInformationByTypeOrUserId(userId,"NOTICE");
                 if(msgNum != 0 || noticeNum != 0){
                     dataMap.put("result", "success");
                     dataMap.put("msg", "您有未读消息");
@@ -175,7 +175,7 @@ public class UserReadController extends BaseController {
 
             @Override
             public void handle() throws Exception {
-                int hotNum = iJpushService.unreadHotNumGet(userId);
+                int hotNum = jpushService.unreadHotNumGet(userId);
                 if(hotNum != 0){
                     dataMap.put("result", "success");
                     dataMap.put("msg", "您有未读消息");

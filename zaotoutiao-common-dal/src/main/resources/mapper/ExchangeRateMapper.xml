@@ -19,6 +19,7 @@
       <result column="newbie_read_time" jdbcType="INTEGER" property="newbieReadTime" />
       <result column="awaken_parent_gold" jdbcType="INTEGER" property="awakenParentGold" />
       <result column="awaken_user_gold" jdbcType="INTEGER" property="awakenUserGold" />
+      <result column="read_down_gold" jdbcType="INTEGER" property="readDownGold" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -27,7 +28,7 @@
     -->
     id, recruit_gold, recruit_money, newbie_recruit_gold, newbie_recruit_money, regist_login_gold, 
     regist_login_money, gold_to_money, sign_activity_days, read_activity_days, newbie_read_time, 
-    awaken_parent_gold, awaken_user_gold
+    awaken_parent_gold, awaken_user_gold, read_down_gold
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     <!--
@@ -56,12 +57,12 @@
       newbie_recruit_gold, newbie_recruit_money, 
       regist_login_gold, regist_login_money, gold_to_money, 
       sign_activity_days, read_activity_days, newbie_read_time, 
-      awaken_parent_gold, awaken_user_gold)
+      awaken_parent_gold, awaken_user_gold, read_down_gold)
     values (#{id,jdbcType=INTEGER}, #{recruitGold,jdbcType=INTEGER}, #{recruitMoney,jdbcType=INTEGER}, 
       #{newbieRecruitGold,jdbcType=INTEGER}, #{newbieRecruitMoney,jdbcType=INTEGER}, 
       #{registLoginGold,jdbcType=INTEGER}, #{registLoginMoney,jdbcType=INTEGER}, #{goldToMoney,jdbcType=DECIMAL}, 
       #{signActivityDays,jdbcType=INTEGER}, #{readActivityDays,jdbcType=INTEGER}, #{newbieReadTime,jdbcType=INTEGER}, 
-      #{awakenParentGold,jdbcType=INTEGER}, #{awakenUserGold,jdbcType=INTEGER})
+      #{awakenParentGold,jdbcType=INTEGER}, #{awakenUserGold,jdbcType=INTEGER}, #{readDownGold,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.ExchangeRate" >
     <!--
@@ -109,6 +110,9 @@
       <if test="awakenUserGold != null" >
         awaken_user_gold,
       </if>
+      <if test="readDownGold != null" >
+        read_down_gold,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -149,6 +153,9 @@
       </if>
       <if test="awakenUserGold != null" >
         #{awakenUserGold,jdbcType=INTEGER},
+      </if>
+      <if test="readDownGold != null" >
+        #{readDownGold,jdbcType=INTEGER}
       </if>
     </trim>
   </insert>
@@ -195,6 +202,9 @@
       <if test="awakenUserGold != null" >
         awaken_user_gold = #{awakenUserGold,jdbcType=INTEGER},
       </if>
+      <if test="readDownGold != null" >
+        read_down_gold = #{readDownGold, jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -215,7 +225,8 @@
       read_activity_days = #{readActivityDays,jdbcType=INTEGER},
       newbie_read_time = #{newbieReadTime,jdbcType=INTEGER},
       awaken_parent_gold = #{awakenParentGold,jdbcType=INTEGER},
-      awaken_user_gold = #{awakenUserGold,jdbcType=INTEGER}
+      awaken_user_gold = #{awakenUserGold,jdbcType=INTEGER},
+      read_down_gold = #{readDownGold,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

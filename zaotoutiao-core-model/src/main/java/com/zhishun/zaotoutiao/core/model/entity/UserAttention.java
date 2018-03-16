@@ -35,16 +35,6 @@ public class UserAttention implements Serializable {
     private String createDate;
 
     /**
-     * 构造方法
-     */
-    public UserAttention(Long id, Long userId, Long attentionId, String createDate) {
-        this.id = id;
-        this.userId = userId;
-        this.attentionId = attentionId;
-        this.createDate = createDate;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

@@ -12,24 +12,24 @@
 </head>
 <body>
 <div class="container">
-    <form>
-        <div id="tb" style="padding:0 30px;">
-            <input class="easyui-textbox" type="text" name="code" style="width:166px;height:35px;line-height:35px;"></input>
-            <input class="easyui-combobox" name="channelId" id="channelId_um" style="height:35px;" data-options="url:'/listPlatformChannel?platformId=0',
-                        textField:'channelName',valueField:'id',
-                        onLoadSuccess:function(data){
-                            if(data != null && data.length > 0){
-                               $('#channelId_ug').combobox('select',data[0].id);
-                            }
-                        },required:true,editable:false"/>
-            <input class="easyui-datetbox" name="startDate" id="startDate_um" data-options="required:true" />
-            <input class="easyui-textbox" type="text" name="code" style="width:80px;height:35px;line-height:35px;"/>-
-            <input class="easyui-textbox" type="text" name="code" style="width:80px;height:35px;line-height:35px;"/>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true">查询</a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-reload">重置</a>
-        </div>
-    </form>
-    <table id="dg" style="width:100%;height:554px" title="可提现用户列表" data-options="
+    <div id="tb" style="padding:0 30px;">
+        <form id="presented_form">
+            关键词：<input class="easyui-textbox" type="text" name="keyWord" style="width:166px;height:35px;line-height:35px;"/>
+            渠道来源：<input class="easyui-combobox" name="channelId" id="channelId_pres" style="height:35px;" data-options="url:'/listPlatformChannel?platformId=0',
+                    textField:'channelName',valueField:'id',
+                    onLoadSuccess:function(data){
+                        if(data != null && data.length > 0){
+                           $('#channelId_ug').combobox('select',data[0].id);
+                        }
+                    },required:true,editable:false"/>
+            注册时间：<input class="easyui-datebox" name="createDate" data-options="required:true" />
+            零钱：<input class="easyui-textbox" type="text" name="minMoney" style="width:80px;height:35px;line-height:35px;"/>-
+            <input class="easyui-textbox" type="text" name="maxMoney" style="width:80px;height:35px;line-height:35px;"/>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true" id="presented_search_btn">查询</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="clearForm()">重置</a>
+        </form>
+    </div>
+    <table id="dg_present" style="width:100%;height:auto" title="可提现用户列表" data-options="
                 rownumbers:true,
                 singleSelect:false,
                 autoRowHeight:false,
@@ -40,39 +40,17 @@
                 selectOnCheck:false,
                 collapsible:true,
                 toolbar:'#tb',
-                pageSize:10">
-        <thead>
-        <tr>
-            <th field="id" width="110">序号</th>
-            <th field="nickName" width="226">用户昵称</th>
-            <th field="telephone" width="112">手机号</th>
-            <!--<th field="channelName" width="170">渠道来源</th>-->
-            <th field="createDate" width="130">注册时间</th>
-            <!--<th field="issubmit" width="136">最后活跃时间</th>-->
-            <!--<th field="status" width="120">今日启动次数</th>-->
-            <!--<th field="note" width="105">累计启动次数</th>
-            <th field="note" width="105">地理位置</th>
-            <th field="note" width="105">年龄</th>
-            <th field="note" width="105">性别</th>
-            <th field="note" width="105">职业</th>
-            <th field="note" width="105">教育经历</th>
-            <th field="note" width="105">金币</th>
-            <th field="note" width="105">零钱余额</th>
-            <th field="note" width="105">状态</th>
-            <th field="note" width="105">状态</th>-->
-            <th field="_operate" width="200" data-options="align:'center',formatter:formatOperate">操作</th>
-        </tr>
-        </thead>
-    </table>
+                pageSize:10"></table>
 </div>
 <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="/static/js/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="/static/js/easyui-lang-zh_CN.js"></script>
 
 <script type="text/javascript">
-    (function($){
-        function pagerFilter(data){
-            if ($.isArray(data)){   // is array
+
+    $(function(){
+        /*function pagerFilter(data) {
+            if ($.isArray(data)) {   // is array
                 data = {
                     total: data.length,
                     rows: data
@@ -82,35 +60,34 @@
             var dg = $(target);
             var state = dg.data('datagrid');
             var opts = dg.datagrid('options');
-            if (!state.allRows){
+            if (!state.allRows) {
                 state.allRows = (data.rows);
             }
-            if (!opts.remoteSort && opts.sortName){
+            if (!opts.remoteSort && opts.sortName) {
                 var names = opts.sortName.split(',');
                 var orders = opts.sortOrder.split(',');
-                state.allRows.sort(function(r1,r2){
+                state.allRows.sort(function (r1, r2) {
                     var r = 0;
-                    for(var i=0; i<names.length; i++){
+                    for (var i = 0; i < names.length; i++) {
                         var sn = names[i];
                         var so = orders[i];
                         var col = $(target).datagrid('getColumnOption', sn);
-                        var sortFunc = col.sorter || function(a,b){
-                            return a==b ? 0 : (a>b?1:-1);
+                        var sortFunc = col.sorter || function (a, b) {
+                            return a == b ? 0 : (a > b ? 1 : -1);
                         };
-                        r = sortFunc(r1[sn], r2[sn]) * (so=='asc'?1:-1);
-                        if (r != 0){
+                        r = sortFunc(r1[sn], r2[sn]) * (so == 'asc' ? 1 : -1);
+                        if (r != 0) {
                             return r;
                         }
                     }
                     return r;
                 });
             }
-            var start = (opts.pageNumber-1)*parseInt(opts.pageSize);
+            var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
             var end = start + parseInt(opts.pageSize);
             data.rows = state.allRows.slice(start, end);
             return data;
         }
-
         var loadDataMethod = $.fn.datagrid.methods.loadData;
         var deleteRowMethod = $.fn.datagrid.methods.deleteRow;
         $.extend($.fn.datagrid.methods, {
@@ -168,25 +145,128 @@
             getAllRows: function(jq){
                 return jq.data('datagrid').allRows;
             }
-        })
-    })(jQuery);
+        })*/
+        $('#dg_present').datagrid({
+            url: '/bePresentedUser/list',
+            columns: [[
+                {field: 'nickName', title: '用户昵称', width:50, align: 'center'},
+                {field: 'telephone', title: '手机号', width:50, align: 'center'},
+                {field: 'channelName', title: '渠道来源', width:50, align: 'center'},
+                {field: 'createDate', title: '注册时间', width:100, align: 'center'},
+                {field: 'lastVisitDate', title: '最后活跃时间', width:100, align: 'center'},
+                {field: 'readNumber', title: '阅读天数', width:50, align: 'center'},
+                {field: 'address', title: '地理位置', width:50, align: 'center'},
+                {field: 'birthday', title: '年龄', width:50, align: 'center'},
+                {field: 'sex', title: '年龄', width:50, align: 'center', formatter:function(value,row,index){
+                        var str = '';
+                        if(value == 0){
+                            str = '女';
+                        }else if(value == 1){
+                            str = '男';
+                        }else{
+                            str = '未知';
+                        }
+                        return str;
+                    }},
+                {field: 'job', title: '职业', width:100, align: 'center'},
+                {field: 'educational', title: '教育经历', width:100, align: 'center'},
+                {field: 'gold', title: '金币', width:50, align: 'center'},
+                {field: 'money', title: '零钱余额', width:50, align: 'center'},
+                {field: 'apprenticeNum', title: '徒弟数', width:50, align: 'center'},
+                {field: 'status', title: '状态', width:50, align: 'center', formatter:function (value,row,index) {
+                        var str = '';
+                        if(value == 0){
+                            str = '正常';
+                        }else if(value == 1){
+                            str = '封号';
+                        }else if(value == 2){
+                            str = '禁止收益';
+                        }else if(value == 3){
+                            str = '禁止提现';
+                        }else{
+                            str = '禁言';
+                        }
+                        return str;
+                    }},
+                {field: 'userId', title: '操作', width: 110, align: 'center', formatter: function(value,row,index) {
+                        var str = '';
+                        if(row.status == 0){
+                            str += ' <a title="封号" onclick="editUser('+ value +','+1+',\'确定封号吗?\')">封号</a>&nbsp;&nbsp';
+                        }else{
+                            str += '<a title="解封" onclick="editUser('+ value +','+0+',\'确定解封吗?\')">解封</a>&nbsp;&nbsp';
+                        }
+                        if(row.status == 0){
+                            str += ' <a title="禁止收益" onclick="editUser('+ value +','+2+',\'确定禁止收益吗?\')">禁止收益</a>&nbsp;&nbsp';
+                        }else{
+                            str += '<a title="恢复收益" onclick="editUser('+ value +','+0+',\'确定恢复收益吗?\')">恢复收益</a>&nbsp;&nbsp';
+                        }
+                        if(row.status == 0){
+                            str += ' <a title="禁止提现" onclick="editUser('+ value +','+3+',\'确定禁止提现吗?\')">禁止提现</a>&nbsp;&nbsp';
+                        }else{
+                            str += '<a title="启用提现" onclick="editUser('+ value +','+0+',\'确定启用提现吗?\')">启用提现</a>&nbsp;&nbsp';
+                        }
+                        if(row.status == 0){
+                            str += ' <a title="禁言" onclick="editUser('+ value +','+4+',\'确定禁言吗?\')">禁言</a>&nbsp;&nbsp';
+                        }else{
+                            str += '<a title="恢复" onclick="editUser('+ value +','+0+',\'确定恢复吗?\')">恢复</a>&nbsp;&nbsp';
+                        }
+                        return str;
+                    }
+                }
+            ]],
+            onLoadSuccess: function(data) {
+                if(data){
+                    $.each(data.rows, function(index, item){
+                        if(item.checked){
+                            $('#bt_grid').datagrid('checkRow', index);
+                        }
+                    });
+                }
+            }
+        });
+        $('#presented_search_btn').click(function() {
+            $('#dg_present').datagrid('load', $('#presented_form').toJsonNotEmpty());
+        });
 
-
-    $(function(){
-        $('#dg').datagrid({url:'/bePresentedUser/list'}).datagrid('clientPaging');
     });
 
-    function formatOperate(val,row,index){
-        return '<a href="#" onclick="editUser(\'+index+\')">封号</a>&nbsp;&nbsp;' +
-            '<a href="#" onclick="editUser(\'+index+\')">禁止</a>&nbsp;&nbsp;' +
-            '<a href="#" onclick="editUser(\'+index+\')">收益</a>&nbsp;&nbsp;' +
-            '<a href="#" onclick="editUser(\'+index+\')">禁止提现</a>&nbsp;&nbsp;' +
-            '<a href="#" onclick="editUser(\'+index+\')">禁言</a>';
+    function editUser(id,status,str){
+        $.messager.confirm('提示信息', str, function(r){
+            if (r){
+                $.post("/updateUser?userId="+id+"&status="+status, function(data) {
+                    if (data.result == 'success') {
+                        $.messager.alert("提示信息",data.msg);
+                        $('#dg_present').datagrid('reload');
+                    } else {
+                        $.messager.alert("提示信息",data.msg);
+                    }
+                }, "JSON");
+            }
+        });
+
     }
 
-    function editUser(id){
-
+    function clearForm(){
+        $('#presented_form').form('clear');
+        $("#channelId_pres").combobox('setValue', '全部');
     }
+
+    $.fn.toJsonNotEmpty = function() {
+        var arrayValue = $(this).serializeArray();
+        var json = {};
+        $.each(arrayValue, function() {
+            var item = this;
+            if(item["value"] && item["value"].trim()!=""){
+                if (json[item["name"]]) {
+                    json[item["name"]] += "," + item["value"];
+                } else {
+                    json[item["name"]] = item["value"];
+                }
+            }
+        });
+        return json;
+    };
+
 </script>
 </body>
 </html>

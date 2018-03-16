@@ -53,7 +53,7 @@ public class User implements Serializable {
     /**
      * 金币
      */
-    private Long gold;
+    private Integer gold;
 
     /**
      * 零钱
@@ -149,6 +149,16 @@ public class User implements Serializable {
      * 平台对应的渠道ID
      */
     private Integer channelId;
+
+    /**
+     * 状态
+     */
+    private Integer status;
+
+    /**
+     * 地址
+     */
+    private String address;
 
     /**
      * Getter method for property <tt>userId</tt>.
@@ -281,7 +291,7 @@ public class User implements Serializable {
      *
      * @return property value of gold
      */
-    public Long getGold() {
+    public Integer getGold() {
         return gold;
     }
 
@@ -290,7 +300,7 @@ public class User implements Serializable {
      *
      * @param gold value to be assigned to property gold
      */
-    public void setGold(Long gold) {
+    public void setGold(Integer gold) {
         this.gold = gold;
     }
 
@@ -634,5 +644,41 @@ public class User implements Serializable {
      */
     public void setChannelId(Integer channelId) {
         this.channelId = channelId;
+    }
+
+    /**
+     * Getter method for property <tt>status</tt>.
+     *
+     * @return property value of status
+     */
+    public Integer getStatus() {
+        return status;
+    }
+
+    /**
+     * Setter method for property <tt>status</tt>.
+     *
+     * @param status value to be assigned to property status
+     */
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    /**
+     * Getter method for property <tt>address</tt>.
+     *
+     * @return property value of address
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * Setter method for property <tt>address</tt>.
+     *
+     * @param address value to be assigned to property address
+     */
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

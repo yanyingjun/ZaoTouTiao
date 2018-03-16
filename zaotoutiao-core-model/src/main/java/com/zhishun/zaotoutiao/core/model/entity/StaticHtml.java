@@ -40,17 +40,6 @@ public class StaticHtml implements Serializable {
     private String content;
 
     /**
-     * 构造方法
-     */
-    public StaticHtml(Long staticId, String name, String title, String createDate, String content) {
-        this.staticId = staticId;
-        this.name = name;
-        this.title = title;
-        this.createDate = createDate;
-        this.content = content;
-    }
-
-    /**
      * Getter method for property <tt>staticId</tt>.
      *
      * @return property value of staticId

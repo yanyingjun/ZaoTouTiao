@@ -11,7 +11,7 @@ public class UserReadRecord {
 
     private String infoId;
 
-    private Date createDate;
+    private String createDate;
 
     private String infoType;
 
@@ -169,7 +169,7 @@ public class UserReadRecord {
      *
      * @return property value of createDate
      */
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
@@ -178,7 +178,7 @@ public class UserReadRecord {
      *
      * @param createDate value to be assigned to property createDate
      */
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 

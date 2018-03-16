@@ -18,7 +18,7 @@ public class VideoMsgReq {
     /**
      * 获取视频新闻列表
      */
-    public static final String VIDEO_GET_REQ = "/video/get";
+    /*public static final String VIDEO_GET_REQ = "/video/get";*/
 
     /**
      * 获取视频相关内容

@@ -30,15 +30,6 @@ public class StaticJobs implements Serializable {
     private Long industrysId;
 
     /**
-     * 构造方法
-     */
-    public StaticJobs(Long id, String name, Long industrysId) {
-        this.id = id;
-        this.name = name;
-        this.industrysId = industrysId;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

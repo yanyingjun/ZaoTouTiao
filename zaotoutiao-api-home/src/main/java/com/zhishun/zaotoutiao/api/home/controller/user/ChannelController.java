@@ -53,16 +53,15 @@ public class ChannelController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                Page<Channels> pageList = channelService.listChannelsPage(null,null);
+                List<Channels> listAll = channelService.listChannels(null);
                 UserChannels userChannels = channelService.getUserChannel(userId);
-                List<Channels> listAll = pageList.getRows();
                 List<Channels> list = Lists.newArrayList();
                 if(StringUtils.isEmpty(userChannels.getChannels())){
                     list = listAll;
                 }else{
                     String[] channels = userChannels.getChannels().split(",");
                     for(String channel : channels){
-                        Channels channels1 = channelService.getChannelById(Long.valueOf(channel));
+                        Channels channels1 = channelService.getChannelsByChannelId(channel);
                         list.add(channels1);
                     }
                     for(Channels chan : list){
@@ -98,12 +97,14 @@ public class ChannelController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                UserChannels userChannels = new UserChannels();
-                userChannels.setUserId(userId);
-                userChannels.setChannels(channels);
-                channelService.updateUserChannel(userChannels);
-                dataMap.put("result", "success");
-                dataMap.put("msg", "我的频道列表修改成功");
+                int num = channelService.updateUserChannelByUserId(userId, channels);
+                if(num > 0){
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "我的频道列表修改成功");
+                }else{
+                    dataMap.put("result", "fail");
+                    dataMap.put("msg", "我的频道列表修改失败");
+                }
             }
         });
 

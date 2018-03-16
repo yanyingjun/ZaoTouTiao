@@ -1,7 +1,7 @@
 package com.zhishun.zaotoutiao.biz.service;
 
+        import com.zhishun.zaotoutiao.core.model.entity.Channels;
         import com.zhishun.zaotoutiao.core.model.entity.Infos;
-        import com.zhishun.zaotoutiao.core.model.entity.VideoChannels;
         import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 
         import java.util.List;
@@ -16,7 +16,7 @@ public interface IVideoService {
      * 获取视频分类列表
      * @return
      */
-    List<VideoChannels> listVideoChannels();
+    List<Channels> listVideoChannels(Integer status, Integer appType);
 
     /**
      * 根据类型查找视频或新闻

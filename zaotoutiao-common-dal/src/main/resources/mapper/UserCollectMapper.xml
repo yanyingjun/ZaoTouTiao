@@ -3,12 +3,23 @@
 <mapper namespace="com.zhishun.zaotoutiao.dal.mapper.UserCollectMapper">
   <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.UserCollect">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="userId" jdbcType="BIGINT" property="userId" />
-    <result column="infosId" jdbcType="VARCHAR" property="infosId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="filter" jdbcType="VARCHAR" property="filter" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="raw_url" jdbcType="VARCHAR" property="rawUrl" />
+    <result column="channel" jdbcType="VARCHAR" property="channel" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="style" jdbcType="VARCHAR" property="style" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate" />
+    <result column="infos_type" jdbcType="VARCHAR" property="infosType" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, userId, infosId, create_date
+    id, user_id, title, create_date, filter, url, author, raw_url, channel, source, style, 
+    pic_url, publish_date, infos_type
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -21,10 +32,16 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserCollect">
-    insert into user_collect (id, userId, infosId, 
-      create_date)
-    (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{infosId,jdbcType=VARCHAR},
-      #{createDate,jdbcType=TIMESTAMP})
+    insert into user_collect (id, user_id, title, 
+      create_date, filter, url, 
+      author, raw_url, channel, 
+      source, style, pic_url, 
+      publish_date, infos_type)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{filter,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{author,jdbcType=VARCHAR}, #{rawUrl,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR}, 
+      #{source,jdbcType=VARCHAR}, #{style,jdbcType=VARCHAR}, #{picUrl,jdbcType=VARCHAR}, 
+        #{publishDate,jdbcType=TIMESTAMP}, #{infosType, jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserCollect">
     insert into user_collect
@@ -32,14 +49,44 @@
       <if test="id != null">
         id,
       </if>
-        <if test="userId != null">
-            userId,
-        </if>
-        <if test="infosId != null">
-        infosId,
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="title != null">
+        title,
       </if>
       <if test="createDate != null">
         create_date,
+      </if>
+      <if test="filter != null">
+        filter,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="rawUrl != null">
+        raw_url,
+      </if>
+      <if test="channel != null">
+        channel,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="style != null">
+        style,
+      </if>
+      <if test="picUrl != null">
+        pic_url,
+      </if>
+      <if test="publishDate != null">
+        publish_date,
+      </if>
+      <if test="infosType != null">
+        infos_type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -49,11 +96,41 @@
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
       </if>
-      <if test="infosId != null">
-        #{infosId,jdbcType=VARCHAR},
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null">
         #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="filter != null">
+        #{filter,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="rawUrl != null">
+        #{rawUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null">
+        #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null">
+        #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null">
+        #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="infosType != null">
+        #{infosType, jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -61,39 +138,72 @@
     update user_collect
     <set>
       <if test="userId != null">
-        userId = #{userId,jdbcType=BIGINT},
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
-      <if test="infosId != null">
-        infosId = #{infosId,jdbcType=VARCHAR},
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null">
         create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="filter != null">
+        filter = #{filter,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="rawUrl != null">
+        raw_url = #{rawUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null">
+        channel = #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null">
+        style = #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null">
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null">
+        publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="infosType != null">
+        infos_type = #{infosType,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserCollect">
     update user_collect
-    set userId = #{userId,jdbcType=BIGINT},
-      infosId = #{infosId,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP}
+    set user_id = #{userId,jdbcType=BIGINT},
+      title = #{title,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      filter = #{filter,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      raw_url = #{rawUrl,jdbcType=VARCHAR},
+      channel = #{channel,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      style = #{style,jdbcType=VARCHAR},
+      pic_url = #{picUrl,jdbcType=VARCHAR},
+      publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      infos_type = #{infosType,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <delete id="delUserCollect" parameterType="java.lang.Long">
-    delete from user_collect
-    where userId = #{userId}
-  </delete>
-
-  <select id="listCollect" parameterType="map" resultMap="BaseResultMap">
-    SELECT * FROM user_collect WHERE userId = #{userId} and infosId = #{infosId}
-  </select>
-
-  <delete id="delOneCollect" parameterType="map">
-    DELETE FROM user_collect where userId = #{userId} AND infosId = #{infosId}
-  </delete>
-
-  <select id="getUserCollectByParam" parameterType="map" resultMap="BaseResultMap">
-    SELECT * FROM user_collect WHERE user_collect.infosId = #{infosId} AND user_collect.userId = #{userId}
+  <select id="getCollectList" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_collect
+    where user_id = #{userId}
+    and infos_type = #{infosType}
+    ORDER BY create_date desc
+    limit #{startNo},#{endNo}
   </select>
 </mapper>

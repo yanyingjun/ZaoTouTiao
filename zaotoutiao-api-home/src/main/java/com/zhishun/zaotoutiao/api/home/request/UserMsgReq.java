@@ -13,7 +13,7 @@ public class UserMsgReq {
     /**
      * 用户登录
      */
-    public static final String USER_LOGIN_REQ = "/user/common";
+    public static final String USER_LOGIN_REQ = "/user/login";
 
     /**
      * 用户注册

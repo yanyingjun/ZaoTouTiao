@@ -2,6 +2,7 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 
 import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 
 import java.util.List;
 import java.util.Map;
@@ -79,4 +80,25 @@ public interface UserReadRecordMapper {
      * @return
      */
     int isContinuousReadToday(Long userId);
+
+    /**
+     * 获取用户历史记录
+     * @param map
+     * @return
+     */
+    List<UserReadRecord> listLookRecordPage(Map<String,Object> map);
+
+    /**
+     * 获取用户历史总记录数
+     * @param map
+     * @return
+     */
+    int countLookRecord(Map<String,Object> map);
+
+    /**
+     * 获取最大的一条记录
+     * @param userId
+     * @return
+     */
+    UserReadRecord maxReadRecord(Long userId);
 }

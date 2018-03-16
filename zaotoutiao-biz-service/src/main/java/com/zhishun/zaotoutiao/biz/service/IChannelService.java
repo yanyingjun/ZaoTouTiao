@@ -18,7 +18,7 @@ public interface IChannelService {
      * 获取导航列表
      * @return
      */
-    Page<Channels> listChannelsPage(ChannelsVO channelsVO, PageRequest pageRequest);
+    List<Channels> listChannels(ChannelsVO channelsVO);
 
     /**
      * 获取导航列表
@@ -93,6 +93,28 @@ public interface IChannelService {
      * @return
      */
     int addTheChannel(Channels channels);
+
+    /**
+     * 添加视频导航
+     * @param channels
+     * @return
+     */
+    int addVideoChannel(Channels channels);
+
+    /**
+     * 获取新闻或视频分类信息
+     * @param channelId
+     * @return
+     */
+    Channels getChannelsByChannelId(String channelId);
+
+    /**
+     * 修改用户关注的频道
+     * @param userId
+     * @param channels
+     * @return
+     */
+    int updateUserChannelByUserId(Long userId, String channels);
 
 
     List<ChannelsVO> getTabs(String name, Long parentId, Integer appType);

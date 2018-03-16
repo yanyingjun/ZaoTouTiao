@@ -2,6 +2,8 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 
 import com.zhishun.zaotoutiao.core.model.entity.UserComments;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
 
 import java.util.List;
 import java.util.Map;
@@ -66,4 +68,18 @@ public interface UserCommentsMapper {
      * @return
      */
     List<UserComments> getCommentsByKeywordList(String keyword);
+
+    /**
+     * 获取最新评论和评论点赞信息
+     * @param map
+     * @return
+     */
+    List<UserCommentsVO> getNewComments(Map<String,Object> map);
+
+    /**
+     * 获取热门评论和评论点赞信息
+     * @param map
+     * @return
+     */
+    List<UserCommentsVO> getHotComments(Map<String,Object> map);
 }

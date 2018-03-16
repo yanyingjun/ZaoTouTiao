@@ -2,7 +2,7 @@
  * @company 杭州智顺文化传播有限公司
  * @copyright Copyright (c) 2018 - 2018
  */
-package com.zhishun.zaotoutiao.core.model.information360.RequestURL;
+package com.zhishun.zaotoutiao.core.model.information360;
 
 /**
  * @author 闫迎军(YanYingJun)
@@ -16,12 +16,7 @@ public class ThirdConstantInfo {
     public static final String PN = "com.muki.topline";
 
     /**
-     * 用户ID
-     */
-    public static final String MY_UID = "hzzswhcbyxgs";
-
-    /**
-     * 应用平台分配的APPID
+     * 新闻应用平台分配的APPID
      */
     public static final String APPID = "278";
 
@@ -36,5 +31,16 @@ public class ThirdConstantInfo {
      * 客户端版本
      */
     public static final String VERSION = "1.0.2";
+
+    /**---------------------------------------------------------------------*/
+    //视频相关
+
+    //渠道唯一标识（测试）
+    public static final String SH_APPID = "opendemoapi";
+
+    //测试使用
+    public static final String SECRET_KEY = "a8cce06b7384c2e33da28117993383f6";
+
+
 
 }

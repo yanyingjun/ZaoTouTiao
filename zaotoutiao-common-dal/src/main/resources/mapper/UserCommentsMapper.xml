@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhishun.zaotoutiao.dal.mapper.UserCommentsMapper">
-  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.UserComments">
+  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="infoId" jdbcType="VARCHAR" property="infoId" />
-    <result column="userId" jdbcType="BIGINT" property="userId" />
+    <result column="info_id" jdbcType="VARCHAR" property="infoId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="likes" jdbcType="INTEGER" property="likes" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, infoId, userId, content, createDate, likes
+    id, info_id, user_id, content, create_date, likes
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -23,8 +23,8 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserComments">
-    insert into user_comments (id, infoId, userId, 
-      content, createDate, likes
+    insert into user_comments (id, info_id, user_id,
+      content, create_date, likes
       )
     values (#{id,jdbcType=BIGINT}, #{infoId,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT},
       #{content,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{likes,jdbcType=INTEGER}
@@ -37,16 +37,16 @@
         id,
       </if>
       <if test="infoId != null">
-        infoId,
+        info_id,
       </if>
       <if test="userId != null">
-        userId,
+        user_id,
       </if>
       <if test="content != null">
         content,
       </if>
       <if test="createDate != null">
-        createDate,
+        create_date,
       </if>
       <if test="likes != null">
         likes,
@@ -77,16 +77,16 @@
     update user_comments
     <set>
       <if test="infoId != null">
-        infoId = #{infoId,jdbcType=VARCHAR},
+        info_id = #{infoId,jdbcType=VARCHAR},
       </if>
       <if test="userId != null">
-        userId = #{userId,jdbcType=BIGINT},
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null">
-        createDate = #{createDate,jdbcType=TIMESTAMP},
+        create_date = #{createDate,jdbcType=TIMESTAMP},
       </if>
       <if test="likes != null">
         likes = #{likes,jdbcType=INTEGER},
@@ -96,10 +96,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserComments">
     update user_comments
-    set infoId = #{infoId,jdbcType=VARCHAR},
-      userId = #{userId,jdbcType=BIGINT},
+    set info_id = #{infoId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
       content = #{content,jdbcType=VARCHAR},
-      createDate = #{createDate,jdbcType=TIMESTAMP},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
       likes = #{likes,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -110,7 +110,7 @@
     from user_comments
     where id = #{id,jdbcType=BIGINT}
     <if test="userId != null">
-      and userId = #{userId}
+      and user_id = #{userId}
     </if>
   </select>
 
@@ -121,16 +121,16 @@
   </delete>
 
   <select id="getUserCommentsByInfoId" parameterType="string" resultMap="BaseResultMap">
-    select * from user_comments WHERE infoId = #{infoId}
+    select * from user_comments WHERE info_id = #{infoId}
   </select>
 
   <select id="countUserComments" parameterType="string" resultType="int">
-    select count(*) as comments_num from user_comments WHERE infoId = #{infoId}
+    select count(*) as comments_num from user_comments WHERE info_id = #{infoId}
   </select>
 
   <select id="getCommentsNumByInfoId" parameterType="java.lang.String" resultType="int">
     select count(0) FROM user_comments
-    WHERE infoId = #{infoId}
+    WHERE info_id = #{infoId}
   </select>
 
   <select id="getCommentsList" resultMap="BaseResultMap">
@@ -146,5 +146,21 @@
     LEFT JOIN infos ON infos.infoId = user_comments.infoId
     LEFT JOIN user ON user.userId = user_comments.userId
     WHERE user.nickName like #{keyword} or infos.title like #{keyword} or user_comments.content like #{keyword}
+  </select>
+
+  <select id="getNewComments" parameterType="map" resultMap="BaseResultMap">
+    SELECT user.headpath, user.nickName, user_comments.*
+    FROM user, user_comments
+    WHERE user_comments.info_id = #{infoId}
+    AND user.userId = user_comments.user_id
+    ORDER BY user_comments.create_date desc limit #{startNo},#{endNo}
+  </select>
+
+  <select id="getHotComments" parameterType="map" resultMap="BaseResultMap">
+    SELECT user.headpath, user.nickName, user_comments.*
+    FROM user, user_comments
+    WHERE user_comments.info_id = #{infoId}
+    AND user.userId = user_comments.user_id
+    ORDER BY user_comments.likes desc,user_comments.create_date desc limit #{startNo},#{endNo}
   </select>
 </mapper>

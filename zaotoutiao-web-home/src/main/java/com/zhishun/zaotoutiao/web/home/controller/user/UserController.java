@@ -8,6 +8,9 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
+import com.zhishun.zaotoutiao.common.util.AssertsUtil;
+import com.zhishun.zaotoutiao.core.model.entity.User;
+import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.core.model.vo.UserVO;
 import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
@@ -55,7 +58,7 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = ZttWebMsgReq.ZTT_CAN_BE_PRESENTED_USER_LIST_REQ)
     @ResponseBody
-    public Map<Object,Object> listCanBePresentedUser(final String keyWord, final String channelId, final String createDate, final BigDecimal money, final PageRequest pageRequest){
+    public Map<Object,Object> listCanBePresentedUser(final String keyWord, final String channelId, final String createDate, final BigDecimal minMoney, final BigDecimal maxMoney, final PageRequest pageRequest){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
@@ -66,9 +69,43 @@ public class UserController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                Page<UserVO> page = userService.listCanBePresentedUser(keyWord, channelId, createDate, money, pageRequest);
+                Page<UserVO> page = userService.listCanBePresentedUser(keyWord, channelId, createDate, minMoney, maxMoney, pageRequest);
                 dataMap.put("total", page.getTotal());
                 dataMap.put("rows", page.getRows());
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 更新用户状态
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = ZttWebMsgReq.ZTT_UPDATE_USER_REQ)
+    @ResponseBody
+    public Map<Object,Object> updateUser(final Long userId, final Integer status){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                User user = userService.getUserByUserId(userId);
+                user.setStatus(status);
+                int num = userService.updateUser(user);
+                if(num > 0){
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "操作成功");
+                }else{
+                    dataMap.put("result", "fail");
+                    dataMap.put("msg", "操作失败");
+                }
             }
         });
 

@@ -34,6 +34,20 @@ public class RandomUtil {
 			'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
 	/**
+	 * 获取随机数
+	 * @return
+	 */
+	public static int getRandomIndex(){
+		int random = 0;
+		int[] doc = {0,1,2,3,4,5,6,7,8,9};
+		for(int i = 0; i<doc.length; i++){
+			int index = (int) (Math.random() * doc.length);
+			random = doc[index];
+		}
+		return random;
+	}
+
+	/**
 	 * 产生默认验证码，6位随机数<br>
 	 * 
 	 * @return 验证码

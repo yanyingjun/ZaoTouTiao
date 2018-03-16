@@ -35,16 +35,6 @@ public class UserCheckGoldHistory implements Serializable {
     private Integer type;
 
     /**
-     * 构造方法
-     */
-    public UserCheckGoldHistory(Long id, Long userId, String createDate, Integer type) {
-        this.id = id;
-        this.userId = userId;
-        this.createDate = createDate;
-        this.type = type;
-    }
-
-    /**
      * Getter method for property <tt>id</tt>.
      *
      * @return property value of id

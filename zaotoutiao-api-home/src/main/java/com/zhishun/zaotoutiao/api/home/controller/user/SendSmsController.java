@@ -7,6 +7,7 @@ package com.zhishun.zaotoutiao.api.home.controller.user;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
+import com.zhishun.zaotoutiao.api.home.request.UserMsgReq;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.common.util.SendMsgUtil;
@@ -15,6 +16,8 @@ import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -34,6 +37,7 @@ public class SendSmsController extends BaseController{
      * @param telephone
      * @return
      */
+    @RequestMapping(value = UserMsgReq.SEND_SMS_CODE, method = RequestMethod.GET)
     public Map<Object,Object> sendSmsCode(final String telephone){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
@@ -46,9 +50,23 @@ public class SendSmsController extends BaseController{
             @Override
             public void handle() throws Exception {
                 User user = userService.getUserByMap(telephone);
-                //判断是否绑定过微信
-                if(StringUtils.isEmpty(user.getWechatId())){
-                    dataMap.put("whether_binding_wechat", "false");
+                if(StringUtils.isEmpty(user)){
+                    //判断是否绑定过微信
+                    if(StringUtils.isEmpty(user.getWechatId())){
+                        dataMap.put("whether_binding_wechat", "false");
+                        //生成四位随机数
+                        int code = new Random().nextInt(9000) + 1000;
+                        //发送验证码
+                        SendMsgUtil.sendSms(telephone, String.valueOf(code));
+                        dataMap.put("telephone", telephone);
+                        dataMap.put("code", code);
+                        dataMap.put("result", "success");
+                        dataMap.put("msg", "验证码发送成功");
+                    }else{
+                        dataMap.put("whether_binding_wechat", "true");
+                    }
+                    dataMap.put("whether_has_user", "false");
+                }else{
                     //生成四位随机数
                     int code = new Random().nextInt(9000) + 1000;
                     //发送验证码
@@ -57,12 +75,6 @@ public class SendSmsController extends BaseController{
                     dataMap.put("code", code);
                     dataMap.put("result", "success");
                     dataMap.put("msg", "验证码发送成功");
-                }else{
-                    dataMap.put("whether_binding_wechat", "true");
-                }
-                if(StringUtils.isEmpty(user)){
-                    dataMap.put("whether_has_user", "false");
-                }else{
                     dataMap.put("whether_has_user", "true");
                 }
             }

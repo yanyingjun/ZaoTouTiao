@@ -107,7 +107,7 @@ public interface UserMapper {
      * @param userId
      * @return
      */
-    User isParentFirstRecruit(Long userId);
+    List<User> isParentFirstRecruit(Long userId);
 
     /**
      * 获取徒弟数

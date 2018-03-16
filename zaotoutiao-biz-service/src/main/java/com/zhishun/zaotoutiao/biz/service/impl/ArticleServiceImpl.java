@@ -51,13 +51,6 @@ public class ArticleServiceImpl implements IArticleService {
     private StaticGetGoldMethodMapper staticGetGoldMethodMapper;
 
     @Override
-    public int addComments(UserComments userComments) {
-        userComments.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
-        userComments.setLikes(0);
-        return userCommentsMapper.insertSelective(userComments);
-    }
-
-    @Override
     public UserComments getUserCommonets(Long id) {
         return userCommentsMapper.selectByPrimaryKey(id);
     }
@@ -137,7 +130,7 @@ public class ArticleServiceImpl implements IArticleService {
                         //新闻评论类型
                         int source = 5;
                         userGoldRecord = new UserGoldRecord();
-                        userGoldRecord.setGold(Long.valueOf(goldNum));
+                        userGoldRecord.setGold(Integer.valueOf(goldNum));
                         userGoldRecord.setUserId(authorId);
                         userGoldRecord.setInfoId(infoId);
                         userGoldRecord.setType((byte)1);
@@ -147,7 +140,7 @@ public class ArticleServiceImpl implements IArticleService {
                         //更新用户金币数量
                         User user = userMapper.selectByPrimaryKey(authorId);
                         BigDecimal newGold = new BigDecimal(goldNum).add(new BigDecimal(user.getGold()));
-                        user.setGold(newGold.longValue());
+                        user.setGold(newGold.intValue());
                         userMapper.updateByPrimaryKeySelective(user);
                     }
                 }

@@ -207,6 +207,9 @@
       <if test="isRequestGold != null">
         and is_request_gold = #{isRequestGold}
       </if>
+      <if test="createDate != null">
+        and TO_DAYS( NOW( ) ) - TO_DAYS( create_date) = 0
+      </if>
     </where>
   </select>
 
@@ -247,5 +250,28 @@
   <select id="isContinuousReadToday" parameterType="Long" resultType="int">
     SELECT COUNT(0)
     FROM user_read_record WHERE TO_DAYS( NOW( ) ) - TO_DAYS( create_date) &lt;= 0 AND userId = #{userId}
+  </select>
+
+
+  <select id="listLookRecordPage" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_read_record
+    WHERE userId = #{userId} ORDER BY create_date desc
+    <if test="offset != null and limit != null">
+      limit #{offset},#{limit}
+    </if>
+  </select>
+
+  <select id="countLookRecord" parameterType="map" resultType="int">
+    select count(id)
+    from user_read_record
+    WHERE userId = #{userId} ORDER BY create_date desc
+  </select>
+
+  <select id="maxReadRecord" parameterType="long" resultMap="BaseResultMap">
+    SELECT max(create_date),browsing
+    from user_read_record
+    WHERE userId = #{userId} and create_date= (select MAX(create_date) from  user_read_record)
   </select>
 </mapper>

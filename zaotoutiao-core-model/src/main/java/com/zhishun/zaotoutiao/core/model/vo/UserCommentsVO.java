@@ -22,6 +22,9 @@ public class UserCommentsVO extends UserComments{
      */
     private String nickName;
 
+    //自己是否点赞
+    private boolean isMyLike;
+
     public String getTitle() {
         return title;
     }
@@ -36,5 +39,23 @@ public class UserCommentsVO extends UserComments{
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    /**
+     * Getter method for property <tt>isMyLike</tt>.
+     *
+     * @return property value of isMyLike
+     */
+    public boolean isMyLike() {
+        return isMyLike;
+    }
+
+    /**
+     * Setter method for property <tt>isMyLike</tt>.
+     *
+     * @param isMyLike value to be assigned to property isMyLike
+     */
+    public void setMyLike(boolean myLike) {
+        isMyLike = myLike;
     }
 }

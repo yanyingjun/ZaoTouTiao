@@ -79,8 +79,9 @@ public class ExchangeRate implements Serializable {
     private Integer awakenUserGold;
 
     /**
-     * 构造方法
+     * 阅读掉落金币数量
      */
+    private Integer readDownGold;
 
     /**
      * Getter method for property <tt>id</tt>.
@@ -314,5 +315,23 @@ public class ExchangeRate implements Serializable {
      */
     public void setAwakenUserGold(Integer awakenUserGold) {
         this.awakenUserGold = awakenUserGold;
+    }
+
+    /**
+     * Getter method for property <tt>readDownGold</tt>.
+     *
+     * @return property value of readDownGold
+     */
+    public Integer getReadDownGold() {
+        return readDownGold;
+    }
+
+    /**
+     * Setter method for property <tt>readDownGold</tt>.
+     *
+     * @param readDownGold value to be assigned to property readDownGold
+     */
+    public void setReadDownGold(Integer readDownGold) {
+        this.readDownGold = readDownGold;
     }
 }

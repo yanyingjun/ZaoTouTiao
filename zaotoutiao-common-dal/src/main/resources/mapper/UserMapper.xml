@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhishun.zaotoutiao.dal.mapper.UserMapper" >
   <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.vo.UserVO" >
-      <id column="userId" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <id column="userId" property="userId" jdbcType="BIGINT" />
       <result column="name" property="name" jdbcType="VARCHAR" />
       <result column="nickName" property="nickName" jdbcType="VARCHAR"  />
       <result column="telephone" property="telephone" jdbcType="VARCHAR" />
@@ -29,6 +29,8 @@
       <result column="oppenId" property="oppenId" jdbcType="VARCHAR" />
       <result column="platform_id" property="platformId" jdbcType="INTEGER" />
       <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+      <result column="address" property="address" jdbcType="VARCHAR" />
+      <result column="status" property="status" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -38,7 +40,7 @@
     userId, name, nickName, telephone, account, password, parentId, gold, money, headpath, 
     birthday, sex, myInvitation, isOnline, create_date, job, educational, last_visit_date, 
     code, push_time_1, push_time_2, push_time_3, push_time_4, wechatId, oppenId, platform_id,
-    channel_id
+    channel_id, address, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     <!--
@@ -71,7 +73,7 @@
       job, educational, last_visit_date, 
       code, push_time_1, push_time_2, 
       push_time_3, push_time_4, wechatId, 
-      oppenId, platform_id, channelId)
+      oppenId, platform_id, channelId, address, status)
     values (#{userId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR},
       #{telephone,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{parentId,jdbcType=BIGINT}, #{gold,jdbcType=BIGINT}, #{money,jdbcType=DECIMAL},
@@ -80,7 +82,8 @@
       #{job,jdbcType=VARCHAR}, #{educational,jdbcType=VARCHAR}, #{lastVisitDate,jdbcType=TIMESTAMP}, 
       #{code,jdbcType=VARCHAR}, #{pushTime1,jdbcType=TIME}, #{pushTime2,jdbcType=TIME}, 
       #{pushTime3,jdbcType=TIME}, #{pushTime4,jdbcType=TIME}, #{wechatId,jdbcType=VARCHAR},
-      #{oppenId,jdbcType=VARCHAR}, #{platformId, jdbcType=INTEGER}, #{channelId, jdbcType=INTEGER})
+      #{oppenId,jdbcType=VARCHAR}, #{platformId, jdbcType=INTEGER}, #{channelId, jdbcType=INTEGER},
+      #{address,jdbcType=VARCHAR}, #{status, jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.User" useGeneratedKeys="true" keyProperty="userId" >
     <!--
@@ -95,7 +98,7 @@
       <if test="name != null" >
         name,
       </if>
-      <if test="nickname != null" >
+      <if test="nickName != null" >
         nickName,
       </if>
       <if test="telephone != null" >
@@ -107,7 +110,7 @@
       <if test="password != null" >
         password,
       </if>
-      <if test="parentid != null" >
+      <if test="parentId != null" >
         parentId,
       </if>
       <if test="gold != null" >
@@ -168,7 +171,13 @@
         platform_id,
       </if>
       <if test="channelId != null" >
-        channel_id
+        channel_id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="status != null">
+        status
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -251,7 +260,13 @@
         #{platformId, jdbcType=INTEGER},
       </if>
       <if test="channelId != null" >
-        #{channelId, jdbcType=INTEGER}
+        #{channelId, jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address, jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status, jdbcType=INTEGER}
       </if>
     </trim>
   </insert>
@@ -338,7 +353,13 @@
         platform_id = #{platformId, jdbcType=INTEGER},
       </if>
       <if test="channelId != null">
-        channel_id = #{channelId, jdbcType=INTEGER}
+        channel_id = #{channelId, jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address, jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status, jdbcType=INTEGER}
       </if>
     </set>
     where userId = #{userId,jdbcType=BIGINT}
@@ -374,7 +395,9 @@
       wechatId = #{wechatId,jdbcType=VARCHAR},
       oppenId = #{oppenId,jdbcType=VARCHAR},
       platform_id = #{platformId,jdbcType=INTEGER},
-      channel_id = #{channelId,jdbcType=INTEGER}
+      channel_id = #{channelId,jdbcType=INTEGER},
+      address = #{address},
+      status = #{status}
     where userId = #{userId,jdbcType=BIGINT}
   </update>
 
@@ -442,7 +465,7 @@
   </select>
 
   <select id="isSurpassingActivtiy" parameterType="map" resultMap="BaseResultMap">
-    SELECT * FROM user WHERE TO_DAYS( NOW( ) ) - TO_DAYS( create_date) > #{readActivityDays} AND userId = #{userId}
+    SELECT * FROM user WHERE TO_DAYS( NOW( ) ) - TO_DAYS( create_date) &lt; #{readActivityDays} AND userId = #{userId}
   </select>
 
   <select id="isParentFirstRecruit" parameterType="long" resultMap="BaseResultMap">
@@ -608,18 +631,25 @@
   </select>
 
   <select id="listCanBePresentedUser" parameterType="map" resultMap="BaseResultMap">
-    select * from USER  where money &gt;= 30
+    select u.*, r.number as readNumber, s.apprenticeNum as apprenticeNum, p.channel_name as channelName from USER as u
+    LEFT JOIN (select count(0) as number,userId from user_read_record GROUP BY userId) as r ON u.userId = r.userId
+    LEFT join (SELECT count(apprenticeId) as apprenticeNum, userId from user_share GROUP BY userId) as s ON u.userId = s.userId
+    LEFT JOIN platform_channel as p ON u.channel_id = p.id
+
     <if test="keyWord != null">
-        and (nickName LIKE CONCAT('%', #{keyWord}, '%') || telephone LIKE CONCAT('%', #{keyWord}, '%'))
+        and (u.nickName LIKE CONCAT('%', #{keyWord}, '%') || u.telephone LIKE CONCAT('%', #{keyWord}, '%'))
     </if>
     <if test="channelId != null">
-        and channel_id = #{channelId}
+        and u.channel_id = #{channelId}
     </if>
     <if test="createDate != null">
-        and create_date = #{createDate}
+        and date_format(u.create_date,'%M/%D/%Y') = #{createDate}
     </if>
-    <if test="money != null">
-        and money LIKE CONCAT('%', #{money}, '%')
+    <if test="minMoney != null">
+        and u.money &gt;= #{minMoney}
+    </if>
+    <if test="maxMoney != null">
+        and u.money &lt;= #{maxMoney}
     </if>
     <if test="offset != null and limit != null">
       limit #{offset},#{limit}
@@ -627,18 +657,25 @@
   </select>
 
   <select id="countCanBePresentedUser" parameterType="map" resultType="int">
-    select count(0) from USER  where money &gt;= 30
+    select count(0) from USER as u
+    LEFT JOIN (select count(0) as number,userId from user_read_record GROUP BY userId) as r ON u.userId = r.userId
+    LEFT join (SELECT count(apprenticeId) as apprenticeNum, userId from user_share GROUP BY userId) as s ON u.userId = s.userId
+    LEFT JOIN platform_channel as p ON u.channel_id = p.id
+
     <if test="keyWord != null">
-      and (nickName LIKE CONCAT('%', #{keyWord}, '%') || telephone LIKE CONCAT('%', #{keyWord}, '%'))
+      and (u.nickName LIKE CONCAT('%', #{keyWord}, '%') || u.telephone LIKE CONCAT('%', #{keyWord}, '%'))
     </if>
     <if test="channelId != null">
-      and channel_id = #{channelId}
+      and u.channel_id = #{channelId}
     </if>
     <if test="createDate != null">
-      and create_date = #{createDate}
+      and date_format(u.create_date,'%M/%D/%Y') = #{createDate}
     </if>
-    <if test="money != null">
-      and money LIKE CONCAT('%', #{money}, '%')
+    <if test="minMoney != null">
+      and u.money &gt;= #{minMoney}
+    </if>
+    <if test="maxMoney != null">
+      and u.money &lt;= #{maxMoney}
     </if>
   </select>
 </mapper>

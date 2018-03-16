@@ -13,18 +13,9 @@ import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.common.util.Md5Util;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.vo.StaticIndustrysVO;
-import com.zhishun.zaotoutiao.core.model.entity.StaticFakeData;
-import com.zhishun.zaotoutiao.core.model.entity.User;
-import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
-import com.zhishun.zaotoutiao.core.model.entity.UserMoneyRecord;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserMoneyRecordVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserVO;
-import com.zhishun.zaotoutiao.dal.mapper.*;
-import com.zhishun.zaotoutiao.dal.mapper.UserGoldRecordMapper;
-import com.zhishun.zaotoutiao.dal.mapper.UserInformationMapper;
-import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
-import com.zhishun.zaotoutiao.dal.mapper.UserMoneyRecordMapper;
 import com.zhishun.zaotoutiao.dal.mapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,7 +118,7 @@ public class UserServiceImpl implements IUserService{
     public void updateUserInfo(Long userId, int gold) {
         User user = userMapper.selectByPrimaryKey(userId);
         BigDecimal newGold = new BigDecimal(gold).add(new BigDecimal(user.getGold()));
-        user.setGold(newGold.longValue());
+        user.setGold(newGold.intValue());
         userMapper.updateByPrimaryKeySelective(user);
     }
 
@@ -208,28 +199,6 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public int isRead(Long userId, Long infoId) {
-        Map<String,Object> map = Maps.newHashMap();
-        map.put("userId", userId);
-        map.put("infoId", infoId);
-        UserReadRecord userReadRecord = userReadRecordMapper.getUserReadRecord(map);
-        map.put("isRequestGold", 1);
-        UserReadRecord userReadRecord1 = userReadRecordMapper.getUserReadRecord(map);
-        if(StringUtils.isEmpty(userReadRecord1)){
-            //判断是否添加到阅读列表
-            if(StringUtils.isEmpty(userReadRecord)){
-                return 0;
-            }else{
-                userReadRecord.setIsRequestGold(1);
-                userReadRecordMapper.updateReadRecord(userReadRecord);
-                return 2;
-            }
-        }else {
-            return 1;
-        }
-    }
-
-    @Override
     public User isSurpassingActivtiy(int readActivityDays, Long userId) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("readActivityDays", readActivityDays);
@@ -248,7 +217,7 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public int addUserGoldRecord(int source, Long userId, Long gold, Long apprenticeId) {
+    public int addUserGoldRecord(int source, Long userId, int gold, Long apprenticeId) {
         UserGoldRecord userGoldRecord = new UserGoldRecord();
         userGoldRecord = new UserGoldRecord();
         userGoldRecord.setSource(source);
@@ -282,7 +251,7 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public User isParentFirstRecruit(Long userId) {
+    public List<User> isParentFirstRecruit(Long userId) {
         return userMapper.isParentFirstRecruit(userId);
     }
 
@@ -398,7 +367,7 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public int addUser(String telephone, String password, String wechatId, String wechatHead, String wechatName) {
+    public Long addUser(String telephone, String password, String wechatId, String wechatHead, String wechatName) {
         password = Md5Util.md5Encode(password);
         //我的邀请码为我的手机号转16进制
         String myInvitation = Long.toHexString(Long.valueOf(telephone));
@@ -414,13 +383,13 @@ public class UserServiceImpl implements IUserService{
         user.setHeadPath(headpath);
         user.setWechatId(wechatId);
         user.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
-        int id = userMapper.insertSelective(user);
+        userMapper.insertSelective(user);
 
         //添加用户关注频道
         UserChannels userChannels = new UserChannels();
-        userChannels.setUserId(Long.valueOf(id));
+        userChannels.setUserId(user.getUserId());
         userChannelsMapper.insertSelective(userChannels);
-        return id;
+        return user.getUserId();
     }
 
     @Override
@@ -490,7 +459,7 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public int addUserInfo(String telephone, String password) {
+    public Long addUserInfo(String telephone, String password, Integer platformId, Integer channelId, String address) {
         password = Md5Util.md5Encode(password);
         String nickName = "手机用户_" + telephone.substring(7, 11);
         //我的邀请码为我的手机号转16进制
@@ -506,30 +475,38 @@ public class UserServiceImpl implements IUserService{
         user.setMyInvitation(myInvitation);
         user.setHeadPath(headpath);
         user.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
-        int id = userMapper.insertSelective(user);
+        user.setPlatformId(platformId);
+        user.setChannelId(channelId);
+        user.setAddress(address);
+        user.setLastVisitDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+
+        userMapper.insertSelective(user);
 
         //添加用户关注频道
         UserChannels userChannels = new UserChannels();
-        userChannels.setUserId(Long.valueOf(id));
+        userChannels.setUserId(user.getUserId());
         userChannelsMapper.insertSelective(userChannels);
 
-        return id;
+        return user.getUserId();
     }
 
     @Override
-    public Page<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal money, PageRequest pageRequest) {
+    public Page<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal minMoney, BigDecimal maxMoney, PageRequest pageRequest) {
         Map map = Maps.newHashMap();
         if(!StringUtils.isEmpty(keyWord)){
             map.put("keyWord", keyWord);
         }
-        if(!StringUtils.isEmpty(channelId)){
+        if(!StringUtils.isEmpty(channelId) && Integer.valueOf(channelId) != 0){
             map.put("channelId", channelId);
         }
         if(!StringUtils.isEmpty(createDate)){
             map.put("createDate", createDate);
         }
-        if(!StringUtils.isEmpty(money)){
-            map.put("money", money);
+        if(!StringUtils.isEmpty(minMoney)){
+            map.put("minMoney", minMoney);
+        }
+        if(!StringUtils.isEmpty(maxMoney)){
+            map.put("maxMoney", maxMoney);
         }
         int total = userMapper.countCanBePresentedUser(map);
         if(!StringUtils.isEmpty(pageRequest)){
