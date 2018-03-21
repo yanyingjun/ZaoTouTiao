@@ -482,7 +482,7 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
 
 
     @Override
-    public AdInfoVO getAdInfo(InformationVO informationVO){
+    public AdInfoVO getAdInfo(InformationVO informationVO, String id){
 
         App app = new App();
         app.setPackage_name(informationVO.getPackageName());
@@ -520,8 +520,8 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
         client.setVersion(AdConstantInfo.VERSION);
 
         Adslot adslot = new Adslot();
-        adslot.setId(AdConstantInfo.TEST_AD_POSITION);
-        adslot.setType(2);
+        adslot.setId(id);
+        adslot.setType(1);
         adslot.setHeight(200);
         adslot.setWidth(100);
 
@@ -532,7 +532,7 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
         map.put("client", client);
         map.put("adslot", adslot);
 
-        JSONObject jsonss = ApiUtil.httpPost(AdConstantInfo.TEST_REQUEST_URL, map);
+        JSONObject jsonss = ApiUtil.httpPost(AdConstantInfo.AD_REQUEST_URL, map);
 
         JSONObject ads = JSONObject.parseObject(jsonss.getString("ads"));
         JSONObject nativeMaterial = JSONObject.parseObject(ads.getString("native_material"));
@@ -549,6 +549,12 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
             adInfoVO.setHeight(imageSnippet.getInteger("height"));
             adInfoVO.setDesc(imageSnippet.getString("desc"));
             adInfoVO.setType(type);
+            if(!StringUtils.isEmpty(imageSnippet.getString("clk"))){
+                adInfoVO.setClk(imageSnippet.getString("clk"));
+            }
+            if(!StringUtils.isEmpty(imageSnippet.getString("imp"))){
+                adInfoVO.setImp(imageSnippet.getString("imp"));
+            }
             adInfoVO.setInteractionType(interationType);
         }
         //图文，三图，互动
@@ -560,6 +566,12 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
             adInfoVO.setUrl(textIconSnippet.getString("url"));
             adInfoVO.setWidth(textIconSnippet.getInteger("width"));
             adInfoVO.setHeight(textIconSnippet.getInteger("height"));
+            if(!StringUtils.isEmpty(textIconSnippet.getString("clk"))){
+                adInfoVO.setClk(textIconSnippet.getString("clk"));
+            }
+            if(!StringUtils.isEmpty(textIconSnippet.getString("imp"))){
+                adInfoVO.setImp(textIconSnippet.getString("imp"));
+            }
             adInfoVO.setType(type);
             adInfoVO.setInteractionType(interationType);
         }
@@ -572,6 +584,14 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
             adInfoVO.setHeight(videoSnippet.getInteger("height"));
             adInfoVO.setDuration(videoSnippet.getInteger("duration"));
             adInfoVO.setType(type);
+            if(!StringUtils.isEmpty(videoSnippet.getString("clk"))){
+                adInfoVO.setClk(videoSnippet.getString("clk"));
+            }
+            if(!StringUtils.isEmpty(videoSnippet.getString("video_imp"))){
+                JSONObject videoImp = JSONObject.parseObject(videoSnippet.getString("video_imp"));
+                adInfoVO.setImp(videoImp.getString("imp_url"));
+                adInfoVO.setTime(videoImp.getString("time"));
+            }
             adInfoVO.setInteractionType(interationType);
         }
         //判断类型为下载

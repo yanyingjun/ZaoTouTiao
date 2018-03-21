@@ -27,6 +27,21 @@ public class AdConstantInfo {
     public static final String TEST_AD_POSITION = "7112926";
 
     /**
+     * 正式环境地址
+     */
+    public static final String AD_REQUEST_URL = "http://api.aiclk.com/v3/json";
+
+    /**
+     * 正式视频广告位
+     */
+    public static final String AD_VIDEO_POSITION = "7846970";
+
+    /**
+     * 正式新闻广告位
+     */
+    public static final String AD_NEWS_POSITION = "7987169";
+
+    /**
      * 请求aiclk的版本号，当前版本号
      */
     public static final String VERSION = "1.6.2";

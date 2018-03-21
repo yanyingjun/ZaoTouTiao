@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,13 +53,11 @@ public class UserController extends BaseController{
      * @param keyWord
      * @param channelId
      * @param createDate
-     * @param money
-     * @param pageRequest
      * @return
      */
     @RequestMapping(value = ZttWebMsgReq.ZTT_CAN_BE_PRESENTED_USER_LIST_REQ)
     @ResponseBody
-    public Map<Object,Object> listCanBePresentedUser(final String keyWord, final String channelId, final String createDate, final BigDecimal minMoney, final BigDecimal maxMoney, final PageRequest pageRequest){
+    public Map<Object,Object> listCanBePresentedUser(final String keyWord, final String channelId, final String createDate, final BigDecimal minMoney, final BigDecimal maxMoney){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
@@ -69,9 +68,9 @@ public class UserController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                Page<UserVO> page = userService.listCanBePresentedUser(keyWord, channelId, createDate, minMoney, maxMoney, pageRequest);
-                dataMap.put("total", page.getTotal());
-                dataMap.put("rows", page.getRows());
+                List<UserVO> list = userService.listCanBePresentedUser(keyWord, channelId, createDate, minMoney, maxMoney);
+                dataMap.put("rows", list);
+                dataMap.put("total", list.size());
             }
         });
 
@@ -79,13 +78,13 @@ public class UserController extends BaseController{
     }
 
     /**
-     * 更新用户状态
+     * 更新状态
      * @param userId
      * @return
      */
     @RequestMapping(value = ZttWebMsgReq.ZTT_UPDATE_USER_REQ)
     @ResponseBody
-    public Map<Object,Object> updateUser(final Long userId, final Integer status){
+    public Map<Object,Object> updateUser(final Long userId, final Integer status, final String type){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
@@ -97,7 +96,15 @@ public class UserController extends BaseController{
             @Override
             public void handle() throws Exception {
                 User user = userService.getUserByUserId(userId);
-                user.setStatus(status);
+                if(type.equals("accountStatus")){
+                    user.setAccountStatus(status);
+                }else if(type.equals("incomeStatus")){
+                    user.setIncomeStatus(status);
+                }else if(type.equals("presentStatus")){
+                    user.setPresentStatus(status);
+                }else{
+                    user.setSpeechStatus(status);
+                }
                 int num = userService.updateUser(user);
                 if(num > 0){
                     dataMap.put("result", "success");

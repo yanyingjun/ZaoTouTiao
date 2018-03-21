@@ -151,14 +151,34 @@ public class User implements Serializable {
     private Integer channelId;
 
     /**
-     * 状态
+     * 账号状态
      */
-    private Integer status;
+    private Integer accountStatus;
+
+    /**
+     * 收益状态
+     */
+    private Integer incomeStatus;
+
+    /**
+     * 提现状态
+     */
+    private Integer presentStatus;
+
+    /**
+     * 留言状态
+     */
+    private Integer speechStatus;
 
     /**
      * 地址
      */
     private String address;
+
+    /**
+     * 手机唯一设备码
+     */
+    private String idImei;
 
     /**
      * Getter method for property <tt>userId</tt>.
@@ -647,24 +667,6 @@ public class User implements Serializable {
     }
 
     /**
-     * Getter method for property <tt>status</tt>.
-     *
-     * @return property value of status
-     */
-    public Integer getStatus() {
-        return status;
-    }
-
-    /**
-     * Setter method for property <tt>status</tt>.
-     *
-     * @param status value to be assigned to property status
-     */
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    /**
      * Getter method for property <tt>address</tt>.
      *
      * @return property value of address
@@ -680,5 +682,95 @@ public class User implements Serializable {
      */
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    /**
+     * Getter method for property <tt>idImei</tt>.
+     *
+     * @return property value of idImei
+     */
+    public String getIdImei() {
+        return idImei;
+    }
+
+    /**
+     * Setter method for property <tt>idImei</tt>.
+     *
+     * @param idImei value to be assigned to property idImei
+     */
+    public void setIdImei(String idImei) {
+        this.idImei = idImei;
+    }
+
+    /**
+     * Getter method for property <tt>accountStatus</tt>.
+     *
+     * @return property value of accountStatus
+     */
+    public Integer getAccountStatus() {
+        return accountStatus;
+    }
+
+    /**
+     * Setter method for property <tt>accountStatus</tt>.
+     *
+     * @param accountStatus value to be assigned to property accountStatus
+     */
+    public void setAccountStatus(Integer accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    /**
+     * Getter method for property <tt>incomeStatus</tt>.
+     *
+     * @return property value of incomeStatus
+     */
+    public Integer getIncomeStatus() {
+        return incomeStatus;
+    }
+
+    /**
+     * Setter method for property <tt>incomeStatus</tt>.
+     *
+     * @param incomeStatus value to be assigned to property incomeStatus
+     */
+    public void setIncomeStatus(Integer incomeStatus) {
+        this.incomeStatus = incomeStatus;
+    }
+
+    /**
+     * Getter method for property <tt>presentStatus</tt>.
+     *
+     * @return property value of presentStatus
+     */
+    public Integer getPresentStatus() {
+        return presentStatus;
+    }
+
+    /**
+     * Setter method for property <tt>presentStatus</tt>.
+     *
+     * @param presentStatus value to be assigned to property presentStatus
+     */
+    public void setPresentStatus(Integer presentStatus) {
+        this.presentStatus = presentStatus;
+    }
+
+    /**
+     * Getter method for property <tt>speechStatus</tt>.
+     *
+     * @return property value of speechStatus
+     */
+    public Integer getSpeechStatus() {
+        return speechStatus;
+    }
+
+    /**
+     * Setter method for property <tt>speechStatus</tt>.
+     *
+     * @param speechStatus value to be assigned to property speechStatus
+     */
+    public void setSpeechStatus(Integer speechStatus) {
+        this.speechStatus = speechStatus;
     }
 }

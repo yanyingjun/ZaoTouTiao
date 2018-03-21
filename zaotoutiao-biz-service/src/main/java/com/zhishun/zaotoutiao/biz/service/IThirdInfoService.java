@@ -101,6 +101,6 @@ public interface IThirdInfoService {
      * @param json
      * @return
      */
-    AdInfoVO getAdInfo(InformationVO informationVO);
+    AdInfoVO getAdInfo(InformationVO informationVO, String id);
 
 }

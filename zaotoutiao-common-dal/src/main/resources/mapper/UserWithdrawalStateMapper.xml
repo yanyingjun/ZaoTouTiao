@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhishun.zaotoutiao.dal.mapper.UserWithdrawalStateMapper" >
-  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.UserWithdrawalState" >
+  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.vo.UserWithdrawalStateVO" >
       <id column="id" property="id" jdbcType="BIGINT" />
       <result column="userId" property="userId" jdbcType="BIGINT" />
       <result column="money" property="money" jdbcType="DECIMAL" />
@@ -134,5 +134,32 @@
 
   <select id="getHasApplication" parameterType="long" resultMap="BaseResultMap">
     SELECT * FROM user_withdrawal_state WHERE status = 0 AND userId = #{userId}
+  </select>
+
+  <select id="listWithdrawals" parameterType="map" resultMap="BaseResultMap">
+    select w.userId,w.money,w.bill_no,w.status as auditStatus,u.status,u.nickName,u.telephone,g2.gold/g1.gold as apprenticeRate,
+    w.create_date as createDate,u.last_visit_date as lastVisitDate, r.number as readNumber, s.apprenticeNum as apprenticeNum,
+    p.channel_name as channelName, u.account_status as accountStatus, u.income_status as incomeStatus, u.present_status as presentStatus,
+    u.speech_status as speechStatus
+    from user_withdrawal_state as w
+    LEFT JOIN user as u ON w.userId = u.userId
+    LEFT JOIN (select count(0) as number,userId from user_read_record GROUP BY userId) as r ON u.userId = r.userId
+    LEFT join (SELECT count(apprenticeId) as apprenticeNum, userId from user_share GROUP BY userId) as s ON u.userId = s.userId
+    LEFT JOIN platform_channel as p ON u.channel_id = p.id
+    LEFT JOIN (SELECT SUM(gold) as gold, userId FROM user_gold_record where source != 7 GROUP BY userId) as g1 ON w.userId = g1.userId
+    LEFT JOIN (SELECT SUM(gold) as gold, userId FROM user_gold_record where source in (6,9,10) GROUP BY userId) as g2 ON w.userId = g2.userId
+    WHERE w.status = 0
+    <if test="keyWord != null">
+      and (u.nickName LIKE CONCAT('%', #{keyWord}, '%') || u.telephone LIKE CONCAT('%', #{keyWord}, '%'))
+    </if>
+    <if test="channelId != null">
+      and u.channel_id = #{channelId}
+    </if>
+    <if test="createDate != null">
+      and date_format(w.create_date,'%M/%D/%Y') = #{createDate}
+    </if>
+    <if test="status != null">
+      and w.status = #{status}
+    </if>
   </select>
 </mapper>

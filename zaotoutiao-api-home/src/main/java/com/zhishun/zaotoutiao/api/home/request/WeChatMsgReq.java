@@ -21,12 +21,17 @@ public class WeChatMsgReq {
     public static final String LOGIN_WECHAT = "/login/wechat";
 
     /**
-     * 微信注册
+     * 绑定手机号
      */
-    public static final String USER_REGISTER_WECHAT = "/user/register/wechat";
+    public static final String USER_BINDING_TELEPHONE = "/binding/telephone";
 
     /**
      * 绑定微信
      */
     public static final String BINDING_WECHAT = "/binding/wechat";
+
+    /**
+     * 提现申请
+     */
+    public static final String ADD_WITHDRAWWALS = "/withdrawwals/add";
 }

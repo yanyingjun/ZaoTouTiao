@@ -18,6 +18,7 @@ import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.enums.ChannelEnum;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
+import com.zhishun.zaotoutiao.core.model.information360.AdConstantInfo;
 import com.zhishun.zaotoutiao.core.model.information360.RequestUrlApi;
 import com.zhishun.zaotoutiao.core.model.thirdVo.AdInfoVO;
 import com.zhishun.zaotoutiao.core.model.thirdVo.InformationVO;
@@ -317,7 +318,7 @@ public class ThirdInfoController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                ResponseResult responseResult = thirdInfoService.ListVideos(informationVO.getVideoOsType(), informationVO.getUserId(), informationVO.getChannelId(), informationVO.getIp(), informationVO.getBackdata(), "7");
+                ResponseResult responseResult = thirdInfoService.ListVideos(informationVO.getVideoOsType(), informationVO.getUserId(), informationVO.getChannelId(), informationVO.getIp(), informationVO.getBackdata(), "8");
                 JSONObject jsonObject = JSONObject.parseObject(responseResult.getData());
 
                 JSONArray jsonArray = JSONArray.parseArray(jsonObject.getString("list"));
@@ -345,19 +346,13 @@ public class ThirdInfoController extends BaseController{
                     listVideos.add(map);
                 }
 
-                AdInfoVO adInfoVO1 = thirdInfoService.getAdInfo(informationVO);
-                Map map1 = Maps.newHashMap();
-                map1.put("type", ChannelEnum.AD.getValue());
-                map1.put("obj", adInfoVO1);
-                listVideos.add(1, map1);
-
-                AdInfoVO adInfoVO2 = thirdInfoService.getAdInfo(informationVO);
+                AdInfoVO adInfoVO2 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_VIDEO_POSITION);
                 Map map2 = Maps.newHashMap();
                 map2.put("type", ChannelEnum.AD.getValue());
                 map2.put("obj", adInfoVO2);
                 listVideos.add(5, map2);
 
-                AdInfoVO adInfoVO3 = thirdInfoService.getAdInfo(informationVO);
+                AdInfoVO adInfoVO3 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_VIDEO_POSITION);
                 Map map3 = Maps.newHashMap();
                 map3.put("type", ChannelEnum.AD.getValue());
                 map3.put("obj", adInfoVO3);
@@ -505,25 +500,25 @@ public class ThirdInfoController extends BaseController{
                     listVideos.add(map);
                 }
 
-                AdInfoVO adInfoVO1 = thirdInfoService.getAdInfo(informationVO);
+                AdInfoVO adInfoVO1 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_VIDEO_POSITION);
                 Map map1 = Maps.newHashMap();
                 map1.put("type", ChannelEnum.AD.getValue());
                 map1.put("obj", adInfoVO1);
                 listVideos.add(0, map1);
 
-                AdInfoVO adInfoVO2 = thirdInfoService.getAdInfo(informationVO);
+                AdInfoVO adInfoVO2 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_VIDEO_POSITION);
                 Map map2 = Maps.newHashMap();
                 map2.put("type", ChannelEnum.AD.getValue());
                 map2.put("obj", adInfoVO2);
                 listVideos.add(2, map2);
 
-                AdInfoVO adInfoVO3 = thirdInfoService.getAdInfo(informationVO);
+                AdInfoVO adInfoVO3 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_VIDEO_POSITION);
                 Map map3 = Maps.newHashMap();
                 map3.put("type", ChannelEnum.AD.getValue());
                 map3.put("obj", adInfoVO3);
                 listVideos.add(3,map3);
 
-                AdInfoVO adInfoVO4 = thirdInfoService.getAdInfo(informationVO);
+                AdInfoVO adInfoVO4 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_VIDEO_POSITION);
                 Map map4 = Maps.newHashMap();
                 map4.put("type", ChannelEnum.AD.getValue());
                 map4.put("obj", adInfoVO4);
@@ -601,19 +596,19 @@ public class ThirdInfoController extends BaseController{
                         list1.add(map);
                     }
 
-                    AdInfoVO adInfoVO1 = thirdInfoService.getAdInfo(informationVO);
+                    AdInfoVO adInfoVO1 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_NEWS_POSITION);
                     Map map1 = Maps.newHashMap();
                     map1.put("type", ChannelEnum.AD.getValue());
                     map1.put("obj", adInfoVO1);
                     list1.add(1, map1);
 
-                    AdInfoVO adInfoVO2 = thirdInfoService.getAdInfo(informationVO);
+                    AdInfoVO adInfoVO2 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_NEWS_POSITION);
                     Map map2 = Maps.newHashMap();
                     map2.put("type", ChannelEnum.AD.getValue());
                     map2.put("obj", adInfoVO2);
                     list1.add(5, map2);
 
-                    AdInfoVO adInfoVO3 = thirdInfoService.getAdInfo(informationVO);
+                    AdInfoVO adInfoVO3 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_NEWS_POSITION);
                     Map map3 = Maps.newHashMap();
                     map3.put("type", ChannelEnum.AD.getValue());
                     map3.put("obj", adInfoVO3);
@@ -692,25 +687,25 @@ public class ThirdInfoController extends BaseController{
                         list1.add(map);
                     }
 
-                    AdInfoVO adInfoVO1 = thirdInfoService.getAdInfo(informationVO);
+                    AdInfoVO adInfoVO1 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_NEWS_POSITION);
                     Map map1 = Maps.newHashMap();
                     map1.put("type", ChannelEnum.AD.getValue());
                     map1.put("obj", adInfoVO1);
                     list1.add(0, map1);
 
-                    AdInfoVO adInfoVO2 = thirdInfoService.getAdInfo(informationVO);
+                    AdInfoVO adInfoVO2 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_NEWS_POSITION);
                     Map map2 = Maps.newHashMap();
                     map2.put("type", ChannelEnum.AD.getValue());
                     map2.put("obj", adInfoVO2);
                     list1.add(2, map2);
 
-                    AdInfoVO adInfoVO3 = thirdInfoService.getAdInfo(informationVO);
+                    AdInfoVO adInfoVO3 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_NEWS_POSITION);
                     Map map3 = Maps.newHashMap();
                     map3.put("type", ChannelEnum.AD.getValue());
                     map3.put("obj", adInfoVO3);
                     list1.add(3,map3);
 
-                    AdInfoVO adInfoVO4 = thirdInfoService.getAdInfo(informationVO);
+                    AdInfoVO adInfoVO4 = thirdInfoService.getAdInfo(informationVO, AdConstantInfo.AD_NEWS_POSITION);
                     Map map4 = Maps.newHashMap();
                     map4.put("type", ChannelEnum.AD.getValue());
                     map4.put("obj", adInfoVO4);

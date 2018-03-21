@@ -41,7 +41,7 @@
                         textField:'channelName',valueField:'id',
                         onLoadSuccess:function(data){
                             if(data != null && data.length > 0){
-                               $('#channelId_ug').combobox('select',data[0].id);
+                               $('#channelId_um').combobox('select',data[0].id);
                             }
                         },required:true,editable:false"/>
                     </td>

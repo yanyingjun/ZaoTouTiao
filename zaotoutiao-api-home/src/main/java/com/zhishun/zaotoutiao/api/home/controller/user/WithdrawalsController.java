@@ -17,10 +17,7 @@ import com.zhishun.zaotoutiao.biz.service.IExchangeRateService;
 import com.zhishun.zaotoutiao.biz.service.IInformationService;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.biz.service.IWithdrawalService;
-import com.zhishun.zaotoutiao.common.util.AssertsUtil;
-import com.zhishun.zaotoutiao.common.util.BeanMapUtil;
-import com.zhishun.zaotoutiao.common.util.DateUtil;
-import com.zhishun.zaotoutiao.common.util.RedPackUtil;
+import com.zhishun.zaotoutiao.common.util.*;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
@@ -58,6 +55,40 @@ public class WithdrawalsController extends BaseController{
     @Autowired
     private IInformationService iInformationService;
 
+    /**
+     * 添加提现申请
+     * @param userId
+     * @param money
+     * @return
+     */
+    @RequestMapping(value = WeChatMsgReq.ADD_WITHDRAWWALS, method = RequestMethod.GET)
+    public Map<Object,Object> addWithdrawwals(final Long userId, final BigDecimal money){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+
+            }
+
+            @Override
+            public void handle() throws Exception {
+                //添加零钱提现申请，状态为审核中
+                int status = 0;
+                Map<String,Object> map = iWithdrawalService.addWithdrawalState(userId, money, status);
+                if(!StringUtils.isEmpty(map.get("insertId"))){
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "添加提现申请成功");
+                }else{
+                    dataMap.put("result", "fail");
+                    dataMap.put("msg", "添加提现申请失败");
+                }
+            }
+        });
+
+        return dataMap;
+    }
 
     /**
      * 微信提现
@@ -159,7 +190,7 @@ public class WithdrawalsController extends BaseController{
                             }
                         }
                     }
-                }else{
+                }/*else{
                     //正常提现申请
                     //添加零钱提现申请，状态为申请中
                     int status = 0;
@@ -234,7 +265,7 @@ public class WithdrawalsController extends BaseController{
                         dataMap.put("msg", "请先绑定微信");
                         dataMap.put("data", false);
                     }
-                }
+                }*/
             }
         });
 
@@ -268,35 +299,38 @@ public class WithdrawalsController extends BaseController{
         return dataMap;
     }
 
+
     /**
-     * 用户登录(第三方账号登录)(微信登录)
-     * @param wechatId
+     * 绑定手机号
+     * @param telephone
      * @return
      */
-    @RequestMapping(value = WeChatMsgReq.LOGIN_WECHAT)
-    public Map<Object,Object> loginWechat(final String wechatId){
+    @RequestMapping(value = WeChatMsgReq.USER_BINDING_TELEPHONE, method = RequestMethod.GET)
+    public Map<Object,Object> bindingTelephone(final Long userId, final String telephone, final String password){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
-                AssertsUtil.isNotBlank(wechatId, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotBlank(telephone, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotBlank(password, ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
-
-                //判断用户是否存在
-                Map map = Maps.newHashMap();
-                map.put("wechatId", wechatId);
-                User user = userService.getUserByParam(map);
+                User user = userService.getUserByMap(telephone);
                 if(StringUtils.isEmpty(user)){
-                    dataMap.put("result", "failure");
-                    dataMap.put("msg", "用户不存在，请先注册");
-                    dataMap.put("data", null);
+                    User user1 = userService.getUserByUserId(userId);
+                    //设置默认头像
+                    user1.setTelephone(telephone);
+                    user1.setPassword(Md5Util.md5Encode(password));
+                    userService.updateUser(user1);
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "绑定手机号成功");
+                    dataMap.put("data", user1);
                 }else{
                     dataMap.put("result", "success");
-                    dataMap.put("msg", "用户已存在，请直接登录");
+                    dataMap.put("msg", "手机号已绑定");
                     dataMap.put("data", user);
                 }
             }
@@ -307,71 +341,78 @@ public class WithdrawalsController extends BaseController{
     }
 
     /**
-     * 用户微信注册(绑定微信个人信息注册)
-     * 手机号，密码，微信id,微信头像，微信昵称
-     * is_first_login:是否是首次登录 \n telephone 手机号，password 密码，wechatId 微信id, wechat_head 微信头像， wechat_name 微信昵称
-     * @param telephone
+     * 用户微信登录
+     * 微信id,微信头像，微信昵称
+     * is_first_login:是否是首次登录 wechatId 微信id, wechat_head 微信头像， wechat_name 微信昵称
      * @param wechatId
      * @return
      */
-    @RequestMapping(value = WeChatMsgReq.USER_REGISTER_WECHAT)
-    public Map<Object,Object> userRegisterWechat(final String telephone, final String wechatId,
-                                                 final String password, final String wechatHead, final String wechatName){
+    @RequestMapping(value = WeChatMsgReq.LOGIN_WECHAT)
+    public Map<Object,Object> loginWechat(final String wechatId, final String wechatHead, final String wechatName, final String invitation){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
-                AssertsUtil.isNotBlank(telephone, ErrorCodeEnum.SYSTEM_ANOMALY);
                 AssertsUtil.isNotBlank(wechatId, ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
 
-                User user = userService.getUserByMap(telephone);
                 Map map = Maps.newHashMap();
                 map.put("wechatId", wechatId);
                 User user1 = userService.getUserByParam(map);
-                if(StringUtils.isEmpty(user)){
-                    //判断微信是否已经绑定
-                    if(StringUtils.isEmpty(user1)){
-                        //微信还不存在
-                        Long userId = userService.addUser(telephone, password, wechatId, wechatHead, wechatName);
-                        //为新用户新增金币和零钱
-                        ExchangeRate exchangeRate = exchangeRateService.getGoldToMoney();
+                //判断微信是否已经绑定
+                if(StringUtils.isEmpty(user1)){
+                    //微信还不存在
+                    Long userId = userService.addUser(wechatId, wechatHead, wechatName);
+                    //为新用户新增金币和零钱
+                    ExchangeRate exchangeRate = exchangeRateService.getGoldToMoney();
 
-                        //为用户添加消息和公告
-                        List<UserInformationTemplate> listInformation = iInformationService.listInformationNew();
-                        for(UserInformationTemplate userInfo : listInformation){
-                            UserInformation userInformation = new UserInformation();
-                            BeanMapUtil.copy(userInfo, userInformation);
-                            userInformation.setId(null);
-                            userInformation.setUserId(userId);
-                            userInformation.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
-                            iInformationService.addUserInformation(userInformation);
+                    if(!StringUtils.isEmpty(invitation)){
+                        Map mapA = Maps.newHashMap();
+                        mapA.put("myInvitation", invitation);
+                        User userParent = userService.getUserByParam(mapA);
+                        //判断是否已经绑定过师徒关系
+                        //判断同一台设备多账号登录，不能绑定师徒关系
+                        User userA = userService.getParentApprentice(userId, userParent.getUserId());
+                        if(StringUtils.isEmpty(userA)){
+                            User userData = userService.getUserByUserId(userId);
+                            userData.setParentId(userParent.getUserId());
+                            userService.updateUser(userData);
+                            //给师傅进贡100金币
+                            int gold = 100;
+                            userService.addUserGoldRecord(6,userParent.getParentId(), gold, userId);
+                            userService.updateUserInfo(userParent.getParentId(), gold);
                         }
-                        User user2 = userService.getUserByMap(telephone);
-                        //查询是否是第一次登录
-                        if(user2.getIsOnline() == 0){
-                            dataMap.put("isFirstLogin", true);
-                        }else{
-                            dataMap.put("isFirstLogin", false);
-                        }
-                        dataMap.put("result", "success");
-                        dataMap.put("msg", "新增用户成功");
-                        dataMap.put("data", user2);
-                    }else{
-                        dataMap.put("result", "success");
-                        dataMap.put("msg", "微信号已绑定");
-                        dataMap.put("data", user1);
                     }
+
+                    //为用户添加消息和公告
+                    List<UserInformationTemplate> listInformation = iInformationService.listInformationNew();
+                    for(UserInformationTemplate userInfo : listInformation){
+                        UserInformation userInformation = new UserInformation();
+                        BeanMapUtil.copy(userInfo, userInformation);
+                        userInformation.setId(null);
+                        userInformation.setUserId(userId);
+                        userInformation.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                        iInformationService.addUserInformation(userInformation);
+                    }
+                    User user2 = userService.getUserByUserId(userId);
+                    //查询是否是第一次登录
+                    if(user2.getIsOnline() == 0){
+                        dataMap.put("isFirstLogin", true);
+                    }else{
+                        dataMap.put("isFirstLogin", false);
+                    }
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "微信登录成功");
+                    dataMap.put("data", user2);
                 }else{
                     dataMap.put("result", "success");
-                    dataMap.put("msg", "手机号已注册，暂时不能用微信号注册");
-                    dataMap.put("data", user);
+                    dataMap.put("msg", "微信号已绑定");
+                    dataMap.put("data", user1);
                 }
-
             }
         });
 

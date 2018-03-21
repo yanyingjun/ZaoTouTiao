@@ -2,7 +2,7 @@
  * @company 杭州智顺文化传播有限公司
  * @copyright Copyright (c) 2018 - 2018
  */
-package com.zhishun.zaotoutiao.web.home.controller.user;
+package com.zhishun.zaotoutiao.web.home.controller.finance;
 
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IPlatformWebService;

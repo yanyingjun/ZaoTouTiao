@@ -117,7 +117,7 @@
   <delete id="delUserComments" parameterType="map">
     delete from user_comments
     where userId = #{userId}
-      and infoId = #{infoId}
+      and info_id = #{infoId}
   </delete>
 
   <select id="getUserCommentsByInfoId" parameterType="string" resultMap="BaseResultMap">
@@ -136,15 +136,15 @@
   <select id="getCommentsList" resultMap="BaseResultMap">
     SELECT user_comments.*,infos.title,infos.infoId,user.nickName,user.userId
     FROM user_comments
-    LEFT JOIN infos ON infos.infoId = user_comments.infoId
-    LEFT JOIN user ON user.userId = user_comments.userId
+    LEFT JOIN infos ON infos.infoId = user_comments.info_id
+    LEFT JOIN user ON user.userId = user_comments.user_id
   </select>
 
   <select id="getCommentsByKeywordList" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT user_comments.*,infos.title,infos.infoId,user.nickName,user.userId
     FROM user_comments
-    LEFT JOIN infos ON infos.infoId = user_comments.infoId
-    LEFT JOIN user ON user.userId = user_comments.userId
+    LEFT JOIN infos ON infos.infoId = user_comments.info_id
+    LEFT JOIN user ON user.userId = user_comments.info_id
     WHERE user.nickName like #{keyword} or infos.title like #{keyword} or user_comments.content like #{keyword}
   </select>
 

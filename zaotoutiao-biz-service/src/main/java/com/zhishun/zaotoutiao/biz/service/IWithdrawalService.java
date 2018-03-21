@@ -2,6 +2,7 @@ package com.zhishun.zaotoutiao.biz.service;
 
 import com.zhishun.zaotoutiao.core.model.entity.StaticRedEnvelope;
 import com.zhishun.zaotoutiao.core.model.entity.UserWithdrawalState;
+import com.zhishun.zaotoutiao.core.model.vo.UserWithdrawalStateVO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -41,4 +42,14 @@ public interface IWithdrawalService {
      * @return
      */
     List<StaticRedEnvelope> listRedEnvelope();
+
+    /**
+     * 获取用户提现申请列表
+     * @param keyWord
+     * @param channelId
+     * @param createDate
+     * @param status
+     * @return
+     */
+    List<UserWithdrawalStateVO> listWithdrawals(String keyWord, String channelId, String createDate, Integer status);
 }

@@ -71,6 +71,21 @@ public class AdInfoVO {
     private String apppackage;
 
     /**
+     * 点击监控
+     */
+    private String clk;
+
+    /**
+     * 曝光监控
+     */
+    private String imp;
+
+    /**
+     * 广告播放到Time时间
+     */
+    private String time;
+
+    /**
      * Getter method for property <tt>type</tt>.
      *
      * @return property value of type
@@ -284,5 +299,59 @@ public class AdInfoVO {
      */
     public void setApppackage(String apppackage) {
         this.apppackage = apppackage;
+    }
+
+    /**
+     * Getter method for property <tt>clk</tt>.
+     *
+     * @return property value of clk
+     */
+    public String getClk() {
+        return clk;
+    }
+
+    /**
+     * Setter method for property <tt>clk</tt>.
+     *
+     * @param clk value to be assigned to property clk
+     */
+    public void setClk(String clk) {
+        this.clk = clk;
+    }
+
+    /**
+     * Getter method for property <tt>imp</tt>.
+     *
+     * @return property value of imp
+     */
+    public String getImp() {
+        return imp;
+    }
+
+    /**
+     * Setter method for property <tt>imp</tt>.
+     *
+     * @param imp value to be assigned to property imp
+     */
+    public void setImp(String imp) {
+        this.imp = imp;
+    }
+
+    /**
+     * Getter method for property <tt>time</tt>.
+     *
+     * @return property value of time
+     */
+    public String getTime() {
+        return time;
+    }
+
+    /**
+     * Setter method for property <tt>time</tt>.
+     *
+     * @param time value to be assigned to property time
+     */
+    public void setTime(String time) {
+        this.time = time;
     }
 }

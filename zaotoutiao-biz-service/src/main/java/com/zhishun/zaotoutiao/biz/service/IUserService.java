@@ -32,6 +32,12 @@ public interface IUserService {
      */
     User getUserByMap (String telephone);
 
+    /**
+     * 根据手机号查询用户信息
+     * @param telephone
+     * @return
+     */
+    Map getUserByTelephone(String telephone);
 
     /**
      * 用户登录
@@ -299,14 +305,12 @@ public interface IUserService {
 
     /**
      * 微信用户注册
-     * @param telephone
-     * @param password
      * @param wechatId
      * @param wechatHead
      * @param wechatName
      * @return
      */
-    Long addUser(String telephone, String password, String wechatId, String wechatHead, String wechatName);
+    Long addUser(String wechatId, String wechatHead, String wechatName);
 
     /**
      * 用户信息修改（绑定微信）
@@ -338,17 +342,15 @@ public interface IUserService {
      * @param password
      * @return
      */
-    Long addUserInfo(String telephone, String password, Integer platformId, Integer channelId, String address);
+    Long addUserInfo(String telephone, String password, Integer platformId, Integer channelId, String address, String idImei);
 
     /**
      * 可提现用户列表
      * @param keyWord
      * @param channelId
      * @param createDate
-     * @param money
-     * @param pageRequest
      * @return
      */
-    Page<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal minMoney, BigDecimal maxMoney, PageRequest pageRequest);
+    List<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal minMoney, BigDecimal maxMoney);
 
 }

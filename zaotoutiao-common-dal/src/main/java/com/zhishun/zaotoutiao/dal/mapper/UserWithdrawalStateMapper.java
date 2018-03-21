@@ -5,8 +5,10 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserWithdrawalState;
+import com.zhishun.zaotoutiao.core.model.vo.UserWithdrawalStateVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 提现状态-mapper接口
@@ -62,4 +64,11 @@ public interface UserWithdrawalStateMapper {
      * @return
      */
     List<UserWithdrawalState> getHasApplication(Long userId);
+
+    /**
+     * 获取提现申请列表
+     * @param map
+     * @return
+     */
+    List<UserWithdrawalStateVO> listWithdrawals(Map map);
 }

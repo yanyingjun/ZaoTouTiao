@@ -90,4 +90,49 @@ public class ZttWebMsgReq {
      */
     public static final String ZTT_UPDATE_USER_REQ = "/updateUser";
 
+    /**
+     * 推送列表页面请求
+     */
+    public static final String ZTT_PUSH_MANAGE_VIEW = "/push/manage";
+
+    /**
+     * 新增新闻推送
+     */
+    public static final String ZTT_ADD_NEWS_VIEW = "/push/addNews";
+
+    /**
+     * 新增视频推送
+     */
+    public static final String ZTT_ADD_VIDEO_VIEW = "/push/addVideo";
+
+    /**
+     * 提现申请页面请求
+     */
+    public static final String ZTT_PRESENT_VIEW = "/present/req";
+
+    /**
+     * 金币预警页面请求
+     */
+    public static final String ZTT_EARLY_WARNING_VIEW = "/gold/earlyWarning";
+
+    /**
+     * 提现申请
+     */
+    public static final String ZTT_PRESENT_REQ = "/present/list";
+
+    /**
+     * 更新用户提现状态
+     */
+    public static final String ZTT_UPDATE_USER_PRESENTSTATUS_REQ = "/updateUser/presentStatus";
+
+    /**
+     * 新增新闻页面请求
+     */
+    public static final String ZTT_CONTENT_ADD_VIEW = "/content";
+
+    /**
+     * 内容列表页面请求
+     */
+    public static final String ZTT_CONTENT_LIST_VIEW = "/content/list/view";
+
 }

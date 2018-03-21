@@ -30,7 +30,11 @@
       <result column="platform_id" property="platformId" jdbcType="INTEGER" />
       <result column="channel_id" property="channelId" jdbcType="INTEGER" />
       <result column="address" property="address" jdbcType="VARCHAR" />
-      <result column="status" property="status" jdbcType="TINYINT" />
+      <result column="account_status" property="accountStatus" jdbcType="TINYINT" />
+      <result column="income_status" property="incomeStatus" jdbcType="TINYINT" />
+      <result column="present_status" property="presentStatus" jdbcType="TINYINT" />
+      <result column="speech_status" property="speechStatus" jdbcType="TINYINT" />
+      <result column="id_imei" property="idImei" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -40,7 +44,7 @@
     userId, name, nickName, telephone, account, password, parentId, gold, money, headpath, 
     birthday, sex, myInvitation, isOnline, create_date, job, educational, last_visit_date, 
     code, push_time_1, push_time_2, push_time_3, push_time_4, wechatId, oppenId, platform_id,
-    channel_id, address, status
+    channel_id, address, account_status, income_status, present_status, speech_status, id_imei
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     <!--
@@ -73,7 +77,8 @@
       job, educational, last_visit_date, 
       code, push_time_1, push_time_2, 
       push_time_3, push_time_4, wechatId, 
-      oppenId, platform_id, channelId, address, status)
+      oppenId, platform_id, channelId, address, account_status, income_status,
+      present_status, speech_status, id_imei)
     values (#{userId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR},
       #{telephone,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{parentId,jdbcType=BIGINT}, #{gold,jdbcType=BIGINT}, #{money,jdbcType=DECIMAL},
@@ -83,7 +88,8 @@
       #{code,jdbcType=VARCHAR}, #{pushTime1,jdbcType=TIME}, #{pushTime2,jdbcType=TIME}, 
       #{pushTime3,jdbcType=TIME}, #{pushTime4,jdbcType=TIME}, #{wechatId,jdbcType=VARCHAR},
       #{oppenId,jdbcType=VARCHAR}, #{platformId, jdbcType=INTEGER}, #{channelId, jdbcType=INTEGER},
-      #{address,jdbcType=VARCHAR}, #{status, jdbcType=INTEGER})
+      #{address,jdbcType=VARCHAR}, #{presentStatus, jdbcType=TINYINT}, #{idImei,jdbcType=VARCHAR},
+      #{accountStatus,jdbcType=TINYINT}, #{incomeStatus,jdbcType=TINYINT}, #{speechStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.User" useGeneratedKeys="true" keyProperty="userId" >
     <!--
@@ -176,8 +182,20 @@
       <if test="address != null">
         address,
       </if>
-      <if test="status != null">
-        status
+      <if test="accountStatus != null">
+        account_status,
+      </if>
+      <if test="incomeStatus != null">
+        income_status,
+      </if>
+      <if test="presentStatus != null">
+        present_status,
+      </if>
+      <if test="speechStatus != null">
+        speech_status,
+      </if>
+      <if test="idImei != null">
+        id_imei
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -265,8 +283,20 @@
       <if test="address != null">
         #{address, jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        #{status, jdbcType=INTEGER}
+      <if test="accountStatus != null">
+        #{accountStatus, jdbcType=TINYINT},
+      </if>
+      <if test="incomeStatus != null">
+        #{incomeStatus, jdbcType=TINYINT},
+      </if>
+      <if test="presentStatus != null">
+        #{presentStatus, jdbcType=TINYINT},
+      </if>
+      <if test="speechStatus != null">
+        #{speechStatus, jdbcType=TINYINT},
+      </if>
+      <if test="idImei != null">
+        #{idImei,jdbcType=VARCHAR}
       </if>
     </trim>
   </insert>
@@ -358,8 +388,20 @@
       <if test="address != null">
         address = #{address, jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        status = #{status, jdbcType=INTEGER}
+      <if test="accountStatus != null">
+        account_status = #{accountStatus, jdbcType=TINYINT},
+      </if>
+      <if test="incomeStatus != null">
+        income_status = #{incomeStatus, jdbcType=TINYINT},
+      </if>
+      <if test="presentStatus != null">
+        present_status = #{presentStatus, jdbcType=TINYINT},
+      </if>
+      <if test="speechStatus != null">
+        speech_status = #{speechStatus, jdbcType=TINYINT},
+      </if>
+      <if test="idImei != null">
+        id_imei = #{idImei, jdbcType=VARCHAR}
       </if>
     </set>
     where userId = #{userId,jdbcType=BIGINT}
@@ -397,7 +439,11 @@
       platform_id = #{platformId,jdbcType=INTEGER},
       channel_id = #{channelId,jdbcType=INTEGER},
       address = #{address},
-      status = #{status}
+      account_status = #{accountStatus, jdbcType=TINYINT},
+      income_status = #{incomeStatus, jdbcType=TINYINT},
+      present_status = #{presentStatus, jdbcType=TINYINT},
+      speech_status = #{speechStatus, jdbcType=TINYINT},
+      id_imei = #{idImei}
     where userId = #{userId,jdbcType=BIGINT}
   </update>
 
@@ -431,7 +477,21 @@
       <if test="wechatId != null">
         and wechatId = #{wechatId}
       </if>
+      <if test="idImei != null">
+        and id_imei = #{idImei}
+      </if>
     </where>
+  </select>
+
+  <select id="getUserByTelephone" parameterType="map" resultType="map">
+    SELECT userId, name, nickName,
+      telephone, account,
+      parentId, gold, money,
+      headpath, birthday, sex,
+      myInvitation, isOnline, create_date,
+      job, wechatId, oppenId, platform_id, channel_id, address
+    from user
+    where telephone = #{telephone}
   </select>
 
   <select id="getApprentice" parameterType="map" resultMap="BaseResultMap">
@@ -631,11 +691,11 @@
   </select>
 
   <select id="listCanBePresentedUser" parameterType="map" resultMap="BaseResultMap">
-    select u.*, r.number as readNumber, s.apprenticeNum as apprenticeNum, p.channel_name as channelName from USER as u
+    select u.*, r.number as readNumber, s.apprenticeNum as apprenticeNum, p.channel_name as channelName from user as u
     LEFT JOIN (select count(0) as number,userId from user_read_record GROUP BY userId) as r ON u.userId = r.userId
     LEFT join (SELECT count(apprenticeId) as apprenticeNum, userId from user_share GROUP BY userId) as s ON u.userId = s.userId
     LEFT JOIN platform_channel as p ON u.channel_id = p.id
-
+    WHERE u.money &gt;= 30
     <if test="keyWord != null">
         and (u.nickName LIKE CONCAT('%', #{keyWord}, '%') || u.telephone LIKE CONCAT('%', #{keyWord}, '%'))
     </if>
@@ -651,17 +711,14 @@
     <if test="maxMoney != null">
         and u.money &lt;= #{maxMoney}
     </if>
-    <if test="offset != null and limit != null">
-      limit #{offset},#{limit}
-    </if>
   </select>
 
   <select id="countCanBePresentedUser" parameterType="map" resultType="int">
-    select count(0) from USER as u
+    select count(0) from user as u
     LEFT JOIN (select count(0) as number,userId from user_read_record GROUP BY userId) as r ON u.userId = r.userId
     LEFT join (SELECT count(apprenticeId) as apprenticeNum, userId from user_share GROUP BY userId) as s ON u.userId = s.userId
     LEFT JOIN platform_channel as p ON u.channel_id = p.id
-
+    WHERE u.money &gt;= 30
     <if test="keyWord != null">
       and (u.nickName LIKE CONCAT('%', #{keyWord}, '%') || u.telephone LIKE CONCAT('%', #{keyWord}, '%'))
     </if>

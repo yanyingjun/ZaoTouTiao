@@ -49,4 +49,40 @@ public class ZttWebMsgView {
      * 用户可提现列表
      */
     public static final String ZTT_CAN_BE_PRESENTED_USER_VIEW = "finance/user_presented";
+
+    /**
+     * 推送列表
+     */
+    public static final String ZTT_PUSH_LIST_VIEW = "push/push_list";
+
+    /**
+     * 添加推动新闻
+     */
+    public static final String ZTT_PUSH_ADD_NEWS_VIEW = "push/add_news";
+
+    /**
+     * 添加推送视频
+     */
+    public static final String ZTT_PUSH_ADD_VIDEO_VIEW = "push/add_video";
+
+    /**
+     * 提现申请页面请求
+     */
+    public static final String ZTT_APPLY_FOR_CASH_VIEW = "finance/apply_for_cash";
+
+    /**
+     * 金币预警
+     */
+    public static final String ZTT_EARLY_WARNING = "finance/early_warning";
+
+    /**
+     * 新增视频
+     */
+    public static final String ZTT_CONTENT_ADD_VIEW = "content/add_content";
+
+    /**
+     * 内容列表
+     */
+    public static final String ZTT_CONTENT_LIST_VIEW = "content/content_list";
+
 }

@@ -12,10 +12,6 @@ import com.zhishun.zaotoutiao.biz.service.*;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.*;
-import com.zhishun.zaotoutiao.core.model.entity.ExchangeRate;
-import com.zhishun.zaotoutiao.core.model.entity.StaticFakeData;
-import com.zhishun.zaotoutiao.core.model.entity.User;
-import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
@@ -26,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +70,7 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_REGISTER_REQ, method = RequestMethod.POST)
-    public Map<Object, Object> search(final String telephone, final String password, final Integer platformId, final Integer channelId, final String address) {
+    public Map<Object, Object> search(final HttpServletRequest request, final String telephone, final String password, final Integer platformId, final Integer channelId, final String address, final String verificationCode, final String idImei) {
 
         // 定义Map集合对象
         final Map<Object, Object> dataMap = Maps.newHashMap();
@@ -88,19 +86,31 @@ public class UserController extends BaseController{
                 //业务逻辑
                 User user = userService.getUserByMap(telephone);
                 if(StringUtils.isEmpty(user)){
-                    dataMap.put("msg", "新增用户成功");
-                    Long userId = userService.addUserInfo(telephone, password, platformId, channelId, address);
-                    //为用户添加消息和公告
-                    List<UserInformationTemplate> listInformation = iInformationService.listInformationNew();
-                    for(UserInformationTemplate userInfo : listInformation){
-                        UserInformation userInformation = new UserInformation();
-                        BeanMapUtil.copy(userInfo, userInformation);
-                        userInformation.setUserId(userId);
-                        userInformation.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
-                        iInformationService.addUserInformation(userInformation);
+                    HttpSession session = request.getSession();
+                    //session.setAttribute(telephone, "1234");
+                    String code = session.getAttribute(telephone).toString();
+
+                    if(verificationCode.equals(code)){
+                        Long userId = userService.addUserInfo(telephone, password, platformId, channelId, address, idImei);
+                        //为用户添加消息和公告
+                        List<UserInformationTemplate> listInformation = iInformationService.listInformationNew();
+                        for(UserInformationTemplate userInfo : listInformation){
+                            UserInformation userInformation = new UserInformation();
+                            BeanMapUtil.copy(userInfo, userInformation);
+                            userInformation.setUserId(userId);
+                            userInformation.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                            iInformationService.addUserInformation(userInformation);
+                        }
+                        Map userData = userService.getUserByTelephone(telephone);
+                        dataMap.put("result", "success");
+                        dataMap.put("data", userData);
+                        dataMap.put("msg", "新增用户成功");
+                    }else{
+                        dataMap.put("result", "fail");
+                        dataMap.put("msg", "手机验证码错误");
+                        dataMap.put("data", null);
                     }
-                    User userData = userService.getUserByMap(telephone);
-                    dataMap.put("data", userData);
+
                 }else{
                     dataMap.put("msg", "用户已存在，请直接登录");
                     dataMap.put("data", null);
@@ -147,37 +157,51 @@ public class UserController extends BaseController{
 
     /**
      * 用户登录
-     * @param user
+     * @param telephone
+     * @param password
+     * @param invitation  用户邀请码
+     * @param idImei   手机号唯一设备编码
      * @return
      */
     @RequestMapping(value = UserMsgReq.USER_LOGIN_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> login(final UserVO user){
+    public Map<Object,Object> login(final String telephone, final String password, final String invitation, final String idImei){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
-                AssertsUtil.isNotBlank(user.getTelephone(), ErrorCodeEnum.PARAMETER_ANOMALY);
-                AssertsUtil.isNotBlank(user.getPassword(), ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotBlank(telephone, ErrorCodeEnum.PARAMETER_ANOMALY);
+                AssertsUtil.isNotBlank(password, ErrorCodeEnum.PARAMETER_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
                 //查询用户信息
-                String password = Md5Util.md5Encode(user.getPassword());
-                User userData = userService.getUserByMap(user.getTelephone());
+                User userData = userService.getUserByMap(telephone);
+
                 if(StringUtils.isEmpty(userData)){
                     dataMap.put("result", "failure");
                     dataMap.put("msg", "用户不存在，请先注册");
                 }else{
-                    Boolean userLogin = userService.isUserLogin(user.getTelephone(), password);
+                    Boolean userLogin = userService.isUserLogin(telephone, Md5Util.md5Encode(password));
                     if(userLogin == false){
                         dataMap.put("result", "failure");
                         dataMap.put("msg", "密码错误");
                     }else{
+                        if(!StringUtils.isEmpty(invitation)){
+                            Map map = Maps.newHashMap();
+                            map.put("myInvitation", invitation);
+                            User userParent = userService.getUserByParam(map);
+                            //判断是否已经绑定过师徒关系
+                            //判断同一台设备多账号登录，不能绑定师徒关系
+                            User userA = userService.getParentApprentice(userData.getUserId(), userParent.getUserId());
+                            if(userData.getIdImei().equals(idImei) && StringUtils.isEmpty(userA)){
+                                userData.setParentId(userParent.getUserId());
+                            }
+                        }
                         //更改用户登录状态为在线
                         dataMap.put("result", "success");
-                        dataMap.put("msg", "用户存在，直接登录");
+                        dataMap.put("msg", "登录成功");
                         if(userData.getIsOnline() == 0){
                             dataMap.put("isFirstLogin", "true");
                         }else{
@@ -351,7 +375,7 @@ public class UserController extends BaseController{
      * @param userId
      * @return
      */
-    @RequestMapping(value = UserMsgReq.MY_INCOME_REQ, method = RequestMethod.POST)
+    @RequestMapping(value = UserMsgReq.MY_INCOME_REQ, method = RequestMethod.GET)
     public Map<Object,Object> getUserIncome(final Long userId){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();

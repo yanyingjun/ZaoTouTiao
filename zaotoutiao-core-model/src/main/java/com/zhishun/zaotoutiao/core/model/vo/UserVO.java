@@ -218,4 +218,5 @@ public class UserVO extends User{
     public void setChannelName(String channelName) {
         this.channelName = channelName;
     }
+
 }

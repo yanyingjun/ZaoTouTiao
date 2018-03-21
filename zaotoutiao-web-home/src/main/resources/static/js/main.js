@@ -71,3 +71,4 @@ var mainPlatform = {
 };
 
 mainPlatform.init();
+

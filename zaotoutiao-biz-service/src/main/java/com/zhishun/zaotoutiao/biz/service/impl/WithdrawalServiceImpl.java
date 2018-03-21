@@ -9,10 +9,12 @@ import com.zhishun.zaotoutiao.biz.service.IWithdrawalService;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.StaticRedEnvelope;
 import com.zhishun.zaotoutiao.core.model.entity.UserWithdrawalState;
+import com.zhishun.zaotoutiao.core.model.vo.UserWithdrawalStateVO;
 import com.zhishun.zaotoutiao.dal.mapper.StaticRedEnvelopeMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserWithdrawalStateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -50,12 +52,12 @@ public class WithdrawalServiceImpl implements IWithdrawalService{
         userWithdrawalState.setMoney(money);
         userWithdrawalState.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
 
-        int id = userWithdrawalStateMapper.insertSelective(userWithdrawalState);
-        String billNo = id + "" + String.valueOf(System.currentTimeMillis());
+        userWithdrawalStateMapper.insertSelective(userWithdrawalState);
+        String billNo = userWithdrawalState.getId() + "" + String.valueOf(System.currentTimeMillis());
         userWithdrawalState.setBillNo(billNo);
         userWithdrawalStateMapper.updateByPrimaryKeySelective(userWithdrawalState);
         Map<String,Object> map = Maps.newHashMap();
-        map.put("insertId", id);
+        map.put("insertId", userWithdrawalState.getId());
         map.put("billNo", billNo);
         return map;
     }
@@ -63,5 +65,23 @@ public class WithdrawalServiceImpl implements IWithdrawalService{
     @Override
     public List<StaticRedEnvelope> listRedEnvelope() {
         return staticRedEnvelopeMapper.listRedEnvelope();
+    }
+
+    @Override
+    public List<UserWithdrawalStateVO> listWithdrawals(String keyWord, String channelId, String createDate, Integer status) {
+        Map map = Maps.newHashMap();
+        if(!StringUtils.isEmpty(keyWord)){
+            map.put("keyWord", keyWord);
+        }
+        if(!StringUtils.isEmpty(channelId) && Integer.valueOf(channelId) != 0){
+            map.put("channelId", channelId);
+        }
+        if(!StringUtils.isEmpty(createDate)){
+            map.put("createDate", createDate);
+        }
+        if(!StringUtils.isEmpty(status)){
+            map.put("status", status);
+        }
+        return userWithdrawalStateMapper.listWithdrawals(map);
     }
 }

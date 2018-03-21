@@ -68,6 +68,13 @@ public interface UserMapper {
     User getUserByMap(Map<String,Object> map);
 
     /**
+     * 根据手机号获取用户信息
+     * @param map
+     * @return
+     */
+    Map getUserByTelephone(Map map);
+
+    /**
      * 获取徒弟列表信息
      * @param map
      * @return

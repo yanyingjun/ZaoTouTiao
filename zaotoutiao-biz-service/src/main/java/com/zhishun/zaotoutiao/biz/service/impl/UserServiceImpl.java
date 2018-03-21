@@ -11,6 +11,7 @@ import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.common.util.Md5Util;
+import com.zhishun.zaotoutiao.common.util.RandomUtil;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.vo.StaticIndustrysVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
@@ -93,6 +94,14 @@ public class UserServiceImpl implements IUserService{
         Map<String,Object> map = Maps.newHashMap();
         map.put("telephone", telephone);
         return userMapper.getUserByMap(map);
+    }
+
+    @Override
+    public Map getUserByTelephone(String telephone){
+        //查询用户信息
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("telephone", telephone);
+        return userMapper.getUserByTelephone(map);
     }
 
     @Override
@@ -367,17 +376,13 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public Long addUser(String telephone, String password, String wechatId, String wechatHead, String wechatName) {
-        password = Md5Util.md5Encode(password);
-        //我的邀请码为我的手机号转16进制
-        String myInvitation = Long.toHexString(Long.valueOf(telephone));
-        String name = 'A' + telephone.substring(3,11);
+    public Long addUser(String wechatId, String wechatHead, String wechatName) {
+        //我的邀请码为11为随机数转16进制
+        String myInvitation = String.valueOf(RandomUtil.getSecurityCode(11,RandomUtil.SecurityCodeLevel.Hard,false));
         //设置默认头像
         String headpath = wechatHead;
         User user = new User();
-        user.setName(name);
-        user.setPassword(password);
-        user.setTelephone(telephone);
+        user.setName(wechatName);
         user.setNickName(wechatName);
         user.setMyInvitation(myInvitation);
         user.setHeadPath(headpath);
@@ -394,22 +399,13 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public void updateWechatUser(String telephone, String wechatName, String wechatId, String wechatHead) {
-        String nickName = "手机用户_" + telephone.substring(7, 11);
-        String headpath = "http://daoyi-content.oss-cn-hangzhou.aliyuncs.com/default_headpath.png";
         Map<String,Object> map = Maps.newHashMap();
         map.put("telephone", telephone);
         User user = userMapper.getUserByMap(map);
         //判断是否是之前绑定的状态
         if(!user.getWechatId().equals(wechatId)){
-            //判断用户是否改变过
-            if(user.getNickName().equals(nickName)){
-                nickName = wechatName;
-                user.setNickName(nickName);
-            }
-            if(user.getHeadPath().equals(headpath)){
-                headpath = wechatHead;
-                user.setHeadPath(headpath);
-            }
+            user.setNickName(wechatName);
+            user.setHeadPath(wechatHead);
             user.setWechatId(wechatId);
             userMapper.updateByPrimaryKeySelective(user);
         }
@@ -459,7 +455,7 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public Long addUserInfo(String telephone, String password, Integer platformId, Integer channelId, String address) {
+    public Long addUserInfo(String telephone, String password, Integer platformId, Integer channelId, String address, String idImei) {
         password = Md5Util.md5Encode(password);
         String nickName = "手机用户_" + telephone.substring(7, 11);
         //我的邀请码为我的手机号转16进制
@@ -478,6 +474,7 @@ public class UserServiceImpl implements IUserService{
         user.setPlatformId(platformId);
         user.setChannelId(channelId);
         user.setAddress(address);
+        user.setIdImei(idImei);
         user.setLastVisitDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
 
         userMapper.insertSelective(user);
@@ -491,7 +488,7 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public Page<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal minMoney, BigDecimal maxMoney, PageRequest pageRequest) {
+    public List<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal minMoney, BigDecimal maxMoney) {
         Map map = Maps.newHashMap();
         if(!StringUtils.isEmpty(keyWord)){
             map.put("keyWord", keyWord);
@@ -508,12 +505,6 @@ public class UserServiceImpl implements IUserService{
         if(!StringUtils.isEmpty(maxMoney)){
             map.put("maxMoney", maxMoney);
         }
-        int total = userMapper.countCanBePresentedUser(map);
-        if(!StringUtils.isEmpty(pageRequest)){
-            map.put("offset", pageRequest.getOffset());
-            map.put("limit", pageRequest.getPageSize());
-        }
-        List<UserVO> list = userMapper.listCanBePresentedUser(map);
-        return PageBuilder.buildPage(pageRequest, list, total);
+        return userMapper.listCanBePresentedUser(map);
     }
 }

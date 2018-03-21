@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.Random;
 
@@ -38,7 +40,7 @@ public class SendSmsController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.SEND_SMS_CODE, method = RequestMethod.GET)
-    public Map<Object,Object> sendSmsCode(final String telephone){
+    public Map<Object,Object> sendSmsCode(final String telephone, final HttpServletRequest request){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
@@ -58,6 +60,9 @@ public class SendSmsController extends BaseController{
                         int code = new Random().nextInt(9000) + 1000;
                         //发送验证码
                         SendMsgUtil.sendSms(telephone, String.valueOf(code));
+                        HttpSession session = request.getSession();
+                        session.removeAttribute(telephone);
+                        session.setAttribute(telephone, code);
                         dataMap.put("telephone", telephone);
                         dataMap.put("code", code);
                         dataMap.put("result", "success");
