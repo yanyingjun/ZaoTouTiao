@@ -29,12 +29,13 @@
       <result column="push_date" property="pushDate" jdbcType="TIMESTAMP" />
       <result column="direct_in" property="directIn" jdbcType="TINYINT" />
       <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List">
     id, infoId, infoType, algInfo, channelId, catInfoId, catInfoName, hasVideo, imgType, 
     producer, publishTime, recId, source, thumbnails, title, updateTime, videos, summary, 
     tripleImgs, h5Url, web_url, hasContent, create_date, isHot, push_date, direct_in, 
-    create_time
+    create_time, content
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -55,7 +56,7 @@
       updateTime, videos, summary, 
       tripleImgs, h5Url, web_url, 
       hasContent, create_date, isHot, 
-      push_date, direct_in, create_time
+      push_date, direct_in, create_time, content
       )
     values (#{id,jdbcType=BIGINT}, #{infoid,jdbcType=VARCHAR}, #{infotype,jdbcType=VARCHAR}, 
       #{alginfo,jdbcType=VARCHAR}, #{channelid,jdbcType=INTEGER}, #{catinfoid,jdbcType=INTEGER}, 
@@ -65,7 +66,8 @@
       #{updatetime,jdbcType=TIMESTAMP}, #{videos,jdbcType=VARCHAR}, #{summary,jdbcType=VARCHAR}, 
       #{tripleimgs,jdbcType=VARCHAR}, #{h5url,jdbcType=VARCHAR}, #{webUrl,jdbcType=VARCHAR}, 
       #{hascontent,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{ishot,jdbcType=TINYINT}, 
-      #{pushDate,jdbcType=TIMESTAMP}, #{directIn,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}
+      #{pushDate,jdbcType=TIMESTAMP}, #{directIn,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
+       #{content,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.Infos">
@@ -152,6 +154,9 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="content != null">
+        content,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -234,6 +239,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -318,6 +326,9 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -348,7 +359,8 @@
       isHot = #{ishot,jdbcType=TINYINT},
       push_date = #{pushDate,jdbcType=TIMESTAMP},
       direct_in = #{directIn,jdbcType=TINYINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
