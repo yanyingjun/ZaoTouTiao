@@ -1,192 +1,87 @@
+/**
+ * @company 杭州智顺文化传播有限公司
+ * @copyright Copyright (c) 2018 - 2018
+ */
 package com.zhishun.zaotoutiao.web.home.controller.push;
 
-import org.springframework.stereotype.Controller;
+import com.google.common.collect.Maps;
+import com.zhishun.zaotoutiao.biz.service.IInfosImageService;
+import com.zhishun.zaotoutiao.common.util.AssertsUtil;
+import com.zhishun.zaotoutiao.common.util.DateUtil;
+import com.zhishun.zaotoutiao.common.util.LoggerUtils;
+import com.zhishun.zaotoutiao.common.util.OSSClientUtil;
+import com.zhishun.zaotoutiao.core.model.entity.InfosImage;
+import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
+import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
+import com.zhishun.zaotoutiao.web.home.callback.ControllerCallback;
+import com.zhishun.zaotoutiao.web.home.constant.request.ZttWebMsgReq;
+import com.zhishun.zaotoutiao.web.home.controller.base.BaseController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
- * 异步上传文件
- * 
- * @author 王佳田
- *
+ * @author 闫迎军(YanYingJun)
+ * @version $Id: UploadController, v0.1 2018年03月22日 10:10闫迎军(YanYingJun) Exp $
  */
-@Controller
-@RequestMapping("/upload")
-public class UploadController {
+@RestController
+public class UploadController extends BaseController{
 
-    /*@Autowired
-    private UpYunFileManager upYunFileManager;
+    public static Logger LOGGER = LoggerFactory.getLogger(UploadController.class);
 
-    @RequestMapping(value = "uploadPic")
-    public void uploadPicList(@RequestParam(required = false) List<MultipartFile> pic,
-                              HttpServletResponse response)
-            throws Exception {
-        if (pic != null && pic.size() > 0) {
-            for (int i = 0; i < pic.size(); i++) {
-                // 扩展名
-                String ext = FilenameUtils.getExtension(pic.get(i).getOriginalFilename());
-                byte[] bytes = pic.get(i).getBytes();
-                // 1)保存大图
-                String path_s = this.uploadPic(bytes, ext, response);
-                // 2)生成APP使用小图
-                // 取得根目录路径
-                String rootPath = getClass().getResource("/").getFile().toString();
-                System.out.println("##########" + rootPath);
-                File file = UploadHead.uploadHead(pic.get(i).getInputStream(), rootPath, path_s);
-                // 3)保存小图
-                this.uploadPicSmall(UploadHead.File2byte(file), path_s, ext);
-            }
-        }
-    }
+    @Autowired
+    private IInfosImageService infosImageService;
 
-    *//**
+    /**
      * 上传图片
-     *//*
-    private String uploadPic(byte[] bytes,
-                             String ext,
-                             HttpServletResponse response)
-            throws Exception {
-        // 生成策略
-        DateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-        String format = df.format(new Date());
-        Random r = new Random();
-        for (int i = 0; i < 3; i++) {
-            format += r.nextInt(10);
-        }
-        // 实例jersey
-        Client client = new Client();
-
-        // 保存db
-        String path = "upload/" + format + "." + ext;
-        // 保存db：APP使用（小图）
-        String path_s = format + "_s" + "." + ext;
-        String ip = ImgServerPathConfig.getImgServerUrl();
-
-        // 另一台服务器的请求路径
-        String url = ip + path;
-        // 设置请求路径
-        WebResource resource = client.resource(url);
-        // 发送开始
-        resource.put(String.class, bytes);
-
-        // 返回
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("url", url);
-        map.put("path", path);
-        response.setContentType("text/html");
-        response.getWriter().write(JacksonMapperUtil.beanToJson(map));
-        response.flushBuffer();
-        // 返回
-        return path_s;
-    }
-
-    *//**
-     * 上传小图
-     *//*
-    private void uploadPicSmall(byte[] bytes,
-                                String path_s,
-                                String ext)
-            throws Exception {
-        // 实例jersey
-        Client client = new Client();
-        // 保存db
-        String path = "upload/" + path_s;
-        String ip = ImgServerPathConfig.getImgServerUrl();
-        // 另一台服务器的请求路径
-        String url = ip + path;
-        // 设置请求路径
-        WebResource resource = client.resource(url);
-        // 发送开始
-        resource.put(String.class, bytes);
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/uploadFile")
-    public Object uploadFile(HttpServletResponse response,
-                             HttpServletRequest request,
-                             @RequestParam(value = "uploaderImage", required = false) MultipartFile file,
-                             Boolean secretKey,
-                             String elementId)
-            throws Exception {
-        String[] strs = new String[2];
-        String path = request.getContextPath();
-        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-        String rootC = basePath + "merchantAuth";
-        String msg = "false";
-        msg = uploadPic(file, elementId, secretKey);
-        strs[0] = msg;
-        strs[1] = rootC + msg;
-        return strs;
-    }
-
-    private String uploadPic(MultipartFile file,
-                             String elementId,
-                             Boolean secretKey)
-            throws Exception {
-        MultipartFile fileUpload = file;
-        // 后缀名
-        String extensionName = null;
-        // 文件名
-        String fileNameLong = null;
-        // 文件名
-        String fileName = null;
-        // 文件路径
-        String filePath = null;
-        // 判断是否有文件
-        if (!fileUpload.isEmpty()) {
-            // 获取文件上传路径名称
-            fileNameLong = fileUpload.getOriginalFilename();
-            // 获取文件扩展名
-            extensionName = fileNameLong.substring(fileNameLong.lastIndexOf(".") + 1);
-            Image src = javax.imageio.ImageIO.read(fileUpload.getInputStream());
-            if (src == null) {
-                return "请上传正常图片";
-            }
-        } else {
-            return "上传文件不能为空";
-        }
-        InputStream image = null;
-        image = fileUpload.getInputStream();
-        Calendar cal = Calendar.getInstance();// 使用日历类
-        int year = cal.get(Calendar.YEAR);// 得到年
-        int month = cal.get(Calendar.MONTH) + 1;// 得到月
-        fileName = elementId + "_" + System.currentTimeMillis() + "." + extensionName;
-        filePath = "/m/auth/" + year + month + "/" + fileName;
-        try {
-            // 上传
-            if (secretKey) {
-
-                upYunFileManager.writeFile(filePath, toByteArray(image), "aa123456");
-            }
-
-        } catch (Exception e) {
-            return "上传图片出错";
-        } finally {
-            if (image != null) {
-                image.close();
-            }
-        }
-        return filePath;
-    }
-
-    *//**
-     * 字节流转换
-     * 
-     * @param in
+     * @param pic
      * @return
-     * @throws IOException
-     * @author 徐大伟
-     * @date 2015年5月20日
-     *//*
-    private static byte[] toByteArray(InputStream in) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024 * 4];
-        int n = 0;
-        while ((n = in.read(buffer)) != -1) {
-            out.write(buffer, 0, n);
-        }
-        return out.toByteArray();
-    }*/
+     */
+    @RequestMapping(value = ZttWebMsgReq.ZTT_UPLOAD_LIST_PIC_REQ)
+    public Map<Object,Object> uploadListPic(final List<MultipartFile> pic){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotEmpty(pic, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+
+                try {
+                    for(MultipartFile file : pic){
+                        String name = OSSClientUtil.uploadImg2Oss(file);
+                        String imgUrl = OSSClientUtil.getImgUrl(name);
+                        InfosImage infosImage = new InfosImage();
+                        infosImage.setInfoId("news");
+                        infosImage.setPicName(name);
+                        infosImage.setPicUrl(imgUrl);
+                        infosImage.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                        infosImageService.addImage(infosImage);
+                        dataMap.put("infosImage", infosImage);
+                    }
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "上传图片成功");
+                }catch(IOException e){
+                    dataMap.put("result", "fail");
+                    dataMap.put("msg", "上传图片失败");
+                    LoggerUtils.error(LOGGER, "上传图片异常，异常信息：" + e.getMessage());
+                }
+            }
+        });
+
+        return dataMap;
+
+    }
 
 }

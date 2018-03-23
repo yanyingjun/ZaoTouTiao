@@ -7,6 +7,7 @@ package com.zhishun.zaotoutiao.api.home.controller.user;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
+import com.zhishun.zaotoutiao.api.home.request.UserMsgReq;
 import com.zhishun.zaotoutiao.biz.service.IExchangeRateService;
 import com.zhishun.zaotoutiao.biz.service.ISignInService;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
@@ -16,6 +17,8 @@ import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -46,6 +49,7 @@ public class SignInController extends BaseController{
      * @param isSubmit
      * @return
      */
+    @RequestMapping(value = UserMsgReq.SIGN_IN, method = RequestMethod.POST)
     public Map<Object,Object> signIn(final Long userId, final int isSubmit){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
@@ -53,7 +57,6 @@ public class SignInController extends BaseController{
             @Override
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
-                AssertsUtil.isZero(isSubmit, ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override

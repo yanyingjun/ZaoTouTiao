@@ -135,4 +135,14 @@ public class ZttWebMsgReq {
      */
     public static final String ZTT_CONTENT_LIST_VIEW = "/content/list/view";
 
+    /**
+     * 上传图片
+     */
+    public static final String ZTT_UPLOAD_LIST_PIC_REQ = "/upload/listPic";
+
+    /**
+     * 编辑器上传图片
+     */
+    public static final String ZTT_UPLOAD_IMAGE_REQ = "/upload/image";
+
 }

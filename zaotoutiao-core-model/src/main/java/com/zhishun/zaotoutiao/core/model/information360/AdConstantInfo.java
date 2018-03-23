@@ -44,7 +44,7 @@ public class AdConstantInfo {
     /**
      * 请求aiclk的版本号，当前版本号
      */
-    public static final String VERSION = "1.6.2";
+    public static final String VERSION = "1.6.4";
 
 
 }
