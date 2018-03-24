@@ -4,6 +4,7 @@
  */
 package com.zhishun.zaotoutiao.web.home.controller.push;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IInfosImageService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
@@ -37,6 +38,11 @@ public class UploadController extends BaseController{
 
     public static Logger LOGGER = LoggerFactory.getLogger(UploadController.class);
 
+    /**
+     * 新闻图片路径
+     */
+    private static String NEWS_IMAGE_DIR = "news/image/";
+
     @Autowired
     private IInfosImageService infosImageService;
 
@@ -60,18 +66,20 @@ public class UploadController extends BaseController{
 
                 try {
                     for(MultipartFile file : pic){
-                        String name = OSSClientUtil.uploadImg2Oss(file);
-                        String imgUrl = OSSClientUtil.getImgUrl(name);
+                        String name = OSSClientUtil.uploadImgOss(file, NEWS_IMAGE_DIR);
+                        String imgUrl = OSSClientUtil.getImgUrl(name, NEWS_IMAGE_DIR);
+
                         InfosImage infosImage = new InfosImage();
                         infosImage.setInfoId("news");
                         infosImage.setPicName(name);
                         infosImage.setPicUrl(imgUrl);
                         infosImage.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
-                        infosImageService.addImage(infosImage);
+                        //infosImageService.addImage(infosImage);
                         dataMap.put("infosImage", infosImage);
                     }
                     dataMap.put("result", "success");
                     dataMap.put("msg", "上传图片成功");
+                    System.out.println(JSON.toJSON(dataMap));
                 }catch(IOException e){
                     dataMap.put("result", "fail");
                     dataMap.put("msg", "上传图片失败");
@@ -83,5 +91,51 @@ public class UploadController extends BaseController{
         return dataMap;
 
     }
+
+    /**
+     * 上传视频
+     * @param pic
+     * @return
+     */
+    @RequestMapping(value = ZttWebMsgReq.ZTT_UPLOAD_VIDEO_REQ)
+    public Map<Object,Object> uploadListVideo(final MultipartFile video){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                //AssertsUtil.isNotEmpty(video, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+
+                try {
+
+                    String name = OSSClientUtil.uploadImgOss(video, NEWS_IMAGE_DIR);
+                    String imgUrl = OSSClientUtil.getImgUrl(name, NEWS_IMAGE_DIR);
+                    InfosImage infosImage = new InfosImage();
+                    infosImage.setInfoId("news");
+                    infosImage.setPicName(name);
+                    infosImage.setPicUrl(imgUrl);
+                    infosImage.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                    //infosImageService.addImage(infosImage);
+                    dataMap.put("infosImage", infosImage);
+
+                    dataMap.put("result", "success");
+                    dataMap.put("msg", "上传视频成功");
+                    System.out.println(JSON.toJSON(dataMap));
+                }catch(IOException e){
+                    dataMap.put("result", "fail");
+                    dataMap.put("msg", "上传视频失败");
+                    LoggerUtils.error(LOGGER, "上传视频异常，异常信息：" + e.getMessage());
+                }
+            }
+        });
+
+        return dataMap;
+
+    }
+
 
 }

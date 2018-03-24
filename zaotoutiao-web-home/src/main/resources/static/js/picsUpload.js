@@ -14,7 +14,7 @@ function toUpLoad(pic, imgsDiv, showImgDialog) {
 		dataType : 'json',
 		done : function(e, data) {
 			var count = $("#"+imgsDiv).find(".picDivS").length;
-			reloadPic(imgsDiv,count, data.data.picUrl, data.data.picUrl, showImgDialog,false);
+			reloadPic(imgsDiv,count, data.result.infosImage.picUrl, data.result.infosImage.picUrl, data.result.infosImage.picName, showImgDialog,false);
 			//count++;
 		}
 	}).on('fileuploadprocessalways', function (e, data) {
@@ -29,13 +29,14 @@ function toUpLoad(pic, imgsDiv, showImgDialog) {
 }
 
 // 1.2)加载图片
-function reloadPic(imgsDiv, index, url, path, imgDialog,view) {
+function reloadPic(imgsDiv, index, url, path, picName, imgDialog, view) {
 	var html = '<div class="picDivS" id = "pic_' + index + '"  >';
 	html += '<img title="" src="' + url + '" alt="" width="100px" height="100px" onclick="showPic(\''+imgDialog+'\',\''+url+'\');" style="cursor: pointer;">';
 	if(!view){
 		html += '<i class="delfilebtn ifont" OnClick="delPic(this)">×</i>';
 		//html += '<input type="button" name="delBtn" value="删除" OnClick="delPic(this)">';
-		html += '<input name="picList[' + index + '].picUrl" type="hidden" value="' + path + '">';
+		html += '<input name="picList[' + index + '].picUrl" type="hidden" value="' + path + '">' +
+			'<input name="picList['+ index +'].picName" type="hidden" value="'+ picName +'" ';
 		//html += '<input name="picInfo[' + index + '].picName" type="hidden" value="' + path + '">';
 	}
 	html += '</div>';

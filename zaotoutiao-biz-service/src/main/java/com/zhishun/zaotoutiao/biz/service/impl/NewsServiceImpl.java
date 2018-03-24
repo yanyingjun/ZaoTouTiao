@@ -13,7 +13,7 @@ import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
 import com.zhishun.zaotoutiao.common.base.pagination.PageNoAndSize;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.*;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import com.zhishun.zaotoutiao.dal.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,13 +57,13 @@ public class NewsServiceImpl implements INewsService {
      * @return
      */
     @Override
-    public List<InfosVo> getInfosByType(String type, int channelId,PageRequest pageRequest) {
+    public List<InfosVO> getInfosByType(String type, int channelId,PageRequest pageRequest) {
         Map map = Maps.newHashMap();
         map.put("type",type);
         map.put("channelId",channelId);
         map.put("endNo",pageRequest.getOffset());
         map.put("startNo", pageRequest.getPageSize());
-        List<InfosVo> voList= infosMapper.selectInfosByType(map);
+        List<InfosVO> voList= infosMapper.selectInfosByType(map);
         return voList;
     }
 
@@ -114,13 +114,13 @@ public class NewsServiceImpl implements INewsService {
      * @return
      */
     @Override
-    public List<InfosVo> searchNewsByKeyword(String keyword,PageRequest pageRequest) {
+    public List<InfosVO> searchNewsByKeyword(String keyword,PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
         keyword = new StringBuilder().append("%").append(keyword).append("%").toString();
         map.put("keyword",keyword);
         map.put("startNo",pageRequest.getOffset());
         map.put("endNo",pageRequest.getPageSize());
-        List<InfosVo> infosVoList = infosMapper.searchNewsByKeyword(map);
+        List<InfosVO> infosVoList = infosMapper.searchNewsByKeyword(map);
         return infosVoList;
     }
 
@@ -144,7 +144,7 @@ public class NewsServiceImpl implements INewsService {
     }
 
     @Override
-    public List<InfosVo> List24HoursInfos() {
+    public List<InfosVO> List24HoursInfos() {
         return infosMapper.List24HoursInfos();
     }
 

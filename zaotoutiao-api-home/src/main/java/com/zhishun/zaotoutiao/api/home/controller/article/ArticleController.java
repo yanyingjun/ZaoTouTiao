@@ -16,7 +16,7 @@ import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import com.zhishun.zaotoutiao.core.model.vo.Ques;
 import com.zhishun.zaotoutiao.core.model.vo.StaticFaqVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -213,7 +213,7 @@ public class ArticleController extends BaseController{
                 String contentHtml = content.getHtmlContent().replace("padding-bottom: ","x-style")
                         .replace("height: ","x-style").replace("width: ","x-style");
                 String title = infos.getTitle();
-                Date publishTime = infos.getPublishtime();
+                Date publishTime = infos.getPublishTime();
                 String source = infos.getSource();
                 String strHtml = "<!DOCTYPE html>\n" +
                         "<html lang='zh-CN'>\n" +
@@ -406,7 +406,7 @@ public class ArticleController extends BaseController{
                             .replace("data-src","src");
 
                     String title = infos.getTitle();
-                    Date publishTime = infos.getPublishtime();
+                    Date publishTime = infos.getPublishTime();
                     String source = infos.getSource();
                     //String[] images = {};
                 }
@@ -683,12 +683,12 @@ public class ArticleController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                List<InfosVo> list = newsService.List24HoursInfos();
-                List<InfosVo> isToday = Lists.newArrayList();
-                List<InfosVo> yesterday = Lists.newArrayList();
-                for(InfosVo infos : list){
+                List<InfosVO> list = newsService.List24HoursInfos();
+                List<InfosVO> isToday = Lists.newArrayList();
+                List<InfosVO> yesterday = Lists.newArrayList();
+                for(InfosVO infos : list){
                     //判断当前用户是否已阅读
-                    UserJpush userJpush = jpushService.getUserJpush(userId, infos.getInfoid());
+                    UserJpush userJpush = jpushService.getUserJpush(userId, infos.getInfoId());
                     int read = userJpush.getIsRead();
                     infos.setIsRead(read);
                     int day = jpushService.isToday(DateUtil.toString(infos.getPushDate(), DateUtil.DEFAULT_DATETIME_FORMAT));

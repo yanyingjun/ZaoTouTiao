@@ -13,7 +13,7 @@ import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.entity.UserComments;
 import com.zhishun.zaotoutiao.core.model.entity.UserGiveLike;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
 import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserCommentsMapper;
@@ -47,7 +47,7 @@ public class CommentsServiceImpl implements ICommentsService{
     private UserMapper userMapper;
 
     @Override
-    public Page<InfosVo> getMyCommentsList(Long userId, PageRequest pageRequest) {
+    public Page<InfosVO> getMyCommentsList(Long userId, PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("userId", userId);
         int count = infosMapper.countMyCommentsList(map);
@@ -55,7 +55,7 @@ public class CommentsServiceImpl implements ICommentsService{
             map.put("offset", pageRequest.getOffset());
             map.put("limit", pageRequest.getPageSize());
         }
-        List<InfosVo> list = infosMapper.getMyCommentsList(map);
+        List<InfosVO> list = infosMapper.getMyCommentsList(map);
         return PageBuilder.buildPage(pageRequest, list, count);
     }
 

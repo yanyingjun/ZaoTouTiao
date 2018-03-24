@@ -5,15 +5,18 @@
 package com.zhishun.zaotoutiao.common.util;
 
 import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 import java.util.Random;
@@ -47,11 +50,6 @@ public class OSSClientUtil {
     protected static String BUCKETNAME = "zs-static";
 
     /**
-     * 新闻图片路径
-     */
-    private static String NEWS_IMAGE_DIR = "news/image/";
-
-    /**
      * 视频图片路径
      */
     private static String VIDEO_IMAGE_DIR = "video/video_image/";
@@ -69,7 +67,7 @@ public class OSSClientUtil {
      * @return
      * @throws Exception
      */
-    public static String uploadImg2Oss(MultipartFile file) throws Exception {
+    public static String uploadImgOss(MultipartFile file, String path) throws Exception {
         if (file.getSize() > 1024 * 1024) {
             throw new Exception("上传图片大小不能超过1M！");
         }
@@ -79,7 +77,7 @@ public class OSSClientUtil {
         String name = random.nextInt(10000) + System.currentTimeMillis() + substring;
         try {
             InputStream inputStream = file.getInputStream();
-            uploadFile2OSS(inputStream, name);
+            uploadFile2OSS(inputStream, name, path);
             return name;
         } catch (Exception e) {
             throw new Exception("图片上传失败");
@@ -93,7 +91,7 @@ public class OSSClientUtil {
      * @param fileName 文件名称 包括后缀名
      * @return 出错返回"" ,唯一MD5数字签名
      */
-    public static String uploadFile2OSS(InputStream instream, String fileName) {
+    public static String uploadFile2OSS(InputStream instream, String fileName, String path) {
         String ret = "";
         try {
             //创建上传Object的Metadata
@@ -104,7 +102,7 @@ public class OSSClientUtil {
             objectMetadata.setContentType(getContentType(fileName.substring(fileName.lastIndexOf("."))));
             objectMetadata.setContentDisposition("inline;filename=" + fileName);
             //上传文件
-            PutObjectResult putResult = ossClient.putObject(BUCKETNAME, NEWS_IMAGE_DIR + fileName, instream, objectMetadata);
+            PutObjectResult putResult = ossClient.putObject(BUCKETNAME, path + fileName, instream, objectMetadata);
             ret = putResult.getETag();
         } catch (IOException e) {
             LoggerUtils.error(LOGGER, "上传OSS服务器异常，异常信息：" + e.getMessage());
@@ -126,10 +124,10 @@ public class OSSClientUtil {
      * @param fileUrl
      * @return
      */
-    public static String getImgUrl(String fileUrl) {
+    public static String getImgUrl(String fileUrl, String path) {
         if (!StringUtils.isEmpty(fileUrl)) {
             String[] split = fileUrl.split("/");
-            return getUrl(NEWS_IMAGE_DIR + split[split.length - 1]);
+            return getUrl(path + split[split.length - 1]);
         }
         return null;
     }

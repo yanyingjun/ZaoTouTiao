@@ -3,10 +3,9 @@ package com.zhishun.zaotoutiao.biz.service;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.*;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author BugMan
@@ -22,7 +21,7 @@ public interface INewsService {
      * @param pageRequest
      * @return
      */
-    List<InfosVo> getInfosByType(String type, int channelId,PageRequest pageRequest);
+    List<InfosVO> getInfosByType(String type, int channelId,PageRequest pageRequest);
 
     /**
      * 获取新闻分类列表
@@ -63,7 +62,7 @@ public interface INewsService {
      * @param pageRequest
      * @return
      */
-    List<InfosVo> searchNewsByKeyword(String keyword,PageRequest pageRequest);
+    List<InfosVO> searchNewsByKeyword(String keyword,PageRequest pageRequest);
 
     /**
      * 获取收藏列表
@@ -78,5 +77,5 @@ public interface INewsService {
      * 获取24小时热文
      * @return
      */
-    List<InfosVo> List24HoursInfos();
+    List<InfosVO> List24HoursInfos();
 }

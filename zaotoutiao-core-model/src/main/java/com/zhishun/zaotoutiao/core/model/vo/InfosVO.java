@@ -7,17 +7,19 @@
 package com.zhishun.zaotoutiao.core.model.vo;
 
 import com.zhishun.zaotoutiao.core.model.entity.Infos;
+import com.zhishun.zaotoutiao.core.model.entity.InfosImage;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author BugMan
- * @version $Id: InfosVo, v0.1 2018年02月26日 13:37BugMan Exp $
+ * @version $Id: InfosVO, v0.1 2018年02月26日 13:37BugMan Exp $
  * 返回的视频新闻列表视图
  */
 
 
-public class InfosVo extends Infos{
+public class InfosVO extends Infos {
 
     //排序时间
     private Date orderTime;
@@ -35,8 +37,6 @@ public class InfosVo extends Infos{
 
     //user_comment
     private int commentsId;
-
-    private String content;
 
     private int likes;
 
@@ -62,12 +62,12 @@ public class InfosVo extends Infos{
      */
     private String readCreateDate;
 
-
-    private String infoId;
-
     private Long userId;
 
     private Integer isRead;
+
+
+    private List<InfosImage> picList;
 
     public int getUserCollectId() {
         return userCollectId;
@@ -189,42 +189,6 @@ public class InfosVo extends Infos{
     }
 
     /**
-     * Getter method for property <tt>infoId</tt>.
-     *
-     * @return property value of infoId
-     */
-    public String getInfoId() {
-        return infoId;
-    }
-
-    /**
-     * Setter method for property <tt>infoId</tt>.
-     *
-     * @param infoId value to be assigned to property infoId
-     */
-    public void setInfoId(String infoId) {
-        this.infoId = infoId;
-    }
-
-    /**
-     * Getter method for property <tt>content</tt>.
-     *
-     * @return property value of content
-     */
-    public String getContent() {
-        return content;
-    }
-
-    /**
-     * Setter method for property <tt>content</tt>.
-     *
-     * @param content value to be assigned to property content
-     */
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    /**
      * Getter method for property <tt>userId</tt>.
      *
      * @return property value of userId
@@ -296,5 +260,23 @@ public class InfosVo extends Infos{
      */
     public void setIsRead(Integer isRead) {
         this.isRead = isRead;
+    }
+
+    /**
+     * Getter method for property <tt>picList</tt>.
+     *
+     * @return property value of picList
+     */
+    public List<InfosImage> getPicList() {
+        return picList;
+    }
+
+    /**
+     * Setter method for property <tt>picList</tt>.
+     *
+     * @param picList value to be assigned to property picList
+     */
+    public void setPicList(List<InfosImage> picList) {
+        this.picList = picList;
     }
 }

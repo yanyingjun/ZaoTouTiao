@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>新增文章</title>
+    <title>新增视频</title>
 
     <link href="/static/css/base.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/uimaker/easyui.css">
@@ -16,11 +16,11 @@
         <form id="content_add_form"  method="post">
             <table cellpadding="5">
                 <tr>
-                    <td>文章标题:</td>
+                    <td>视频标题:</td>
                     <td><input class="easyui-textbox" type="text" name="title" data-options="required:true"></input></td>
                 </tr>
                 <tr>
-                    <td>文章封面：</td>
+                    <td>视频封面：</td>
                     <td>
                         <div class="div1">
                             <div class="div2">上传图片</div>
@@ -85,8 +85,8 @@
                     <td><textarea name="catInfoName" type="text/plain"></textarea></td>
                 </tr>
                 <tr>
-                    <td>文章详情：</td>
-                    <td><textarea id="container" name="content" type="text/plain"></textarea></td>
+                    <td>视频上传：</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td><a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" onclick="saveNews();">确定</a></td>
@@ -108,25 +108,8 @@
 
 <script type="text/javascript">
 
-    var ue = UE.getEditor('container',{
-        zIndex : 9010,
-        initialFrameWidth : 780,
-        initialFrameHeight: 400
-    });
-
-    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-    UE.Editor.prototype.getActionUrl = function(action) {
-        if (action == 'uploadimage') {
-            return '/upload/image';
-        } else if(action == 'listimage'){
-            return this._bkGetActionUrl.call(this, action);
-        } else {
-            return this._bkGetActionUrl.call(this, action);
-        }
-    }
-
     function saveNews(){
-        //if ($('#content_add_form').form('validate')) {
+        if ($('#content_add_form').form('validate')) {
             var jsondata=$('#content_add_form').serializeObject();
             $.post('/infos/add', jsondata, function(data) {
                 if (data.state == 'success') {
@@ -136,7 +119,7 @@
                     $.messager.alert('提示信息', data.msg);
                 }
             }, "JSON");
-        //}
+        }
     }
 
     $.fn.extend({

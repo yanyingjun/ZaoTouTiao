@@ -3,30 +3,23 @@ package com.zhishun.zaotoutiao.core.model.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Infos implements Serializable {
+public class Infos implements Serializable{
+
+    private static final long serialVersionUID = -731339082387107210L;
+
     private Long id;
 
-    private String infoid;
+    private String infoId;
 
-    private String infotype;
+    private String infoType;
 
-    private String alginfo;
+    private String channelId;
 
-    private Integer channelid;
+    private String catInfoName;
 
-    private Integer catinfoid;
+    private Integer imgType;
 
-    private String catinfoname;
-
-    private String hasvideo;
-
-    private Integer imgtype;
-
-    private String producer;
-
-    private Date publishtime;
-
-    private String recid;
+    private Date publishTime;
 
     private String source;
 
@@ -34,33 +27,23 @@ public class Infos implements Serializable {
 
     private String title;
 
-    private Date updatetime;
+    private Date updateTime;
 
     private String videos;
 
     private String summary;
 
-    private String tripleimgs;
-
-    private String h5url;
-
-    private String webUrl;
-
-    private Integer hascontent;
+    private String content;
 
     private Date createDate;
 
-    private Byte ishot;
+    private Byte isHot;
 
     private Date pushDate;
 
-    private Byte directIn;
+    private Integer firstLevel;
 
-    private Date createTime;
-
-    public Infos() {
-        super();
-    }
+    private Integer twoLevel;
 
     public Long getId() {
         return id;
@@ -70,92 +53,36 @@ public class Infos implements Serializable {
         this.id = id;
     }
 
-    public String getInfoid() {
-        return infoid;
+    public String getInfoType() {
+        return infoType;
     }
 
-    public void setInfoid(String infoid) {
-        this.infoid = infoid == null ? null : infoid.trim();
+    public void setInfoType(String infoType) {
+        this.infoType = infoType == null ? null : infoType.trim();
     }
 
-    public String getInfotype() {
-        return infotype;
+    public String getChannelId() {
+        return channelId;
     }
 
-    public void setInfotype(String infotype) {
-        this.infotype = infotype == null ? null : infotype.trim();
+    public void setChannelId(String channelId) {
+        this.channelId = channelId == null ? null : channelId.trim();
     }
 
-    public String getAlginfo() {
-        return alginfo;
+    public Integer getImgType() {
+        return imgType;
     }
 
-    public void setAlginfo(String alginfo) {
-        this.alginfo = alginfo == null ? null : alginfo.trim();
+    public void setImgType(Integer imgType) {
+        this.imgType = imgType;
     }
 
-    public Integer getChannelid() {
-        return channelid;
+    public Date getPublishTime() {
+        return publishTime;
     }
 
-    public void setChannelid(Integer channelid) {
-        this.channelid = channelid;
-    }
-
-    public Integer getCatinfoid() {
-        return catinfoid;
-    }
-
-    public void setCatinfoid(Integer catinfoid) {
-        this.catinfoid = catinfoid;
-    }
-
-    public String getCatinfoname() {
-        return catinfoname;
-    }
-
-    public void setCatinfoname(String catinfoname) {
-        this.catinfoname = catinfoname == null ? null : catinfoname.trim();
-    }
-
-    public String getHasvideo() {
-        return hasvideo;
-    }
-
-    public void setHasvideo(String hasvideo) {
-        this.hasvideo = hasvideo == null ? null : hasvideo.trim();
-    }
-
-    public Integer getImgtype() {
-        return imgtype;
-    }
-
-    public void setImgtype(Integer imgtype) {
-        this.imgtype = imgtype;
-    }
-
-    public String getProducer() {
-        return producer;
-    }
-
-    public void setProducer(String producer) {
-        this.producer = producer == null ? null : producer.trim();
-    }
-
-    public Date getPublishtime() {
-        return publishtime;
-    }
-
-    public void setPublishtime(Date publishtime) {
-        this.publishtime = publishtime;
-    }
-
-    public String getRecid() {
-        return recid;
-    }
-
-    public void setRecid(String recid) {
-        this.recid = recid == null ? null : recid.trim();
+    public void setPublishTime(Date publishTime) {
+        this.publishTime = publishTime;
     }
 
     public String getSource() {
@@ -182,12 +109,12 @@ public class Infos implements Serializable {
         this.title = title == null ? null : title.trim();
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getVideos() {
@@ -206,52 +133,12 @@ public class Infos implements Serializable {
         this.summary = summary == null ? null : summary.trim();
     }
 
-    public String getTripleimgs() {
-        return tripleimgs;
-    }
-
-    public void setTripleimgs(String tripleimgs) {
-        this.tripleimgs = tripleimgs == null ? null : tripleimgs.trim();
-    }
-
-    public String getH5url() {
-        return h5url;
-    }
-
-    public void setH5url(String h5url) {
-        this.h5url = h5url == null ? null : h5url.trim();
-    }
-
-    public String getWebUrl() {
-        return webUrl;
-    }
-
-    public void setWebUrl(String webUrl) {
-        this.webUrl = webUrl == null ? null : webUrl.trim();
-    }
-
-    public Integer getHascontent() {
-        return hascontent;
-    }
-
-    public void setHascontent(Integer hascontent) {
-        this.hascontent = hascontent;
-    }
-
     public Date getCreateDate() {
         return createDate;
     }
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    public Byte getIshot() {
-        return ishot;
-    }
-
-    public void setIshot(Byte ishot) {
-        this.ishot = ishot;
     }
 
     public Date getPushDate() {
@@ -262,19 +149,91 @@ public class Infos implements Serializable {
         this.pushDate = pushDate;
     }
 
-    public Byte getDirectIn() {
-        return directIn;
+    public Integer getFirstLevel() {
+        return firstLevel;
     }
 
-    public void setDirectIn(Byte directIn) {
-        this.directIn = directIn;
+    public void setFirstLevel(Integer firstLevel) {
+        this.firstLevel = firstLevel;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Integer getTwoLevel() {
+        return twoLevel;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setTwoLevel(Integer twoLevel) {
+        this.twoLevel = twoLevel;
+    }
+
+    /**
+     * Getter method for property <tt>infoId</tt>.
+     *
+     * @return property value of infoId
+     */
+    public String getInfoId() {
+        return infoId;
+    }
+
+    /**
+     * Setter method for property <tt>infoId</tt>.
+     *
+     * @param infoId value to be assigned to property infoId
+     */
+    public void setInfoId(String infoId) {
+        this.infoId = infoId;
+    }
+
+    /**
+     * Getter method for property <tt>catInfoName</tt>.
+     *
+     * @return property value of catInfoName
+     */
+    public String getCatInfoName() {
+        return catInfoName;
+    }
+
+    /**
+     * Setter method for property <tt>catInfoName</tt>.
+     *
+     * @param catInfoName value to be assigned to property catInfoName
+     */
+    public void setCatInfoName(String catInfoName) {
+        this.catInfoName = catInfoName;
+    }
+
+    /**
+     * Getter method for property <tt>content</tt>.
+     *
+     * @return property value of content
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * Setter method for property <tt>content</tt>.
+     *
+     * @param content value to be assigned to property content
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    /**
+     * Getter method for property <tt>isHot</tt>.
+     *
+     * @return property value of isHot
+     */
+    public Byte getIsHot() {
+        return isHot;
+    }
+
+    /**
+     * Setter method for property <tt>isHot</tt>.
+     *
+     * @param isHot value to be assigned to property isHot
+     */
+    public void setIsHot(Byte isHot) {
+        this.isHot = isHot;
     }
 }

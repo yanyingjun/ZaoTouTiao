@@ -10,7 +10,7 @@ import com.zhishun.zaotoutiao.common.base.pagination.PageNoAndSize;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.entity.Infos;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import com.zhishun.zaotoutiao.dal.mapper.ChannelsMapper;
 import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,6 @@ public class VideoServiceImpl implements IVideoService{
         return channelsMapper.listVideoChannels(map);
     }
 
-
     /**
      * 根据类型查找视频或新闻
      * @param type
@@ -50,13 +49,13 @@ public class VideoServiceImpl implements IVideoService{
      * @return
      */
     @Override
-    public List<InfosVo> getInfosByType(String type, int channelId, PageRequest pageRequest) {
+    public List<InfosVO> getInfosByType(String type, int channelId, PageRequest pageRequest) {
         Map map = Maps.newHashMap();
         map.put("type",type);
         map.put("channelId",channelId);
         map.put("endNo",pageRequest.getOffset());
         map.put("startNo",pageRequest.getPageSize());
-        List<InfosVo> voList= infosMapper.selectInfosByType(map);
+        List<InfosVO> voList= infosMapper.selectInfosByType(map);
         return voList;
     }
 

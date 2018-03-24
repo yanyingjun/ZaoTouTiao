@@ -7,7 +7,7 @@ package com.zhishun.zaotoutiao.biz.service;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.UserComments;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface ICommentsService {
      * @param pageRequest
      * @return
      */
-    Page<InfosVo> getMyCommentsList(Long userId, PageRequest pageRequest);
+    Page<InfosVO> getMyCommentsList(Long userId, PageRequest pageRequest);
 
     /**
      * 删除我的评论

@@ -2,7 +2,6 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 
 import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
 
 import java.util.List;

@@ -73,8 +73,8 @@ public class NewsController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                List<InfosVo> list = iNewsService.getInfosByType("article",channelId ,pageNo,pageSize);
-                for(InfosVo infosVo:list){
+                List<InfosVO> list = iNewsService.getInfosByType("article",channelId ,pageNo,pageSize);
+                for(InfosVO infosVo:list){
                     String infoid = infosVo.getInfoid();
                     int commentsNum = iCommentService.getCommentsNumByInfoId(infoid);
                     infosVo.setCommentsNum(commentsNum);
@@ -253,9 +253,9 @@ public class NewsController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                List<InfosVo> infosVoList = iNewsService.searchNewsByKeyword(keyword,pageNo,pageSize);
+                List<InfosVO> infosVoList = iNewsService.searchNewsByKeyword(keyword,pageNo,pageSize);
                 //循环添加留言数
-                for(InfosVo infosVo:infosVoList){
+                for(InfosVO infosVo:infosVoList){
                     String infoid = infosVo.getInfoid();
                     int commentsNum = iCommentService.getCommentsNumByInfoId(infoid);
                     infosVo.setCommentsNum(commentsNum);
