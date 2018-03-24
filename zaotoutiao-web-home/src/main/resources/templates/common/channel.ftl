@@ -49,7 +49,7 @@
             <option value="0">视频</option>
         </select>
         <a href="#" onclick="toSearch()" id="bt_search_btn" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true">查询</a>
-        <a href="javascript:void(0);" onclick="parent.Open('新增导航', '/channel/add')" class="easyui-linkbutton">新增</a>
+        <a href="javascript:void(0);" onclick="parent.Open('新增导航', '/channel/add')" class="easyui-linkbutton" iconCls="icon-add">新增</a>
     </div>
 </div>
 
@@ -172,41 +172,51 @@
             status= '下架'
         }
         return  '<a href="#" onclick="doOrder()">排序</a>&nbsp;&nbsp;' +
-                '<a href="#" onclick="changeStatus('+row.id+','+row.status+')">'+status+'</a>&nbsp;&nbsp;' +
+                '<a href="#" onclick="changeStatus('+row.id+','+row.status+',\'确定修改吗?\')">'+status+'</a>&nbsp;&nbsp;' +
                 '<a href="#" onclick="doEdit('+row.id+',\''+row.name+'\')">编辑</a>&nbsp;&nbsp;' +
-                '<a href="#" onclick="del('+row.id+')">删除</a>';
+                '<a href="#" onclick="del('+row.id+',\'确定删除吗?\')">删除</a>';
     }
+
+
     //删除
-    function del(id) {
-        $.post("/delete/channel",{id:id},function (data) {
-            if (data === 1) {
-                $.messager.alert('请求删除导航', '删除成功！', 'info');
-            } else {
-                $.messager.alert('请求删除导航', '删除失败！', 'error');
+    function del(id,str) {
+        $.messager.confirm('提示信息', str, function(r){
+            if(r){
+                $.post("/delete/channel",{id:id},function (data) {
+                    if (data === 1) {
+                        $.messager.alert('请求删除导航', '删除成功！', 'info');
+                    } else {
+                        $.messager.alert('请求删除导航', '删除失败！', 'error');
+                    }
+                    $('#dg').datagrid('reload');
+                },"json");
             }
-            $('#dg').datagrid('reload');
-        },"json")
+        })
     }
     function doOrder (){
         $('#dlg').dialog('open');
     }
 
     //更新状态
-    function changeStatus(id,status) {
-        var newStatus;
-        if(status === 1){
-            newStatus=0;
-        }else if(status === 0){
-            newStatus=1;
-        }
-        $.post("/update/channel/status",{id:id,status:newStatus},function (data) {
-            if (data === 1) {
-                $.messager.alert('请求更新状态', '更新成功！', 'info');
-            } else {
-                $.messager.alert('请求更新状态', '更新失败！', 'error');
+    function changeStatus(id,status,str) {
+        $.messager.confirm('提示信息', str, function(r){
+            if(r){
+                var newStatus;
+                if(status === 1){
+                    newStatus=0;
+                }else if(status === 0){
+                    newStatus=1;
+                }
+                $.post("/update/channel/status",{id:id,status:newStatus},function (data) {
+                    if (data === 1) {
+                        $.messager.alert('请求更新状态', '更新成功！', 'info');
+                    } else {
+                        $.messager.alert('请求更新状态', '更新失败！', 'error');
+                    }
+                    $('#dg').datagrid('reload');
+                },"json")
             }
-            $('#dg').datagrid('reload');
-        },"json")
+        })
     }
 
     //查询

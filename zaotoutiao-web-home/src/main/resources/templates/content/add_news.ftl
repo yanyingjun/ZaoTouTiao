@@ -95,7 +95,7 @@
             <div>
                 <div style=" font-size: 14px; font-weight: 700">
                     文章详情:&nbsp;&nbsp;&nbsp;
-                    <script id="container" name="content" type="text/plain"></script>
+                    <#--<script id="container" name="content" type="text/plain"></script>-->
                     <div style="clear: both"></div>
                 </div>
             </div>
@@ -113,32 +113,32 @@
 <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="/static/js/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="/static/js/img-upload.js"></script>
-<script type="text/javascript" src="/static/UEditor/ueditor.config.js"></script>
-<!-- 编辑器源码文件 -->
-<script type="text/javascript" src="/static/UEditor/ueditor.all.js"></script>
-<!-- 实例化编辑器 -->
-<script type="text/javascript">
-    $(function(){
-        var ue = UE.getEditor('container',{
-            initialFrameHeight:300,
-            autoHeightEnabled:false
-        });
-        UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-        UE.Editor.prototype.getActionUrl = function(action) {
-            if (action == 'uploadimage' || action == 'uploadimage') {
-                return "/ueditor/uploadImg";
-            }else if(action == 'uploadscrawl' ){
-                return "/ueditor/uploadscrawl";
-            } else if (action == 'uploadvideo') {
-                return '/ueditor/uploadVideo';
-            }else if (action == 'uploadfile') {
-                return '/ueditor/uploadfile';
-            } else {
-                return this._bkGetActionUrl.call(this, action);
-            }
-        }
-    })
-</script>
+<#--<script type="text/javascript" src="/static/UEditor/ueditor.config.js"></script>-->
+<#--<!-- 编辑器源码文件 &ndash;&gt;-->
+<#--<script type="text/javascript" src="/static/UEditor/ueditor.all.js"></script>-->
+<#--<!-- 实例化编辑器 &ndash;&gt;-->
+<#--<script type="text/javascript">-->
+    <#--$(function(){-->
+        <#--var ue = UE.getEditor('container',{-->
+            <#--initialFrameHeight:300,-->
+            <#--autoHeightEnabled:false-->
+        <#--});-->
+        <#--UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;-->
+        <#--UE.Editor.prototype.getActionUrl = function(action) {-->
+            <#--if (action == 'uploadimage' || action == 'uploadimage') {-->
+                <#--return "/ueditor/uploadImg";-->
+            <#--}else if(action == 'uploadscrawl' ){-->
+                <#--return "/ueditor/uploadscrawl";-->
+            <#--} else if (action == 'uploadvideo') {-->
+                <#--return '/ueditor/uploadVideo';-->
+            <#--}else if (action == 'uploadfile') {-->
+                <#--return '/ueditor/uploadfile';-->
+            <#--} else {-->
+                <#--return this._bkGetActionUrl.call(this, action);-->
+            <#--}-->
+        <#--}-->
+    <#--})-->
+<#--</script>-->
 
 <script>
     //联动

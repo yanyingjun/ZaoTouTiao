@@ -66,7 +66,7 @@
         <a href="#" onclick="toSearch()" id="bt_search_btn" class="easyui-linkbutton" iconCls="icon-search"
            data-options="selected:true">查询</a>
         <a href="javascript:void(0);" onclick="parent.Open('新增二级标签', '/add/second/tab')"
-           class="easyui-linkbutton">新增</a>
+           class="easyui-linkbutton" iconCls="icon-add">新增</a>
     </div>
 </div>
 
@@ -184,18 +184,22 @@
     function formatOperate(val, row, index) {
 
         return '<a href="#" onclick="doEdit(' + row.id + ',\'' + row.name + '\')">编辑</a>&nbsp;&nbsp;' +
-                '<a href="#" onclick="del(' + row.id + ')">删除</a>';
+                '<a href="#" onclick="del(' + row.id + ',\'确定恢复吗?\')">删除</a>';
     }
     //删除
-    function del(id) {
-        $.post("/delete/channel", {id: id}, function (data) {
-            if (data === 1) {
-                $.messager.alert('请求删除导航', '删除成功！', 'info');
-            } else {
-                $.messager.alert('请求删除导航', '删除失败！', 'error');
+    function del(id,str) {
+        $.messager.confirm('提示信息', str, function(r){
+            if(r){
+                $.post("/delete/channel", {id: id}, function (data) {
+                    if (data === 1) {
+                        $.messager.alert('请求删除导航', '删除成功！', 'info');
+                    } else {
+                        $.messager.alert('请求删除导航', '删除失败！', 'error');
+                    }
+                    $('#dg').datagrid('reload');
+                }, "json")
             }
-            $('#dg').datagrid('reload');
-        }, "json")
+        })
     }
     function doOrder() {
         $('#dlg').dialog('open');
