@@ -8,23 +8,19 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.ArticleMsgReq;
-import com.zhishun.zaotoutiao.api.home.request.UserMsgReq;
 import com.zhishun.zaotoutiao.biz.service.ICommentsService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
-import com.zhishun.zaotoutiao.core.model.entity.UserCollect;
 import com.zhishun.zaotoutiao.core.model.entity.UserComments;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -82,7 +78,7 @@ public class UserCommentsController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                Page<InfosVo> page = commentsService.getMyCommentsList(userId, pageRequest);
+                Page<InfosVO> page = commentsService.getMyCommentsList(userId, pageRequest);
                 dataMap.put("result", "success");
                 dataMap.put("msg", "相关信息返回成功");
                 dataMap.put("data", page.getRows());

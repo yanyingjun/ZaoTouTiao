@@ -76,9 +76,14 @@ public class ZttWebMsgView {
     public static final String ZTT_EARLY_WARNING = "finance/early_warning";
 
     /**
-     * 新增视频
+     * 新增新闻
      */
     public static final String ZTT_CONTENT_ADD_VIEW = "content/add_content";
+
+    /**
+     * 新增视频
+     */
+    public static final String ZTT_VIDEO_ADD_VIEW = "content/add_video";
 
     /**
      * 内容列表

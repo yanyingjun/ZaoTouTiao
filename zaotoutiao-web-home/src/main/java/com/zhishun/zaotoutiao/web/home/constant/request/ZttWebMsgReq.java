@@ -128,7 +128,12 @@ public class ZttWebMsgReq {
     /**
      * 新增新闻页面请求
      */
-    public static final String ZTT_CONTENT_ADD_VIEW = "/content";
+    public static final String ZTT_NEWS_ADD_VIEW = "/content/news";
+
+    /**
+     * 新增视频页面请求
+     */
+    public static final String ZTT_VIDEO_ADD_VIEW = "/content/video";
 
     /**
      * 内容列表页面请求
@@ -144,5 +149,10 @@ public class ZttWebMsgReq {
      * 编辑器上传图片
      */
     public static final String ZTT_UPLOAD_IMAGE_REQ = "/upload/image";
+
+    /**
+     * 上传视频
+     */
+    public static final String ZTT_UPLOAD_VIDEO_REQ = "/upload/video";
 
 }

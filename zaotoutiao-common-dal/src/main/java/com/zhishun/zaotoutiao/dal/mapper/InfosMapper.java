@@ -1,8 +1,7 @@
 package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.Infos;
-import com.zhishun.zaotoutiao.core.model.entity.UserCollect;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ public interface InfosMapper {
 
     int updateByPrimaryKey(Infos record);
 
-    List<InfosVo> selectInfosByType(Map map);
+    List<InfosVO> selectInfosByType(Map map);
 
     int selectCountByType(String type);
 
@@ -36,7 +35,7 @@ public interface InfosMapper {
      * @param map
      * @return
      */
-    List<InfosVo> getMyCommentsList(Map<String,Object> map);
+    List<InfosVO> getMyCommentsList(Map<String,Object> map);
 
     /**
      * 获取我的评论总记录数
@@ -57,13 +56,13 @@ public interface InfosMapper {
      * @param map
      * @return
      */
-    List<InfosVo> searchNewsByKeyword(Map<String,Object> map);
+    List<InfosVO> searchNewsByKeyword(Map<String,Object> map);
 
     /**
      * 获取24小时热文
      * @return
      */
-    List<InfosVo> List24HoursInfos();
+    List<InfosVO> List24HoursInfos();
 
     String getInfoTitle(String infoId);
 }

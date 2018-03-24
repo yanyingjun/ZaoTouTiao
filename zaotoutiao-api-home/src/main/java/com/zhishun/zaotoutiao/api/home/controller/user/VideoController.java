@@ -11,23 +11,14 @@ import com.zhishun.zaotoutiao.api.home.request.VideoMsgReq;
 import com.zhishun.zaotoutiao.biz.service.IAdvertisementService;
 import com.zhishun.zaotoutiao.biz.service.ICommentsService;
 import com.zhishun.zaotoutiao.biz.service.IVideoService;
-import com.zhishun.zaotoutiao.common.util.AssertsUtil;
-import com.zhishun.zaotoutiao.common.util.DateUtil;
-import com.zhishun.zaotoutiao.core.model.entity.Advertisement;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
-import com.zhishun.zaotoutiao.core.model.entity.Infos;
-import com.zhishun.zaotoutiao.core.model.entity.UserComments;
 import com.zhishun.zaotoutiao.core.model.enums.ChannelEnum;
-import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +81,7 @@ public class VideoController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                List<InfosVo> list = videoService.getInfosByType("video",channelId ,pageNo,pageSize);
+                List<InfosVO> list = videoService.getInfosByType("video",channelId ,pageNo,pageSize);
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取视频新闻列表成功");
                 dataMap.put("data", list);

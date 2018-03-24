@@ -31,6 +31,11 @@ import java.util.Map;
 @RestController
 public class UEditorController extends BaseController{
 
+    /**
+     * 新闻图片路径
+     */
+    private static String NEWS_IMAGE_DIR = "news/image/";
+
     @RequestMapping(value="/config")
     public void config(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");
@@ -51,25 +56,26 @@ public class UEditorController extends BaseController{
      * @param file
      * @return
      */
-    /*@RequestMapping(value = ZttWebMsgReq.ZTT_UPLOAD_IMAGE_REQ)
-    public Map<Object,Object> uploadImage(MultipartFile file){
+    @RequestMapping(value = ZttWebMsgReq.ZTT_UPLOAD_IMAGE_REQ)
+    public Map<Object,Object> uploadImage(MultipartFile upfile){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
-                AssertsUtil.isNotNull(file, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(upfile, ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
                 try {
-                    String name = OSSClientUtil.uploadImg2Oss(file);
-                    String imgUrl = OSSClientUtil.getImgUrl(name);
-                    dataMap.put("result", "success");
+                    String name = OSSClientUtil.uploadImgOss(upfile, NEWS_IMAGE_DIR);
+                    String imgUrl = OSSClientUtil.getImgUrl(name, NEWS_IMAGE_DIR);
+                    dataMap.put("url", imgUrl);
+                    dataMap.put("state", "SUCCESS");
                     dataMap.put("msg", "上传图片成功");
                 }catch(IOException e){
-                    dataMap.put("result", "fail");
+                    dataMap.put("state", "FAIL");
                     dataMap.put("msg", "上传图片失败");
                     LoggerUtils.error(LOGGER, "上传图片异常，异常信息：" + e.getMessage());
                 }
@@ -77,7 +83,7 @@ public class UEditorController extends BaseController{
         });
 
         return dataMap;
-    }*/
+    }
 
 
 

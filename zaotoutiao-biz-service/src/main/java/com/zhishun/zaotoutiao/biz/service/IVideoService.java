@@ -2,7 +2,7 @@ package com.zhishun.zaotoutiao.biz.service;
 
         import com.zhishun.zaotoutiao.core.model.entity.Channels;
         import com.zhishun.zaotoutiao.core.model.entity.Infos;
-        import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+        import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 
         import java.util.List;
 
@@ -26,7 +26,7 @@ public interface IVideoService {
      * @param pageSize
      * @return
      */
-    List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize);
+    List<InfosVO> getInfosByType(String type, int channelId, int pageNo, int pageSize);
 
     /**
      * 获取视频相关内容

@@ -6,41 +6,44 @@
 
 package com.zhishun.zaotoutiao.web.home.controller.content;
 
-import com.zhishun.zaotoutiao.web.home.constant.request.ContentMsgReq;
+import com.google.common.collect.Maps;
+import com.zhishun.zaotoutiao.biz.service.IChannelService;
+import com.zhishun.zaotoutiao.biz.service.IInfosService;
+import com.zhishun.zaotoutiao.biz.service.IVideoService;
+import com.zhishun.zaotoutiao.common.util.AssertsUtil;
+import com.zhishun.zaotoutiao.core.model.entity.Channels;
+import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
+import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
+import com.zhishun.zaotoutiao.web.home.callback.ControllerCallback;
+import com.zhishun.zaotoutiao.web.home.constant.request.InfosMsgReq;
 import com.zhishun.zaotoutiao.web.home.constant.request.ZttWebMsgReq;
-import com.zhishun.zaotoutiao.web.home.constant.view.ContentMsgView;
 import com.zhishun.zaotoutiao.web.home.constant.view.ZttWebMsgView;
 import com.zhishun.zaotoutiao.web.home.controller.base.BaseController;
-
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- * 后台新闻及视频相关接口
- * @author BugMan
- * @version $Id: ContentController, v0.1 2018年03月19日 11:15BugMan Exp $
+ * @author 闫迎军(YanYingJun)
+ * @version $Id: ContentController, v0.1 2018年03月20日 22:24闫迎军(YanYingJun) Exp $
  */
-@Controller
-public class ContentController extends BaseController {
+@RestController
+public class ContentController extends BaseController{
 
-    /**
-     * 新增文章
-     * @return
-     */
-    @RequestMapping(value = ContentMsgReq.ADD_NEWS_REQ)
-    public String addNews(){
-        return ContentMsgView.ADD_NEWS_VIEW;
-    }
+    @Autowired
+    private IChannelService channelService;
 
-    /**
-     * 新增视频
-     * @return
-     */
-    @RequestMapping(value = ContentMsgReq.ADD_VIDEO_REQ)
-    public String addVideo(){
-        return ContentMsgView.ADD_VIDEO_VIEW;
-    }
+    @Autowired
+    private IVideoService videoService;
+
+    @Autowired
+    private IInfosService infosService;
 
     /**
      * 跳转到内容列表页面
@@ -56,11 +59,75 @@ public class ContentController extends BaseController {
      * 跳转到新增新闻页面
      * @return
      */
-    @RequestMapping(value = ZttWebMsgReq.ZTT_CONTENT_ADD_VIEW)
+    @RequestMapping(value = ZttWebMsgReq.ZTT_NEWS_ADD_VIEW)
     public ModelAndView contentAddView(){
         ModelAndView mv = new ModelAndView(ZttWebMsgView.ZTT_CONTENT_ADD_VIEW);
         return mv;
     }
+
+    /**
+     * 跳转到新增视频页面
+     * @return
+     */
+    @RequestMapping(value = ZttWebMsgReq.ZTT_VIDEO_ADD_VIEW)
+    public ModelAndView addVideoView(){
+        ModelAndView mv = new ModelAndView(ZttWebMsgView.ZTT_VIDEO_ADD_VIEW);
+        return mv;
+    }
+
+    /**
+     * 获取导航
+     * @return
+     */
+    @RequestMapping(value = "/getChannels")
+    public List<Channels> getNewsChannls(Integer appType){
+        List<Channels> list = videoService.listVideoChannels(1, appType);
+        return list;
+    }
+
+    /**
+     * 获取子导航
+     * @param parentId
+     * @param appType
+     * @return
+     */
+    @RequestMapping(value = "/subnavigation")
+    public List<Channels> getSubnavigation(Long parentId, Integer appType){
+        List<Channels> list = channelService.getChannelsList(null, 1, appType, parentId);
+        return list;
+    }
+
+    /**
+     * 新增视频和新闻
+     * @param infosVO
+     * @return
+     */
+    @RequestMapping(value = InfosMsgReq.ADD_NEWS_VIDEO_REQ, method = RequestMethod.POST)
+    public Map<Object,Object> addInfos(final InfosVO infosVO){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotNull(infosVO, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                int num = infosService.addInfos(infosVO);
+                if(num > 0){
+                    dataMap.put("state", "success");
+                    dataMap.put("msg", "新增成功");
+                }else{
+                    dataMap.put("state", "fail");
+                    dataMap.put("msg", "新增失败");
+                }
+            }
+        });
+
+        return dataMap;
+    }
+
 
 
 }
