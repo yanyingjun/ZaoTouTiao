@@ -117,10 +117,10 @@
   </select>
 
   <select id="getUserSignRecord" parameterType="long" resultMap="BaseResultMap">
-    SELECT max(create_date),sign_continuous_day from user_sign_in where user_sign_in.userId = #{userId}
+    SELECT create_date,sign_continuous_day from user_sign_in where user_sign_in.userId = #{userId} ORDER BY create_date desc LIMIT 1
   </select>
 
   <select id="getUserSignList" parameterType="map" resultMap="BaseResultMap">
-    select * from user_sign_in where userId = #{userId} ORDER BY create_date DESC limit #{limit}
+    select * from user_sign_in where userId = #{userId} ORDER BY create_date DESC limit #{dayNum}
   </select>
 </mapper>

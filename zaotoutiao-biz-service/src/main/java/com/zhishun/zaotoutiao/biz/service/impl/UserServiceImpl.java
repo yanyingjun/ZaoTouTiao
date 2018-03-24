@@ -455,7 +455,7 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public Long addUserInfo(String telephone, String password, Integer platformId, Integer channelId, String address, String idImei) {
+    public Long addUserInfo(String telephone, String password, Integer platformId, String channelId, String address, String idImei) {
         password = Md5Util.md5Encode(password);
         String nickName = "手机用户_" + telephone.substring(7, 11);
         //我的邀请码为我的手机号转16进制

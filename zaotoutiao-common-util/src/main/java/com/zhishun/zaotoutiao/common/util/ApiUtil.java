@@ -123,13 +123,6 @@ public class ApiUtil {
             }
         }catch (Exception e){
             LoggerUtils.error(LOGGER, "广告位请求异常");
-
-
-
-
-
-
-
             return null;
         }
     }

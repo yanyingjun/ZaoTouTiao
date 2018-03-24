@@ -20,22 +20,40 @@
                     <td><input class="easyui-textbox" type="text" name="name" data-options="required:true"></input></td>
                 </tr>
                 <tr>
-                    <td>文章封面:</td>
-                    <td><input class="easyui-textbox" type="text" name="email" data-options="required:true,validType:'email'"></input></td>
+                    <td>文章封面：</td>
+                    <td>
+                        <div class="div1">
+                            <div class="div2">上传图片</div>
+                            <input name="pic" class="inputstyle" type="file" onClick="toUpLoad()" multiple="multiple" />
+                        </div>
+                        <div id="imgdiv"></div>
+                        <div id="imgDialog" closed="true" class="easyui-dialog" title="原图"
+                             data-options="maximizable:true,resizable:true,modal:true" style="width: 800px; height: 600px; padding: 10px">
+                            <img alt="" src="" id="showImg"/>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>导航名称:</td>
                     <td><input class="easyui-textbox" type="text" name="subject" data-options="required:true"></input></td>
                 </tr>
                 <tr>
-                    <td>Message:</td>
+                    <td>一级标签:</td>
                     <td><input class="easyui-textbox" name="message" data-options="multiline:true" style="height:60px"></input></td>
                 </tr>
                 <tr>
-                    <td>Language:</td>
+                    <td>二级标签:</td>
                     <td>
                         <select class="easyui-combobox" name="language"><option value="ar">Arabic</option><option value="bg">Bulgarian</option><option value="ca">Catalan</option><option value="zh-cht">Chinese Traditional</option><option value="cs">Czech</option><option value="da">Danish</option><option value="nl">Dutch</option><option value="en" selected="selected">English</option><option value="et">Estonian</option><option value="fi">Finnish</option><option value="fr">French</option><option value="de">German</option><option value="el">Greek</option><option value="ht">Haitian Creole</option><option value="he">Hebrew</option><option value="hi">Hindi</option><option value="mww">Hmong Daw</option><option value="hu">Hungarian</option><option value="id">Indonesian</option><option value="it">Italian</option><option value="ja">Japanese</option><option value="ko">Korean</option><option value="lv">Latvian</option><option value="lt">Lithuanian</option><option value="no">Norwegian</option><option value="fa">Persian</option><option value="pl">Polish</option><option value="pt">Portuguese</option><option value="ro">Romanian</option><option value="ru">Russian</option><option value="sk">Slovak</option><option value="sl">Slovenian</option><option value="es">Spanish</option><option value="sv">Swedish</option><option value="th">Thai</option><option value="tr">Turkish</option><option value="uk">Ukrainian</option><option value="vi">Vietnamese</option></select>
                     </td>
+                </tr>
+                <!--<tr>
+                    <td>关键词：</td>
+                    <td><textarea name="content" type="text/plain"></textarea></td>
+                </tr>-->
+                <tr>
+                    <td>文章详情：</td>
+                    <td><textarea id="container" name="content" type="text/plain"></textarea></td>
                 </tr>
             </table>
         </form>
@@ -44,8 +62,30 @@
 <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="/static/js/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="/static/js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>"
+<script type="text/javascript" src="/static/fileupload/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="/static/fileupload/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/static/fileupload/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/static/js/picsUpload.js"></script>
 
 <script type="text/javascript">
+
+    var ue = UE.getEditor('container',{
+        zIndex : 9010,
+        initialFrameWidth : 780,
+        initialFrameHeight: 400
+    });
+
+    /*UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+    UE.Editor.prototype.getActionUrl = function(action) {
+        if (action == 'uploadimage') {
+            return '/upload/image';
+        } else {
+            return this._bkGetActionUrl.call(this, action);
+        }
+    }*/
 
     function loadLocal(){
         $('#ff').form('load',{
@@ -63,6 +103,8 @@
         $('#ff').form('clear');
     }
 
+    toUpLoad('pic', 'imgdiv', 'imgDialog') ;
+    //initShowPic(null,null,'imgdiv', 'imgDialog');
 </script>
 </body>
 </html>

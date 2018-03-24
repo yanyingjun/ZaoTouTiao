@@ -5,6 +5,7 @@
 package com.zhishun.zaotoutiao.biz.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IThirdInfoService;
@@ -550,10 +551,20 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
             adInfoVO.setDesc(imageSnippet.getString("desc"));
             adInfoVO.setType(type);
             if(!StringUtils.isEmpty(imageSnippet.getString("clk"))){
-                adInfoVO.setClk(imageSnippet.getString("clk"));
+                JSONArray jsonArray = JSONObject.parseArray(imageSnippet.getString("clk"));
+                String clk = "";
+                for(int i=0 ;i<jsonArray.size();i++){
+                    clk += jsonArray.get(i) + ",";
+                }
+                adInfoVO.setClk(clk);
             }
             if(!StringUtils.isEmpty(imageSnippet.getString("imp"))){
-                adInfoVO.setImp(imageSnippet.getString("imp"));
+                JSONArray jsonArray = JSONObject.parseArray(imageSnippet.getString("imp"));
+                String imp = "";
+                for(int i=0 ;i<jsonArray.size();i++){
+                    imp += jsonArray.get(i) + ",";
+                }
+                adInfoVO.setImp(imp);
             }
             adInfoVO.setInteractionType(interationType);
         }
@@ -567,10 +578,20 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
             adInfoVO.setWidth(textIconSnippet.getInteger("width"));
             adInfoVO.setHeight(textIconSnippet.getInteger("height"));
             if(!StringUtils.isEmpty(textIconSnippet.getString("clk"))){
-                adInfoVO.setClk(textIconSnippet.getString("clk"));
+                JSONArray jsonArray = JSONObject.parseArray(textIconSnippet.getString("clk"));
+                String clk = "";
+                for(int i=0 ;i<jsonArray.size();i++){
+                    clk += jsonArray.get(i) + ",";
+                }
+                adInfoVO.setClk(clk);
             }
             if(!StringUtils.isEmpty(textIconSnippet.getString("imp"))){
-                adInfoVO.setImp(textIconSnippet.getString("imp"));
+                JSONArray jsonArray = JSONObject.parseArray(textIconSnippet.getString("imp"));
+                String imp = "";
+                for(int i=0 ;i<jsonArray.size();i++){
+                    imp += jsonArray.get(i) + ",";
+                }
+                adInfoVO.setImp(imp);
             }
             adInfoVO.setType(type);
             adInfoVO.setInteractionType(interationType);
@@ -585,11 +606,21 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
             adInfoVO.setDuration(videoSnippet.getInteger("duration"));
             adInfoVO.setType(type);
             if(!StringUtils.isEmpty(videoSnippet.getString("clk"))){
-                adInfoVO.setClk(videoSnippet.getString("clk"));
+                JSONArray jsonArray = JSONObject.parseArray(videoSnippet.getString("clk"));
+                String clk = "";
+                for(int i=0 ;i<jsonArray.size();i++){
+                    clk += jsonArray.get(i) + ",";
+                }
+                adInfoVO.setClk(clk);
             }
             if(!StringUtils.isEmpty(videoSnippet.getString("video_imp"))){
                 JSONObject videoImp = JSONObject.parseObject(videoSnippet.getString("video_imp"));
-                adInfoVO.setImp(videoImp.getString("imp_url"));
+                JSONArray jsonArray = JSONObject.parseArray(videoImp.getString("imp_url"));
+                String imp = "";
+                for(int i=0 ;i<jsonArray.size();i++){
+                    imp += jsonArray.get(i) + ",";
+                }
+                adInfoVO.setImp(imp);
                 adInfoVO.setTime(videoImp.getString("time"));
             }
             adInfoVO.setInteractionType(interationType);

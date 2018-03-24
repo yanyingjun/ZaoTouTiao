@@ -6,22 +6,25 @@
 
 package com.zhishun.zaotoutiao.api.home.controller.news;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.NewsMsgReq;
+import com.zhishun.zaotoutiao.biz.service.IChannelService;
 import com.zhishun.zaotoutiao.biz.service.ICommentsService;
 import com.zhishun.zaotoutiao.biz.service.INewsService;
 import com.zhishun.zaotoutiao.biz.service.IVideoService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
+import com.zhishun.zaotoutiao.core.model.entity.UserChannels;
 import com.zhishun.zaotoutiao.core.model.entity.UserCollect;
 import com.zhishun.zaotoutiao.core.model.enums.ChannelEnum;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
-import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
 import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +48,9 @@ public class NewsController extends BaseController{
 
     @Autowired
     private ICommentsService iCommentService;
+
+    @Autowired
+    private IChannelService channelService;
 
     /**
      * 获取新闻列表
@@ -85,7 +91,7 @@ public class NewsController extends BaseController{
      * @return
      */
     @RequestMapping(value = NewsMsgReq.NEWS_CHANNELS_REQ, method = RequestMethod.GET)
-    public Map<Object,Object> getNewsChannles(){
+    public Map<Object,Object> getNewsChannles(final Long userId){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
         this.excute(dataMap, null, new ControllerCallback() {
@@ -96,7 +102,27 @@ public class NewsController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                List<Channels> list = videoService.listVideoChannels(1, ChannelEnum.NEWS.getValue());
+                List<Channels> list = Lists.newArrayList();
+                List<Channels> listAll = Lists.newArrayList();
+                if(StringUtils.isEmpty(userId)){
+                    list = videoService.listVideoChannels(1, ChannelEnum.NEWS.getValue());
+                }else{
+                    listAll = videoService.listVideoChannels(1, ChannelEnum.NEWS.getValue());
+                    UserChannels userChannels = channelService.getUserChannel(userId);
+                    if(StringUtils.isEmpty(userChannels.getChannels())){
+                        list = listAll;
+                    }else{
+                        String[] channels = userChannels.getChannels().split(",");
+                        for(String channel : channels){
+                            Channels channels1 = channelService.getChannelsByChannelId(channel);
+                            list.add(channels1);
+                        }
+                        for(Channels chan : list){
+                            listAll.remove(chan);
+                        }
+                    }
+                }
+                dataMap.put("not_concern", listAll);
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取新闻分类列表成功");
                 dataMap.put("data", list);

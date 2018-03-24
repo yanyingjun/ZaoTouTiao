@@ -51,37 +51,14 @@ public class SendSmsController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                User user = userService.getUserByMap(telephone);
-                if(StringUtils.isEmpty(user)){
-                    //判断是否绑定过微信
-                    if(StringUtils.isEmpty(user.getWechatId())){
-                        dataMap.put("whether_binding_wechat", "false");
-                        //生成四位随机数
-                        int code = new Random().nextInt(9000) + 1000;
-                        //发送验证码
-                        SendMsgUtil.sendSms(telephone, String.valueOf(code));
-                        HttpSession session = request.getSession();
-                        session.removeAttribute(telephone);
-                        session.setAttribute(telephone, code);
-                        dataMap.put("telephone", telephone);
-                        dataMap.put("code", code);
-                        dataMap.put("result", "success");
-                        dataMap.put("msg", "验证码发送成功");
-                    }else{
-                        dataMap.put("whether_binding_wechat", "true");
-                    }
-                    dataMap.put("whether_has_user", "false");
-                }else{
-                    //生成四位随机数
-                    int code = new Random().nextInt(9000) + 1000;
-                    //发送验证码
-                    SendMsgUtil.sendSms(telephone, String.valueOf(code));
-                    dataMap.put("telephone", telephone);
-                    dataMap.put("code", code);
-                    dataMap.put("result", "success");
-                    dataMap.put("msg", "验证码发送成功");
-                    dataMap.put("whether_has_user", "true");
-                }
+                //生成四位随机数
+                int code = new Random().nextInt(9000) + 1000;
+                //发送验证码
+                SendMsgUtil.sendSms(telephone, String.valueOf(code));
+                dataMap.put("telephone", telephone);
+                dataMap.put("code", code);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "验证码发送成功");
             }
         });
 

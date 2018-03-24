@@ -342,7 +342,7 @@ public interface IUserService {
      * @param password
      * @return
      */
-    Long addUserInfo(String telephone, String password, Integer platformId, Integer channelId, String address, String idImei);
+    Long addUserInfo(String telephone, String password, Integer platformId, String channelId, String address, String idImei);
 
     /**
      * 可提现用户列表
