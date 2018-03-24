@@ -4,9 +4,11 @@ import com.zhishun.zaotoutiao.core.model.entity.ExchangeRate;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
-import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
+import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
 
 /**
  * @author BugMan
@@ -59,4 +61,13 @@ public interface IUserReadService {
      * @param exchangeRate
      */
     void readAddGold(Long userId, int gold, User user, ExchangeRate exchangeRate, UserReadRecord userReadRecord);
+
+    /**
+     * 获得导航排行数据
+     * @param dateNum
+     * @param date
+     * @param infoType
+     * @return
+     */
+    List<NavigationVO> getNavList(Integer dateNum, String date, String infoType);
 }

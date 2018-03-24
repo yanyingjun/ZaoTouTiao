@@ -274,4 +274,50 @@
     from user_read_record
     WHERE userId = #{userId} and create_date= (select MAX(create_date) from  user_read_record)
   </select>
+
+  <select id="list4Nav" parameterType="map" resultType="com.zhishun.zaotoutiao.core.model.vo.NavigationVO">
+    select count(r.channelId) as readNum,c.name as name,c.id,c.parentId
+    from user_read_record as r
+    JOIN channels as c
+    ON r.channelId = c.channelId
+    WHERE r.infoType = #{infoType}
+    AND c.parentId = #{parentId}
+    <if test="date != null">
+      AND date( #{date} ) = date(r.create_date)
+    </if>
+    <if test="date == null and dateNum != null">
+      AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(r.create_date)
+    </if>
+    GROUP BY r.channelId
+    ORDER BY readNum DESC;
+  </select>
+
+  <select id="getNavReadNum" parameterType="Long" resultType="Long">
+    select count(r.channelId) as readNum
+    FROM user_read_record as r
+    JOIN channels as C
+    ON r.channelId = c.channelId
+    WHERE c.parentId in(select id from channels WHERE parentId = #{parentId})
+    <if test="date != null">
+      AND date( #{date} ) = date(r.create_date)
+    </if>
+    <if test="date == null and dateNum != null">
+      AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(r.create_date)
+    </if>
+  </select>
+
+  <select id="getFirstTabNum" parameterType="Long" resultType="Long">
+    SELECT count(r.channelId) as readNum
+    FROM user_read_record as r
+    JOIN channels as C
+    ON r.channelId = c.channelId
+    WHERE c.parentId = #{parentId}
+    <if test="date != null">
+      AND date( #{date} ) = date(r.create_date)
+    </if>
+    <if test="date == null and dateNum != null">
+      AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(r.create_date)
+    </if>
+  </select>
+
 </mapper>

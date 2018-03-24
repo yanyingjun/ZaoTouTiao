@@ -6,27 +6,26 @@
 
 package com.zhishun.zaotoutiao.biz.service.impl;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IUserReadService;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
-import com.zhishun.zaotoutiao.common.util.LoggerUtils;
 import com.zhishun.zaotoutiao.core.model.entity.*;
-import com.zhishun.zaotoutiao.dal.mapper.ExchangeRateMapper;
-import com.zhishun.zaotoutiao.dal.mapper.UserInformationMapper;
-import com.zhishun.zaotoutiao.dal.mapper.UserJpushMapper;
-import com.zhishun.zaotoutiao.dal.mapper.UserReadRecordMapper;
+import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
+import com.zhishun.zaotoutiao.dal.mapper.*;
+import groovy.util.MapEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.security.KeyStore;
+import java.util.*;
 
 /**
  * @author BugMan
@@ -52,6 +51,9 @@ public class UserReadServiceImpl implements IUserReadService {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private ChannelsMapper channelsMapper;
 
     @Override
     public boolean isUserRead(String id, Long userId, String type) {
@@ -259,4 +261,69 @@ public class UserReadServiceImpl implements IUserReadService {
         }
 
     }
+
+    @Override
+    public List<NavigationVO> getNavList(Integer dateNum, String date, @RequestParam(value = "appType",defaultValue = "article") String appType){
+        //时间类型转换
+        Date date1 = DateUtil.toDate(date,DateUtil.DEFAULT_DATE_FORMAT);
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("dateNum",dateNum);
+        map.put("date",date1);
+        map.put("infoType",appType);
+        map.put("parentId",0);
+        List<NavigationVO> navigationVOList = Lists.newArrayList();
+        //获取特定infoType的导航
+        List<Channels> channelsList = channelsMapper.channelListByInfoType(appType);
+        for(Channels channels : channelsList){
+            map.put("parentId",channels.getId());
+            NavigationVO navigationVO = new NavigationVO();
+            navigationVO.setId(channels.getId());
+            navigationVO.setName(channels.getName());
+            navigationVO.setParentId(0L);
+            navigationVO.setReadNum(userReadRecordMapper.getNavReadNum(map));
+            //List<Map<String,Object>> firstTab = Lists.newArrayList();
+            ArrayList<Map.Entry> firstTabsNumAndId = Lists.newArrayList();
+            Long parentId = channels.getId();
+            //获取一级标签列表
+            List<Channels> ChildTabList = channelsMapper.getChildTabList(parentId);
+            for(Channels channels1 : ChildTabList){
+                map.put("parentId",channels1.getId());
+                //获取一级标签下的阅读数
+                Map.Entry mapEntry = new MapEntry(channels1.getId(),userReadRecordMapper.getFirstTabNum(map));
+                firstTabsNumAndId.add(mapEntry);
+            }
+            //排序
+            Collections.sort( firstTabsNumAndId, new Comparator<Map.Entry>() {
+                @Override
+                public int compare(Map.Entry o1, Map.Entry o2) {
+                    int o1Num=Integer.valueOf(o1.getValue().toString());
+                    int o2Num=Integer.valueOf(o2.getValue().toString());
+                    return o2Num - o1Num;
+                }
+            });
+            //插入前三的数据
+            Map<String,Object> channelsMap = Maps.newHashMap();
+            if(0 != firstTabsNumAndId.size()) {
+                if (firstTabsNumAndId.size() >= 3) {
+                    for (int i = 0; i < 3; i++) {
+                        Long tabId = Long.valueOf(firstTabsNumAndId.get(i).getKey().toString());
+                        String tabName = channelsMapper.selectByPrimaryKey(tabId).getName();
+                        channelsMap.put(tabName, firstTabsNumAndId.get(i).getValue());
+                    }
+                } else {
+                    for (Map.Entry aFirstTabsNumAndId : firstTabsNumAndId) {
+                        Long tabId = Long.valueOf(aFirstTabsNumAndId.getKey().toString());
+                        String tabName = channelsMapper.selectByPrimaryKey(tabId).getName();
+                        channelsMap.put(tabName, aFirstTabsNumAndId.getValue());
+                    }
+                }
+                navigationVO.setChildTabsNameAndId(channelsMap);
+            }
+            navigationVOList.add(navigationVO);
+        }
+        return navigationVOList;
+    }
+
+
+
 }

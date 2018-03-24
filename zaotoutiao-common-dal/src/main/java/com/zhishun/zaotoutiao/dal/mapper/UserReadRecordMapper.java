@@ -3,6 +3,7 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
+import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
 
 import java.util.List;
 import java.util.Map;
@@ -101,4 +102,26 @@ public interface UserReadRecordMapper {
      * @return
      */
     UserReadRecord maxReadRecord(Long userId);
+
+    /**
+     * 根据条件，查询二级标签信息
+     * @param map
+     * @return
+     */
+    List<NavigationVO> list4Nav(Map<String,Object> map);
+
+    /**
+     * 获取某个导航下的所有阅读数
+     * @param map
+     * @return
+     */
+    Long getNavReadNum(Map<String,Object> map);
+
+    /**
+     * 获取某个一级标签下的所有阅读
+     * @param map
+     * @return
+     */
+    Long getFirstTabNum(Map<String,Object> map);
+
 }

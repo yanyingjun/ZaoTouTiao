@@ -213,6 +213,7 @@
     SELECT
     <include refid="Base_Column_List" />
     FROM channels
+    WHERE parent = 0
     order By channelOrder ASC
   </select>
 
@@ -294,6 +295,19 @@
         and appType = #{appType}
       </if>
     </where>
+  </select>
+
+  <select id="channelListByInfoType" parameterType="String" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM channels
+    WHERE appType = #{appType}
+    and parentId = 0
+  </select>
+
+  <select id="getChildTabList" parameterType="Long" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM channels
+    where parentId = #{parentId}
   </select>
 
 </mapper>
