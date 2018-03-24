@@ -53,18 +53,16 @@ public class NewsServiceImpl implements INewsService {
      * 根据类型级分类ID返回新闻列表信息
      * @param type
      * @param channelId
-     * @param pageNo
-     * @param pageSize
+     * @param pageRequest
      * @return
      */
     @Override
-    public List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize) {
-        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
+    public List<InfosVo> getInfosByType(String type, int channelId,PageRequest pageRequest) {
         Map map = Maps.newHashMap();
         map.put("type",type);
         map.put("channelId",channelId);
-        map.put("endNo",pageMap.get("endNo"));
-        map.put("startNo",pageMap.get("startNo"));
+        map.put("endNo",pageRequest.getOffset());
+        map.put("startNo", pageRequest.getPageSize());
         List<InfosVo> voList= infosMapper.selectInfosByType(map);
         return voList;
     }
@@ -112,18 +110,16 @@ public class NewsServiceImpl implements INewsService {
     /**
      * 根据关键词搜索新闻
      * @param keyword
-     * @param pageNo
-     * @param pageSize
+     * @param pageRequest
      * @return
      */
     @Override
-    public List<InfosVo> searchNewsByKeyword(String keyword, int pageNo, int pageSize) {
+    public List<InfosVo> searchNewsByKeyword(String keyword,PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
         keyword = new StringBuilder().append("%").append(keyword).append("%").toString();
-        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
         map.put("keyword",keyword);
-        map.put("startNo",pageMap.get("startNo"));
-        map.put("endNo",pageMap.get("endNo"));
+        map.put("startNo",pageRequest.getOffset());
+        map.put("endNo",pageRequest.getPageSize());
         List<InfosVo> infosVoList = infosMapper.searchNewsByKeyword(map);
         return infosVoList;
     }
@@ -132,18 +128,16 @@ public class NewsServiceImpl implements INewsService {
      * 获取收藏列表
      * @param infosType
      * @param userId
-     * @param pageNo
-     * @param pageSize
+     * @param pageRequest
      * @return
      */
     @Override
-    public List<UserCollect> getCollectList(String infosType, int userId, int pageNo, int pageSize) {
+    public List<UserCollect> getCollectList(String infosType, int userId,PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
-        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
         map.put("infosType",infosType);
         map.put("userId",userId);
-        map.put("startNo",pageMap.get("startNo"));
-        map.put("endNo",pageMap.get("endNo"));
+        map.put("startNo",pageRequest.getOffset());
+        map.put("endNo",pageRequest.getPageSize());
         List<UserCollect> infosVoList = userCollectMapper.getCollectList(map);
         return infosVoList;
 

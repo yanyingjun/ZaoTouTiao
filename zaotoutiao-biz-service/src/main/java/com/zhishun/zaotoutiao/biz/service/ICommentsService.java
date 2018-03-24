@@ -63,12 +63,12 @@ public interface ICommentsService {
     /**
      * 获取最新评论和评论点赞信息
      */
-    List<UserCommentsVO> getNewCommentVO(String infoId, int userId, int pageNo, int pageSize);
+    List<UserCommentsVO> getNewCommentVO(String infoId, int userId,PageRequest pageRequest);
 
     /**
      * 获取热门评论和评论点赞信息
      */
-    List<UserCommentsVO> getHotCommentVO(String infoId, int userId, int pageNo, int pageSize);
+    List<UserCommentsVO> getHotCommentVO(String infoId, int userId,PageRequest pageRequest);
 
     /**
      * 查看该评论自己是否点赞

@@ -94,12 +94,12 @@ public class CommentsServiceImpl implements ICommentsService{
     }
 
     @Override
-    public List<UserCommentsVO> getNewCommentVO(String infoId, int userId, int pageNo, int pageSize) {Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
+    public List<UserCommentsVO> getNewCommentVO(String infoId, int userId,PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("infoId", infoId);
         map.put("userId", userId);
-        map.put("startNo", pageMap.get("startNo"));
-        map.put("endNo", pageMap.get("endNo"));
+        map.put("startNo",pageRequest.getOffset());
+        map.put("endNo", pageRequest.getPageSize());
 
         List<UserCommentsVO> commentVOList = userCommentsMapper.getNewComments(map);
 
@@ -107,13 +107,12 @@ public class CommentsServiceImpl implements ICommentsService{
     }
 
     @Override
-    public List<UserCommentsVO> getHotCommentVO(String infoId, int userId, int pageNo, int pageSize) {
-        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
+    public List<UserCommentsVO> getHotCommentVO(String infoId, int userId,PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("infoId", infoId);
         map.put("userId", userId);
-        map.put("startNo", pageMap.get("startNo"));
-        map.put("endNo", pageMap.get("endNo"));
+        map.put("startNo", pageRequest.getOffset());
+        map.put("endNo", pageRequest.getPageSize());
         List<UserCommentsVO> commentVOList = userCommentsMapper.getHotComments(map);
 
         return commentVOList;

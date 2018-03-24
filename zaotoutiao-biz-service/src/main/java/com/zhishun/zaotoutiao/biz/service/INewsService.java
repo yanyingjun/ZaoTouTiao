@@ -19,11 +19,10 @@ public interface INewsService {
      * 根据类型、channelId查找视频或新闻
      * @param type
      * @param channelId
-     * @param pageNo
-     * @param pageSize
+     * @param pageRequest
      * @return
      */
-    List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize);
+    List<InfosVo> getInfosByType(String type, int channelId,PageRequest pageRequest);
 
     /**
      * 获取新闻分类列表
@@ -61,20 +60,19 @@ public interface INewsService {
     /**
      * 根据关键词搜索新闻
      * @param keyword
-     * @param pageNo
-     * @param pageSize
+     * @param pageRequest
      * @return
      */
-    List<InfosVo> searchNewsByKeyword(String keyword,int pageNo,int pageSize);
+    List<InfosVo> searchNewsByKeyword(String keyword,PageRequest pageRequest);
 
     /**
      * 获取收藏列表
      * @param infosType
      * @param userId
-     * @param pageNo
+     * @param pageRequest
      * @return
      */
-    List<UserCollect> getCollectList(String infosType, int userId, int pageNo, int pageSize);
+    List<UserCollect> getCollectList(String infosType, int userId,PageRequest pageRequest);
 
     /**
      * 获取24小时热文

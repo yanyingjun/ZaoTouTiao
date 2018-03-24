@@ -1,5 +1,6 @@
 package com.zhishun.zaotoutiao.biz.service;
 
+        import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
         import com.zhishun.zaotoutiao.core.model.entity.Channels;
         import com.zhishun.zaotoutiao.core.model.entity.Infos;
         import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
@@ -22,11 +23,10 @@ public interface IVideoService {
      * 根据类型查找视频或新闻
      * @param type
      * @param channelId
-     * @param pageNo
-     * @param pageSize
+     * @param pageRequest
      * @return
      */
-    List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize);
+    List<InfosVo> getInfosByType(String type, int channelId, PageRequest pageRequest);
 
     /**
      * 获取视频相关内容
