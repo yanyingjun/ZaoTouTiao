@@ -41,6 +41,7 @@ public class VideoServiceImpl implements IVideoService{
         return channelsMapper.listVideoChannels(map);
     }
 
+
     /**
      * 根据类型查找视频或新闻
      * @param type
