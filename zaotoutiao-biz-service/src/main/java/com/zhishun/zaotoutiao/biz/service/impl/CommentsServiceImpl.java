@@ -114,7 +114,6 @@ public class CommentsServiceImpl implements ICommentsService{
         map.put("userId", userId);
         map.put("startNo", pageMap.get("startNo"));
         map.put("endNo", pageMap.get("endNo"));
-
         List<UserCommentsVO> commentVOList = userCommentsMapper.getHotComments(map);
 
         return commentVOList;
