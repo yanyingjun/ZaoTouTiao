@@ -8,6 +8,7 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.ICommentsService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
+import com.zhishun.zaotoutiao.common.base.pagination.PageNoAndSize;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.entity.UserComments;
@@ -93,14 +94,12 @@ public class CommentsServiceImpl implements ICommentsService{
     }
 
     @Override
-    public List<UserCommentsVO> getNewCommentVO(String infoId, int userId, int pageNo, int pageSize) {
-        int startNo = (pageNo-1) * pageSize;
-        int endNo = pageNo * pageSize;
+    public List<UserCommentsVO> getNewCommentVO(String infoId, int userId, int pageNo, int pageSize) {Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
         Map<String,Object> map = Maps.newHashMap();
         map.put("infoId", infoId);
         map.put("userId", userId);
-        map.put("startNo", startNo);
-        map.put("endNo", endNo);
+        map.put("startNo", pageMap.get("startNo"));
+        map.put("endNo", pageMap.get("endNo"));
 
         List<UserCommentsVO> commentVOList = userCommentsMapper.getNewComments(map);
 
@@ -109,14 +108,12 @@ public class CommentsServiceImpl implements ICommentsService{
 
     @Override
     public List<UserCommentsVO> getHotCommentVO(String infoId, int userId, int pageNo, int pageSize) {
-        int startNo = (pageNo-1) * pageSize;
-        int endNo = pageNo * pageSize;
+        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
         Map<String,Object> map = Maps.newHashMap();
         map.put("infoId", infoId);
         map.put("userId", userId);
-        map.put("startNo", startNo);
-        map.put("endNo", endNo);
-
+        map.put("startNo", pageMap.get("startNo"));
+        map.put("endNo", pageMap.get("endNo"));
         List<UserCommentsVO> commentVOList = userCommentsMapper.getHotComments(map);
 
         return commentVOList;

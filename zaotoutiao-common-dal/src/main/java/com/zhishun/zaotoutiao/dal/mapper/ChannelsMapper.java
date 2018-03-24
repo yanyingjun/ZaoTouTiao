@@ -114,4 +114,11 @@ public interface ChannelsMapper {
      * @return
      */
     Channels getChannelsByChannelId(String channelId);
+
+    /**
+     * 根据类别获取导航列表
+     */
+    List<Channels> channelListByInfoType(String appType);
+
+    List<Channels> getChildTabList(Long parentId);
 }

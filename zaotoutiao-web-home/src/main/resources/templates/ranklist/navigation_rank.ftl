@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>导航管理</title>
+    <title>导航排行</title>
     <link href="/static/css/base.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/uimaker/easyui.css">
     <link rel="stylesheet" href="/static/uimaker/icon.css">
@@ -25,31 +25,25 @@
         <thead>
         <tr>
             <th field="name" width="200">导航</th>
-            <th field="statusName" width="260">状态</th>
-            <th field="typeName" width="260">类型</th>
-            <th field="updateDate" width="200">操作时间</th>
+            <th field="statusName" width="260">阅读量</th>
+            <th field="typeName" width="260">一级标签（前三）</th>
+            <th field="updateDate" width="200">文章（前30）</th>
+            <th field="updateDate" width="200">视频（前30）</th>
             <th field="_operate" width="100" data-options="align:'center',formatter:formatOperate">操作</th>
         </tr>
         </thead>
     </table>
     <div id="tb" style="padding:0 30px;">
-        <label for="search">关键字: </label>
-        <input id="search" class="easyui-textbox" type="text" name="code" style="width:166px;height:35px;line-height:35px;"/>
-        <label for="status">状态：</label>
-        <select id="status" name="status" style="height:35px; width: 100px; text-align: center">
-            <option value="">全部</option>
-            <option value="1">激活</option>
-            <option value="0">下架</option>
-        </select>
+        <div class="opt-buttons">
+            时间：
+            <a href="#" class="easyui-linkbutton" data-options="selected:true">今天</a>
+            <a href="#" class="easyui-linkbutton">昨天</a>
+            <a href="#" class="easyui-linkbutton">最近7天</a>
+            <a href="#" class="easyui-linkbutton">最近30天</a>
+            <input type="date" style="width:200px;height:35px;
 
-        <label for="appType">类型：</label>
-        <select id="appType" name="appType" style="height:35px; width: 100px; text-align: center">
-            <option value="">全部</option>
-            <option value="1">新闻</option>
-            <option value="0">视频</option>
-        </select>
-        <a href="#" onclick="toSearch()" id="bt_search_btn" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true">查询</a>
-        <a href="javascript:void(0);" onclick="parent.Open('新增导航', '/channel/add')" class="easyui-linkbutton" iconCls="icon-add">新增</a>
+">
+        </div>
     </div>
 </div>
 
@@ -294,19 +288,19 @@
 </div>
 
 <div id="edit" class="easyui-dialog" title="导航编辑" data-options="closed:true" style="width:422px;height:260px;padding:10px;">
-        <div style="padding:10px 60px 20px 60px">
-            <form id="ff" method="post">
-                <table cellpadding="5">
-                    <tr>
-                        <td>导航名称:</td>
-                        <td><input type="text" id="editChannelName" name="editChannelName"  style="height:35px;"><br /><input style="display: none" name="editId" id="editId" /></td>
-                    </tr>
-                </table>
-            </form>
-            <div style="text-align:center;padding:5px">
-                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">确认</a>
-            </div>
+    <div style="padding:10px 60px 20px 60px">
+        <form id="ff" method="post">
+            <table cellpadding="5">
+                <tr>
+                    <td>导航名称:</td>
+                    <td><input type="text" id="editChannelName" name="editChannelName"  style="height:35px;"><br /><input style="display: none" name="editId" id="editId" /></td>
+                </tr>
+            </table>
+        </form>
+        <div style="text-align:center;padding:5px">
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">确认</a>
         </div>
+    </div>
 </div>
 </body>
 </html>

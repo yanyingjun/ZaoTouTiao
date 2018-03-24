@@ -69,7 +69,7 @@ public interface INewsService {
 
     /**
      * 获取收藏列表
-     * @param infoType
+     * @param infosType
      * @param userId
      * @param pageNo
      * @return

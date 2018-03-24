@@ -151,17 +151,21 @@
     });
 
     function formatOperate(val,row,index){
-        return '<a href="#" onclick="del('+row.id+')">删除</a>';
+        return '<a href="#" onclick="del('+row.id+',\'确定删除吗?\')">删除</a>';
     }
     function del(id) {
-        $.post("/delete/comments",{id:id},function (data) {
-            if (data === 1) {
-                $.messager.alert('请求删除评论', '删除成功！', 'info');
-            } else {
-                $.messager.alert('请求删除评论', '删除失败！', 'error');
+        $.messager.confirm('提示信息', str, function(r){
+            if(r){
+                $.post("/delete/comments",{id:id},function (data) {
+                    if (data === 1) {
+                        $.messager.alert('请求删除评论', '删除成功！', 'info');
+                    } else {
+                        $.messager.alert('请求删除评论', '删除失败！', 'error');
+                    }
+                    $('#dg').datagrid('reload');
+                },"json")
             }
-            $('#dg').datagrid('reload');
-        },"json")
+        })
     }
 
     //function toSearch() {

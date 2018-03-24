@@ -1,8 +1,8 @@
 
 // 1.1)图片上传
 /**
- * 
- * @param basepath 上传图片base路径 
+ *
+ * @param basepath 上传图片base路径
  * @param pic 上传图片名字（目前只能是pic）
  * @param imgsDiv 显示图片的divId
  * @param showImgDialog 显示原图的弹窗id
@@ -24,7 +24,7 @@ function toUpLoad(pic, imgsDiv, showImgDialog) {
 		   if(data.files[0].error){
 			   $.alert("图片类型错误,仅限gif,jpg,jpeg,png格式");
 		   }
-		} 
+		}
 	});
 }
 
@@ -71,7 +71,7 @@ function showPic(imgDialog, url) {
 }
 
 /**
- * 
+ *
  * @param imgServer 图片访问服务地址
  * @param picPaths 图片相对路径（可以用，隔开）
  * @param imgDiv 显示图片的divId
@@ -87,7 +87,7 @@ function initShowPic(imgServer,picPaths,imgsDiv, showImgDialog,view){
 		for(var i = 0 ; i<picStrs.length;i++){
 			if(picStrs[i]!=null && picStrs[i]!=''){
 				var url = imgServer+picStrs[i];
-				reloadPic(imgsDiv, i, url, picStrs[i], showImgDialog,view) 
+				reloadPic(imgsDiv, i, url, picStrs[i], showImgDialog,view)
 			}
 		}
 	}

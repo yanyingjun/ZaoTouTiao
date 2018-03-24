@@ -6,6 +6,7 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IVideoService;
+import com.zhishun.zaotoutiao.common.base.pagination.PageNoAndSize;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.entity.Infos;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
@@ -49,13 +50,12 @@ public class VideoServiceImpl implements IVideoService{
      */
     @Override
     public List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize) {
-        int startNo = (pageNo-1) * pageSize;
-        int endNo = pageNo * pageSize;
+        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
         Map map = Maps.newHashMap();
         map.put("type",type);
         map.put("channelId",channelId);
-        map.put("endNo",endNo);
-        map.put("startNo",startNo);
+        map.put("endNo",pageMap.get("endNo"));
+        map.put("startNo",pageMap.get("startNo"));
         List<InfosVo> voList= infosMapper.selectInfosByType(map);
         return voList;
     }

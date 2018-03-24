@@ -10,6 +10,7 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.INewsService;
 import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageBuilder;
+import com.zhishun.zaotoutiao.common.base.pagination.PageNoAndSize;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.*;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVo;
@@ -58,13 +59,12 @@ public class NewsServiceImpl implements INewsService {
      */
     @Override
     public List<InfosVo> getInfosByType(String type, int channelId, int pageNo, int pageSize) {
-        int startNo = (pageNo-1) * pageSize;
-        int endNo = pageNo * pageSize;
+        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
         Map map = Maps.newHashMap();
         map.put("type",type);
         map.put("channelId",channelId);
-        map.put("endNo",endNo);
-        map.put("startNo",startNo);
+        map.put("endNo",pageMap.get("endNo"));
+        map.put("startNo",pageMap.get("startNo"));
         List<InfosVo> voList= infosMapper.selectInfosByType(map);
         return voList;
     }
@@ -120,18 +120,17 @@ public class NewsServiceImpl implements INewsService {
     public List<InfosVo> searchNewsByKeyword(String keyword, int pageNo, int pageSize) {
         Map<String,Object> map = Maps.newHashMap();
         keyword = new StringBuilder().append("%").append(keyword).append("%").toString();
-        int startNo = (pageNo-1) * pageSize;
-        int endNo = pageNo * pageSize;
+        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
         map.put("keyword",keyword);
-        map.put("startNo",startNo);
-        map.put("endNo",endNo);
+        map.put("startNo",pageMap.get("startNo"));
+        map.put("endNo",pageMap.get("endNo"));
         List<InfosVo> infosVoList = infosMapper.searchNewsByKeyword(map);
         return infosVoList;
     }
 
     /**
      * 获取收藏列表
-     * @param infoType
+     * @param infosType
      * @param userId
      * @param pageNo
      * @param pageSize
@@ -140,12 +139,11 @@ public class NewsServiceImpl implements INewsService {
     @Override
     public List<UserCollect> getCollectList(String infosType, int userId, int pageNo, int pageSize) {
         Map<String,Object> map = Maps.newHashMap();
-        int startNo = (pageNo-1) * pageSize;
-        int endNo = pageNo * pageSize;
+        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
         map.put("infosType",infosType);
         map.put("userId",userId);
-        map.put("startNo",startNo);
-        map.put("endNo",endNo);
+        map.put("startNo",pageMap.get("startNo"));
+        map.put("endNo",pageMap.get("endNo"));
         List<UserCollect> infosVoList = userCollectMapper.getCollectList(map);
         return infosVoList;
 
