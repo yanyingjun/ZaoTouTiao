@@ -18,7 +18,7 @@
     <result column="browsing" jdbcType="INTEGER" property="browsing" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, userId, infoId, create_date, infoType, read_continuous_day, is_request_gold, channelId, label, title, source, imgUrl, url, browsing
+    id, userId, infoId, date_format(create_date, '%Y-%m-%d %H:%i:%s') as createDate, infoType, read_continuous_day, is_request_gold, channelId, label, title, source, imgUrl, url, browsing
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 

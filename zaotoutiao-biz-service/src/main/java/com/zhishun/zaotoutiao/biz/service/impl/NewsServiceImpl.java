@@ -58,13 +58,12 @@ public class NewsServiceImpl implements INewsService {
      * @return
      */
     @Override
-    public List<InfosVO> getInfosByType(String type, int channelId, int pageNo, int pageSize) {
-        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
+    public List<InfosVO> getInfosByType(String type, int channelId, PageRequest pageRequest) {
         Map map = Maps.newHashMap();
         map.put("type",type);
         map.put("channelId",channelId);
-        map.put("endNo",pageMap.get("endNo"));
-        map.put("startNo",pageMap.get("startNo"));
+        map.put("endNo",pageRequest.getOffset());
+        map.put("startNo",pageRequest.getPageSize());
         List<InfosVO> voList= infosMapper.selectInfosByType(map);
         return voList;
     }
@@ -132,18 +131,16 @@ public class NewsServiceImpl implements INewsService {
      * 获取收藏列表
      * @param infosType
      * @param userId
-     * @param pageNo
-     * @param pageSize
+     * @param pageRequest
      * @return
      */
     @Override
-    public List<UserCollect> getCollectList(String infosType, int userId, int pageNo, int pageSize) {
+    public List<UserCollect> getCollectList(String infosType, int userId, PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
-        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
         map.put("infosType",infosType);
         map.put("userId",userId);
-        map.put("startNo",pageMap.get("startNo"));
-        map.put("endNo",pageMap.get("endNo"));
+        map.put("startNo",pageRequest.getOffset());
+        map.put("endNo",pageRequest.getPageSize());
         List<UserCollect> infosVoList = userCollectMapper.getCollectList(map);
         return infosVoList;
 

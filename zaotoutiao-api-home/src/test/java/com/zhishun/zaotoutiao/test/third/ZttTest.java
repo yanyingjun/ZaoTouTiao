@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
 
 /**
  * 测试类
@@ -114,7 +117,7 @@ public class ZttTest extends TestConfig{
 
         //先随机产生一个下标再获取元素
 
-        int[] doc = {0,1,2,3,4,5,6,7,8,9};
+        /*int[] doc = {0,1,2,3,4,5,6,7,8,9};
 
         for(int i = 0;i<10;i++){
             int index = (int) (Math.random() * doc.length);
@@ -126,7 +129,13 @@ public class ZttTest extends TestConfig{
                 System.out.println("***"+random);
             }
 
-        }
+        }*/
+
+        //Calendar cal = Calendar.getInstance();
+        //System.out.println(cal.get(Calendar.DAY_OF_MONTH));
+
+        Random random = new Random();
+        System.out.println(random.nextInt(100));
 
 
 

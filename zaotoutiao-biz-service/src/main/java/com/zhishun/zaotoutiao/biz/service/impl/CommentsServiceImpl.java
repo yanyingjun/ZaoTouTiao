@@ -63,8 +63,9 @@ public class CommentsServiceImpl implements ICommentsService{
     public int delMyComments(Long userId, String infoId) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("userId", userId);
-        map.put("infoId", infoId);
-
+        if(!StringUtils.isEmpty(infoId)){
+            map.put("infoId", infoId);
+        }
         return userCommentsMapper.delUserComments(map);
     }
 

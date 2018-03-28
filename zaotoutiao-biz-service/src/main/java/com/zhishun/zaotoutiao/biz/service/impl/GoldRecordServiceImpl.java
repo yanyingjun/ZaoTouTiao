@@ -7,9 +7,12 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IGoldRecordService;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
+import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
+import com.zhishun.zaotoutiao.core.model.enums.GoldSourceEnum;
+import com.zhishun.zaotoutiao.core.model.vo.ApprenticeRepVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 import com.zhishun.zaotoutiao.dal.mapper.UserGoldRecordMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
@@ -239,6 +242,77 @@ public class GoldRecordServiceImpl implements IGoldRecordService{
             map.put("endDate", endDate);
         }
         return userGoldRecordMapper.listGoldCountBySource(map);
+    }
+
+    @Override
+    public int getEffectiveApprenticeNum(Long userId, String startDate, String endDate) {
+        Map map = Maps.newHashMap();
+        map.put("source", GoldSourceEnum.APPRENTICE_READ_TRIBUTE.getValue());
+        if(!StringUtils.isEmpty(userId)){
+            map.put("userId", userId);
+        }
+        if(!StringUtils.isEmpty(startDate)){
+            map.put("startDate", startDate);
+        }
+        if(!StringUtils.isEmpty(endDate)){
+            map.put("endDate", endDate);
+        }
+        return userGoldRecordMapper.getEffectiveApprenticeNum(map);
+    }
+
+    @Override
+    public int getActivityGoldSum(Long userId, String startDate, String endDate) {
+        Map map = Maps.newHashMap();
+        map.put("source", GoldSourceEnum.APPRENTICE_READ_TRIBUTE.getValue());
+        if(!StringUtils.isEmpty(userId)){
+            map.put("userId", userId);
+        }
+        if(!StringUtils.isEmpty(startDate)){
+            map.put("startDate", startDate);
+        }
+        if(!StringUtils.isEmpty(endDate)){
+            map.put("endDate", endDate);
+        }
+        return userGoldRecordMapper.getActivityGoldSum(map);
+    }
+
+    @Override
+    public List<ApprenticeRepVO> listAwakenApprentice(Long userId, PageRequest pageRequest) {
+        Map map = Maps.newHashMap();
+        if(!StringUtils.isEmpty(userId)){
+            map.put("userId", userId);
+        }
+        if(!StringUtils.isEmpty(pageRequest)){
+            map.put("offset", pageRequest.getOffset());
+            map.put("limit", pageRequest.getPageSize());
+        }
+        return userGoldRecordMapper.listAwakenApprentice(map);
+    }
+
+    @Override
+    public List<ApprenticeRepVO> listEffectiveApprentice(Long userId, PageRequest pageRequest) {
+        Map map = Maps.newHashMap();
+        if(!StringUtils.isEmpty(userId)){
+            map.put("userId", userId);
+        }
+        if(!StringUtils.isEmpty(pageRequest)){
+            map.put("offset", pageRequest.getOffset());
+            map.put("limit", pageRequest.getPageSize());
+        }
+        return userGoldRecordMapper.listEffectiveApprentice(map);
+    }
+
+    @Override
+    public List<ApprenticeRepVO> listMyApprentice(Long userId, PageRequest pageRequest) {
+        Map map = Maps.newHashMap();
+        if(!StringUtils.isEmpty(userId)){
+            map.put("userId", userId);
+        }
+        if(!StringUtils.isEmpty(pageRequest)){
+            map.put("offset", pageRequest.getOffset());
+            map.put("limit", pageRequest.getPageSize());
+        }
+        return userGoldRecordMapper.listMyApprentice(map);
     }
 
     /**

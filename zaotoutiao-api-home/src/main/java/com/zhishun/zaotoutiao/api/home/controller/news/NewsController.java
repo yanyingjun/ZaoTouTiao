@@ -15,6 +15,7 @@ import com.zhishun.zaotoutiao.biz.service.IChannelService;
 import com.zhishun.zaotoutiao.biz.service.ICommentsService;
 import com.zhishun.zaotoutiao.biz.service.INewsService;
 import com.zhishun.zaotoutiao.biz.service.IVideoService;
+import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.entity.UserChannels;
@@ -273,14 +274,13 @@ public class NewsController extends BaseController{
 
     /**
      * 获取收藏列表
-     * @param infoType news：新闻; video:视频
+     * @param infosType news：新闻; video:视频
      * @param userId
-     * @param pageNo
-     * @param pageSize
+     * @param pageRequest
      * @return
      */
     @RequestMapping(value = NewsMsgReq.COLLECT_GET, method = RequestMethod.GET)
-    public Map<Object,Object> collectGet(final String infosType, final int userId, final int pageNo, final int pageSize){
+    public Map<Object,Object> collectGet(final String infosType, final int userId, final PageRequest pageRequest){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
         this.excute(dataMap, null, new ControllerCallback() {
@@ -288,15 +288,14 @@ public class NewsController extends BaseController{
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotNull(infosType, ErrorCodeEnum.PARAMETER_ANOMALY);
                 AssertsUtil.isNotNull(userId, ErrorCodeEnum.PARAMETER_ANOMALY);
-                AssertsUtil.isNotNull(pageNo, ErrorCodeEnum.PARAMETER_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
-                List<UserCollect> infosVoList = iNewsService.getCollectList(infosType,userId,pageNo,pageSize);
+                List<UserCollect> infosVoList = iNewsService.getCollectList(infosType,userId,pageRequest);
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取收藏列表成功");
-                dataMap.put("date", infosVoList);
+                dataMap.put("data", infosVoList);
             }
         });
 

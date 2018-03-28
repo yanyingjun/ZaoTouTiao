@@ -10,6 +10,7 @@ import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.common.util.LoggerUtils;
 import com.zhishun.zaotoutiao.common.util.OSSClientUtil;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
+import com.zhishun.zaotoutiao.core.model.enums.InfosEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.web.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.web.home.constant.request.ZttWebMsgReq;
@@ -53,7 +54,7 @@ public class UEditorController extends BaseController{
 
     /**
      * 编辑器图片上传
-     * @param file
+     * @param upfile
      * @return
      */
     @RequestMapping(value = ZttWebMsgReq.ZTT_UPLOAD_IMAGE_REQ)
@@ -69,7 +70,7 @@ public class UEditorController extends BaseController{
             @Override
             public void handle() throws Exception {
                 try {
-                    String name = OSSClientUtil.uploadImgOss(upfile, NEWS_IMAGE_DIR);
+                    String name = OSSClientUtil.uploadImgOss(upfile, NEWS_IMAGE_DIR, InfosEnum.NEWS.getValue());
                     String imgUrl = OSSClientUtil.getImgUrl(name, NEWS_IMAGE_DIR);
                     dataMap.put("url", imgUrl);
                     dataMap.put("state", "SUCCESS");

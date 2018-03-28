@@ -105,4 +105,5 @@ public class UserMoneyRecordVO extends UserMoneyRecord{
     public void setSumMoney(BigDecimal sumMoney) {
         this.sumMoney = sumMoney;
     }
+
 }

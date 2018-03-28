@@ -10,7 +10,7 @@
 function toUpLoad(pic, imgsDiv, showImgDialog) {
 	$("input[name='"+pic+"']").fileupload({
 		url : "/upload/listPic",// 上传地址
-		acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+		acceptFileTypes: /(\.|\/)(gif|jpe?g|png|bmp)$/i,
 		dataType : 'json',
 		done : function(e, data) {
 			var count = $("#"+imgsDiv).find(".picDivS").length;
@@ -22,7 +22,7 @@ function toUpLoad(pic, imgsDiv, showImgDialog) {
 		   $(this).parent().children("p").remove();
 		   $(this).removeAttr("disabled");
 		   if(data.files[0].error){
-			   $.alert("图片类型错误,仅限gif,jpg,jpeg,png格式");
+			   $.alert("图片类型错误,仅限gif,jpg,jpeg,png,bmp格式");
 		   }
 		}
 	});
@@ -102,7 +102,8 @@ String.prototype.endWith=function(s){
 	  else
 	     return false;
 	  return true;
-	 }
+}
+
 String.prototype.startWith=function(s){
 	  if(s==null||s==""||this.length==0||s.length>this.length)
 	   return false;
@@ -111,4 +112,54 @@ String.prototype.startWith=function(s){
 	  else
 	     return false;
 	  return true;
-	 }
+}
+
+/**
+ * 上传视频
+ * @param video
+ * @param videoDiv
+ */
+function toUpLoadVideo(video, videoDiv) {
+    $("input[name='"+video+"']").fileupload({
+        url : "/upload/video",// 上传地址
+        acceptFileTypes: /(\.|\/)(flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid)$/i,
+        dataType : 'json',
+        done : function(e, data) {
+            $('#progress .bar').text("done");
+            var count = $("#"+videoDiv).find(".picDivS").length;
+            reloadVideo(videoDiv, count, data.result.infosImage.picUrl, data.result.infosImage.picUrl, data.result.infosImage.picName,false);
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .bar').css(
+                'width',
+                progress + '%'
+            );
+            $('#progress .bar').text(progress + '%');
+        }
+    }).on('fileuploadprocessalways', function (e, data) {
+        if(data.files.error){
+            $(this).parent().children("p").remove();
+            $(this).removeAttr("disabled");
+            if(data.files[0].error){
+                $.alert("视频类型错误,仅限flv,swf,mkv,avi,rm,rmvb,mpeg,mpg,ogg,ogv,mov,wmv,mp4,webm,mp3,wav,mid格式");
+            }
+        }
+    });
+}
+
+// 1.2)加载图片
+function reloadVideo(imgsDiv, index, url, path, picName, view) {
+    var html = '<div class="picDivS" id = "pic_' + index + '"  >';
+    html += '<img title="" src="' + url + '" alt="" width="100px" height="100px" style="cursor: pointer;">';
+    if(!view){
+        html += '<i class="delfilebtn ifont" OnClick="delPic(this)">×</i>';
+        //html += '<input type="button" name="delBtn" value="删除" OnClick="delPic(this)">';
+        html += '<input name="videoList[' + index + '].picUrl" type="hidden" value="' + path + '">' +
+            '<input name="videoList['+ index +'].picName" type="hidden" value="'+ picName +'" ';
+        //html += '<input name="picInfo[' + index + '].picName" type="hidden" value="' + path + '">';
+    }
+    html += '</div>';
+    $("#"+imgsDiv).append(html);
+}
+

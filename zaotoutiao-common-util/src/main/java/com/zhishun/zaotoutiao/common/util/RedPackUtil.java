@@ -33,7 +33,8 @@ import java.util.Map;
  */
 public class RedPackUtil {
 
-    public static String MCH_ID = "1496821682";
+    public static String MCH_ID = "1500492402";
+    public static String WXAPP_ID = "wx7ef6a3f6467ff3d6";
     public static String API_KEY = "ozIWq0a2gKaFQ7gRRVQ5EZoUZSJw1234";
 
     public RedPackUtil() {
@@ -161,17 +162,29 @@ public class RedPackUtil {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         sdf.format(date);
         SendRedPack sendRedPack = new SendRedPack();
-        sendRedPack.setNonce_str("5K8264ILTKCH16CQ2502SI8ZNMTM67VS");
+        //32位随机字符串
+        sendRedPack.setNonce_str(String.valueOf(RandomUtil.getUpperCode(32, RandomUtil.SecurityCodeLevel.Hard, true)));
+        //商户号
         sendRedPack.setMch_id(MCH_ID);
+        //商户订单号
         sendRedPack.setMch_billno(bill_no);
-        sendRedPack.setWxappid("wxbaf3266efe745c38");
+        //公众账号appid
+        sendRedPack.setWxappid(WXAPP_ID);
+        //商户名称
         sendRedPack.setSend_name(sendName);
+        //发放红包总人数
         sendRedPack.setTotal_num(1);
+        //活动名称
         sendRedPack.setAct_name(actName);
+        //红包祝福语
         sendRedPack.setWishing(wishing);
+        //备注
         sendRedPack.setRemark(remark);
+        //调用接口的机器ip地址
         sendRedPack.setClient_ip(ip);
+        //用户openid
         sendRedPack.setRe_openid(openId);
+        //付款金额（单位分）
         sendRedPack.setTotal_amount(amount);
         String sign = createSendRedPackOrderSign(sendRedPack);
         sendRedPack.setSign(sign);

@@ -1,6 +1,9 @@
 package com.zhishun.zaotoutiao.biz.service;
 
+import com.zhishun.zaotoutiao.core.model.vo.ContentQueryVO;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
+
+import java.util.List;
 
 /**
  * @author 闫迎军(YanYingJun)
@@ -14,4 +17,10 @@ public interface IInfosService {
      * @return
      */
     int addInfos(InfosVO infosVO);
+
+    /**
+     * 获取内容列表
+     * @return
+     */
+    List<InfosVO> listInfos(ContentQueryVO contentQueryVO);
 }

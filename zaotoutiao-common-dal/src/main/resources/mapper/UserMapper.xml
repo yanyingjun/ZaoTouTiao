@@ -735,4 +735,14 @@
       and u.money &lt;= #{maxMoney}
     </if>
   </select>
+
+  <select id="getActivityApprenticeSum" parameterType="map" resultType="int">
+    select count(*) as count from user where user.parentId = #{parentId}
+    <if test="startDate != null">
+      and create_date &gt;= #{startDate}
+    </if>
+    <if test="endDate != null">
+      and create_date &lt;= #{endDate}
+    </if>
+  </select>
 </mapper>

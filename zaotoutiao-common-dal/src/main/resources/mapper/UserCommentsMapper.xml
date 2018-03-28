@@ -116,8 +116,10 @@
 
   <delete id="delUserComments" parameterType="map">
     delete from user_comments
-    where userId = #{userId}
+    where user_id = #{userId}
+    <if test="info_id != null">
       and info_id = #{infoId}
+    </if>
   </delete>
 
   <select id="getUserCommentsByInfoId" parameterType="string" resultMap="BaseResultMap">
@@ -136,7 +138,7 @@
   <select id="getCommentsList" resultMap="BaseResultMap">
     SELECT user_comments.*,infos.title,infos.infoId,user.nickName,user.userId
     FROM user_comments
-    LEFT JOIN infos ON infos.infoId = user_comments.info_id
+    LEFT JOIN infos ON infos.info_id = user_comments.info_id
     LEFT JOIN user ON user.userId = user_comments.user_id
   </select>
 

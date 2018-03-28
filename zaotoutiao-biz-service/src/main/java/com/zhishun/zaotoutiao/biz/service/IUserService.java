@@ -353,4 +353,10 @@ public interface IUserService {
      */
     List<UserVO> listCanBePresentedUser(String keyWord, String channelId, String createDate, BigDecimal minMoney, BigDecimal maxMoney);
 
+    /**
+     * 获取活动时间内新增徒弟数量
+     * @param map
+     * @return
+     */
+    int getActivityApprenticeSum(Long userId, String createDate, String endDate);
 }

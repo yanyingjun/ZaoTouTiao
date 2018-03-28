@@ -42,6 +42,9 @@ public class UserGoldRecordVO extends UserGoldRecord{
      */
     private String times;
 
+
+
+
     /**
      * Getter method for property <tt>explanation</tt>.
      *

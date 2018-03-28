@@ -162,8 +162,8 @@
   </select>
 
   <select id="allRankings" resultType="com.zhishun.zaotoutiao.core.model.vo.AllRankingVO">
-    SELECT user_money_record.userId, sum(user_money_record.money) as allSum
-    FROM user_money_record LEFT JOIN user ON user_money_record.userId = user.userId
+    SELECT user_money_record.userId, sum(user_money_record.money) as sumMoney
+    FROM user_money_record
     WHERE user_money_record.type = 1 GROUP BY user_money_record.userId
     ORDER BY sum(user_money_record.money) DESC LIMIT 0,100
   </select>
@@ -385,5 +385,13 @@
       </if>
     </if>
     GROUP BY source
+  </select>
+
+  <select id="weekRankings" resultType="com.zhishun.zaotoutiao.core.model.vo.AllRankingVO">
+    SELECT user_money_record.userId, sum(user_money_record.money) as sumMoney
+    FROM user_money_record
+    WHERE user_money_record.type = 1 and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= user_money_record.create_date
+    GROUP BY user_money_record.userId
+    ORDER BY sum(user_money_record.money) DESC LIMIT 0,100
   </select>
 </mapper>

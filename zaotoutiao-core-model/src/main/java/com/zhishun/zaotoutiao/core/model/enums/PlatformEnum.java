@@ -7,7 +7,14 @@ import com.zhishun.zaotoutiao.common.base.core.ValueEnum;
  * @version $Id: PlatformEnum, v0.1 2018年03月02日 15:53闫迎军(YanYingJun) Exp $
  */
 public enum PlatformEnum implements ValueEnum<Integer>{
+    /**
+     * 安卓
+     */
     ANDROID(1, "android"),
+
+    /**
+     * IOS
+     */
     IOS(2, "ios");
 
     PlatformEnum(Integer value, String name){
@@ -21,11 +28,11 @@ public enum PlatformEnum implements ValueEnum<Integer>{
 
     @Override
     public Integer getValue() {
-        return null;
+        return value;
     }
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 }

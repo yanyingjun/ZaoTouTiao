@@ -12,6 +12,7 @@ import com.zhishun.zaotoutiao.biz.service.IUserReadService;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.*;
+import com.zhishun.zaotoutiao.core.model.enums.GoldSourceEnum;
 import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
 import com.zhishun.zaotoutiao.dal.mapper.*;
 import groovy.util.MapEntry;
@@ -24,7 +25,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
-import java.security.KeyStore;
 import java.util.*;
 
 /**
@@ -192,7 +192,7 @@ public class UserReadServiceImpl implements IUserReadService {
         //添加自己阅读金币和金币记录
         //新闻阅读奖励类型
 
-        int source = 1;
+        int source = GoldSourceEnum.NEWS_READING.getValue();
         userService.addUserGoldRecord(source, userId, gold, null);
 
         //更新用户金币
@@ -213,7 +213,7 @@ public class UserReadServiceImpl implements IUserReadService {
             //这里把父类id当作用户id,用户id当作徒弟id,添加的金币作为阅读进贡
             //添加徒弟阅读进贡金币记录
             //徒弟新闻阅读进贡奖励类型
-            userService.addUserGoldRecord(2,parentId, gold, userId);
+            userService.addUserGoldRecord(GoldSourceEnum.APPRENTICE_READ_TRIBUTE.getValue(),parentId, gold, userId);
             //更新用户金币
             userService.updateUserInfo(parentId, gold);
 
@@ -225,11 +225,11 @@ public class UserReadServiceImpl implements IUserReadService {
                 Integer parentGoldNum = exchangeRate.getNewbieRecruitGold();
                 BigDecimal parentMoneyNum = exchangeRate.getNewbieRecruitMoney();
                 //添加金币和金币记录
-                userService.addUserGoldRecord(9,parentId, parentGoldNum, userId);
+                userService.addUserGoldRecord(GoldSourceEnum.FOR_THE_FIRST_TIME_AN_APPRENTICE.getValue(),parentId, parentGoldNum, userId);
                 //更新用户金币
                 userService.updateUserInfo(parentId, parentGoldNum);
                 //添加零钱和零钱记录
-                userService.addUserMoneyRecord(3, parentId, parentMoneyNum, userId);
+                userService.addUserMoneyRecord(GoldSourceEnum.SIGN.getValue(), parentId, parentMoneyNum, userId);
                 userService.updateUserMoneyRecord(parentId, parentMoneyNum);
             }else{
                 //判断师傅已经收到自己的收徒奖励
@@ -237,25 +237,29 @@ public class UserReadServiceImpl implements IUserReadService {
                 if(StringUtils.isEmpty(userGoldRecord1)){
                     //给师傅添加收徒奖励和奖励记录（普通）
                     BigDecimal goldNum = new BigDecimal(gold).multiply(new BigDecimal(2));
-                    userService.addUserGoldRecord(6,parentId, goldNum.intValue(), userId);
+                    userService.addUserGoldRecord(GoldSourceEnum.AN_APPRENTICE.getValue(),parentId, goldNum.intValue(), userId);
                     userService.updateUserInfo(parentId, goldNum.intValue());
                 }
             }
             //判断三天内是否添加过唤醒金币
-            UserGoldRecord userGoldRecord = userService.getWeekupThreeDayGetGold(userId, 13);
+            UserGoldRecord userGoldRecord = userService.getWeekupThreeDayGetGold(userId, GoldSourceEnum.BE_AWAKENED.getValue());
             if(StringUtils.isEmpty(userGoldRecord)){
                 //判断三天内是否有师傅唤醒自己
                 // 被唤醒类型
                 String type = "AWAKEN";
                 UserShare userShare = userService.getWeekupThreeDay(userId, type);
                 if(!StringUtils.isEmpty(userShare)){
-                    //添加金币和金币记录
-                    //给师傅添加唤醒徒弟奖励金币
-                    userService.addUserGoldRecord(12,parentId, exchangeRate.getAwakenParentGold(), userId);
-                    userService.updateUserInfo(parentId, exchangeRate.getAwakenParentGold().intValue());
-                    //给师徒弟加被唤醒奖励金币
-                    userService.addUserGoldRecord(13,userId, exchangeRate.getAwakenUserGold(), userId);
-                    userService.updateUserInfo(userId, exchangeRate.getAwakenUserGold().intValue());
+                    //判断当天内被唤醒徒弟阅读大于三篇新闻
+                    List<UserReadRecord> listRR = userReadRecordMapper.isReadThreeToday(userId);
+                    if(listRR !=null && !listRR.isEmpty() && listRR.size() >= 3){
+                        //添加金币和金币记录
+                        //给师傅添加唤醒徒弟奖励金币
+                        userService.addUserGoldRecord(GoldSourceEnum.Wake_up_the_apprentice.getValue(),parentId, exchangeRate.getAwakenParentGold(), userId);
+                        userService.updateUserInfo(parentId, exchangeRate.getAwakenParentGold().intValue());
+                        //给师徒弟加被唤醒奖励金币
+                        userService.addUserGoldRecord(GoldSourceEnum.BE_AWAKENED.getValue(),userId, exchangeRate.getAwakenUserGold(), userId);
+                        userService.updateUserInfo(userId, exchangeRate.getAwakenUserGold().intValue());
+                    }
                 }
             }
         }

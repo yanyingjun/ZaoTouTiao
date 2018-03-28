@@ -22,7 +22,7 @@ public interface INewsService {
      * @param pageSize
      * @return
      */
-    List<InfosVO> getInfosByType(String type, int channelId, int pageNo, int pageSize);
+    List<InfosVO> getInfosByType(String type, int channelId, PageRequest pageRequest);
 
     /**
      * 获取新闻分类列表
@@ -73,7 +73,7 @@ public interface INewsService {
      * @param pageNo
      * @return
      */
-    List<UserCollect> getCollectList(String infosType, int userId, int pageNo, int pageSize);
+    List<UserCollect> getCollectList(String infosType, int userId, PageRequest pageRequest);
 
     /**
      * 获取24小时热文

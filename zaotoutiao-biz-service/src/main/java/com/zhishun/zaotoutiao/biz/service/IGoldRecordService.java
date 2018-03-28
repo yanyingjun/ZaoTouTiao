@@ -4,7 +4,9 @@
  */
 package com.zhishun.zaotoutiao.biz.service;
 
+import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
+import com.zhishun.zaotoutiao.core.model.vo.ApprenticeRepVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 
 import java.util.List;
@@ -102,4 +104,41 @@ public interface IGoldRecordService {
      * @return
      */
     List<UserGoldRecordVO> listGoldCountBySource(String isNewAndOld, String type, String startDate, String endDate);
+
+    /**
+     * 获取活动时间内有效徒弟数量
+     * @param map
+     * @return
+     */
+    int getEffectiveApprenticeNum(Long userId, String startDate, String endDate);
+
+    /**
+     * 获取活动时间内累计获得的奖励
+     * @param userId
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    int getActivityGoldSum(Long userId, String startDate, String endDate);
+
+    /**
+     * 获取未唤醒徒弟数量
+     * @param map
+     * @return
+     */
+    List<ApprenticeRepVO> listAwakenApprentice(Long userId, PageRequest pageRequest);
+
+    /**
+     * 获取有效徒弟列表
+     * @param map
+     * @return
+     */
+    List<ApprenticeRepVO> listEffectiveApprentice(Long userId, PageRequest pageRequest);
+
+    /**
+     * 获取我的徒弟列表
+     * @param map
+     * @return
+     */
+    List<ApprenticeRepVO> listMyApprentice(Long userId, PageRequest pageRequest);
 }

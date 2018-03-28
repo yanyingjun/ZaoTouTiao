@@ -8,12 +8,18 @@
     <link href="/static/css/base.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/uimaker/easyui.css">
     <link rel="stylesheet" href="/static/uimaker/icon.css">
-
+    <style>
+        .bar {
+            height: 18px;
+            background: lightcoral;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <div id="tb" style="padding:0 30px;">
-        <form id="content_add_form"  method="post">
+        <form id="video_add_form"  method="post">
+            <input type="hidden" name="infoType" value="video"/>
             <table cellpadding="5">
                 <tr>
                     <td>视频标题:</td>
@@ -26,7 +32,7 @@
                             <div class="div2">上传图片</div>
                             <input name="pic" class="inputstyle" type="file" onClick="toUpLoad()" multiple="multiple" />
                         </div>
-                        <div id="imgdiv"></div>
+                        <div id="videoImgDiv"></div>
                         <div id="imgDialog" closed="true" class="easyui-dialog" title="原图"
                              data-options="maximizable:true,resizable:true,modal:true" style="width: 800px; height: 600px; padding: 10px">
                             <img alt="" src="" id="showImg"/>
@@ -86,10 +92,15 @@
                 </tr>
                 <tr>
                     <td>视频上传：</td>
-                    <td></td>
+                    <td><input name="video" type="file" onClick="toUpLoadVideo()" />
+                        <div id="progress">
+                            <div class="bar" style="width: 0%;">0%</div>
+                        </div>
+                        <div id="videoDiv" style="display: none"></div>
+                    </td>
                 </tr>
                 <tr>
-                    <td><a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" onclick="saveNews();">确定</a></td>
+                    <td><a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" onclick="saveVideo();">确定</a></td>
                 </tr>
             </table>
         </form>
@@ -108,13 +119,13 @@
 
 <script type="text/javascript">
 
-    function saveNews(){
-        if ($('#content_add_form').form('validate')) {
-            var jsondata=$('#content_add_form').serializeObject();
+    function saveVideo(){
+        if ($('#video_add_form').form('validate')) {
+            var jsondata=$('#video_add_form').serializeObject();
             $.post('/infos/add', jsondata, function(data) {
                 if (data.state == 'success') {
                     $.messager.alert('提示信息', data.msg);
-                    $('#content_add_form').form('clear');
+                    $('#video_add_form').form('clear');
                 } else {
                     $.messager.alert('提示信息', data.msg);
                 }
@@ -140,7 +151,8 @@
         }
     });
 
-    toUpLoad('pic', 'imgdiv', 'imgDialog') ;
+    toUpLoad('pic', 'videoImgDiv', 'imgDialog') ;
+    toUpLoadVideo('video', 'videoDiv');
     //initShowPic(null,null,'imgdiv', 'imgDialog');
 </script>
 </body>

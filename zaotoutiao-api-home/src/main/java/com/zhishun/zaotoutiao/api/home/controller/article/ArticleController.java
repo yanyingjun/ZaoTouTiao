@@ -213,7 +213,7 @@ public class ArticleController extends BaseController{
                 String contentHtml = content.getHtmlContent().replace("padding-bottom: ","x-style")
                         .replace("height: ","x-style").replace("width: ","x-style");
                 String title = infos.getTitle();
-                Date publishTime = infos.getPublishTime();
+                String publishTime = infos.getPublishTime();
                 String source = infos.getSource();
                 String strHtml = "<!DOCTYPE html>\n" +
                         "<html lang='zh-CN'>\n" +
@@ -406,7 +406,7 @@ public class ArticleController extends BaseController{
                             .replace("data-src","src");
 
                     String title = infos.getTitle();
-                    Date publishTime = infos.getPublishTime();
+                    String publishTime = infos.getPublishTime();
                     String source = infos.getSource();
                     //String[] images = {};
                 }
@@ -691,7 +691,7 @@ public class ArticleController extends BaseController{
                     UserJpush userJpush = jpushService.getUserJpush(userId, infos.getInfoId());
                     int read = userJpush.getIsRead();
                     infos.setIsRead(read);
-                    int day = jpushService.isToday(DateUtil.toString(infos.getPushDate(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                    int day = jpushService.isToday(infos.getPushDate());
                     if(day == 1){
                         //是今天
                         isToday.add(infos);

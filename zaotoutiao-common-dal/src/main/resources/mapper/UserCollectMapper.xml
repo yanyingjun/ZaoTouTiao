@@ -16,10 +16,11 @@
     <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
     <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate" />
     <result column="infos_type" jdbcType="VARCHAR" property="infosType" />
+    <result column="info_id" jdbcType="VARCHAR" property="infoId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, title, create_date, filter, url, author, raw_url, channel, source, style, 
-    pic_url, publish_date, infos_type
+    id, user_id, title, date_format(create_date, '%Y-%m-%d %H:%i:%s') createDate, filter, url, author, raw_url, channel, source, style,
+    pic_url, date_format(publish_date, '%Y-%m-%d %H:%i:%s') as publishDate, infos_type, info_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -36,12 +37,12 @@
       create_date, filter, url, 
       author, raw_url, channel, 
       source, style, pic_url, 
-      publish_date, infos_type)
+      publish_date, infos_type, info_id)
     values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{filter,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
       #{author,jdbcType=VARCHAR}, #{rawUrl,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR}, 
       #{source,jdbcType=VARCHAR}, #{style,jdbcType=VARCHAR}, #{picUrl,jdbcType=VARCHAR}, 
-        #{publishDate,jdbcType=TIMESTAMP}, #{infosType, jdbcType=VARCHAR})
+        #{publishDate,jdbcType=TIMESTAMP}, #{infosType, jdbcType=VARCHAR}, #{infoId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserCollect">
     insert into user_collect
@@ -88,6 +89,9 @@
       <if test="infosType != null">
         infos_type,
       </if>
+      <if test="infoId != null">
+        info_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -131,6 +135,9 @@
       </if>
       <if test="infosType != null">
         #{infosType, jdbcType=VARCHAR},
+      </if>
+      <if test="infoId != null">
+        #{infoId, jdbcType=VARCHAR}
       </if>
     </trim>
   </insert>
@@ -176,6 +183,9 @@
       <if test="infosType != null">
         infos_type = #{infosType,jdbcType=VARCHAR},
       </if>
+      <if test="infoId != null">
+        info_id = #{infoId, jdbcType=VARCHAR}
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -193,7 +203,8 @@
       style = #{style,jdbcType=VARCHAR},
       pic_url = #{picUrl,jdbcType=VARCHAR},
       publish_date = #{publishDate,jdbcType=TIMESTAMP},
-      infos_type = #{infosType,jdbcType=VARCHAR}
+      infos_type = #{infosType,jdbcType=VARCHAR},
+      info_id = #{infoId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 

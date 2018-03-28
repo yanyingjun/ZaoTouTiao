@@ -7,6 +7,7 @@ package com.zhishun.zaotoutiao.common.util;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
+import com.zhishun.zaotoutiao.core.model.enums.InfosEnum;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,9 +68,11 @@ public class OSSClientUtil {
      * @return
      * @throws Exception
      */
-    public static String uploadImgOss(MultipartFile file, String path) throws Exception {
-        if (file.getSize() > 1024 * 1024) {
-            throw new Exception("上传图片大小不能超过1M！");
+    public static String uploadImgOss(MultipartFile file, String path, String infoType) throws Exception {
+        if(infoType.equals(InfosEnum.NEWS.getValue())){
+            if (file.getSize() > 1024 * 1024) {
+                throw new Exception("上传图片大小不能超过1M！");
+            }
         }
         String originalFilename = file.getOriginalFilename();
         String substring = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
@@ -80,7 +83,7 @@ public class OSSClientUtil {
             uploadFile2OSS(inputStream, name, path);
             return name;
         } catch (Exception e) {
-            throw new Exception("图片上传失败");
+            throw new Exception("上传失败");
         }
     }
 

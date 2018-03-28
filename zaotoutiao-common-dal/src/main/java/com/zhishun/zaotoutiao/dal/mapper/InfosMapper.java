@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface InfosMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(Infos record);
@@ -65,4 +66,11 @@ public interface InfosMapper {
     List<InfosVO> List24HoursInfos();
 
     String getInfoTitle(String infoId);
+
+    /**
+     * 查询内容列表
+     * @param map
+     * @return
+     */
+    List<InfosVO> getInfosPageByMap(Map map);
 }

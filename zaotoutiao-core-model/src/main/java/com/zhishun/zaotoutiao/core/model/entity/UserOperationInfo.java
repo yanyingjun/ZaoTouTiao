@@ -12,7 +12,7 @@ public class UserOperationInfo {
 
     private Integer platformId;
 
-    private Integer channelId;
+    private String channelId;
 
     private String remarks;
 
@@ -50,11 +50,11 @@ public class UserOperationInfo {
         this.platformId = platformId;
     }
 
-    public Integer getChannelId() {
+    public String getChannelId() {
         return channelId;
     }
 
-    public void setChannelId(Integer channelId) {
+    public void setChannelId(String channelId) {
         this.channelId = channelId;
     }
 

@@ -111,6 +111,18 @@ public class WithdrawalsController extends BaseController{
             public void handle() throws Exception {
                 BigDecimal allMoney = new BigDecimal(0);
                 User user = userService.getUserByUserId(userId);
+                if(StringUtils.isEmpty(user.getWechatId())){
+                    dataMap.put("state", "fail");
+                    dataMap.put("msg", "没有绑定微信，请绑定微信号");
+                    dataMap.put("data", false);
+                    return;
+                }
+                if(StringUtils.isEmpty(user.getTelephone())){
+                    dataMap.put("state", "fail");
+                    dataMap.put("msg", "没有绑定手机号，请先绑定手机号");
+                    dataMap.put("data", false);
+                    return;
+                }
                 List<UserWithdrawalState> listUWS = iWithdrawalService.getHasApplication(userId);
                 if(listUWS.size() >= 1){
                     //申请进行中，判断本次申请额度是否超过中金币数
@@ -190,82 +202,85 @@ public class WithdrawalsController extends BaseController{
                             }
                         }
                     }
-                }/*else{
+                }else{
                     //正常提现申请
+                    //判断提现金额是否大于用户余额
+                    if(money.compareTo(user.getMoney()) == 1){
+                        //超过用户总零钱，不允许提现
+                        dataMap.put("state", "fail");
+                        dataMap.put("msg", "余额不足，申请失败");
+                        dataMap.put("data", false);
+                        return;
+                    }
                     //添加零钱提现申请，状态为申请中
                     int status = 0;
                     Map<String,Object> result = iWithdrawalService.addWithdrawalState(userId, money, status);
+                    //微信金额单位为分
                     BigDecimal amount = money.multiply(new BigDecimal(100));
                     //获取oppenId判断用户之前是否提现过
-                    if(!StringUtils.isEmpty(user.getWechatId())){
-                        if(!StringUtils.isEmpty(user.getOppenId())){
-                            //发红包
-                            String billNo = result.get("billNo").toString();
-                            Long id = Long.valueOf(result.get("insertId").toString());
-                            String openId = user.getOppenId();
-                            String result1 = RedPackUtil.sendRedPack(openId, amount.intValue(), billNo,
-                                    "早头条提现", "发送红包新消息",
-                                    "提现红包新消息", "备注", "192.168.1.1");
-                            Map<String,Object> result2 = JSONObject.parseObject(result1, new TypeReference<Map<String, Object>>(){});
-                            String resultCode = result2.get("result_code").toString();
-                            if("FAIL".equals(resultCode)){
-                                String errCode = result2.get("err_code").toString();
-                                if("MONEY_LIMIT".equals(errCode)){
-                                    //金额输入错误
-                                    dataMap.put("result", "failure");
-                                    dataMap.put("msg", "金额输入错误");
-                                    dataMap.put("data", false);
-                                }else if("OPENID_ERROR".equals(errCode)){
-                                    //还未关注公主号
-                                    dataMap.put("result", "failure");
-                                    dataMap.put("msg", "请先关注微信公众号(智顺文化)");
-                                    dataMap.put("data", "http://www.cloudconfs.com/early");
-                                }else if("PARAM_ERROR".equals(errCode)){
-                                    //还未关注公众号
-                                    dataMap.put("result", "failure");
-                                    dataMap.put("msg", "openid字段不正确");
-                                    dataMap.put("data", false);
+                    if(!StringUtils.isEmpty(user.getOppenId())){
+                        //发红包
+                        String billNo = result.get("billNo").toString();
+                        Long id = Long.valueOf(result.get("insertId").toString());
+                        String openId = user.getOppenId();
+                        String result1 = RedPackUtil.sendRedPack(openId, amount.intValue(), billNo,
+                                "早头条提现", "发送红包新消息",
+                                "提现红包新消息", "备注", "192.168.1.1");
+                        Map<String,Object> result2 = JSONObject.parseObject(result1, new TypeReference<Map<String, Object>>(){});
+                        String resultCode = result2.get("result_code").toString();
+                        if("FAIL".equals(resultCode)){
+                            String errCode = result2.get("err_code").toString();
+                            if("MONEY_LIMIT".equals(errCode)){
+                                //金额输入错误
+                                dataMap.put("result", "failure");
+                                dataMap.put("msg", "金额输入错误");
+                                dataMap.put("data", false);
+                            }else if("OPENID_ERROR".equals(errCode)){
+                                //还未关注公主号
+                                dataMap.put("result", "failure");
+                                dataMap.put("msg", "请先关注微信公众号(智顺文化)");
+                                dataMap.put("data", "http://www.cloudconfs.com/early");
+                            }else if("PARAM_ERROR".equals(errCode)){
+                                //还未关注公众号
+                                dataMap.put("result", "failure");
+                                dataMap.put("msg", "openid字段不正确");
+                                dataMap.put("data", false);
 
-                                }else{
-                                    //其他错误
-                                    dataMap.put("result", "failure");
-                                    dataMap.put("msg", "其他错误");
-                                    dataMap.put("data", errCode);
-                                }
-                            }else if("SUCCESS".equals(resultCode)){
-                                String errCode = result2.get("err_code").toString();
-                                if("SUCCESS".equals(errCode)){
-                                    dataMap.put("result", "success");
-                                    dataMap.put("msg", "红包发送成功，请进入公众号(智顺文化)查看");
-                                    dataMap.put("data", true);
-
-                                    //修改请求状态
-                                    UserWithdrawalState userWithdrawalState = new UserWithdrawalState();
-                                    userWithdrawalState.setStatus(1);
-                                    userWithdrawalState.setId(id);
-                                    iWithdrawalService.updateWithdrawalState(userWithdrawalState);
-                                    //修改用户零钱
-                                    //添加零钱记录
-                                    userService.updateUserMoneyRecord(userId, money);
-                                }else{
-                                    dataMap.put("result", "failure");
-                                    dataMap.put("msg", "其他错误");
-                                    dataMap.put("data", errCode);
-                                }
+                            }else{
+                                //其他错误
+                                dataMap.put("result", "failure");
+                                dataMap.put("msg", "其他错误");
+                                dataMap.put("data", errCode);
                             }
-                        }else{
-                            //请先关注微信公众号"智顺文化"
-                            dataMap.put("result", "failure");
-                            dataMap.put("msg", "请先关注微信公众号(智顺文化)");
-                            dataMap.put("data", "http://www.cloudconfs.com/early");
+                        }else if("SUCCESS".equals(resultCode)){
+                            String errCode = result2.get("err_code").toString();
+                            if("SUCCESS".equals(errCode)){
+                                dataMap.put("result", "success");
+                                dataMap.put("msg", "红包发送成功，请进入公众号(智顺文化)查看");
+                                dataMap.put("data", true);
+
+                                //修改请求状态
+                                UserWithdrawalState userWithdrawalState = new UserWithdrawalState();
+                                userWithdrawalState.setStatus(1);
+                                userWithdrawalState.setId(id);
+                                iWithdrawalService.updateWithdrawalState(userWithdrawalState);
+                                //修改用户零钱
+                                //添加零钱记录
+                                userService.updateUserMoneyRecord(userId, money);
+                            }else{
+                                dataMap.put("result", "failure");
+                                dataMap.put("msg", "其他错误");
+                                dataMap.put("data", errCode);
+                            }
                         }
                     }else{
-                        //请先绑定微信
+                        //请先关注微信公众号"智顺文化"
                         dataMap.put("result", "failure");
-                        dataMap.put("msg", "请先绑定微信");
-                        dataMap.put("data", false);
+                        dataMap.put("msg", "请先关注微信公众号(智顺文化)");
+                        dataMap.put("data", "http://www.cloudconfs.com/early");
                     }
-                }*/
+
+                }
             }
         });
 

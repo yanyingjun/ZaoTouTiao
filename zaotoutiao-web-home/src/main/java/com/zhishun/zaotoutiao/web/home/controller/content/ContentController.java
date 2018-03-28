@@ -14,6 +14,7 @@ import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
+import com.zhishun.zaotoutiao.core.model.vo.ContentQueryVO;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import com.zhishun.zaotoutiao.web.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.web.home.constant.request.InfosMsgReq;
@@ -122,6 +123,32 @@ public class ContentController extends BaseController{
                     dataMap.put("state", "fail");
                     dataMap.put("msg", "新增失败");
                 }
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 查询内容列表
+     * @param contentQueryVO
+     * @return
+     */
+    @RequestMapping(value = InfosMsgReq.LIST_INFOS_REQ, method = RequestMethod.POST)
+    public Map<Object,Object> listInfos(final ContentQueryVO contentQueryVO){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotNull(contentQueryVO, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                List<InfosVO> list = infosService.listInfos(contentQueryVO);
+                dataMap.put("rows", list);
+                dataMap.put("total", list.size());
             }
         });
 

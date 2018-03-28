@@ -123,4 +123,31 @@ public class UserCommentsController extends BaseController{
 
         return dataMap;
     }
+
+    /**
+     * 清空我的评论
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = ArticleMsgReq.Empty_MY_COMMENTS)
+    public Map<Object,Object> emptyMyComments(final Long userId){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                commentsService.delMyComments(userId, null);
+                commentsService.delUserGiveLike(userId, null);
+                dataMap.put("result", "success");
+                dataMap.put("msg", "清空成功");
+            }
+        });
+
+        return dataMap;
+    }
 }

@@ -111,10 +111,11 @@ public class ApiUtil {
         try {
             HttpPost httpPost = new HttpPost(url);
             httpPost.setEntity(new StringEntity(reqJson, ContentType.create("application/json", "UTF-8")));
-            System.out.println(reqJson);
+            LoggerUtils.info(LOGGER, "广告位请求开始");
             CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
             resStr = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
             respJson = JSON.parseObject(resStr);
+            LoggerUtils.info(LOGGER, "广告位请求返回数据"+ respJson);
             if(respJson.getString("success").equals("false")){
                 LoggerUtils.info(LOGGER, "广告位请求失败，失败原因："+ respJson);
                 return null;
@@ -149,7 +150,7 @@ public class ApiUtil {
             i++;
         }
         apiUrl += param;
-
+        LoggerUtils.info(LOGGER, "请求360新闻接口开始，请求地址：" + apiUrl);
         CloseableHttpClient httpClient = HttpClients.createDefault();
         // 设置参数
         try {
@@ -158,6 +159,7 @@ public class ApiUtil {
             CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
             // 获取返回的数据
             HttpEntity entity = httpResponse.getEntity();
+            LoggerUtils.info(LOGGER, "请求360新闻接口结束，返回结果：" + JSON.toJSON(entity));
             if(entity != null){
                 String result = EntityUtils.toString(entity);
                 json = JSONObject.parseObject(result);

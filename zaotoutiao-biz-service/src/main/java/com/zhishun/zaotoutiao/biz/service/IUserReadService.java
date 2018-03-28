@@ -70,4 +70,5 @@ public interface IUserReadService {
      * @return
      */
     List<NavigationVO> getNavList(Integer dateNum, String date, String infoType);
+
 }

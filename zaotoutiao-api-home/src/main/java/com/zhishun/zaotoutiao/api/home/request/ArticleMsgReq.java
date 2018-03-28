@@ -46,6 +46,11 @@ public class ArticleMsgReq {
     public static final String MY_COMMENTS_DEL = "/my/comments/del";
 
     /**
+     * 清空我的评论
+     */
+    public static final String Empty_MY_COMMENTS = "/empty/my/comments";
+
+    /**
      * 随机推荐文章
      */
     public static final String RANDOM_ARTICLE = "/random/article";

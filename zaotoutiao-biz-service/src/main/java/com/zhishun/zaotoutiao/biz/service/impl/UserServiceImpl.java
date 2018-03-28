@@ -507,4 +507,17 @@ public class UserServiceImpl implements IUserService{
         }
         return userMapper.listCanBePresentedUser(map);
     }
+
+    @Override
+    public int getActivityApprenticeSum(Long userId, String createDate, String endDate) {
+        Map map = Maps.newHashMap();
+        map.put("userId", userId);
+        if(!StringUtils.isEmpty(createDate)){
+            map.put("createDate", createDate);
+        }
+        if(!StringUtils.isEmpty(endDate)){
+            map.put("endDate", endDate);
+        }
+        return userMapper.getActivityApprenticeSum(map);
+    }
 }
