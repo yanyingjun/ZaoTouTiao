@@ -77,5 +77,13 @@ public interface UserShareMapper {
      */
     int getTiming(Map<String,Object> map);
 
+
     int getNumOfType(Long userId,String shareType);
+
+    /**
+     * 获取分享转发数
+     * @param map infoId
+     * @return
+     */
+    Long getNumByInfoId(Map<String,Object> map);
 }

@@ -2,6 +2,7 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.Infos;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -65,4 +66,25 @@ public interface InfosMapper {
     List<InfosVO> List24HoursInfos();
 
     String getInfoTitle(String infoId);
+
+    /**
+     * 根据infoId获取前30新闻或视频数据
+     * @param infoIdList
+     * @return
+     */
+    List<InfosVO> listOfTot30(@Param("infoIdList") List<String> infoIdList);
+
+    /**
+     * 根据id获得新闻内容
+     * @param id
+     * @return
+     */
+    String getNewsContent(Long id);
+
+    /**
+     * 根据id获得视频url
+     * @param id
+     * @return
+     */
+    String getVideoUrl(Long id);
 }

@@ -64,6 +64,7 @@ public interface INewsService {
      */
     List<InfosVO> searchNewsByKeyword(String keyword,PageRequest pageRequest);
 
+
     /**
      * 获取收藏列表
      * @param infosType

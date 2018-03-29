@@ -57,6 +57,12 @@ public interface UserCommentsMapper {
     int getCommentsNumByInfoId(String infoId);
 
     /**
+     * 获取时间段内新闻的评论数
+     * @param map infoId
+     * @return
+     */
+    int getCommentsNumByInfoIdAndTime(Map<String,Object> map);
+    /**
      * 获取所有新闻列表
      * @return
      */

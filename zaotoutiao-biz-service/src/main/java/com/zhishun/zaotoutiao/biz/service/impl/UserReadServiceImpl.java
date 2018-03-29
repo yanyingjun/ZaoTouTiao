@@ -12,6 +12,9 @@ import com.zhishun.zaotoutiao.biz.service.IUserReadService;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.*;
+import com.zhishun.zaotoutiao.core.model.thirdVo.InformationVO;
+import com.zhishun.zaotoutiao.core.model.vo.InfoRankVO;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
 import com.zhishun.zaotoutiao.dal.mapper.*;
 import groovy.util.MapEntry;
@@ -54,6 +57,18 @@ public class UserReadServiceImpl implements IUserReadService {
 
     @Autowired
     private ChannelsMapper channelsMapper;
+
+    @Autowired
+    private InfosMapper infosMapper;
+
+    @Autowired
+    private UserShareMapper userShareMapper;
+
+    @Autowired
+    private UserCollectMapper userCollectMapper;
+
+    @Autowired
+    private UserCommentsMapper userCommentsMapper;
 
     @Override
     public boolean isUserRead(String id, Long userId, String type) {
@@ -262,15 +277,21 @@ public class UserReadServiceImpl implements IUserReadService {
 
     }
 
+    /**
+     * 获得导航排行数据
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @return
+     */
     @Override
-    public List<NavigationVO> getNavList(Integer dateNum, String date, @RequestParam(value = "appType",defaultValue = "article") String appType){
+    public List<NavigationVO> getNavList(Integer dateNum, String date, Integer appType){
         //时间类型转换
         Date date1 = DateUtil.toDate(date,DateUtil.DEFAULT_DATE_FORMAT);
         Map<String,Object> map = Maps.newHashMap();
         map.put("dateNum",dateNum);
         map.put("date",date1);
         map.put("infoType",appType);
-        map.put("parentId",0);
         List<NavigationVO> navigationVOList = Lists.newArrayList();
         //获取特定infoType的导航
         List<Channels> channelsList = channelsMapper.channelListByInfoType(appType);
@@ -279,51 +300,139 @@ public class UserReadServiceImpl implements IUserReadService {
             NavigationVO navigationVO = new NavigationVO();
             navigationVO.setId(channels.getId());
             navigationVO.setName(channels.getName());
-            navigationVO.setParentId(0L);
+            navigationVO.setAppType(appType);
             navigationVO.setReadNum(userReadRecordMapper.getNavReadNum(map));
-            //List<Map<String,Object>> firstTab = Lists.newArrayList();
             ArrayList<Map.Entry> firstTabsNumAndId = Lists.newArrayList();
             Long parentId = channels.getId();
             //获取一级标签列表
-            List<Channels> ChildTabList = channelsMapper.getChildTabList(parentId);
-            for(Channels channels1 : ChildTabList){
+            List<Channels> childTabList = channelsMapper.getChildTabList(parentId);
+            for(Channels channels1 : childTabList){
                 map.put("parentId",channels1.getId());
                 //获取一级标签下的阅读数
                 Map.Entry mapEntry = new MapEntry(channels1.getId(),userReadRecordMapper.getFirstTabNum(map));
                 firstTabsNumAndId.add(mapEntry);
             }
-            //排序
-            Collections.sort( firstTabsNumAndId, new Comparator<Map.Entry>() {
+            //阅读量
+            firstTabsNumAndId.sort(new Comparator<Map.Entry>() {
                 @Override
                 public int compare(Map.Entry o1, Map.Entry o2) {
-                    int o1Num=Integer.valueOf(o1.getValue().toString());
-                    int o2Num=Integer.valueOf(o2.getValue().toString());
+                    int o1Num = Integer.valueOf(o1.getValue().toString());
+                    int o2Num = Integer.valueOf(o2.getValue().toString());
                     return o2Num - o1Num;
                 }
             });
             //插入前三的数据
-            Map<String,Object> channelsMap = Maps.newHashMap();
+            StringBuilder channelsTop3 = new StringBuilder();
             if(0 != firstTabsNumAndId.size()) {
                 if (firstTabsNumAndId.size() >= 3) {
                     for (int i = 0; i < 3; i++) {
                         Long tabId = Long.valueOf(firstTabsNumAndId.get(i).getKey().toString());
+                        Long readN = Long.valueOf(firstTabsNumAndId.get(i).getValue().toString());
                         String tabName = channelsMapper.selectByPrimaryKey(tabId).getName();
-                        channelsMap.put(tabName, firstTabsNumAndId.get(i).getValue());
+                        channelsTop3.append(tabName).append("[").append(readN).append("]").append(" ");
                     }
                 } else {
                     for (Map.Entry aFirstTabsNumAndId : firstTabsNumAndId) {
                         Long tabId = Long.valueOf(aFirstTabsNumAndId.getKey().toString());
+                        Long readN = Long.valueOf(aFirstTabsNumAndId.getValue().toString());
                         String tabName = channelsMapper.selectByPrimaryKey(tabId).getName();
-                        channelsMap.put(tabName, aFirstTabsNumAndId.getValue());
+                        channelsTop3.append(tabName).append("[").append(readN).append("]").append(" ");
                     }
                 }
-                navigationVO.setChildTabsNameAndId(channelsMap);
+                navigationVO.setChannelsTop3(channelsTop3.toString());
             }
             navigationVOList.add(navigationVO);
         }
+        //总阅读量
+        navigationVOList.sort(new Comparator<NavigationVO>() {
+            @Override
+            public int compare(NavigationVO o1, NavigationVO o2) {
+                int o1readNum = o1.getReadNum().intValue();
+                int o2readNum = o2.getReadNum().intValue();
+                return o2readNum - o1readNum;
+            }
+        });
         return navigationVOList;
     }
 
+    @Override
+    public List<NavigationVO> getFirstTabList(Integer dateNum, String date, Integer appType, Long parentId){
+        return null;
+    }
+
+    /**
+     * 获得info排行前30
+     * @param navId
+     * @param theClass  判断是导航还是几级标签
+     * @return
+     */
+    @Override
+    public List<InfoRankVO> getInfoRankVOList(Long navId,int theClass,Integer dateNum, String date) {
+        List<InfoRankVO> infoRankVOList = Lists.newArrayList();
+        String channelName = channelsMapper.selectByPrimaryKey(navId).getName();
+        //判断获取infoIdList的途径
+        List<String> infoIdList = Lists.newArrayList();
+        Map<String,Object> map = Maps.newHashMap();
+        if("".equals(date)){
+            date = null;
+        }
+        map.put("navId",navId);
+        map.put("dateNum",dateNum);
+        map.put("date",date);
+        if(theClass == 0) {
+            //导航
+            infoIdList = userReadRecordMapper.getInfoId2RankTop30(map);
+        }else if(theClass == 1){
+            //一级标签
+            infoIdList = userReadRecordMapper.getInfoId2RankTop30ByFirst(map);
+        }else if(theClass == 2){
+            //二级标签
+            infoIdList = userReadRecordMapper.getInfoId2RankTop30BySecond(map);
+        }
+        List<InfosVO> infosVOList30 = infosMapper.listOfTot30(infoIdList);
+        if(!infosVOList30.isEmpty()) {
+            for (InfosVO infosVO : infosVOList30) {
+                InfoRankVO infoRankVO = new InfoRankVO();
+                infoRankVO.setId(infosVO.getId());
+                infoRankVO.setInfoType(infosVO.getInfoType());
+                infoRankVO.setTitle(infosVO.getTitle());
+                infoRankVO.setThumbnails(infosVO.getThumbnails());
+                infoRankVO.setSource(infosVO.getSource());
+
+                infoRankVO.setUpdateTime(DateUtil.toString(infosVO.getUpdateTime(),DateUtil.DEFAULT_DATETIME_FORMAT));
+                infoRankVO.setChannelName(channelName);
+                //获取标签
+                if (infosVO.getFirstLevel() != null) {
+                    infoRankVO.setFirstTabName(channelsMapper.selectByPrimaryKey(infosVO.getFirstLevel().longValue()).getName());
+                }
+                if (infosVO.getTwoLevel() != null) {
+                    infoRankVO.setSecondTabName(channelsMapper.selectByPrimaryKey(infosVO.getTwoLevel().longValue()).getName());
+                }
+                map.put("infoId",infosVO.getInfoId());
+                //获取阅读数
+                infoRankVO.setReadNum(userReadRecordMapper.getReadNumByOneInfo(map));
+                //获取分享转发数
+                infoRankVO.setShareNum(userShareMapper.getNumByInfoId(map));
+                //获取收藏数
+                infoRankVO.setCollectNum(userCollectMapper.getNumByInfoId(map));
+                //获取评论数
+                infoRankVO.setCommentNum((long) userCommentsMapper.getCommentsNumByInfoIdAndTime(map));
+                infoRankVOList.add(infoRankVO);
+            }
+            if(infoRankVOList.size()>1){
+                //根据阅读量
+                infoRankVOList.sort(new Comparator<InfoRankVO>() {
+                    @Override
+                    public int compare(InfoRankVO o1, InfoRankVO o2) {
+                        int o1readNum = o1.getReadNum().intValue();
+                        int o2readNum = o2.getReadNum().intValue();
+                        return o2readNum - o1readNum;
+                    }
+                });
+            }
+        }
+        return infoRankVOList;
+    }
 
 
 }

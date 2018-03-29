@@ -22,7 +22,7 @@ public class NavigationVO {
     /**
      * 父id
      */
-    private Long parentId;
+    private Integer appType;
     /**
      * 导航名
      */
@@ -36,7 +36,7 @@ public class NavigationVO {
     /**
      * 下一级标签（前三）
      */
-    private Map<String,Object> childTabsNameAndId;
+    private String channelsTop3;
 
     public String getName() {
         return name;
@@ -62,19 +62,19 @@ public class NavigationVO {
         this.id = id;
     }
 
-    public Long getParentId() {
-        return parentId;
+    public Integer getAppType() {
+        return appType;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
+    public void setAppType(Integer appType) {
+        this.appType = appType;
     }
 
-    public Map<String, Object> getChildTabsNameAndId() {
-        return childTabsNameAndId;
+    public String getChannelsTop3() {
+        return channelsTop3;
     }
 
-    public void setChildTabsNameAndId(Map<String, Object> childTabsNameAndId) {
-        this.childTabsNameAndId = childTabsNameAndId;
+    public void setChannelsTop3(String channelsTop3) {
+        this.channelsTop3 = channelsTop3;
     }
 }

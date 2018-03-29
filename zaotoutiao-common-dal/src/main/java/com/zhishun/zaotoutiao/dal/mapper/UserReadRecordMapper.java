@@ -3,6 +3,7 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
 import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -123,4 +124,30 @@ public interface UserReadRecordMapper {
      */
     Long getFirstTabNum(Map<String,Object> map);
 
+    /**
+     * 获得导航阅读前30infoId
+     * @param map 导航Id navId
+     * @return
+     */
+    List<String> getInfoId2RankTop30(Map<String,Object> map);
+
+    /**
+     * 获得一级标签阅读前30infoId
+     * @param map 一级标签Id navId
+     * @return
+     */
+    List<String> getInfoId2RankTop30ByFirst(Map<String,Object> map);
+
+    /**
+     * 获得二级标签阅读前30infoId
+     * @param map 二级标签Id navId
+     * @return
+     */
+    List<String> getInfoId2RankTop30BySecond(Map<String,Object> map);
+    /**
+     * 获取单个新闻的阅读数
+     * @param map infoId
+     * @return
+     */
+    Long getReadNumByOneInfo(Map<String,Object> map);
 }

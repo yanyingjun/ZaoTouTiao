@@ -163,4 +163,16 @@
   <select id="getNumOfType" parameterType="map" resultType="int">
     SELECT count(0) FROM user_share WHERE userId = #{userId} and type = #{shareType}
   </select>
+
+  <select id="getNumByInfoId" parameterType="String" resultType="Long">
+    SELECT count(infoId) as shareNum
+    FROM user_share
+    WHERE infoId = #{infoId}
+    <if test="date != null">
+      AND date( #{date} ) = date(create_date)
+    </if>
+    <if test="date == null and dateNum != null">
+      AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(create_date)
+    </if>
+  </select>
 </mapper>

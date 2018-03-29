@@ -42,4 +42,14 @@ public class RankMsgReq {
      * 获得导航排行列表数据
      */
     public static final String NAV_TANK_LIST_REQ = "/nav/rank/list";
+
+    /**
+     * 获得导航info排行前30
+     */
+    public static final String GET_INFO_RANK_LIST_REQ = "/info/rank/list";
+
+    /**
+     * 获取新闻详情或视频URL
+     */
+    public static final String GET_INFO_CONTENT_BY_ID_REQ = "/info/rank/content";
 }

@@ -4,10 +4,10 @@ import com.zhishun.zaotoutiao.core.model.entity.ExchangeRate;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.zhishun.zaotoutiao.core.model.vo.InfoRankVO;
 import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
 
 /**
@@ -66,8 +66,25 @@ public interface IUserReadService {
      * 获得导航排行数据
      * @param dateNum
      * @param date
-     * @param infoType
+     * @param appType
      * @return
      */
-    List<NavigationVO> getNavList(Integer dateNum, String date, String infoType);
+    List<NavigationVO> getNavList(Integer dateNum, String date, Integer appType);
+
+    /**
+     * 获得一级标签排行数据
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @param parentId
+     * @return
+     */
+    List<NavigationVO> getFirstTabList(Integer dateNum, String date, Integer appType, Long parentId);
+    /**
+     * 获得info排行前30
+     * @param navId
+     * @param theClass  判断是导航还是几级标签
+     * @return
+     */
+    List<InfoRankVO> getInfoRankVOList(Long navId,int theClass,Integer dateNum, String date);
 }

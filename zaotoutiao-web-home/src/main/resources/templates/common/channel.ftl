@@ -36,14 +36,14 @@
         <label for="search">关键字: </label>
         <input id="search" class="easyui-textbox" type="text" name="code" style="width:166px;height:35px;line-height:35px;"/>
         <label for="status">状态：</label>
-        <select id="status" name="status" style="height:35px; width: 100px; text-align: center">
+        <select class="easyui-combobox" id="status" name="status" style="height:35px; width: 100px; text-align: center">
             <option value="">全部</option>
             <option value="1">激活</option>
             <option value="0">下架</option>
         </select>
 
         <label for="appType">类型：</label>
-        <select id="appType" name="appType" style="height:35px; width: 100px; text-align: center">
+        <select  class="easyui-combobox" id="appType" name="appType" style="height:35px; width: 100px; text-align: center">
             <option value="">全部</option>
             <option value="1">新闻</option>
             <option value="0">视频</option>

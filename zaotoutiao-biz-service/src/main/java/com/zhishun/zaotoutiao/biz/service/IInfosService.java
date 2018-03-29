@@ -14,4 +14,12 @@ public interface IInfosService {
      * @return
      */
     int addInfos(InfosVO infosVO);
+
+    /**
+     * 返回新闻内容或视频链接
+     * @param id
+     * @param infoType
+     * @return
+     */
+    String getConOrUrlById(Long id, String infoType);
 }

@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="container">
-    <table id="dg" class="easyui-datagrid" style="width:100%;height:554px" url="/channel/list" title="新闻/视频导航管理" data-options="
+    <table id="dg" class="easyui-datagrid" style="width:100%;height:554px" url="/nav/rank/list" title="新闻/视频导航管理" data-options="
                 rownumbers:true,
                 singleSelect:false,
                 autoRowHeight:false,
@@ -25,24 +25,37 @@
         <thead>
         <tr>
             <th field="name" width="200">导航</th>
-            <th field="statusName" width="260">阅读量</th>
-            <th field="typeName" width="260">一级标签（前三）</th>
-            <th field="updateDate" width="200">文章（前30）</th>
-            <th field="updateDate" width="200">视频（前30）</th>
-            <th field="_operate" width="100" data-options="align:'center',formatter:formatOperate">操作</th>
+            <th field="readNum" width="260">阅读量</th>
+            <th field="channelsTop3" width="260">一级标签（前三）</th>
+            <th field="appType" width="200" data-options="formatter:function (value,row,index) {
+                            var str = '';
+                            if(value == 0){
+                                str = '视频';
+                            }else{
+                                str = '文章';
+                            }
+                            return str;
+                        }">类型</th>
+            <th field="_operate" width="100" data-options="align:'center',formatter:doQuery">Top-30</th>
         </tr>
         </thead>
     </table>
     <div id="tb" style="padding:0 30px;">
         <div class="opt-buttons">
-            时间：
-            <a href="#" class="easyui-linkbutton" data-options="selected:true">今天</a>
-            <a href="#" class="easyui-linkbutton">昨天</a>
-            <a href="#" class="easyui-linkbutton">最近7天</a>
-            <a href="#" class="easyui-linkbutton">最近30天</a>
-            <input type="date" style="width:200px;height:35px;
-
-">
+            <label for="status">时间段：</label>
+            <a id="today" href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" onclick="getDateNum(1)">今天</a>
+            <a id="yesterday" href="#" data-options="toggle:true,group:'g1'" class="easyui-linkbutton" onclick="getDateNum(-1)">昨天</a>
+            <a id="day7" href="#" data-options="toggle:true,group:'g1'" class="easyui-linkbutton" onclick="getDateNum(7)">最近7天</a>
+            <a id="day30" href="#" data-options="toggle:true,group:'g1'" class="easyui-linkbutton" onclick="getDateNum(30)">最近30天</a>
+            <label for="status">日期：</label>
+            <input id="getDate" type="date" style="">
+            <label for="appType">类别：</label>
+            <select id="appType" name="appType" style="height:35px; width: 100px; text-align: center">
+                <option value="1">新闻</option>
+                <option value="0">视频</option>
+            </select>
+            <input id="dateNumGet" value="1" style="display: none" />
+            <a href="#" onclick="toSearch()" id="bt_search_btn" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true">查询</a>
         </div>
     </div>
 </div>
@@ -51,6 +64,7 @@
 <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="/static/js/jquery.easyui.min.js"></script>
 <script type="text/javascript">
+
     (function($){
         function pagerFilter(data){
             if ($.isArray(data)){   // is array
@@ -149,158 +163,207 @@
             getAllRows: function(jq){
                 return jq.data('datagrid').allRows;
             }
-        })
+        });
+        $.preLoadImages = function(args) {
+            console.log(args);
+            var _html = "";
+            $.each(args, function(index, val) {
+                console.log(_html);
+                _html += '<li><a href="javascript:void(0)"><img src=\"' + val + '\"/></a></li>';
+                $("#showPic>ul").eq(0).html(_html);
+            });
+        };
+
     })(jQuery);
 
 
     //数据分页
     $(function () {
-        $('#dg').datagrid({url:"/channel/list"}).datagrid('clientPaging');
+        $('#dg').datagrid({url:"/nav/rank/list"}).datagrid('clientPaging');
 
     });
-    function formatOperate(val,row,index){
-        var status;
-        if(row.statusName=="下架"){
-            status= '激活'
-        }else{
-            status= '下架'
-        }
-        return  '<a href="#" onclick="doOrder()">排序</a>&nbsp;&nbsp;' +
-                '<a href="#" onclick="changeStatus('+row.id+','+row.status+',\'确定修改吗?\')">'+status+'</a>&nbsp;&nbsp;' +
-                '<a href="#" onclick="doEdit('+row.id+',\''+row.name+'\')">编辑</a>&nbsp;&nbsp;' +
-                '<a href="#" onclick="del('+row.id+',\'确定删除吗?\')">删除</a>';
+
+    function getDateNum(num){
+        $("#dateNumGet").val(num);
     }
 
-
-    //删除
-    function del(id,str) {
-        $.messager.confirm('提示信息', str, function(r){
-            if(r){
-                $.post("/delete/channel",{id:id},function (data) {
-                    if (data === 1) {
-                        $.messager.alert('请求删除导航', '删除成功！', 'info');
-                    } else {
-                        $.messager.alert('请求删除导航', '删除失败！', 'error');
-                    }
-                    $('#dg').datagrid('reload');
-                },"json");
-            }
-        })
-    }
-    function doOrder (){
-        $('#dlg').dialog('open');
-    }
-
-    //更新状态
-    function changeStatus(id,status,str) {
-        $.messager.confirm('提示信息', str, function(r){
-            if(r){
-                var newStatus;
-                if(status === 1){
-                    newStatus=0;
-                }else if(status === 0){
-                    newStatus=1;
-                }
-                $.post("/update/channel/status",{id:id,status:newStatus},function (data) {
-                    if (data === 1) {
-                        $.messager.alert('请求更新状态', '更新成功！', 'info');
-                    } else {
-                        $.messager.alert('请求更新状态', '更新失败！', 'error');
-                    }
-                    $('#dg').datagrid('reload');
-                },"json")
-            }
-        })
-    }
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    };
 
     //查询
     function toSearch(){
+        var dateNum;
+        var date;
+        dateNum = $("#dateNumGet").val();
+        date = $('#getDate').val();
+        if($("#dateNumGet").val() == -1){
+            dateNum = null;
+            if($('#getDate').val() == null || $('#getDate').val() == '') {
+                date = new Date(new Date() - 86400000);
+                date = date.Format("yyyy-MM-dd");
+            }
+        }
+        if($("#dateNumGet").val() == 1){
+            dateNum = null;
+            if($('#getDate').val() == null || $('#getDate').val() == '') {
+                date = new Date();
+                date = date.Format("yyyy-MM-dd");
+            }
+        }
+//        if(dateNum == "" && date == ""){
+//            date = new Date();
+//            date = date.Format("yyyy-MM-dd");
+//        }
         $('#dg').datagrid('load',{
-            name: $('#search').val(),
-            status: $('#status').val(),
+            date: date,
+            dateNum: dateNum,
             appType: $('#appType').val()
         })
     }
 
-    //上移、下移
-    function doOrderById(id,channelOrderChangeNum) {
-        $.post("/do/channel/order",{id:id,channelOrderChangeNum:channelOrderChangeNum},function (data) {
-            if (data === 1) {
-                //$.messager.alert('请求删除导航', '删除成功！', 'info');
-                $('#ggg').datagrid('reload');
-            } else {
-                $.messager.alert('更新排序', '请求失败！', 'error');
-            }
-        },"json")
-    }
-    formatss = function (val,row,index){
-        var up = 1;//上移
-        var down = 2;//下移
-        return  '<a href="#" onclick="doOrderById('+row.id+','+up+')">上移</a>&nbsp;&nbsp;'+
-                '<a href="#" onclick="doOrderById('+row.id+','+down+')">下移</a>';
-    };
 
-    //编辑
-    doEdit = function (id,name){
-        $('#editId').val(id);
-        $('#editChannelName').val(name) ;
-        $('#edit').dialog('open');
-    };
-    //编辑提交
-    function submitForm(){
-        if($('#editChannelName').val().length < 2){
-            $.messager.alert('提示','您的名称太短了','error');
+    function doQuery(value,row,index){
+        return  '<a href="#" onclick="doRead('+row.id+',\''+row.readNum+'\')">查看</a>';
+
+    }
+
+    //查看列表
+    doRead = function (id,readNum){
+        if(0 == readNum){
+            $.messager.alert('获取列表失败', '该标签下阅读量为0', 'error');
         }else{
-            $('#ff').form('submit',{
-                url:"/update/channel/name",
-                onSubmit: function(){
-
-                },
-                success:function(data){
-                    if(data==1){
-                        $.messager.alert('更新导航请求','更新成功！','info');
-                        $('#edit').dialog('close');
-                        $('#dg').datagrid('reload');
-                        //window.location.reload();
-                    }else if(data=='0'){
-                        $.messager.alert('更新导航请求','更新失败！','error');
-                    }
+            var dateNum;
+            var date;
+            dateNum = $("#dateNumGet").val();
+            date = $('#getDate').val();
+            if($("#dateNumGet").val() == -1){
+                dateNum = null;
+                if($('#getDate').val() == null || $('#getDate').val() == '') {
+                    date = new Date(new Date() - 86400000);
+                    date = date.Format("yyyy-MM-dd");
                 }
+            }
+            if($("#dateNumGet").val() == 1){
+                dateNum = null;
+                if($('#getDate').val() == null || $('#getDate').val() == '') {
+                    date = new Date();
+                    date = date.Format("yyyy-MM-dd");
+                }
+            }
+//            if(dateNum == "" && date == ""){
+//                date = new Date();
+//                date = date.Format("yyyy-MM-dd");
+//            }
+            $('#ggg').datagrid('load',{
+                date: date,
+                dateNum: dateNum,
+                navId: id,
+                theClass: 0
             });
+            $('#dlg').dialog('open');
         }
-        //window.location.reload();
+
+    };
+
+    //详情
+    function doInfo(value,row,index){
+        return  '<a href="#" onclick="doGetInfo('+row.id+',\''+row.infoType+'\')">查看</a>';
     }
 
+    function doGetInfo(id,infoType) {
+        $('#readInfo').dialog('open');
+        $.post("/info/rank/content",{id:id,infoType:infoType},function (data) {
+            if(infoType == "news"){
+                $('#readArticle').html(data).css("display","block");
+                $("#readVideo").attr('src','').css("display","none");
+            }else if(infoType == "video"){
+                $("#readVideo").attr('src',data);
+                $("#readVideo").css("display","block");
+                $('#readArticle').css("display","none");
+
+            }
+        })
+    }
+    $(function(){
+        $("#readInfo").dialog({
+            onClose:function(){
+                $("#readVideo").attr('src','');
+            }
+        })
+
+    });
+
+    getPic = function(value,row,index){
+        return '<a href="javascript:void(0)" onclick="doGetPic(\`'+row.thumbnails+'\`)">展示</a>';
+    };
+
+    doGetPic = function(thumbnails){
+        var pic = new Array();
+        if(thumbnails.indexOf(",") >= 0 ) {
+            pic = thumbnails.split(",");
+        }else{
+            pic[0] = thumbnails;
+        }
+       $.preLoadImages(pic);
+        $('#showPic').dialog('open');
+    }
 </script>
-<div id="dlg" class="easyui-dialog" title="导航排序" data-options="closed:true" style="width:720px;height:550px;padding:10px;">
-    <table id="ggg" class="easyui-datagrid" title="导航列表" style="width:690px;height:490px"
-           data-options="singleSelect:true,collapsible:true,url:'/channel/list'">
+<div id="dlg" class="easyui-dialog" title="Top 30" data-options="closed:true" style="width:1200px;height:620px;padding:10px;">
+    <table id="ggg" class="easyui-datagrid" title="列表展示" style="width:1176px;height:556px"
+           data-options="singleSelect:true,collapsible:true,rownumbers:true,url:'/info/rank/list'">
         <thead>
         <tr>
-            <th data-options="field:'name',width:80">名称</th>
-            <th data-options="field:'statusName',width:100">状态</th>
-            <th data-options="field:'typeName',width:100">类型</th>
-            <th data-options="field:'updateDate',width:200">操作时间</th>
-            <th data-options="field:'ss',formatter:formatss,width:200,align:'center'">排序</th>
+            <th data-options="field:'infoType',width:40,formatter:function (value,row,index) {
+                            var str = '';
+                            if(value == 'video'){
+                                str = '视频';
+                            }else{
+                                str = '文章';
+                            }
+                            return str;
+                        }">类型</th>
+            <th data-options="field:'channelName',width:60">导航</th>
+            <th data-options="field:'firstTabName',width:60">一级标签</th>
+            <th data-options="field:'secondTabName',width:60">二级标签</th>
+            <th data-options="field:'title',width:260">标题</th>
+            <th data-options="field:'label',width:120">关键词</th>
+            <th data-options="field:'thumbnails',width:50,formatter:getPic">缩略图</th>
+            <th data-options="field:'source',width:70">来源</th>
+            <th data-options="field:'updateTime',width:75">更新时间</th>
+            <th data-options="field:'readNum',align:'right',width:70">阅读量</th>
+            <th data-options="field:'shareNum',align:'right',width:70">转发量</th>
+            <th data-options="field:'collectNum',align:'right',width:70">收藏数</th>
+            <th data-options="field:'commentNum',align:'right',width:70">评论数</th>
+            <th data-options="field:'aa',align:'center',formatter:doInfo">查看</th>
         </tr>
         </thead>
     </table>
 </div>
 
-<div id="edit" class="easyui-dialog" title="导航编辑" data-options="closed:true" style="width:422px;height:260px;padding:10px;">
-    <div style="padding:10px 60px 20px 60px">
-        <form id="ff" method="post">
-            <table cellpadding="5">
-                <tr>
-                    <td>导航名称:</td>
-                    <td><input type="text" id="editChannelName" name="editChannelName"  style="height:35px;"><br /><input style="display: none" name="editId" id="editId" /></td>
-                </tr>
-            </table>
-        </form>
-        <div style="text-align:center;padding:5px">
-            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">确认</a>
-        </div>
-    </div>
+<div id="readInfo" class="easyui-dialog" title="详情" data-options="closed:true,resizable:true" style="width:900px;height:500px;padding:10px">
+    <div id="readArticle" style="width: 100%; height: 100%"></div>
+    <video id="readVideo" controls="controls" src="" width="100%" height="100%" ></video>
+</div>
+
+<div id="showPic" class="easyui-dialog" title="缩略图" data-options="closed:true,resizable:true" style="width:900px;padding:10px">
+    <style type="text/css">
+        #showPic ul li{float: left; width: 275px; padding: 8px; overflow: hidden;list-style-type: none;}
+        #showPic ul li img{max-width: 275px;vertical-align: top; }
+    </style>
+    <ul></ul>
 </div>
 </body>
 </html>

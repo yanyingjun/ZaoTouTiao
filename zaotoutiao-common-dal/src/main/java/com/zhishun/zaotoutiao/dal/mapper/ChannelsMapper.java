@@ -118,7 +118,7 @@ public interface ChannelsMapper {
     /**
      * 根据类别获取导航列表
      */
-    List<Channels> channelListByInfoType(String appType);
+    List<Channels> channelListByInfoType(Integer appType);
 
     List<Channels> getChildTabList(Long parentId);
 }

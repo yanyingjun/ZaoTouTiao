@@ -58,4 +58,16 @@ public class InfosServiceImpl implements IInfosService{
 
         return infosMapper.insertSelective(infos);
     }
+
+    @Override
+    public String getConOrUrlById(Long id, String infoType) {
+        if("news".equals(infoType)){
+            return infosMapper.getNewsContent(id);
+        }else if("video".equals(infoType)){
+            return infosMapper.getVideoUrl(id);
+        }
+        return null;
+    }
+
+
 }

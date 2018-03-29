@@ -297,7 +297,7 @@
     </where>
   </select>
 
-  <select id="channelListByInfoType" parameterType="String" resultMap="BaseResultMap">
+  <select id="channelListByInfoType" parameterType="Integer" resultMap="BaseResultMap">
     SELECT <include refid="Base_Column_List" />
     FROM channels
     WHERE appType = #{appType}

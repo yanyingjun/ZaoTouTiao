@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhishun.zaotoutiao.dal.mapper.InfosMapper">
-  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.Infos">
+  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.vo.InfosVO">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="info_id" jdbcType="VARCHAR" property="infoId" />
     <result column="info_type" jdbcType="VARCHAR" property="infoType" />
@@ -326,4 +326,30 @@
     FROM infos
     WHERE info_id = #{infoId}
   </select>
+
+  <select id="listOfTot30" parameterType="ArrayList" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM infos
+    <where>
+      <if test="infoIdList != null and infoIdList.size > 0 ">
+        info_id in
+        <foreach item="item" index="index" open="(" separator="," close=")" collection="infoIdList">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+  <select id="getNewsContent" parameterType="Long" resultType="String">
+    SELECT content
+    FROM infos
+    where id = #{id}
+  </select>
+
+  <select id="getVideoUrl" resultType="String" parameterType="Long">
+    SELECT videos
+    FROM infos
+    where id = #{id}
+  </select>
+
 </mapper>

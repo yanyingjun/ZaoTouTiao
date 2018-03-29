@@ -133,17 +133,29 @@
     WHERE info_id = #{infoId}
   </select>
 
-  <select id="getCommentsList" resultMap="BaseResultMap">
-    SELECT user_comments.*,infos.title,infos.infoId,user.nickName,user.userId
+  <select id="getCommentsNumByInfoIdAndTime" parameterType="map" resultType="int">
+    SELECT count(0)
     FROM user_comments
-    LEFT JOIN infos ON infos.infoId = user_comments.info_id
+    WHERE info_id = #{infoId}
+    <if test="date != null">
+      AND date( #{date} ) = date(create_date)
+    </if>
+    <if test="date == null and dateNum != null">
+      AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(create_date)
+    </if>
+  </select>
+
+  <select id="getCommentsList" resultMap="BaseResultMap">
+    SELECT user_comments.*,infos.title,infos.info_id,user.nickName,user.userId
+    FROM user_comments
+    LEFT JOIN infos ON infos.info_id = user_comments.info_id
     LEFT JOIN user ON user.userId = user_comments.user_id
   </select>
 
   <select id="getCommentsByKeywordList" parameterType="java.lang.String" resultMap="BaseResultMap">
-    SELECT user_comments.*,infos.title,infos.infoId,user.nickName,user.userId
+    SELECT user_comments.*,infos.title,infos.info_id,user.nickName,user.userId
     FROM user_comments
-    LEFT JOIN infos ON infos.infoId = user_comments.info_id
+    LEFT JOIN infos ON infos.info_id = user_comments.info_id
     LEFT JOIN user ON user.userId = user_comments.info_id
     WHERE user.nickName like #{keyword} or infos.title like #{keyword} or user_comments.content like #{keyword}
   </select>

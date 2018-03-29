@@ -206,4 +206,16 @@
     ORDER BY create_date desc
     limit #{startNo},#{endNo}
   </select>
+
+  <select id="getNumByInfoId" parameterType="String" resultType="Long">
+    SELECT count(info_id)
+    FROM user_collect
+    WHERE info_id = #{infoId}
+    <if test="date != null">
+      AND date( #{date} ) = date(create_date)
+    </if>
+    <if test="date == null and dateNum != null">
+      AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(create_date)
+    </if>
+  </select>
 </mapper>
