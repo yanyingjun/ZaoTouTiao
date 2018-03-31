@@ -46,4 +46,12 @@ public interface UserCollectMapper {
      * @param userId
      */
     void delUserCollectByUserId(Long userId);
+
+    /**
+     * 根据获得收藏数
+     * @param map infoId
+     * @return
+     */
+    Long getNumByInfoId(Map<String,Object> map);
 }
+

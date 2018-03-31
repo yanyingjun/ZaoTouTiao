@@ -72,7 +72,7 @@ public class UserReadServiceImpl implements IUserReadService {
 
     @Override
     public boolean isUserRead(String id, Long userId, String type) {
-        if ("article".equals(type) || "video".equals(type)){
+        if ("news".equals(type) || "video".equals(type)){
             Map<String,Object> map = Maps.newHashMap();
             map.put("infoId",id);
             map.put("userId",userId);
@@ -515,14 +515,14 @@ public class UserReadServiceImpl implements IUserReadService {
                 infoRankVO.setThumbnails(infosVO.getThumbnails());
                 infoRankVO.setSource(infosVO.getSource());
 
-                infoRankVO.setUpdateTime(DateUtil.toString(infosVO.getUpdateTime(),DateUtil.DEFAULT_DATETIME_FORMAT));
+                infoRankVO.setUpdateTime(infosVO.getUpdateTime());
                 infoRankVO.setChannelName(channelName);
                 //获取标签
                 if (infosVO.getFirstLevel() != null) {
-                    infoRankVO.setFirstTabName(channelsMapper.selectByPrimaryKey(infosVO.getFirstLevel().longValue()).getName());
+                    infoRankVO.setFirstTabName(infosVO.getFirstLevel());
                 }
                 if (infosVO.getTwoLevel() != null) {
-                    infoRankVO.setSecondTabName(channelsMapper.selectByPrimaryKey(infosVO.getTwoLevel().longValue()).getName());
+                    infoRankVO.setSecondTabName(infosVO.getTwoLevel());
                 }
                 map.put("infoId",infosVO.getInfoId());
                 //获取阅读数

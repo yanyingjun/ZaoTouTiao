@@ -209,7 +209,7 @@ public class NewsController extends BaseController{
      * @return
      */
     @RequestMapping(value = NewsMsgReq.HOT_COMMENT_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> getHotComment(final String infoId, final int userId, final PageRequest pageRequest){
+    public Map<Object,Object> getHotComment(final String infoId, final Long userId, final PageRequest pageRequest){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
         this.excute(dataMap, null, new ControllerCallback() {
