@@ -327,7 +327,7 @@
     WHERE info_id = #{infoId}
   </select>
 
-  <select id="listOfTot30" parameterType="ArrayList" resultMap="BaseResultMap">
+  <select id="listOfTot30" parameterType="java.util.List" resultMap="BaseResultMap">
     SELECT <include refid="Base_Column_List" />
     FROM infos
     <where>

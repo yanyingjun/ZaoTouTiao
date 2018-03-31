@@ -14,6 +14,11 @@ package com.zhishun.zaotoutiao.web.home.constant.request;
 public class RankMsgReq {
 
     /**
+     * 导航标签类别列表
+     */
+    public static final String GET_APP_TYPE_LIST_ERQ = "/app/type/list";
+
+    /**
      * 导航排行榜
      */
     public static final String NAV_RANK_REQ = "/nav/rank";
@@ -42,6 +47,16 @@ public class RankMsgReq {
      * 获得导航排行列表数据
      */
     public static final String NAV_TANK_LIST_REQ = "/nav/rank/list";
+
+    /**
+     * 获得一级标签排行列表数据
+     */
+    public static final String FIRST_TAB_TANK_LIST_REQ = "/first/tab/rank/list";
+
+    /**
+     * 获得二级标签排行列表数据
+     */
+    public static final String SECOND_TAB_TANK_LIST_REQ = "/second/tab/rank/list";
 
     /**
      * 获得导航info排行前30

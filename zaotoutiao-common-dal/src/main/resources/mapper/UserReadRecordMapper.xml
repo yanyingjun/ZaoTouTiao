@@ -320,6 +320,18 @@
     </if>
   </select>
 
+  <select id="getSecondTabNum" parameterType="Long" resultType="Long">
+    SELECT count(channelId) as readNum
+    FROM user_read_record
+    WHERE channelId in(select channelId from channels where id = #{id})
+    <if test="date != null">
+      AND date( #{date} ) = date(create_date)
+    </if>
+    <if test="date == null and dateNum != null">
+      AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(create_date)
+    </if>
+  </select>
+
   <select id="getInfoId2RankTop30" parameterType="map" resultType="java.lang.String">
     SELECT infoId
     FROM user_read_record
@@ -353,7 +365,7 @@
   <select id="getInfoId2RankTop30BySecond" parameterType="map" resultType="java.lang.String">
     SELECT infoId
     from user_read_record
-    where channelId =(SELECT channelId from channels where id = #{navId})
+    where channelId in(SELECT channelId from channels where id = #{navId})
     <if test="date != null">
       AND date( #{date} ) = date(create_date)
     </if>

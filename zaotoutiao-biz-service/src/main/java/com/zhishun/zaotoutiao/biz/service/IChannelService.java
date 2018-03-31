@@ -4,6 +4,7 @@ import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.entity.UserChannels;
+import com.zhishun.zaotoutiao.core.model.vo.AppTypeVO;
 import com.zhishun.zaotoutiao.core.model.vo.ChannelsVO;
 
 import java.util.List;
@@ -117,5 +118,18 @@ public interface IChannelService {
     int updateUserChannelByUserId(Long userId, String channels);
 
 
+    /**
+     * 获得一级标签列表
+     * @param name
+     * @param parentId
+     * @param appType
+     * @return
+     */
     List<ChannelsVO> getTabs(String name, Long parentId, Integer appType);
+
+    /**
+     * 获取导航标签类别列表
+     * @return
+     */
+    List<AppTypeVO> getAppTypeList();
 }

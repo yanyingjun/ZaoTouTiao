@@ -11,6 +11,7 @@ import com.zhishun.zaotoutiao.common.util.BeanMapUtil;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.entity.UserChannels;
+import com.zhishun.zaotoutiao.core.model.vo.AppTypeVO;
 import com.zhishun.zaotoutiao.core.model.vo.ChannelsVO;
 import com.zhishun.zaotoutiao.dal.mapper.ChannelsMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserChannelsMapper;
@@ -205,6 +206,39 @@ public class ChannelServiceImpl implements IChannelService{
             channelsVOList.add(channelsVO);
         }
         return channelsVOList;
+    }
+
+    /**
+     * 返回类别对象列表
+     * @return
+     */
+    @Override
+    public List<AppTypeVO> getAppTypeList() {
+        List<Integer> list = channelsMapper.getAppTypeList();
+        List<AppTypeVO> appTypeVoList = Lists.newArrayList();
+        for(Integer num : list){
+            toGetList(appTypeVoList,num);
+        }
+        return appTypeVoList;
+    }
+
+    /**
+     * 存储appType对象
+     * @param list
+     * @param num
+     * @return
+     */
+    private void toGetList(List<AppTypeVO> list ,Integer num){
+        AppTypeVO appTypeVo = new AppTypeVO();
+        if(num == 0){
+            appTypeVo.setAppType(0);
+            appTypeVo.setName("视频");
+        }
+        if(num == 1){
+            appTypeVo.setAppType(1);
+            appTypeVo.setName("新闻");
+        }
+        list.add(appTypeVo);
     }
 
 

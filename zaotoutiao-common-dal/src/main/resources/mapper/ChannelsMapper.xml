@@ -310,4 +310,39 @@
     where parentId = #{parentId}
   </select>
 
+  <select id="getFirstTabListByParentIdAndInfoType" parameterType="map" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM channels
+    WHERE appType = #{appType}
+    <choose>
+      <when test="parentId != null">
+        AND parentId = #{parentId}
+      </when>
+      <otherwise>
+        AND parentId in(select id from channels where parentId = 0)
+      </otherwise>
+    </choose>
+  </select>
+
+  <select id="getSecondTabListByParentIdAndInfoType" parameterType="map" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM channels
+    WHERE appType = #{appType}
+    <choose>
+      <when test="parentId != null">
+        AND parentId = #{parentId}
+      </when>
+      <otherwise>
+        AND parentId in(select id from channels where parentId in(select id from channels where parentId = 0))
+      </otherwise>
+    </choose>
+  </select>
+
+  <select id="getAppTypeList" resultType="java.lang.Integer">
+    SELECT appType
+    FROM channels
+    GROUP by appType
+  </select>
+
+
 </mapper>

@@ -125,6 +125,13 @@ public interface UserReadRecordMapper {
     Long getFirstTabNum(Map<String,Object> map);
 
     /**
+     * 获取某个二级标签下的所有阅读
+     * @param map
+     * @return
+     */
+    Long getSecondTabNum(Map<String,Object> map);
+
+    /**
      * 获得导航阅读前30infoId
      * @param map 导航Id navId
      * @return
@@ -143,6 +150,7 @@ public interface UserReadRecordMapper {
      * @param map 二级标签Id navId
      * @return
      */
+
     List<String> getInfoId2RankTop30BySecond(Map<String,Object> map);
     /**
      * 获取单个新闻的阅读数

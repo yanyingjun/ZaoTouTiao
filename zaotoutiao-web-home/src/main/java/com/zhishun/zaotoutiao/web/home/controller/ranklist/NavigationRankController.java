@@ -6,10 +6,10 @@
 
 package com.zhishun.zaotoutiao.web.home.controller.ranklist;
 
+import com.zhishun.zaotoutiao.biz.service.IChannelService;
 import com.zhishun.zaotoutiao.biz.service.IInfosService;
 import com.zhishun.zaotoutiao.biz.service.IUserReadService;
-import com.zhishun.zaotoutiao.core.model.thirdVo.App;
-import com.zhishun.zaotoutiao.core.model.thirdVo.InformationVO;
+import com.zhishun.zaotoutiao.core.model.vo.AppTypeVO;
 import com.zhishun.zaotoutiao.core.model.vo.InfoRankVO;
 import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
 import com.zhishun.zaotoutiao.web.home.constant.request.RankMsgReq;
@@ -17,12 +17,10 @@ import com.zhishun.zaotoutiao.web.home.constant.view.RankMsgView;
 import com.zhishun.zaotoutiao.web.home.controller.base.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +36,19 @@ public class NavigationRankController extends BaseController{
 
     @Autowired
     private IInfosService infosService;
+
+    @Autowired
+    private IChannelService channelService;
+
+    /**
+     * 导航类别列表
+     * @return
+     */
+    @RequestMapping(value = RankMsgReq.GET_APP_TYPE_LIST_ERQ)
+    @ResponseBody
+    public List<AppTypeVO> getAppTypeList(){
+        return channelService.getAppTypeList();
+    }
 
     /**
      * 进入导航排行 页面
@@ -84,13 +95,45 @@ public class NavigationRankController extends BaseController{
         return RankMsgView.ARTICLE_TANK_VIEW;
     }
 
+    /**
+     * 导航排行列表
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @return
+     */
     @RequestMapping(value = RankMsgReq.NAV_TANK_LIST_REQ)
     @ResponseBody
     public List<NavigationVO> navList(Integer dateNum, String date, @RequestParam(value = "appType",defaultValue = "1") Integer appType){
-        //if(null == dateNum || StringUtils.isEmpty(date)){
-        //    date = new Date().toString();
-        //}
         return userReadService.getNavList(dateNum, date, appType);
+    }
+
+    /**
+     * 一级标签排行列表
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @param parentId
+     * @return
+     */
+    @RequestMapping(value = RankMsgReq.FIRST_TAB_TANK_LIST_REQ)
+    @ResponseBody
+    public List<NavigationVO> firstTabList(Integer dateNum, String date, @RequestParam(value = "appType",defaultValue = "1") Integer appType,Long parentId){
+        return userReadService.getFirstTabList(dateNum, date, appType,parentId);
+    }
+
+    /**
+     * 二级标签排行列表
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @param parentId
+     * @return
+     */
+    @RequestMapping(value = RankMsgReq.SECOND_TAB_TANK_LIST_REQ)
+    @ResponseBody
+    public List<NavigationVO> secondTabList(Integer dateNum, String date, @RequestParam(value = "appType",defaultValue = "1") Integer appType, Long parentId){
+        return userReadService.getSecondTabList(dateNum, date, appType,parentId);
     }
 
     /**

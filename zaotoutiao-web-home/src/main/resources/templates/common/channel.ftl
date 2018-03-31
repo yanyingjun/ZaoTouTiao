@@ -223,8 +223,8 @@
     function toSearch(){
         $('#dg').datagrid('load',{
             name: $('#search').val(),
-            status: $('#status').val(),
-            appType: $('#appType').val()
+            status: $('#status').combobox('getValue'),
+            appType: $('#appType').combobox('getValue')
         })
     }
 

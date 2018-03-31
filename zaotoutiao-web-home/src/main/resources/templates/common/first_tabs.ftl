@@ -35,22 +35,25 @@
     <div id="tb" style="padding:0 30px;">
         <label for="search">关键字: </label>
         <input id="search" class="easyui-textbox" type="text" name="code" style="width:166px;height:35px;line-height:35px;"/>
+        <label for="appType">类别：</label>
+        <input id="appType" class="easyui-combobox"
+               name="appType"
+               data-options="
+                    url:'/app/type/list',
+					method:'get',
+					valueField:'appType',
+					textField:'name',
+					panelHeight:'auto'
+			">
         <label for="parentId">导航：</label>
         <input id="parentId" class="easyui-combobox"
                name="parentId"
                data-options="
-					url:'/channel/list',
 					method:'get',
 					valueField:'id',
 					textField:'name',
 					panelHeight:'auto'
 			">
-        <label for="appType">类别：</label>
-        <select id="appType" name="appType" style="height:35px; width: 100px; text-align: center">
-            <option value="">全部</option>
-            <option value="1">新闻</option>
-            <option value="0">视频</option>
-        </select>
         <a href="#" onclick="toSearch()" id="bt_search_btn" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true">查询</a>
         <a href="javascript:void(0);" onclick="parent.Open('新增一级标签', '/add/first/tab')" class="easyui-linkbutton">新增</a>
     </div>
@@ -196,7 +199,7 @@
         $('#dg').datagrid('load',{
             name: $('#search').val(),
             parentId: $('#parentId').combobox('getValue'),
-            appType: $('#appType').val()
+            appType: $('#appType').combobox('getValue')
         })
     }
 
@@ -233,6 +236,18 @@
         //window.location.reload();
     }
 
+    //类别联动
+    $('#appType').combobox({
+        onSelect: function (row) {
+            if (row != null) {
+                $('#parentId').combobox({
+                    url: "/channel/list?appType=" + row.appType
+                });
+            }
+        }
+    });
+
+
 </script>
 
 <div id="edit" class="easyui-dialog" title="导航编辑" data-options="closed:true" style="width:422px;height:270px;padding:10px;">
@@ -247,9 +262,23 @@
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
+                        <td>类别</td>
+                        <td><input id="appType1" class="easyui-combobox"
+                                   name="appType1"
+                                   data-options="
+                    url:'/app/type/list',
+					method:'get',
+					valueField:'appType',
+					textField:'name',
+					panelHeight:'auto'
+			"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
                         <td>导航</td>
                         <td><input id="parentIdd" class="easyui-combobox" name="parentIdd" data-options="
-					url:'/channel/list',
 					method:'get',
 					valueField:'id',
 					textField:'name',
@@ -260,6 +289,17 @@
             <div style="text-align:center;padding:5px">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">确认</a>
             </div>
+            <script type="text/javascript">
+                $('#appType1').combobox({
+                    onSelect: function (row) {
+                        if (row != null) {
+                            $('#parentIdd').combobox({
+                                url: "/channel/list?appType=" + row.appType
+                            });
+                        }
+                    }
+                });
+            </script>
         </div>
 </div>
 </body>

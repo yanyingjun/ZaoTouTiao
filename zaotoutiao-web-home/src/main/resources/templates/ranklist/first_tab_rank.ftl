@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>导航排行</title>
+    <title>一级标签排行</title>
     <link href="/static/css/base.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/uimaker/easyui.css">
     <link rel="stylesheet" href="/static/uimaker/icon.css">
 </head>
 <body>
 <div class="container">
-    <table id="dg" class="easyui-datagrid" style="width:100%;height:554px" url="/nav/rank/list" title="新闻/视频导航管理" data-options="
+    <table id="dg" class="easyui-datagrid" style="width:100%;height:554px" title="新闻/视频一级标签管理——页面默认加载为总数据排行" data-options="
                 rownumbers:true,
                 singleSelect:false,
                 autoRowHeight:false,
@@ -24,7 +24,7 @@
                 pageSize:10">
         <thead>
         <tr>
-            <th field="name" width="200">导航</th>
+            <th field="name" width="200">一级标签</th>
             <th field="readNum" width="260">阅读量</th>
             <th field="channelsTop3" width="260">二级标签（前三）</th>
             <th field="appType" width="200" data-options="formatter:function (value,row,index) {
@@ -50,10 +50,24 @@
             <label for="status">日期：</label>
             <input id="getDate" type="date" style="">
             <label for="appType">类别：</label>
-            <select id="appType" name="appType" style="height:35px; width: 100px; text-align: center">
-                <option value="1">新闻</option>
-                <option value="0">视频</option>
-            </select>
+            <input id="appType" class="easyui-combobox"
+                   name="appType"
+                   data-options="
+                    url:'/app/type/list',
+					method:'get',
+					valueField:'appType',
+					textField:'name',
+					panelHeight:'auto'
+			">
+            <label for="parentId">导航：</label>
+            <input id="parentId" class="easyui-combobox"
+                   name="parentId"
+                   data-options="
+					method:'get',
+					valueField:'id',
+					textField:'name',
+					panelHeight:'auto'
+			">
             <input id="dateNumGet" value="1" style="display: none" />
             <a href="#" onclick="toSearch()" id="bt_search_btn" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true">查询</a>
         </div>
@@ -119,7 +133,7 @@
                     opts.onBeforeLoad = function(param){
                         state.allRows = null;
                         return onBeforeLoad.call(this, param);
-                    }
+                    };
                     var pager = dg.datagrid('getPager');
                     pager.pagination({
                         onSelectPage:function(pageNum, pageSize){
@@ -179,7 +193,7 @@
 
     //数据分页
     $(function () {
-        $('#dg').datagrid({url:"/nav/rank/list"}).datagrid('clientPaging');
+        $('#dg').datagrid({url:"/first/tab/rank/list"}).datagrid('clientPaging');
 
     });
 
@@ -204,7 +218,7 @@
     };
 
     //查询
-    function toSearch(){
+    toSearch = function (){
         var dateNum;
         var date;
         dateNum = $("#dateNumGet").val();
@@ -230,15 +244,16 @@
         $('#dg').datagrid('load',{
             date: date,
             dateNum: dateNum,
-            appType: $('#appType').val()
+            appType: $('#appType').combobox('getValue'),
+            parentId: $('#parentId').combobox('getValue')
         })
-    }
+    };
 
 
-    function doQuery(value,row,index){
+    doQuery = function(value,row,index){
         return  '<a href="#" onclick="doRead('+row.id+',\''+row.readNum+'\')">查看</a>';
 
-    }
+    };
 
     //查看列表
     doRead = function (id,readNum){
@@ -263,15 +278,11 @@
                     date = date.Format("yyyy-MM-dd");
                 }
             }
-//            if(dateNum == "" && date == ""){
-//                date = new Date();
-//                date = date.Format("yyyy-MM-dd");
-//            }
             $('#ggg').datagrid('load',{
                 date: date,
                 dateNum: dateNum,
                 navId: id,
-                theClass: 0
+                theClass: 1
             });
             $('#dlg').dialog('open');
         }
@@ -319,7 +330,25 @@
         }
         $.preLoadImages(pic);
         $('#showPic').dialog('open');
-    }
+    };
+
+//    $(document).on("change",'select#appType',function(){
+//             var str = ''+ $('#appType').val();
+//             console.log(str);
+//            $('#parentId').combobox("/channel/list?appType=" + str});
+//    })
+    //类别联动
+    $('#appType').combobox({
+        onSelect: function (row) {
+            if (row != null) {
+                $('#parentId').combobox({
+                    url: "/channel/list?appType=" + row.appType
+                });
+            }
+        }
+    });
+
+
 </script>
 <div id="dlg" class="easyui-dialog" title="Top 30" data-options="closed:true" style="width:1200px;height:620px;padding:10px;">
     <table id="ggg" class="easyui-datagrid" title="列表展示" style="width:1176px;height:556px"

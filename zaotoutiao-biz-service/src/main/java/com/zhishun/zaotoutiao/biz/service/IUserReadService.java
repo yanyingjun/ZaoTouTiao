@@ -80,6 +80,17 @@ public interface IUserReadService {
      * @return
      */
     List<NavigationVO> getFirstTabList(Integer dateNum, String date, Integer appType, Long parentId);
+
+    /**
+     * 获得二级标签排行数据
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @param parentId
+     * @return
+     */
+    List<NavigationVO> getSecondTabList(Integer dateNum, String date, Integer appType, Long parentId);
+
     /**
      * 获得info排行前30
      * @param navId

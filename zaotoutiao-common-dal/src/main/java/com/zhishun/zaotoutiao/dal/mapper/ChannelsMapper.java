@@ -120,5 +120,30 @@ public interface ChannelsMapper {
      */
     List<Channels> channelListByInfoType(Integer appType);
 
+    /**
+     * 根据父id获得子标签列表
+     * @param parentId
+     * @return
+     */
     List<Channels> getChildTabList(Long parentId);
+
+    /**
+     * 根据父id及类别获得一级标签列表
+     * @param map
+     * @return
+     */
+    List<Channels> getFirstTabListByParentIdAndInfoType(Map<String,Object> map);
+
+    /**
+     * 根据父id及类别获得二级标签列表
+     * @param map
+     * @return
+     */
+    List<Channels> getSecondTabListByParentIdAndInfoType(Map<String,Object> map);
+
+    /**
+     * 获得导航类别列表
+     * @return
+     */
+    List<Integer> getAppTypeList();
 }

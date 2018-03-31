@@ -20,8 +20,19 @@
                     <td><input type="number" id="channelId" name="channelId" style="height:35px;"><br />数字格式</td>
                     <td>渠道类型:</td>
                     <td><input type="number" id="channelType" name="channelType" style="height:35px;"><br />数字格式</td>
+                    <td>类型:</td>
+                    <td><input id="appType" class="easyui-combobox"
+                               name="appType"
+                               data-options="
+                    url:'/app/type/list',
+					method:'get',
+					valueField:'appType',
+					textField:'name',
+					panelHeight:'auto'
+			"></td>
+
+                    <td>导航:</td>
                     <td><input id="parentId" class="easyui-combobox" name="parentId" data-options="
-					url:'/channel/list',
 					method:'get',
 					valueField:'id',
 					textField:'name',
@@ -71,6 +82,15 @@
             });
         }
     }
+    $('#appType').combobox({
+        onSelect: function (row) {
+            if (row != null) {
+                $('#parentId').combobox({
+                    url: "/channel/list?appType=" + row.appType
+                });
+            }
+        }
+    });
 
 </script>
 
