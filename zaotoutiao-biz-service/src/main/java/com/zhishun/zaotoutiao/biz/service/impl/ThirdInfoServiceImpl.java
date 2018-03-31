@@ -155,13 +155,13 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
     }
 
     @Override
-    public Boolean pressClick (String accessToken, String device, String url, String channel, String a, String c, String source, String t, String sid, String s, String style, String userId) throws Exception {
+    public String pressClick (String accessToken, String device, String channel, String a, String c, String source, String t, String sid, String s, String style, String userId) throws Exception {
 
         Map<String,Object> dataMap = Maps.newHashMap();
         //用户id
         dataMap.put("u", Md5Util.md5Encode(ThirdConstantInfo.APPKEY + ":" + userId));
         //点击URL
-        dataMap.put("url", URLEncoder.encode(url, "utf-8"));
+        //dataMap.put("url", URLEncoder.encode(url, "utf-8"));
         //应用平台分配的appkey
         dataMap.put("sign", ThirdConstantInfo.APPKEY);
         //客户端应用版本
@@ -175,7 +175,7 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
         //新闻类别
         dataMap.put("c", c);
         //回传字段
-        dataMap.put("source", source);
+        dataMap.put("source", URLEncoder.encode(source, "utf-8"));
         //新闻点击时间
         dataMap.put("t", t);
         //请求标识
@@ -190,13 +190,7 @@ public class ThirdInfoServiceImpl implements IThirdInfoService{
         //展现样式style字段
         dataMap.put("style", style);
 
-        Boolean flag = ApiUtil.doGet(RequestUrlApi.PRESS_CLICK_URL, dataMap);
-        if(!StringUtils.isEmpty(flag) && flag){
-            LoggerUtils.info(LOGGER, "获取新闻点击打点成功");
-        }else{
-            LoggerUtils.error(LOGGER, "获取新闻打点失败");
-        }
-        return flag;
+        return ApiUtil.doGetParam(RequestUrlApi.PRESS_CLICK_URL, dataMap);
     }
 
     @Override

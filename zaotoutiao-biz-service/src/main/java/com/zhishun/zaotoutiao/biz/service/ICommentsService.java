@@ -9,6 +9,7 @@ import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.UserComments;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
+import com.zhishun.zaotoutiao.core.model.vo.UserReadRecordVO;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface ICommentsService {
      * @param pageRequest
      * @return
      */
-    Page<InfosVO> getMyCommentsList(Long userId, PageRequest pageRequest);
+    List<UserReadRecordVO> getMyCommentsList(Long userId, PageRequest pageRequest);
 
     /**
      * 删除我的评论
@@ -63,12 +64,12 @@ public interface ICommentsService {
     /**
      * 获取最新评论和评论点赞信息
      */
-    List<UserCommentsVO> getNewCommentVO(String infoId, int userId, int pageNo, int pageSize);
+    List<UserCommentsVO> getNewCommentVO(String infoId, Long userId, PageRequest pageRequest);
 
     /**
      * 获取热门评论和评论点赞信息
      */
-    List<UserCommentsVO> getHotCommentVO(String infoId, int userId, int pageNo, int pageSize);
+    List<UserCommentsVO> getHotCommentVO(String infoId, Long userId, PageRequest pageRequest);
 
     /**
      * 查看该评论自己是否点赞
@@ -76,7 +77,7 @@ public interface ICommentsService {
      * @param commentsId
      * @return
      */
-    Boolean isMyLike (int userId, Long commentsId);
+    Boolean isMyLike (Long userId, Long commentsId);
 
     /**
      * 获得新闻的评论数

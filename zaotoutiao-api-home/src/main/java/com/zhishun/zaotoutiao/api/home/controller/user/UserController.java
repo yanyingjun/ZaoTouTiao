@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -999,8 +1000,9 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.OPEN_TREASURE)
-    public Map<Object,Object> openTreasure(final Long userId, final Long isSubmit){
+    public Map<Object,Object> openTreasure(final Long userId, final Long isSubmit, HttpServletResponse response){
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
@@ -1012,11 +1014,14 @@ public class UserController extends BaseController{
             public void handle() throws Exception {
                 //判断是否超过今天开宝箱可以获得的最大金币数
                 //获取用户当天开宝箱获得的金币总和
-                int goldToday = goldRecordService.getOpenGoldToday(userId, 4);
+                String goldToday = goldRecordService.getOpenGoldToday(userId, 4);
+                if(StringUtils.isEmpty(goldToday)){
+                    goldToday = "0";
+                }
                 //获取用户当天最大可以获得的金币数
                 StaticGoldConfig staticGoldConfig = userService.getReadGoldConfig("OPEN_TREASURE");
                 int openGoldMax = staticGoldConfig.getHighest();
-                if(goldToday < openGoldMax){
+                if(Integer.parseInt(goldToday) < openGoldMax){
                     //判断时间差
                     Map leadTime = goldRecordService.leadTime(userId);
                     //计算下次开宝箱时间
@@ -1310,8 +1315,9 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.ACTIVITY_REWARD, method = RequestMethod.GET)
-    public Map<Object,Object> activityReward(final Long userId, final String startDate, final String endDate){
+    public Map<Object,Object> activityReward(final Long userId, final String startDate, final String endDate, HttpServletResponse response){
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
@@ -1371,8 +1377,9 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.LIST_APPRENTICE, method = RequestMethod.GET)
-    public Map<Object,Object> getListApprentice(final Long userId, final String type, final PageRequest pageRequest){
+    public Map<Object,Object> getListApprentice(final Long userId, final String type, final PageRequest pageRequest, HttpServletResponse response){
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override

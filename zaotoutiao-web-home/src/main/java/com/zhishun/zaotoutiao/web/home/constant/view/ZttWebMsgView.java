@@ -86,6 +86,16 @@ public class ZttWebMsgView {
     public static final String ZTT_VIDEO_ADD_VIEW = "content/add_video";
 
     /**
+     * 修改新闻
+     */
+    public static final String ZTT_NEWS_UPDATE_VIEW = "content/update_content";
+
+    /**
+     * 修改视频
+     */
+    public static final String ZTT_VIDEO_UPDATE_VIEW = "content/update_video";
+
+    /**
      * 内容列表
      */
     public static final String ZTT_CONTENT_LIST_VIEW = "content/content_list";

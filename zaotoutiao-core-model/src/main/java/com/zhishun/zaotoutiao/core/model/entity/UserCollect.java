@@ -31,6 +31,8 @@ public class UserCollect {
 
     private String infosType;
 
+    private String infoId;
+
     public Long getId() {
         return id;
     }
@@ -171,5 +173,23 @@ public class UserCollect {
      */
     public void setInfosType(String infosType) {
         this.infosType = infosType;
+    }
+
+    /**
+     * Getter method for property <tt>infoId</tt>.
+     *
+     * @return property value of infoId
+     */
+    public String getInfoId() {
+        return infoId;
+    }
+
+    /**
+     * Setter method for property <tt>infoId</tt>.
+     *
+     * @param infoId value to be assigned to property infoId
+     */
+    public void setInfoId(String infoId) {
+        this.infoId = infoId;
     }
 }

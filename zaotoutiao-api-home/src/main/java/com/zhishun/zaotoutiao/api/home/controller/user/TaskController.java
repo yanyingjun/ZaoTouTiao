@@ -10,7 +10,9 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.TaskMsgReq;
+import com.zhishun.zaotoutiao.biz.service.IExchangeRateService;
 import com.zhishun.zaotoutiao.biz.service.ITaskService;
+import com.zhishun.zaotoutiao.core.model.entity.ExchangeRate;
 import com.zhishun.zaotoutiao.core.model.entity.StaticTaskList;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class TaskController extends BaseController {
 
     @Autowired
     private ITaskService iTaskService;
+
+    @Autowired
+    private IExchangeRateService exchangeRateService;
 
     /**
      * 获取任务列表

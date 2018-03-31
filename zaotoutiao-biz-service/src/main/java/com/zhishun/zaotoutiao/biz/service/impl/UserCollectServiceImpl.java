@@ -4,15 +4,19 @@
  */
 package com.zhishun.zaotoutiao.biz.service.impl;
 
+import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IUserCollectService;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.UserCollect;
+import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
+import com.zhishun.zaotoutiao.core.model.vo.UserReadRecordVO;
 import com.zhishun.zaotoutiao.dal.mapper.UserCollectMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserReadRecordMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author 闫迎军(YanYingJun)
@@ -24,35 +28,47 @@ public class UserCollectServiceImpl implements IUserCollectService{
     @Autowired
     private UserCollectMapper userCollectMapper;
 
+    @Autowired
+    private UserReadRecordMapper userReadRecordMapper;
+
     @Override
-    public int delAllCollect(Long userId) {
-        /*return userCollectMapper.delUserCollect(userId);*/
-        return 0;
+    public void delAllCollect(Long userId) {
+        userCollectMapper.delUserCollectByUserId(userId);
     }
 
     @Override
-    public List<UserCollect> listCollect(Long userId, String infosId) {
-        /*Map<String,Object> map = Maps.newHashMap();
+    public UserCollect getCollectByMap(Long userId, String infoId) {
+        Map<String,Object> map = Maps.newHashMap();
         map.put("userId", userId);
-        map.put("infosId", infosId);
-        return userCollectMapper.listCollect(map);*/
-        return null;
+        map.put("infoId", infoId);
+        return userCollectMapper.getCollectByMap(map);
     }
 
     @Override
-    public int delOneCollect(Long userId, String infosId) {
-        /*Map<String,Object> map = Maps.newHashMap();
+    public int delOneCollect(Long userId, String infoId) {
+        Map<String,Object> map = Maps.newHashMap();
         map.put("userId", userId);
-        map.put("infosId", infosId);
-        return userCollectMapper.delOneCollect(map);*/
-        return 0;
+        map.put("infoId", infoId);
+        return userCollectMapper.delOneCollect(map);
     }
 
     @Override
-    public int addUserCollect(Long userId, String infosId) {
+    public int addUserCollect(Long userId, String infoId) {
+        UserReadRecord userReadRecord = userReadRecordMapper.getUserReadRecordByInfoId(infoId);
         UserCollect userCollect = new UserCollect();
         userCollect.setUserId(userId);
-        userCollect.setInfosType(infosId);
+        userCollect.setInfoId(infoId);
+        userCollect.setAuthor(null);
+        userCollect.setChannel(userReadRecord.getChannelId());
+        userCollect.setFilter(userReadRecord.getLabel());
+        userCollect.setInfosType(userReadRecord.getInfoType());
+        userCollect.setPicUrl(userReadRecord.getImgUrl());
+        userCollect.setPublishDate(null);
+        userCollect.setRawUrl(null);
+        userCollect.setSource(userReadRecord.getSource());
+        userCollect.setStyle(null);
+        userCollect.setUrl(userReadRecord.getUrl());
+        userCollect.setTitle(userReadRecord.getTitle());
         userCollect.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
         return userCollectMapper.insertSelective(userCollect);
     }

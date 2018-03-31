@@ -22,6 +22,11 @@ public class UserCommentsVO extends UserComments{
      */
     private String nickName;
 
+    /**
+     * 用户头像
+     */
+    private String headPath;
+
     //自己是否点赞
     private boolean isMyLike;
 
@@ -57,5 +62,23 @@ public class UserCommentsVO extends UserComments{
      */
     public void setMyLike(boolean myLike) {
         isMyLike = myLike;
+    }
+
+    /**
+     * Getter method for property <tt>headPath</tt>.
+     *
+     * @return property value of headPath
+     */
+    public String getHeadPath() {
+        return headPath;
+    }
+
+    /**
+     * Setter method for property <tt>headPath</tt>.
+     *
+     * @param headPath value to be assigned to property headPath
+     */
+    public void setHeadPath(String headPath) {
+        this.headPath = headPath;
     }
 }

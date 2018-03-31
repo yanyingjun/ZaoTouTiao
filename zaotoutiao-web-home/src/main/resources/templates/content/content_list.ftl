@@ -4,11 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>内容列表</title>
-
-    <link href="/static/css/base.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/uimaker/easyui.css">
-    <link rel="stylesheet" href="/static/uimaker/icon.css">
-
+    <#assign ctx="${springMacroRequestContext.contextPath}" />
+    <link href="${ctx}/static/css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="${ctx}/static/uimaker/easyui.css">
+    <link rel="stylesheet" href="${ctx}/static/uimaker/icon.css">
 </head>
 <body>
 <div class="container">
@@ -75,8 +74,8 @@
             <input class="easyui-textbox" type="text" name="commentsNumberMax" style="width:80px;height:35px;line-height:35px;"/>
             <a href="#" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true" id="content_search_btn">查询</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="clearForm()">重置</a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="parent.Open('新增新闻','/content/news')">新增新闻</a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="parent.Open('新增视频','/content/video')">新增视频</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="addNews()">新增新闻</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="addVideo()">新增视频</a>
         </form>
     </div>
     <table id="dg_content" style="width:100%;height:auto" title="内容列表" data-options="
@@ -111,9 +110,29 @@
         </thead>
     </table>
 </div>
-<script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
-<script type="text/javascript" src="/static/js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="/static/js/easyui-lang-zh_CN.js"></script>
+<div id="add_news" class="easyui-dialog" data-options="closed:true,iconCls: 'icon-save',buttons: '#add_news_buttons'" style="padding:10px;"></div>
+<div id="add_news_buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="saveNews()">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#add_news').dialog('close')">取消</a>
+</div>
+<div id="add_video" class="easyui-dialog" data-options="closed:true,iconCls: 'icon-save',buttons: '#add_video_buttons'" style="padding:10px;"></div>
+<div id="add_video_buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="saveVideo()">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#edit_video').dialog('close')">取消</a>
+</div>
+<div id="edit_news" class="easyui-dialog" data-options="closed:true,iconCls: 'icon-save',buttons: '#edit_news_buttons'" style="padding:10px;"></div>
+<div id="edit_news_buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="upSaveNews()">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#edit_news').dialog('close')">取消</a>
+</div>
+<div id="edit_video" class="easyui-dialog" data-options="closed:true,iconCls: 'icon-save',buttons: '#edit_video_buttons'" style="padding:10px;"></div>
+<div id="edit_video_buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="upSaveVideo()">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#edit_video').dialog('close')">取消</a>
+</div>
+<script type="text/javascript" src="${ctx}/static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/easyui-lang-zh_CN.js"></script>
 
 <script type="text/javascript">
 
@@ -226,24 +245,145 @@
     });
 
     function optFormatter(value,row,index){
-        var str = '<a title="编辑" onclick="editContent('+ value +')">编辑</a>&nbsp;&nbsp' +
-            '<a title="删除" onclick="delContent('+ value +',\'确定删除吗?\')">删除</a>&nbsp;&nbsp';
+        var str = '';
+        if(row.infoType == 'news'){
+            str += '<a title="编辑"  onclick="editNews('+ row.id +')">编辑</a>&nbsp;&nbsp';
+        }
+        if(row.infoType == 'video'){
+            str += '<a title="编辑" onclick="editVideo('+ row.id +')">编辑</a>&nbsp;&nbsp';
+        }
+        str += '<a title="删除" onclick="delContent('+ row.id +',\'确定删除吗?\')">删除</a>&nbsp;&nbsp';
         return str;
     }
 
     function imgShow(value, row, index) {
         var str = '';
-        var array = value.split(",");
-        for(var i= 0; i< array.length;i++){
-            str += '<img title="" src="' + array[i] + '" alt="" width="100px" height="100px"/>';
+        if(value != null && value != ''){
+            var array = value.split(",");
+            for(var i= 0; i< array.length;i++){
+                str += '<img title="" src="' + array[i] + '" alt="" width="100px" height="100px"/>';
+            }
         }
         return str;
     }
 
-    function editContent(id,status,type,str){
+    function addNews(id) {
+        $('#add_news').dialog({
+            title:'新闻添加',
+            href: '/content/news?id='+id,
+            width: 1000,
+            height: 600,
+            maximizable:true,
+            resizable: true,
+            modal:true,
+            closed:false
+        })
+    }
+
+    function addVideo(id) {
+        $('#add_video').dialog({
+            title:'视频添加',
+            href: '/content/video?id='+id,
+            width: 1000,
+            height: 600,
+            maximizable:true,
+            resizable: true,
+            modal:true,
+            closed:false
+        })
+    }
+
+    function editNews(id) {
+        $('#edit_news').dialog({
+            title:'新闻编辑',
+            href: '/news/updateView?id='+id,
+            width: 1000,
+            height: 600,
+            maximizable:true,
+            resizable: true,
+            modal:true,
+            closed:false
+        })
+    }
+
+    function editVideo(id) {
+        $('#edit_video').dialog({
+            title:'新闻编辑',
+            href: '/video/updateView?id='+id,
+            width: 1000,
+            height: 600,
+            maximizable:true,
+            resizable: true,
+            modal:true,
+            closed:false
+        })
+    }
+
+    function saveNews(){
+        //if ($('#content_add_form').form('validate')) {
+        var jsondata=$('#content_add_form').serializeObject();
+        $.post('/infos/add', jsondata, function(data) {
+            if (data.state == 'success') {
+                $.messager.alert('提示信息', data.msg);
+                $('#content_add_form').form('clear');
+                $('#add_news').dialog('close');
+                $('#dg_content').datagrid('load', $('#content_form').toJsonNotEmpty());
+            } else {
+                $.messager.alert('提示信息', data.msg);
+            }
+        }, "JSON");
+        //}
+    }
+
+    function saveVideo(){
+        if ($('#video_add_form').form('validate')) {
+            var jsondata=$('#video_add_form').serializeObject();
+            $.post('/infos/add', jsondata, function(data) {
+                if (data.state == 'success') {
+                    $.messager.alert('提示信息', data.msg);
+                    $('#video_add_form').form('clear');
+                    $('#add_video').dialog('close');
+                    $('#dg_content').datagrid('load', $('#content_form').toJsonNotEmpty());
+                } else {
+                    $.messager.alert('提示信息', data.msg);
+                }
+            }, "JSON");
+        }
+    }
+
+    function upSaveNews() {
+        var jsondata = $('#content_update_form').serializeObject();
+        $.post('/infos/update', jsondata, function(data) {
+            if (data.state == 'success') {
+                $.messager.alert('提示信息', data.msg);
+                $('#content_update_form').form('clear');
+                $('#edit_news').dialog('close');
+                $('#dg_content').datagrid('load', $('#content_form').toJsonNotEmpty());
+            } else {
+                $.messager.alert('提示信息', data.msg);
+            }
+        }, "JSON");
+    }
+
+    function upSaveVideo() {
+        var jsondata = $('#video_update_form').serializeObject();
+        $.post('/infos/update', jsondata, function(data) {
+            if (data.state == 'success') {
+                $.messager.alert('提示信息', data.msg);
+                $('#video_update_form').form('clear');
+                $('#edit_video').dialog('close');
+                $('#dg_content').datagrid('load', $('#content_form').toJsonNotEmpty());
+            } else {
+                $.messager.alert('提示信息', data.msg);
+            }
+        }, "JSON");
+    }
+
+    function delContent(id, str){
+
         $.messager.confirm('提示信息', str, function(r){
             if (r){
-                $.post("/updateUser?userId="+id+"&status="+status+"&type="+type, function(data) {
+                $.post("/infos/del?id="+id, function(data) {
                     if (data.result == 'success') {
                         $.messager.alert("提示信息",data.msg);
                         $('#dg_content').datagrid('reload');
@@ -254,11 +394,6 @@
                 }, "JSON");
             }
         });
-
-    }
-
-    function delContent(id){
-
     }
 
     function clearForm(){
@@ -281,6 +416,24 @@
         });
         return json;
     };
+
+    $.fn.extend({
+        serializeObject : function() {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [ o[this.name] ];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        }
+    });
 
 </script>
 </body>

@@ -14,7 +14,7 @@ public class ApprenticeRepVO {
     private int sumGold;
 
 
-    private int apprenticeId;
+    private String headPath;
 
 
     private String nickName;
@@ -38,21 +38,21 @@ public class ApprenticeRepVO {
     }
 
     /**
-     * Getter method for property <tt>apprenticeId</tt>.
+     * Getter method for property <tt>headPath</tt>.
      *
-     * @return property value of apprenticeId
+     * @return property value of headPath
      */
-    public int getApprenticeId() {
-        return apprenticeId;
+    public String getHeadPath() {
+        return headPath;
     }
 
     /**
-     * Setter method for property <tt>apprenticeId</tt>.
+     * Setter method for property <tt>headPath</tt>.
      *
-     * @param apprenticeId value to be assigned to property apprenticeId
+     * @param headPath value to be assigned to property headPath
      */
-    public void setApprenticeId(int apprenticeId) {
-        this.apprenticeId = apprenticeId;
+    public void setHeadPath(String headPath) {
+        this.headPath = headPath;
     }
 
     /**

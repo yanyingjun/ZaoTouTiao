@@ -14,7 +14,6 @@ import com.zhishun.zaotoutiao.biz.service.IChannelService;
 import com.zhishun.zaotoutiao.biz.service.IThirdInfoService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
-import com.zhishun.zaotoutiao.common.util.RandomUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
 import com.zhishun.zaotoutiao.core.model.enums.ChannelEnum;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
@@ -201,14 +200,11 @@ public class ThirdInfoController extends BaseController{
                 }else{
                     JSONObject json = JSONObject.parseObject(responseResult.getData());
                     String accessToken = json.getString("access_token");
-                    Boolean flag = thirdInfoService.pressClick(accessToken, device, url, channel, a, newsType, source, t, sid, s, style, userId);
-                    if(flag){
-                        dataMap.put("result", "success");
-                        dataMap.put("msg", "新闻点击单点请求成功");
-                    }else{
-                        dataMap.put("result", "success");
-                        dataMap.put("msg", "新闻点击单点请求失败");
-                    }
+                    String urlPrefix = thirdInfoService.pressClick(accessToken, device, channel, a, newsType, source, t, sid, s, style, userId);
+                    dataMap.put("state", "success");
+                    dataMap.put("msg", "新闻点击单点请求成功");
+                    dataMap.put("urlPrefix", urlPrefix);
+                    dataMap.put("url", url);
                 }
             }
         });

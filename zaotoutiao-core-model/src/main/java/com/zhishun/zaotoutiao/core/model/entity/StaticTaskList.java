@@ -18,6 +18,11 @@ public class StaticTaskList implements Serializable {
 
     private String url;
 
+    private String reward;
+
+
+    private String rewardNum;
+
     public StaticTaskList() {
         super();
     }
@@ -76,5 +81,41 @@ public class StaticTaskList implements Serializable {
 
     public void setUrl(String url) {
         this.url = url == null ? null : url.trim();
+    }
+
+    /**
+     * Getter method for property <tt>reward</tt>.
+     *
+     * @return property value of reward
+     */
+    public String getReward() {
+        return reward;
+    }
+
+    /**
+     * Setter method for property <tt>reward</tt>.
+     *
+     * @param reward value to be assigned to property reward
+     */
+    public void setReward(String reward) {
+        this.reward = reward;
+    }
+
+    /**
+     * Getter method for property <tt>rewardNum</tt>.
+     *
+     * @return property value of rewardNum
+     */
+    public String getRewardNum() {
+        return rewardNum;
+    }
+
+    /**
+     * Setter method for property <tt>rewardNum</tt>.
+     *
+     * @param rewardNum value to be assigned to property rewardNum
+     */
+    public void setRewardNum(String rewardNum) {
+        this.rewardNum = rewardNum;
     }
 }

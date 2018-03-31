@@ -34,36 +34,38 @@ public class UserCollectController extends BaseController{
     private IUserCollectService userCollectService;
 
     @RequestMapping(value = UserMsgReq.COLLECT_SET)
-    public Map<Object,Object> myChannelsSet(final Long userId , final String infosId){
+    public Map<Object,Object> myChannelsSet(final Long userId, final String infoId){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotBlank(infoId, ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
-                if(StringUtils.isEmpty(infosId)){
+                if(StringUtils.isEmpty(infoId)){
                     //删除全部
                     userCollectService.delAllCollect(userId);
                     dataMap.put("result", "success");
                     dataMap.put("msg", "删除全部收藏成功");
                 }else{
-                    List<UserCollect> list = userCollectService.listCollect(userId, infosId);
-                    if(list.size() > 0){
+                    UserCollect userCollect1 = userCollectService.getCollectByMap(userId, infoId);
+                    if(!StringUtils.isEmpty(userCollect1)){
                         //删除单条
-                        userCollectService.delOneCollect(userId, infosId);
+                        userCollectService.delOneCollect(userId, infoId);
                         dataMap.put("result", "success");
                         dataMap.put("msg", "删除单条收藏成功");
                     }else{
                         //不存在收藏
-                        userCollectService.addUserCollect(userId, infosId);
+                        userCollectService.addUserCollect(userId, infoId);
+                        UserCollect userCollect2 = userCollectService.getCollectByMap(userId, infoId);
                         dataMap.put("result", "success");
                         dataMap.put("msg", "添加收藏成功");
+                        dataMap.put("data", userCollect2);
                     }
-                    dataMap.put("data", list);
                 }
             }
         });

@@ -26,4 +26,24 @@ public interface UserCollectMapper {
      * @return
      */
     List<UserCollect> getCollectList(Map<String, Object> map);
+
+    /**
+     * 根据新闻ID删除
+     * @param map
+     * @return
+     */
+    int delOneCollect(Map map);
+
+    /**
+     * 根据新闻ID查询
+     * @param map
+     * @return
+     */
+    UserCollect getCollectByMap(Map map);
+
+    /**
+     * 删除用户所有收藏
+     * @param userId
+     */
+    void delUserCollectByUserId(Long userId);
 }

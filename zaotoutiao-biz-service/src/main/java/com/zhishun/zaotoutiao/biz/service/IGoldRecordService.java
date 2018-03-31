@@ -24,7 +24,7 @@ public interface IGoldRecordService {
      * @param source
      * @return
      */
-    int getOpenGoldToday(Long userId, int source);
+    String getOpenGoldToday(Long userId, int source);
 
     /**
      * 计算时间差

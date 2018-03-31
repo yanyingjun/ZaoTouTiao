@@ -480,9 +480,10 @@ public class WithdrawalsController extends BaseController{
                     if(StringUtils.isEmpty(user1)){
                         //绑定微信
                         userService.updateWechatUser(telephone, weName, wechatId, wechatHead);
+                        User userData = userService.getUserByMap(telephone);
                         dataMap.put("result", "success");
                         dataMap.put("msg", "微信绑定成功");
-                        dataMap.put("data", user);
+                        dataMap.put("data", userData);
                     }else{
                         dataMap.put("result", "failure");
                         dataMap.put("msg", "微信已绑定，不可修改，请更换其他微信");

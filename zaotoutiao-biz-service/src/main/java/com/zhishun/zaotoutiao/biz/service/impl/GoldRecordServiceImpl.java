@@ -48,7 +48,7 @@ public class GoldRecordServiceImpl implements IGoldRecordService{
     private IUserService iUserService;
 
     @Override
-    public int getOpenGoldToday(Long userId, int source) {
+    public String getOpenGoldToday(Long userId, int source) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd 00:00:00");
         String zeroDay = sdf.format(new Date());
         Map map = Maps.newHashMap();

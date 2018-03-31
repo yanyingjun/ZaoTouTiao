@@ -19,7 +19,7 @@
     <result column="info_id" jdbcType="VARCHAR" property="infoId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, title, date_format(create_date, '%Y-%m-%d %H:%i:%s') createDate, filter, url, author, raw_url, channel, source, style,
+    id, user_id, title, date_format(create_date, '%Y-%m-%d %H:%i:%s') as createDate, filter, url, author, raw_url, channel, source, style,
     pic_url, date_format(publish_date, '%Y-%m-%d %H:%i:%s') as publishDate, infos_type, info_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -216,5 +216,23 @@
     and infos_type = #{infosType}
     ORDER BY create_date desc
     limit #{startNo},#{endNo}
+  </select>
+
+  <delete id="delOneCollect" parameterType="map">
+    delete from user_collect
+    where info_id = #{infoId} and user_id = #{userId}
+  </delete>
+
+  <delete id="delUserCollectByUserId" parameterType="long">
+    delete from user_collect
+    where user_id = #{userId}
+  </delete>
+
+  <select id="getCollectByMap" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_collect
+    where user_id = #{userId}
+    and info_id = #{infoId}
   </select>
 </mapper>

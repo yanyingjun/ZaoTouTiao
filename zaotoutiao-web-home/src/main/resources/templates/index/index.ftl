@@ -4,15 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>早头条后台管理系统</title>
-    <link href="/static/css/base.css" rel="stylesheet">
-    <link href="/static/css/platform.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/uimaker/easyui.css">
+    <#assign ctx="${springMacroRequestContext.contextPath}" />
+    <link href="${ctx}/static/css/base.css" rel="stylesheet">
+    <link href="${ctx}/static/css/platform.css" rel="stylesheet">
+    <link rel="stylesheet" href="${ctx}/static/uimaker/easyui.css">
 </head>
 <body>
 <div class="container">
     <div id="pf-hd">
         <div class="pf-logo">
-            <img src="/static/images/main/main_logo.png" alt="logo">
+            <img src="${ctx}/static/images/main/main_logo.png" alt="logo">
         </div>
 
         <div class="pf-nav-wrap">
@@ -36,7 +37,7 @@
 
         <div class="pf-user">
             <div class="pf-user-photo">
-                <img src="/static/images/main/user.png" alt="">
+                <img src="${ctx}/static/images/main/user.png" alt="">
             </div>
             <h4 class="pf-user-name ellipsis">uimaker</h4>
             <i class="iconfont xiala">&#xe607;</i>
@@ -209,7 +210,7 @@
 
 
                 <!--<div title="采购组织" style="padding:10px 5px 5px 10px;" data-options="closable:true">
-                    <iframe class="page-iframe" src="index.html" frameborder="no"   border="no" height="100%" width="100%" scrolling="auto"></iframe>
+                    <iframe class="page-iframe" src="index.ftl" frameborder="no"   border="no" height="100%" width="100%" scrolling="auto"></iframe>
                 </div>
                 <div title="基本信息" data-options="closable:true" style="padding:10px 5px 5px 10px;">
                     <iframe class="page-iframe" src="basic_info.html" frameborder="no"   border="no" height="100%" width="100%" scrolling="auto"></iframe>
@@ -239,9 +240,9 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
-<script type="text/javascript" src="/static/js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="/static/js/main.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/main.js"></script>
 <!--[if IE 7]>
 <script type="text/javascript">
     $(window).resize(function(){

@@ -15,10 +15,8 @@ import com.zhishun.zaotoutiao.core.model.entity.UserComments;
 import com.zhishun.zaotoutiao.core.model.entity.UserGiveLike;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserCommentsVO;
-import com.zhishun.zaotoutiao.dal.mapper.InfosMapper;
-import com.zhishun.zaotoutiao.dal.mapper.UserCommentsMapper;
-import com.zhishun.zaotoutiao.dal.mapper.UserGiveLikeMapper;
-import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
+import com.zhishun.zaotoutiao.core.model.vo.UserReadRecordVO;
+import com.zhishun.zaotoutiao.dal.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -44,19 +42,20 @@ public class CommentsServiceImpl implements ICommentsService{
     private UserGiveLikeMapper userGiveLikeMapper;
 
     @Autowired
+    private UserReadRecordMapper userReadRecordMapper;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Override
-    public Page<InfosVO> getMyCommentsList(Long userId, PageRequest pageRequest) {
+    public List<UserReadRecordVO> getMyCommentsList(Long userId, PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("userId", userId);
-        int count = infosMapper.countMyCommentsList(map);
         if(!StringUtils.isEmpty(pageRequest)){
             map.put("offset", pageRequest.getOffset());
             map.put("limit", pageRequest.getPageSize());
         }
-        List<InfosVO> list = infosMapper.getMyCommentsList(map);
-        return PageBuilder.buildPage(pageRequest, list, count);
+        return userReadRecordMapper.getMyCommentsList(map);
     }
 
     @Override
@@ -95,12 +94,12 @@ public class CommentsServiceImpl implements ICommentsService{
     }
 
     @Override
-    public List<UserCommentsVO> getNewCommentVO(String infoId, int userId, int pageNo, int pageSize) {Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
+    public List<UserCommentsVO> getNewCommentVO(String infoId, Long userId, PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("infoId", infoId);
         map.put("userId", userId);
-        map.put("startNo", pageMap.get("startNo"));
-        map.put("endNo", pageMap.get("endNo"));
+        map.put("startNo", pageRequest.getOffset());
+        map.put("endNo", pageRequest.getPageSize());
 
         List<UserCommentsVO> commentVOList = userCommentsMapper.getNewComments(map);
 
@@ -108,13 +107,12 @@ public class CommentsServiceImpl implements ICommentsService{
     }
 
     @Override
-    public List<UserCommentsVO> getHotCommentVO(String infoId, int userId, int pageNo, int pageSize) {
-        Map pageMap = PageNoAndSize.getNum(pageNo,pageSize);
+    public List<UserCommentsVO> getHotCommentVO(String infoId, Long userId, PageRequest pageRequest) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("infoId", infoId);
         map.put("userId", userId);
-        map.put("startNo", pageMap.get("startNo"));
-        map.put("endNo", pageMap.get("endNo"));
+        map.put("startNo", pageRequest.getOffset());
+        map.put("endNo", pageRequest.getPageSize());
         List<UserCommentsVO> commentVOList = userCommentsMapper.getHotComments(map);
 
         return commentVOList;
@@ -122,7 +120,7 @@ public class CommentsServiceImpl implements ICommentsService{
 
 
     @Override
-    public Boolean isMyLike(int userId, Long commentsId) {
+    public Boolean isMyLike(Long userId, Long commentsId) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("userId",userId);
         map.put("commentsId",commentsId);

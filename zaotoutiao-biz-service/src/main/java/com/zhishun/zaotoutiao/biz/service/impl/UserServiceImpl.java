@@ -403,11 +403,18 @@ public class UserServiceImpl implements IUserService{
         map.put("telephone", telephone);
         User user = userMapper.getUserByMap(map);
         //判断是否是之前绑定的状态
-        if(!user.getWechatId().equals(wechatId)){
+        if(StringUtils.isEmpty(user.getWechatId())){
             user.setNickName(wechatName);
             user.setHeadPath(wechatHead);
             user.setWechatId(wechatId);
             userMapper.updateByPrimaryKeySelective(user);
+        }else{
+            if(!user.getWechatId().equals(wechatId)){
+                user.setNickName(wechatName);
+                user.setHeadPath(wechatHead);
+                user.setWechatId(wechatId);
+                userMapper.updateByPrimaryKeySelective(user);
+            }
         }
     }
 

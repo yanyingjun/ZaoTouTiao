@@ -20,31 +20,31 @@ public interface IUserCollectService {
      * @param userId
      * @return
      */
-    int delAllCollect(Long userId);
+    void delAllCollect(Long userId);
 
     /**
      * 查询收藏列表
      * @param userId
-     * @param infosId
+     * @param infoId
      * @return
      */
-    List<UserCollect> listCollect(Long userId, String infosId);
+    UserCollect getCollectByMap(Long userId, String infoId);
 
     /**
      * 删除收藏（单条）
      * @param userId
-     * @param infosId
+     * @param infoId
      * @return
      */
-    int delOneCollect(Long userId, String infosId);
+    int delOneCollect(Long userId, String infoId);
 
     /**
      * 添加收藏
      * @param userId
-     * @param infosId
+     * @param infoId
      * @return
      */
-    int addUserCollect(Long userId, String infosId);
+    int addUserCollect(Long userId, String infoId);
 
     /**
      * 是否收藏

@@ -9,9 +9,11 @@
       <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
       <result column="button" property="button" jdbcType="VARCHAR" />
       <result column="url" property="url" jdbcType="VARCHAR" />
+      <result column="reward" property="reward" jdbcType="VARCHAR" />
+      <result column="reward_num" property="rewardNum" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, question, answer, type, create_date, button, url
+    id, question, answer, type, create_date, button, url, reward, reward_num
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -25,11 +27,10 @@
   </delete>
   <insert id="insert" parameterType="com.zhishun.zaotoutiao.core.model.entity.StaticTaskList">
     insert into static_task_list (id, question, answer, 
-      type, create_date, button, 
-      url)
+      type, create_date, button, url, reward, reward_num)
     values (#{id,jdbcType=BIGINT}, #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, 
       #{type,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{button,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR})
+      #{url,jdbcType=VARCHAR}, #{reward,jdbcType=VARCHAR}, #{rewardNum,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.StaticTaskList">
     insert into static_task_list
@@ -55,6 +56,12 @@
       <if test="url != null">
         url,
       </if>
+      <if test="reward != null">
+        reward,
+      </if>
+      <if test="rewardNum != null">
+        reward_num,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -77,6 +84,12 @@
       </if>
       <if test="url != null">
         #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="reward != null">
+        #{reward,jdbcType=VARCHAR},
+      </if>
+      <if test="rewardNum != null">
+        #{rewardNum,jdbcType=VARCHAR}
       </if>
     </trim>
   </insert>
@@ -101,6 +114,12 @@
       <if test="url != null">
         url = #{url,jdbcType=VARCHAR},
       </if>
+      <if test="reward != null">
+        reward = #{reward, jdbcType=VARCHAR},
+      </if>
+      <if test="rewardNum != null">
+        reward_num = #{rewardNum, jdbcType=VARCHAR}
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -111,7 +130,9 @@
       type = #{type,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       button = #{button,jdbcType=VARCHAR},
-      url = #{url,jdbcType=VARCHAR}
+      url = #{url,jdbcType=VARCHAR},
+      reward = #{reward,jdbcType=VARCHAR},
+      reward_num = #{rewardNum, jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 

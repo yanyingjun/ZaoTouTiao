@@ -32,20 +32,6 @@ public interface InfosMapper {
     Infos getInfosByMap(Map<String,Object> map);
 
     /**
-     * 获取我的评论列表
-     * @param map
-     * @return
-     */
-    List<InfosVO> getMyCommentsList(Map<String,Object> map);
-
-    /**
-     * 获取我的评论总记录数
-     * @param map
-     * @return
-     */
-    int countMyCommentsList(Map<String,Object> map);
-
-    /**
      * 获取视频相关内容
      * @param channelId
      * @return
@@ -73,4 +59,13 @@ public interface InfosMapper {
      * @return
      */
     List<InfosVO> getInfosPageByMap(Map map);
+
+    /**
+     * 删除内容
+     * @param infoId
+     * @return
+     */
+    int delInfos(String infoId);
+
+
 }

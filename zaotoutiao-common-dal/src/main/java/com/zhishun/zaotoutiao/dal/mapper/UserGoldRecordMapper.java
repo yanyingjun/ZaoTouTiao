@@ -138,7 +138,7 @@ public interface UserGoldRecordMapper {
      * @param map
      * @return
      */
-    int getOpenGoldToday(Map<String,Object> map);
+    String getOpenGoldToday(Map<String,Object> map);
 
     /**
      * 计算时间差

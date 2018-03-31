@@ -6,6 +6,7 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IInfosService;
+import com.zhishun.zaotoutiao.common.util.BeanMapUtil;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.common.util.RandomUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Infos;
@@ -51,8 +52,9 @@ public class InfosServiceImpl implements IInfosService{
         for(InfosImage infosImage : infosVO.getPicList()){
             infosImage.setInfoId(infos.getInfoId());
             infosImage.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+            infosImage.setPicType("1");
             infosImageMapper.insertSelective(infosImage);
-            thumbnails += infosImage.getPicUrl();
+            thumbnails += infosImage.getPicUrl() + ",";
         }
 
         if(infosVO.getInfoType().equals(InfosEnum.NEWS.getValue())){
@@ -64,8 +66,10 @@ public class InfosServiceImpl implements IInfosService{
             infosVideo.setPicUrl(infosVO.getVideoList().get(0).getPicUrl());
             infosVideo.setPicName(infosVO.getVideoList().get(0).getPicName());
             infosVideo.setInfoId(infos.getInfoId());
+            infosVideo.setPicType("2");
             infosVideo.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
             infosImageMapper.insertSelective(infosVideo);
+            infos.setThumbnails(thumbnails);
             infos.setVideos(infosVO.getVideoList().get(0).getPicUrl());
         }
 
@@ -97,7 +101,7 @@ public class InfosServiceImpl implements IInfosService{
         if(!StringUtils.isEmpty(contentQueryVO.getTwoLevel())){
             map.put("towLevel", contentQueryVO.getTwoLevel());
         }
-        if(!StringUtils.isEmpty(contentQueryVO.getSource())){
+        if(!StringUtils.isEmpty(contentQueryVO.getSource()) && Integer.parseInt(contentQueryVO.getSource()) != 0){
             map.put("source", contentQueryVO.getSource());
         }
         if(!StringUtils.isEmpty(contentQueryVO.getBrowsingVolumeMin())){
@@ -125,5 +129,78 @@ public class InfosServiceImpl implements IInfosService{
             map.put("commentsNumberMax", contentQueryVO.getCommentsNumberMax());
         }
         return infosMapper.getInfosPageByMap(map);
+    }
+
+    @Override
+    public int delInfos(Long id) {
+        int num = infosMapper.deleteByPrimaryKey(id);
+        Infos infos = infosMapper.selectByPrimaryKey(id);
+        //删除对应的图片
+        infosImageMapper.delInfosImage(infos.getInfoId());
+        return num;
+    }
+
+    @Override
+    public int updateInfos(InfosVO infosVO) {
+        //更新内容
+        //删除对应的图片
+        infosImageMapper.delInfosImage(infosVO.getInfoId());
+        Map map = Maps.newHashMap();
+        map.put("infoId", infosVO.getInfoId());
+        Infos infos = infosMapper.getInfosByMap(map);
+        infos.setTitle(infosVO.getTitle());
+        String thumbnails = "";
+        for(InfosImage infosImage : infosVO.getPicList()){
+            infosImage.setInfoId(infos.getInfoId());
+            infosImage.setPicType("1");
+            infosImage.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+            infosImageMapper.insertSelective(infosImage);
+            thumbnails += infosImage.getPicUrl() + ",";
+        }
+        infos.setThumbnails(thumbnails);
+        infos.setChannelId(infosVO.getChannelId());
+        infos.setFirstLevel(infosVO.getFirstLevel());
+        infos.setTwoLevel(infosVO.getTwoLevel());
+        infos.setCatInfoName(infosVO.getCatInfoName());
+
+        if(infosVO.getInfoType().equals(InfosEnum.NEWS.getValue())){
+            infos.setContent(infosVO.getContent());
+        }else{
+            //新增视频
+            InfosImage infosVideo = new InfosImage();
+            infosVideo.setPicUrl(infosVO.getVideoList().get(0).getPicUrl());
+            infosVideo.setPicName(infosVO.getVideoList().get(0).getPicName());
+            infosVideo.setInfoId(infos.getInfoId());
+            infosVideo.setPicType("2");
+            infosVideo.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+            infosImageMapper.insertSelective(infosVideo);
+            infos.setVideos(infosVO.getVideoList().get(0).getPicUrl());
+        }
+        return infosMapper.updateByPrimaryKeySelective(infos);
+    }
+
+    @Override
+    public Infos getInfos(String infoId) {
+        Map map = Maps.newHashMap();
+        map.put("infoId", infoId);
+        return infosMapper.getInfosByMap(map);
+    }
+
+    @Override
+    public InfosVO getInfosById(Long id) {
+        Infos infos = infosMapper.selectByPrimaryKey(id);
+        InfosVO infosVO = new InfosVO();
+        BeanMapUtil.copy(infos, infosVO);
+        Map map = Maps.newHashMap();
+        map.put("infoId", infos.getInfoId());
+        map.put("picType", "1");
+        List<InfosImage> list = infosImageMapper.listInfosImage(map);
+        infosVO.setPicList(list);
+        Map mapVideo = Maps.newHashMap();
+        mapVideo.put("infoId", infos.getInfoId());
+        mapVideo.put("picType", "2");
+        List<InfosImage> listVideo = infosImageMapper.listInfosImage(mapVideo);
+        infosVO.setVideoList(listVideo);
+        return infosVO;
     }
 }

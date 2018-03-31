@@ -35,7 +35,9 @@ public class RedPackUtil {
 
     public static String MCH_ID = "1500492402";
     public static String WXAPP_ID = "wx7ef6a3f6467ff3d6";
-    public static String API_KEY = "ozIWq0a2gKaFQ7gRRVQ5EZoUZSJw1234";
+    public static String API_KEY = "HtfvEN5DyBai2xvhVJOPdiHtvHXrnWu7";
+
+    public final static String WXUrl = "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack";
 
     public RedPackUtil() {
     }
@@ -191,8 +193,7 @@ public class RedPackUtil {
         XMLUtil xmlUtil = new XMLUtil();
         xmlUtil.xstream().alias("xml", sendRedPack.getClass());
         String xml = xmlUtil.xstream().toXML(sendRedPack);
-        String url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack";
-        String response = ssl(url, xml);
+        String response = ssl(WXUrl, xml);
         String result;
         try {
             Map<String, String> map = xmlUtil.parseXml(response);

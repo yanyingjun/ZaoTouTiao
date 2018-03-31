@@ -3,22 +3,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>新增文章</title>
-
-    <link href="/static/css/base.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/uimaker/easyui.css">
-    <link rel="stylesheet" href="/static/uimaker/icon.css">
-
+    <title>更新文章</title>
+    <#assign ctx="${springMacroRequestContext.contextPath}" />
 </head>
 <body>
 <div class="container">
     <div id="tb" style="padding:0 30px;">
-        <form id="content_add_form"  method="post">
+        <form id="content_update_form"  method="post">
             <input type="hidden" name="infoType" value="news"/>
+            <input type="hidden" name="infoId" value="${infosVO.getInfoId()}" />
             <table cellpadding="5">
                 <tr>
                     <td>文章标题:</td>
-                    <td><input class="easyui-textbox" type="text" name="title" data-options="required:true"></input></td>
+                    <td><input class="easyui-textbox" type="text" name="title" data-options="required:true" value="${infosVO.title}"/></td>
                 </tr>
                 <tr>
                     <td>文章封面：</td>
@@ -27,8 +24,8 @@
                             <div class="div2">上传图片</div>
                             <input name="pic" class="inputstyle" type="file" onClick="toUpLoad()" multiple="multiple" />
                         </div>
-                        <div id="imgdiv"></div>
-                        <div id="imgDialog" closed="true" class="easyui-dialog" title="原图"
+                        <div id="img_update_div"></div>
+                        <div id="img_update_Dialog" closed="true" class="easyui-dialog" title="原图"
                              data-options="maximizable:true,resizable:true,modal:true" style="width: 800px; height: 600px; padding: 10px">
                             <img alt="" src="" id="showImg"/>
                         </div>
@@ -36,7 +33,7 @@
                 </tr>
                 <tr>
                     <td>导航名称:</td>
-                    <td><input class="easyui-combobox" type="text" id="channleId_cont" name="channelId"  data-options="url:'/getChannels?appType=1',
+                    <td><input class="easyui-combobox" type="text" id="channleId_update_cont" name="channelId"  data-options="url:'/getChannels?appType=1',
                     textField:'name',valueField:'channelId',onSelect:function(params){
                                $('#firstLevel_cont').combobox({
                                   url:'/subnavigation',
@@ -51,15 +48,15 @@
                            },
                     onLoadSuccess:function(data){
                         if(data != null && data.length > 0){
-                           $('#channleId_cont').combobox('select',data[0].channelId);
+                           $('#channleId_update_cont').combobox('select','${infosVO.channelId}');
                         }
                     },required:true,editable:false"/></td>
                 </tr>
                 <tr>
                     <td>一级标签:</td>
-                    <td><input class="easyui-combobox" id="firstLevel_cont" name="firstLevel" data-options="onLoadSuccess:function(data){
+                    <td><input class="easyui-combobox" id="firstLevel_update_cont" name="firstLevel" data-options="onLoadSuccess:function(data){
                               if(data != null && data.length > 0){
-                                  $('#firstLevel_cont').combobox('select',data[0].channelId);
+                                  $('#firstLevel_update_cont').combobox('select','${infosVO.firstLevel}');
                               }
                           },editable:false,onSelect:function(params){$('#towLevel_cont').combobox({
                                   url:'/subnavigation',
@@ -74,42 +71,34 @@
                 <tr>
                     <td>二级标签:</td>
                     <td>
-                        <input class="easyui-combobox" id="towLevel_cont" name="twoLevel" data-options="onLoadSuccess:function(data){
+                        <input class="easyui-combobox" id="towLevel_update_cont" name="twoLevel" data-options="onLoadSuccess:function(data){
                               if(data != null && data.length > 0){
-                                  $('#towLevel_cont').combobox('select',data[0].channelId);
+                                  $('#towLevel_update_cont').combobox('select','${infosVO.twoLevel}');
                               }
-                          },editable:false,"/>
+                          },editable:false"/>
                     </td>
                 </tr>
                 <tr>
                     <td>关键词：</td>
-                    <td><textarea name="catInfoName" type="text/plain"></textarea></td>
+                    <td><textarea name="catInfoName" type="text/plain">${infosVO.catInfoName}</textarea></td>
                 </tr>
                 <tr>
                     <td>文章详情：</td>
-                    <td><textarea id="container" name="content" type="text/plain"></textarea></td>
-                </tr>
-                <tr>
-                    <td><a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" onclick="saveNews();">确定</a></td>
+                    <td><textarea id="container_update_news" name="content" type="text/plain">${infosVO.content}</textarea></td>
                 </tr>
             </table>
         </form>
     </div>
 </div>
-<script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
-<script type="text/javascript" src="/static/js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="/static/js/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
-<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
-<script type="text/javascript" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>"
-<script type="text/javascript" src="/static/fileupload/jquery.iframe-transport.js"></script>
-<script type="text/javascript" src="/static/fileupload/jquery.ui.widget.js"></script>
-<script type="text/javascript" src="/static/fileupload/jquery.fileupload.js"></script>
-<script type="text/javascript" src="/static/js/picsUpload.js"></script>
-
+<script type="text/javascript" src="${ctx}/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="${ctx}/static/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="${ctx}/static/ueditor/lang/zh-cn/zh-cn.js"></script>"
+<script type="text/javascript" src="${ctx}/static/fileupload/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="${ctx}/static/fileupload/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="${ctx}/static/fileupload/jquery.fileupload.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/picsUpload.js"></script>
 <script type="text/javascript">
-
-    var ue = UE.getEditor('container',{
+    var ue = UE.getEditor('container_update_news',{
         zIndex : 9010,
         initialFrameWidth : 780,
         initialFrameHeight: 400
@@ -126,40 +115,16 @@
         }
     }
 
-    function saveNews(){
-        //if ($('#content_add_form').form('validate')) {
-            var jsondata=$('#content_add_form').serializeObject();
-            $.post('/infos/add', jsondata, function(data) {
-                if (data.state == 'success') {
-                    $.messager.alert('提示信息', data.msg);
-                    $('#content_add_form').form('clear');
-                } else {
-                    $.messager.alert('提示信息', data.msg);
-                }
-            }, "JSON");
-        //}
-    }
-
-    $.fn.extend({
-        serializeObject : function() {
-            var o = {};
-            var a = this.serializeArray();
-            $.each(a, function() {
-                if (o[this.name]) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [ o[this.name] ];
-                    }
-                    o[this.name].push(this.value || '');
-                } else {
-                    o[this.name] = this.value || '';
-                }
-            });
-            return o;
-        }
-    });
-
-    toUpLoad('pic', 'imgdiv', 'imgDialog') ;
-    //initShowPic(null,null,'imgdiv', 'imgDialog');
+    var array = new Array();
+    var obj = new Object();
+    <#list infosVO.picList as file>
+         var obj = new Object();
+        obj.picUrl = '${file.picUrl}';
+        obj.picName = '${file.picName}';
+        array.push(obj);
+    </#list>
+    toUpLoad('pic', 'img_update_div', 'img_update_Dialog') ;
+    initShowPic(array,'img_update_div', 'img_update_Dialog');
 </script>
 </body>
 </html>

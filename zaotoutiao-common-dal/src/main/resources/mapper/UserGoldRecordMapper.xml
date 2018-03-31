@@ -225,7 +225,7 @@
     SELECT * from user_gold_record where userId = #{userId} order by create_date desc limit 1
   </select>
 
-  <select id="getOpenGoldToday" parameterType="map" resultType="int">
+  <select id="getOpenGoldToday" parameterType="map" resultType="string">
     SELECT SUM(gold) as count FROM user_gold_record WHERE userId = #{userId} AND source = #{source} AND create_date > #{zeroDay}
     group by userId
   </select>
@@ -519,35 +519,37 @@
     group by apprenticeId) as a group by userId
   </select>
 
+  <!-- 七天内无进贡 -->
   <select id="listAwakenApprentice" parameterType="map" resultType="com.zhishun.zaotoutiao.core.model.vo.ApprenticeRepVO">
-    select c.sumGold,c.apprenticeId,3 as type from (select sum(a.gold) as sumGold,apprenticeId,b.nickName
+    select sum(a.gold) as sumGold,b.headpath as headPath,b.nickName
     from user_gold_record as a
     LEFT JOIN user as b ON a.apprenticeId = b.userId
-    where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(a.create_date) and a.source =2 and a.userId = #{userId} group by a.apprenticeId) as c where c.sumGold &lt;= 0
+    where a.source =2 and a.userId = #{userId} and a.apprenticeId NOT in (select d.apprenticeId
+    from user_gold_record as d
+    LEFT JOIN user as e ON d.apprenticeId = e.userId
+    where date(d.create_date) &gt; DATE_SUB(CURDATE(), INTERVAL 7 DAY) and date(d.create_date) &lt;= date(CURDATE()) and d.source =2 and d.userId = #{userId} group by d.apprenticeId) group by a.apprenticeId
     <if test="offset != null and limit != null">
       limit #{offset},#{limit}
     </if>
   </select>
 
+  <!-- 有效徒弟：七天内进贡金币>=100 -->
   <select id="listEffectiveApprentice" parameterType="map" resultType="com.zhishun.zaotoutiao.core.model.vo.ApprenticeRepVO">
-    select c.sumGold,c.apprenticeId,2 as type from (select sum(a.gold) as sumGold,apprenticeId,b.nickName
-    from user_gold_record as a
-    LEFT JOIN user as b ON a.apprenticeId = b.userId where a.source =2 and a.userId = #{userId}
-    group by a.apprenticeId) as c where c.sumGold &lt; 100 and c.apprenticeId
-    not in (select f.apprenticeId from (select sum(d.gold) as sumGold,d.apprenticeId,e.nickName
+    select a.sumGold,a.headpath as headPath,a.nickName from (select d.apprenticeId,SUM(d.gold) as sumGold,e.headpath,e.nickName
     from user_gold_record as d
     LEFT JOIN user as e ON d.apprenticeId = e.userId
-    where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(d.create_date) and d.source =2 and d.userId = #{userId} group by d.apprenticeId) as f where f.sumGold &lt;= 0)
+    where date(d.create_date) &gt; DATE_SUB(CURDATE(), INTERVAL 7 DAY) and date(d.create_date) &lt;= date(CURDATE()) and d.source =2 and d.userId = #{userId} group by d.apprenticeId) as a where a.sumGold &gt;= 100
     <if test="offset != null and limit != null">
       limit #{offset},#{limit}
     </if>
   </select>
-  
+
+  <!-- 七天内进贡金币<100 -->
   <select id="listMyApprentice" parameterType="map" resultType="com.zhishun.zaotoutiao.core.model.vo.ApprenticeRepVO">
-    SELECT sum(a.gold) as sumGold,apprenticeId,b.nickName from user_gold_record as a
-    LEFT JOIN user as b ON a.apprenticeId = b.userId
-    where source = 2 and a.userId = #{userId}
-    group by a.apprenticeId
+    select a.sumGold,a.headpath as headPath,a.nickName from (select d.apprenticeId,SUM(d.gold) as sumGold,e.headpath,e.nickName
+    from user_gold_record as d
+    LEFT JOIN user as e ON d.apprenticeId = e.userId
+    where date(d.create_date) &gt; DATE_SUB(CURDATE(), INTERVAL 7 DAY) and date(d.create_date) &lt;= date(CURDATE()) and d.source =2 and d.userId = #{userId} group by d.apprenticeId) as a where a.sumGold &gt; 0 and a.sumGold &lt; 100
     <if test="offset != null and limit != null">
       limit #{offset},#{limit}
     </if>

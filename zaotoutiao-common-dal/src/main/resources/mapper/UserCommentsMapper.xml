@@ -108,7 +108,7 @@
     select
     <include refid="Base_Column_List" />
     from user_comments
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id}
     <if test="userId != null">
       and user_id = #{userId}
     </if>
@@ -136,14 +136,18 @@
   </select>
 
   <select id="getCommentsList" resultMap="BaseResultMap">
-    SELECT user_comments.*,infos.title,infos.infoId,user.nickName,user.userId
+    SELECT user_comments.id, user_comments.info_id,
+    user_comments.content, date_format(user_comments.create_date, '%Y-%m-%d %H:%i:%s') as createDate,
+    user_comments.likes, user_comments.user_id,infos.title,infos.infoId,user.nickName,user.userId
     FROM user_comments
     LEFT JOIN infos ON infos.info_id = user_comments.info_id
     LEFT JOIN user ON user.userId = user_comments.user_id
   </select>
 
   <select id="getCommentsByKeywordList" parameterType="java.lang.String" resultMap="BaseResultMap">
-    SELECT user_comments.*,infos.title,infos.infoId,user.nickName,user.userId
+    SELECT user_comments.id, user_comments.info_id,
+    user_comments.content, date_format(user_comments.create_date, '%Y-%m-%d %H:%i:%s') as createDate,
+    user_comments.likes, user_comments.user_id,infos.title,infos.infoId,user.nickName,user.userId
     FROM user_comments
     LEFT JOIN infos ON infos.infoId = user_comments.info_id
     LEFT JOIN user ON user.userId = user_comments.info_id
@@ -151,7 +155,9 @@
   </select>
 
   <select id="getNewComments" parameterType="map" resultMap="BaseResultMap">
-    SELECT user.headpath, user.nickName, user_comments.*
+    SELECT user.headpath as headPath, user.nickName, user_comments.id, user_comments.info_id,
+    user_comments.content, date_format(user_comments.create_date, '%Y-%m-%d %H:%i:%s') as createDate,
+    user_comments.likes, user_comments.user_id
     FROM user, user_comments
     WHERE user_comments.info_id = #{infoId}
     AND user.userId = user_comments.user_id
@@ -159,7 +165,9 @@
   </select>
 
   <select id="getHotComments" parameterType="map" resultMap="BaseResultMap">
-    SELECT user.headpath, user.nickName, user_comments.*
+    SELECT user.headpath as headPath, user.nickName, user_comments.id, user_comments.info_id,
+    user_comments.content, date_format(user_comments.create_date, '%Y-%m-%d %H:%i:%s') as createDate,
+    user_comments.likes, user_comments.user_id
     FROM user, user_comments
     WHERE user_comments.info_id = #{infoId}
     AND user.userId = user_comments.user_id

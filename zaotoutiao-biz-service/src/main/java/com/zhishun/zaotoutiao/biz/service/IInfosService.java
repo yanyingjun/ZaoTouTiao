@@ -1,5 +1,6 @@
 package com.zhishun.zaotoutiao.biz.service;
 
+import com.zhishun.zaotoutiao.core.model.entity.Infos;
 import com.zhishun.zaotoutiao.core.model.vo.ContentQueryVO;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 
@@ -23,4 +24,32 @@ public interface IInfosService {
      * @return
      */
     List<InfosVO> listInfos(ContentQueryVO contentQueryVO);
+
+    /**
+     * 删除内容
+     * @param infoId
+     * @return
+     */
+    int delInfos(Long infoId);
+
+    /**
+     * 修改内容
+     * @param infosVO
+     * @return
+     */
+    int updateInfos(InfosVO infosVO);
+
+    /**
+     * 查询内容信息
+     * @param infoId
+     * @return
+     */
+    Infos getInfos(String infoId);
+
+    /**
+     * 根据ID获取新闻
+     * @param id
+     * @return
+     */
+    InfosVO getInfosById(Long id);
 }

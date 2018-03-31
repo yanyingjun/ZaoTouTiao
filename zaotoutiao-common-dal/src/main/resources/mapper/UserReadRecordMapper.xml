@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhishun.zaotoutiao.dal.mapper.UserReadRecordMapper">
-  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord">
+  <resultMap id="BaseResultMap" type="com.zhishun.zaotoutiao.core.model.vo.UserReadRecordVO">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="userId" jdbcType="BIGINT" property="userId" />
     <result column="infoId" jdbcType="VARCHAR" property="infoId" />
@@ -213,6 +213,12 @@
     </where>
   </select>
 
+  <select id="getUserReadRecordByInfoId" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_read_record
+    where infoId = #{infoId}
+  </select>
 
   <select id="updateReadRecord" parameterType="com.zhishun.zaotoutiao.core.model.entity.UserReadRecord" resultMap="BaseResultMap">
     update SET is_request_gold = #{isRequestGold}
@@ -272,7 +278,7 @@
   <select id="maxReadRecord" parameterType="long" resultMap="BaseResultMap">
     SELECT max(create_date),browsing
     from user_read_record
-    WHERE userId = #{userId} and create_date= (select MAX(create_date) from  user_read_record)
+    WHERE userId = #{userId} and create_date= (select MAX(create_date) from  user_read_record where userId = #{userId})
   </select>
 
   <select id="list4Nav" parameterType="map" resultType="com.zhishun.zaotoutiao.core.model.vo.NavigationVO">
@@ -317,6 +323,18 @@
     </if>
     <if test="date == null and dateNum != null">
       AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(r.create_date)
+    </if>
+  </select>
+
+  <select id="getMyCommentsList" parameterType="long" resultMap="BaseResultMap">
+    SELECT user_comments.content,user_comments.likes,user_read_record.*,channels.name as type,user.address, user_give_like.is_like as isLike
+    FROM user_read_record RIGHT JOIN user_comments ON user_comments.info_id = user_read_record.infoId
+    left join channels ON channels.channelId = user_read_record.channelId
+    left JOIN user ON user_comments.user_id = user.userId
+    LEFT JOIN user_give_like ON user_comments.id = user_give_like.commentsId
+    WHERE user.userId = #{userId}
+    <if test="offset != null and limit != null">
+      limit #{offset},#{limit}
     </if>
   </select>
 

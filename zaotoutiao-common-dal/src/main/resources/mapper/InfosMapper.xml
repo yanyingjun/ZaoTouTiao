@@ -287,25 +287,6 @@
     </where>
   </select>
 
-  <select id="getMyCommentsList" parameterType="long" resultMap="BaseResultMap">
-    SELECT user_comments.*,infos.*,channels.name as type
-    FROM infos RIGHT JOIN user_comments ON user_comments.info_id = infos.info_id
-    left join channels ON channels.channelId = infos.channel_id
-    left JOIN user ON user_comments.user_id = user.userId
-    WHERE user.userId = #{userId}
-    <if test="offset != null and limit != null">
-      limit #{offset},#{limit}
-    </if>
-  </select>
-
-  <select id="countMyCommentsList" parameterType="map" resultType="int">
-    SELECT COUNT(0)
-    FROM infos RIGHT JOIN user_comments ON user_comments.info_id = infos.info_id
-    left join channels ON channels.channelId = infos.channel_id
-    left JOIN user ON user_comments.user_id = user.userId
-    WHERE user.userId = #{userId}
-  </select>
-
   <select id="getRandVideoList" parameterType="int" resultMap="BaseResultMap">
     SELECT * FROM infos WHERE info_type='video' AND channel_id = #{channelId} ORDER BY rand() limit 0,6
   </select>
@@ -383,4 +364,9 @@
       </if>
     </where>
   </select>
+
+  <delete id="delInfos" parameterType="string">
+    delete from infos_image
+    where info_id = #{infoId,jdbcType=TINYINT}
+  </delete>
 </mapper>

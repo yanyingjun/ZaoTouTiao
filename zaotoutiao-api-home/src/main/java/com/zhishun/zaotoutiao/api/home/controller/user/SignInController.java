@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,8 +54,9 @@ public class SignInController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.SIGN_IN, method = RequestMethod.POST)
-    public Map<Object,Object> signIn(final Long userId, final int isSubmit){
+    public Map<Object,Object> signIn(final Long userId, final int isSubmit, HttpServletResponse response){
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override

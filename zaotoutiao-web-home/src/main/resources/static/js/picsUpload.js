@@ -14,7 +14,7 @@ function toUpLoad(pic, imgsDiv, showImgDialog) {
 		dataType : 'json',
 		done : function(e, data) {
 			var count = $("#"+imgsDiv).find(".picDivS").length;
-			reloadPic(imgsDiv,count, data.result.infosImage.picUrl, data.result.infosImage.picUrl, data.result.infosImage.picName, showImgDialog,false);
+			reloadPic(imgsDiv,count, data.result.infosImage.picUrl, data.result.infosImage.picUrl, data.result.infosImage.picName,false);
 			//count++;
 		}
 	}).on('fileuploadprocessalways', function (e, data) {
@@ -29,18 +29,18 @@ function toUpLoad(pic, imgsDiv, showImgDialog) {
 }
 
 // 1.2)加载图片
-function reloadPic(imgsDiv, index, url, path, picName, imgDialog, view) {
+function reloadPic(imgsDiv, index, url, path, picName, view) {
 	var html = '<div class="picDivS" id = "pic_' + index + '"  >';
-	html += '<img title="" src="' + url + '" alt="" width="100px" height="100px" onclick="showPic(\''+imgDialog+'\',\''+url+'\');" style="cursor: pointer;">';
-	if(!view){
+	html += '<img title="" src="' + url + '" alt="" width="100px" height="100px" style="cursor: pointer;">';
+	if(view != null){
 		html += '<i class="delfilebtn ifont" OnClick="delPic(this)">×</i>';
 		//html += '<input type="button" name="delBtn" value="删除" OnClick="delPic(this)">';
 		html += '<input name="picList[' + index + '].picUrl" type="hidden" value="' + path + '">' +
-			'<input name="picList['+ index +'].picName" type="hidden" value="'+ picName +'" ';
+			'<input name="picList['+ index +'].picName" type="hidden" value="'+ picName +'">';
 		//html += '<input name="picInfo[' + index + '].picName" type="hidden" value="' + path + '">';
 	}
-	html += '</div>';
 	$("#"+imgsDiv).append(html);
+
 }
 
 // 1.3)删除图片
@@ -73,26 +73,24 @@ function showPic(imgDialog, url) {
 
 /**
  *
- * @param imgServer 图片访问服务地址
- * @param picPaths 图片相对路径（可以用，隔开）
+ * @param picPaths 图片路径（可以用，隔开）
  * @param imgDiv 显示图片的divId
  * @param showImgDialog 显示原图的弹窗id
  */
-function initShowPic(imgServer,picPaths,imgsDiv, showImgDialog,view){
-	view = (view==undefined)? false:view;
-	if(picPaths.length>0){
-		if(!imgServer.endWith("/")){
-			imgServer = imgServer+"/";
-		}
-		var picStrs = picPaths.split(",");
-		for(var i = 0 ; i<picStrs.length;i++){
-			if(picStrs[i]!=null && picStrs[i]!=''){
-				var url = imgServer+picStrs[i];
-				reloadPic(imgsDiv, i, url, picStrs[i], showImgDialog,view)
-			}
-		}
-	}
+window.initShowPic = function(picList,imgsDiv,view){
+    view = (view==undefined)? false:view;
+    for(var i=0; i<picList.length; i++){
+        reloadPic(imgsDiv, i, picList[i].picUrl, picList[i].picUrl, picList[i].picName,view);
+    }
 }
+/*function initShowPic(picList,imgsDiv,view){
+	console.debug(picList);
+	view = (view==undefined)? false:view;
+	for(var i=0; i<picList.length; i++){
+		console.debug(picList[i]);
+        reloadPic(imgsDiv, i, picList[i].picUrl, picList[i].picUrl, picList[i].picName,view);
+	}
+}*/
 
 String.prototype.endWith=function(s){
 	  if(s==null||s==""||this.length==0||s.length>this.length)
@@ -148,11 +146,11 @@ function toUpLoadVideo(video, videoDiv) {
     });
 }
 
-// 1.2)加载图片
+// 1.2)加载视频
 function reloadVideo(imgsDiv, index, url, path, picName, view) {
     var html = '<div class="picDivS" id = "pic_' + index + '"  >';
     html += '<img title="" src="' + url + '" alt="" width="100px" height="100px" style="cursor: pointer;">';
-    if(!view){
+    if(view != null){
         html += '<i class="delfilebtn ifont" OnClick="delPic(this)">×</i>';
         //html += '<input type="button" name="delBtn" value="删除" OnClick="delPic(this)">';
         html += '<input name="videoList[' + index + '].picUrl" type="hidden" value="' + path + '">' +
@@ -161,5 +159,18 @@ function reloadVideo(imgsDiv, index, url, path, picName, view) {
     }
     html += '</div>';
     $("#"+imgsDiv).append(html);
+}
+
+/**
+ * 显示视频
+ * @param picPaths 图片路径（可以用，隔开）
+ * @param imgDiv 显示图片的divId
+ * @param showImgDialog 显示原图的弹窗id
+ */
+window.initShowVideo = function(picList,imgsDiv,view){
+    view = (view==undefined)? false:view;
+    for(var i=0; i<picList.length; i++){
+        reloadVideo(imgsDiv, i, picList[i].picUrl, picList[i].picUrl, picList[i].picName,view);
+    }
 }
 

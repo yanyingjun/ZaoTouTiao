@@ -16,11 +16,13 @@ import com.zhishun.zaotoutiao.core.model.entity.UserComments;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
+import com.zhishun.zaotoutiao.core.model.vo.UserReadRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,10 +80,10 @@ public class UserCommentsController extends BaseController{
 
             @Override
             public void handle() throws Exception {
-                Page<InfosVO> page = commentsService.getMyCommentsList(userId, pageRequest);
+                List<UserReadRecordVO> list = commentsService.getMyCommentsList(userId, pageRequest);
                 dataMap.put("result", "success");
                 dataMap.put("msg", "相关信息返回成功");
-                dataMap.put("data", page.getRows());
+                dataMap.put("data", list);
 
             }
         });

@@ -11,10 +11,7 @@ import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
 import com.zhishun.zaotoutiao.api.home.request.NewsMsgReq;
-import com.zhishun.zaotoutiao.biz.service.IChannelService;
-import com.zhishun.zaotoutiao.biz.service.ICommentsService;
-import com.zhishun.zaotoutiao.biz.service.INewsService;
-import com.zhishun.zaotoutiao.biz.service.IVideoService;
+import com.zhishun.zaotoutiao.biz.service.*;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
@@ -52,6 +49,9 @@ public class NewsController extends BaseController{
 
     @Autowired
     private IChannelService channelService;
+
+    @Autowired
+    private IUserCollectService userCollectService;
 
     /**
      * 获取新闻列表
@@ -162,12 +162,11 @@ public class NewsController extends BaseController{
      * 获取最新评论和评论点赞信息
      * @param infoId
      * @param userId
-     * @param pageNo
-     * @param pageSize
+     * @param pageRequest
      * @return
      */
     @RequestMapping(value = NewsMsgReq.NEW_COMMENT_REQ, method = RequestMethod.GET)
-    public Map<Object,Object> getNewsComment(final String infoId, final int userId, final int pageNo, final int pageSize){
+    public Map<Object,Object> getNewsComment(final String infoId, final Long userId, final PageRequest pageRequest){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
         this.excute(dataMap, null, new ControllerCallback() {
@@ -175,22 +174,27 @@ public class NewsController extends BaseController{
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotNull(infoId, ErrorCodeEnum.PARAMETER_ANOMALY);
                 AssertsUtil.isNotNull(userId, ErrorCodeEnum.PARAMETER_ANOMALY);
-                AssertsUtil.isNotNull(pageNo, ErrorCodeEnum.PARAMETER_ANOMALY);
-                AssertsUtil.isNotNull(pageSize, ErrorCodeEnum.PARAMETER_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
-                List<UserCommentsVO> commentVOList = iCommentService.getNewCommentVO(infoId,userId,pageNo,pageSize);
+                List<UserCommentsVO> commentVOList = iCommentService.getNewCommentVO(infoId,userId,pageRequest);
+                int total = 0;
                 //循环添加isMyLike（自己是否点赞）
-                for(UserCommentsVO userCommentsVO:commentVOList){
-                    Long commentsId = userCommentsVO.getId();
-                    Boolean isMyLike = iCommentService.isMyLike(userId,commentsId);
-                    userCommentsVO.setMyLike(isMyLike);
+                if(!StringUtils.isEmpty(commentVOList)){
+                    for(UserCommentsVO userCommentsVO:commentVOList){
+                        Long commentsId = userCommentsVO.getId();
+                        Boolean isMyLike = iCommentService.isMyLike(userId,commentsId);
+                        userCommentsVO.setMyLike(isMyLike);
+                    }
+                    total = commentVOList.size();
                 }
+                boolean isCollect = userCollectService.isCollect(userId, infoId);
+                dataMap.put("isCollect", isCollect);
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取最新评论和评论点赞信息成功");
-                dataMap.put("date", commentVOList);
+                dataMap.put("data", commentVOList);
+                dataMap.put("total", total);
             }
         });
         return dataMap;
@@ -205,7 +209,7 @@ public class NewsController extends BaseController{
      * @return
      */
     @RequestMapping(value = NewsMsgReq.HOT_COMMENT_REQ, method = RequestMethod.POST)
-    public Map<Object,Object> getHotComment(final String infoId, final int userId, final int pageNo, final int pageSize){
+    public Map<Object,Object> getHotComment(final String infoId, final Long userId, final PageRequest pageRequest){
         final Map<Object,Object> dataMap = Maps.newHashMap();
 
         this.excute(dataMap, null, new ControllerCallback() {
@@ -213,13 +217,11 @@ public class NewsController extends BaseController{
             public void check() throws ZhiShunException {
                 AssertsUtil.isNotNull(infoId, ErrorCodeEnum.PARAMETER_ANOMALY);
                 AssertsUtil.isNotNull(userId, ErrorCodeEnum.PARAMETER_ANOMALY);
-                AssertsUtil.isNotNull(pageNo, ErrorCodeEnum.PARAMETER_ANOMALY);
-                AssertsUtil.isNotNull(pageSize, ErrorCodeEnum.PARAMETER_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
-                List<UserCommentsVO> commentVOList = iCommentService.getHotCommentVO(infoId,userId,pageNo,pageSize);
+                List<UserCommentsVO> commentVOList = iCommentService.getHotCommentVO(infoId,userId,pageRequest);
                 //循环添加commentsId
                 for(UserCommentsVO userCommentsVO:commentVOList){
                     Long commentsId = userCommentsVO.getId();
@@ -228,7 +230,7 @@ public class NewsController extends BaseController{
                 }
                 dataMap.put("result", "success");
                 dataMap.put("msg", "获取热门评论和评论点赞信息成功");
-                dataMap.put("date", commentVOList);
+                dataMap.put("data", commentVOList);
             }
         });
 

@@ -12,6 +12,7 @@ import com.zhishun.zaotoutiao.biz.service.IInfosService;
 import com.zhishun.zaotoutiao.biz.service.IVideoService;
 import com.zhishun.zaotoutiao.common.util.AssertsUtil;
 import com.zhishun.zaotoutiao.core.model.entity.Channels;
+import com.zhishun.zaotoutiao.core.model.entity.Infos;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.core.model.vo.ContentQueryVO;
@@ -21,12 +22,14 @@ import com.zhishun.zaotoutiao.web.home.constant.request.InfosMsgReq;
 import com.zhishun.zaotoutiao.web.home.constant.request.ZttWebMsgReq;
 import com.zhishun.zaotoutiao.web.home.constant.view.ZttWebMsgView;
 import com.zhishun.zaotoutiao.web.home.controller.base.BaseController;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.sound.sampled.Line;
 import java.util.List;
 import java.util.Map;
 
@@ -73,6 +76,30 @@ public class ContentController extends BaseController{
     @RequestMapping(value = ZttWebMsgReq.ZTT_VIDEO_ADD_VIEW)
     public ModelAndView addVideoView(){
         ModelAndView mv = new ModelAndView(ZttWebMsgView.ZTT_VIDEO_ADD_VIEW);
+        return mv;
+    }
+
+    /**
+     * 跳转到视频修改页面
+     * @return
+     */
+    @RequestMapping(value = ZttWebMsgReq.ZTT_VIDEO_UPDATE_VIEW)
+    public ModelAndView updateVideoView(Long id){
+        InfosVO infosVO = infosService.getInfosById(id);
+        ModelAndView mv = new ModelAndView(ZttWebMsgView.ZTT_VIDEO_UPDATE_VIEW);
+        mv.addObject("infosVO", infosVO);
+        return mv;
+    }
+
+    /**
+     * 跳转到新闻修改页面
+     * @return
+     */
+    @RequestMapping(value = ZttWebMsgReq.ZTT_NEWS_UPDATE_VIEW)
+    public ModelAndView updateNewsView(Long id){
+        InfosVO infosVO = infosService.getInfosById(id);
+        ModelAndView mv = new ModelAndView(ZttWebMsgView.ZTT_NEWS_UPDATE_VIEW);
+        mv.addObject("infosVO", infosVO);
         return mv;
     }
 
@@ -155,6 +182,66 @@ public class ContentController extends BaseController{
         return dataMap;
     }
 
+    /**
+     * 删除新闻/视频
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = InfosMsgReq.DEL_NEWS_VIDEO_REQ)
+    public Map<Object,Object> delContent(final Long id){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(id, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                int num = infosService.delInfos(id);
+                if(num > 0){
+                    dataMap.put("state", "success");
+                    dataMap.put("msg", "删除成功");
+                }else{
+                    dataMap.put("state", "fail");
+                    dataMap.put("msg", "删除失败");
+                }
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 修改新闻/视频
+     * @return
+     */
+    @RequestMapping(value = InfosMsgReq.UPDATE_NEWS_VIDEO_REQ)
+    public Map<Object,Object> updateContent(InfosVO infosVO){
+
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotNull(infosVO, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                int num = infosService.updateInfos(infosVO);
+                if(num > 0){
+                    dataMap.put("state", "success");
+                    dataMap.put("msg", "更新成功");
+                }else{
+                    dataMap.put("state", "fail");
+                    dataMap.put("msg", "更新失败");
+                }
+            }
+        });
+
+        return dataMap;
+    }
 
 
 }
