@@ -111,10 +111,11 @@ public class ApiUtil {
         try {
             HttpPost httpPost = new HttpPost(url);
             httpPost.setEntity(new StringEntity(reqJson, ContentType.create("application/json", "UTF-8")));
-            System.out.println(reqJson);
+            LoggerUtils.info(LOGGER, "广告位请求开始");
             CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
             resStr = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
             respJson = JSON.parseObject(resStr);
+            LoggerUtils.info(LOGGER, "广告位请求返回数据"+ respJson);
             if(respJson.getString("success").equals("false")){
                 LoggerUtils.info(LOGGER, "广告位请求失败，失败原因："+ respJson);
                 return null;
@@ -149,7 +150,7 @@ public class ApiUtil {
             i++;
         }
         apiUrl += param;
-
+        LoggerUtils.info(LOGGER, "请求360新闻接口开始，请求地址：" + apiUrl);
         CloseableHttpClient httpClient = HttpClients.createDefault();
         // 设置参数
         try {
@@ -158,6 +159,7 @@ public class ApiUtil {
             CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
             // 获取返回的数据
             HttpEntity entity = httpResponse.getEntity();
+            LoggerUtils.info(LOGGER, "请求360新闻接口结束，返回结果：" + JSON.toJSON(entity));
             if(entity != null){
                 String result = EntityUtils.toString(entity);
                 json = JSONObject.parseObject(result);
@@ -169,47 +171,28 @@ public class ApiUtil {
     }
 
     /**
-     * 发送get请求不返回数据
+     * get请求组装参数
      * @param HTTP_URL
      * @param params
      * @return
      */
-    public static Boolean doGet(String HTTP_URL, Map<String,Object> params) {
-        StringBuffer httpUrl = new StringBuffer(HTTP_URL);
-        HttpURLConnection connection = null;
-        try {
-            Object object = mapToObject(params, Object.class);
-            System.out.println(httpUrl.toString());
-            URL url = new URL(httpUrl.toString());
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-            // 请求方式设置 POST
-            connection.setRequestMethod("GET");
-            // 设置维持长连接
-            connection.setRequestProperty("Connection", "Keep-Alive");
-            // 设置文件字符集:
-            connection.setRequestProperty("Charset", "UTF-8");
-
-            //根据需求设置读超时的时间
-            connection.setReadTimeout(50);
-            // 开始连接请求
-            connection.connect();
-            OutputStream out = connection.getOutputStream();
-            out.write((object.toString()).getBytes());
-            out.flush();
-            out.close();
-            if (connection.getResponseCode() == 200) {
-                LoggerUtils.info(LOGGER, "连接成功,传送数据...");
-                return true;
-            } else {
-                LoggerUtils.info(LOGGER, "连接失败,错误代码:" + connection.getResponseCode());
-                return false;
+    public static String doGetParam(String HTTP_URL, Map<String,Object> params) {
+        JSONObject json = null;
+        String apiUrl = HTTP_URL;
+        StringBuffer param = new StringBuffer();
+        int i = 0;
+        for (String key : params.keySet()) {
+            if (i == 0){
+                param.append("?");
+            }else{
+                param.append("&");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            param.append(key).append("=").append(params.get(key));
+            i++;
         }
-        return null;
+        apiUrl += param;
+        LoggerUtils.info(LOGGER, "请求360新闻点击打点，请求地址：" + apiUrl);
+        return apiUrl;
     }
 
     /**

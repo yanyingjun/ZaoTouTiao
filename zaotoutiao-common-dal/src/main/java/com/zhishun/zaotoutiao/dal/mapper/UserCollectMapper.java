@@ -2,7 +2,6 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 
 import com.zhishun.zaotoutiao.core.model.entity.UserCollect;
-import org.omg.CORBA.OBJ_ADAPTER;
 
 import java.util.List;
 import java.util.Map;
@@ -29,9 +28,22 @@ public interface UserCollectMapper {
     List<UserCollect> getCollectList(Map<String, Object> map);
 
     /**
-     * 根据获得收藏数
-     * @param map infoId
+     * 根据新闻ID删除
+     * @param map
      * @return
      */
-    Long getNumByInfoId(Map<String,Object> map);
+    int delOneCollect(Map map);
+
+    /**
+     * 根据新闻ID查询
+     * @param map
+     * @return
+     */
+    UserCollect getCollectByMap(Map map);
+
+    /**
+     * 删除用户所有收藏
+     * @param userId
+     */
+    void delUserCollectByUserId(Long userId);
 }

@@ -40,8 +40,6 @@ public class InfosVO extends Infos {
 
     private int likes;
 
-    private Date createDate;
-
     /**
      * 收藏相关
      */
@@ -66,8 +64,50 @@ public class InfosVO extends Infos {
 
     private Integer isRead;
 
-
+    /**
+     * 图片集合
+     */
     private List<InfosImage> picList;
+
+    /**
+     * 视频集合
+     */
+    private List<InfosImage> videoList;
+
+    /**
+     * 导航名称
+     */
+    private String channelName;
+
+    /**
+     * 浏览量
+     */
+    private Integer browsingVolume;
+
+    /**
+     * 转发量
+     */
+    private Integer forwardingAmount;
+
+    /**
+     * 收藏量
+     */
+    private Integer collentAmount;
+
+    /**
+     * 评论数
+     */
+    private Integer commentsNumber;
+
+    /**
+     * 一级标签
+     */
+    private String firstLevelName;
+
+    /**
+     * 二级标签
+     */
+    private String twoLevelName;
 
     public int getUserCollectId() {
         return userCollectId;
@@ -225,26 +265,6 @@ public class InfosVO extends Infos {
     }
 
     /**
-     * Getter method for property <tt>createDate</tt>.
-     *
-     * @return property value of createDate
-     */
-    @Override
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * Setter method for property <tt>createDate</tt>.
-     *
-     * @param createDate value to be assigned to property createDate
-     */
-    @Override
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    /**
      * Getter method for property <tt>isRead</tt>.
      *
      * @return property value of isRead
@@ -278,5 +298,149 @@ public class InfosVO extends Infos {
      */
     public void setPicList(List<InfosImage> picList) {
         this.picList = picList;
+    }
+
+    /**
+     * Getter method for property <tt>videoList</tt>.
+     *
+     * @return property value of videoList
+     */
+    public List<InfosImage> getVideoList() {
+        return videoList;
+    }
+
+    /**
+     * Setter method for property <tt>videoList</tt>.
+     *
+     * @param videoList value to be assigned to property videoList
+     */
+    public void setVideoList(List<InfosImage> videoList) {
+        this.videoList = videoList;
+    }
+
+    /**
+     * Getter method for property <tt>channelName</tt>.
+     *
+     * @return property value of channelName
+     */
+    public String getChannelName() {
+        return channelName;
+    }
+
+    /**
+     * Setter method for property <tt>channelName</tt>.
+     *
+     * @param channelName value to be assigned to property channelName
+     */
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
+
+    /**
+     * Getter method for property <tt>browsingVolume</tt>.
+     *
+     * @return property value of browsingVolume
+     */
+    public Integer getBrowsingVolume() {
+        return browsingVolume;
+    }
+
+    /**
+     * Setter method for property <tt>browsingVolume</tt>.
+     *
+     * @param browsingVolume value to be assigned to property browsingVolume
+     */
+    public void setBrowsingVolume(Integer browsingVolume) {
+        this.browsingVolume = browsingVolume;
+    }
+
+    /**
+     * Getter method for property <tt>forwardingAmount</tt>.
+     *
+     * @return property value of forwardingAmount
+     */
+    public Integer getForwardingAmount() {
+        return forwardingAmount;
+    }
+
+    /**
+     * Setter method for property <tt>forwardingAmount</tt>.
+     *
+     * @param forwardingAmount value to be assigned to property forwardingAmount
+     */
+    public void setForwardingAmount(Integer forwardingAmount) {
+        this.forwardingAmount = forwardingAmount;
+    }
+
+    /**
+     * Getter method for property <tt>collentAmount</tt>.
+     *
+     * @return property value of collentAmount
+     */
+    public Integer getCollentAmount() {
+        return collentAmount;
+    }
+
+    /**
+     * Setter method for property <tt>collentAmount</tt>.
+     *
+     * @param collentAmount value to be assigned to property collentAmount
+     */
+    public void setCollentAmount(Integer collentAmount) {
+        this.collentAmount = collentAmount;
+    }
+
+    /**
+     * Getter method for property <tt>commentsNumber</tt>.
+     *
+     * @return property value of commentsNumber
+     */
+    public Integer getCommentsNumber() {
+        return commentsNumber;
+    }
+
+    /**
+     * Setter method for property <tt>commentsNumber</tt>.
+     *
+     * @param commentsNumber value to be assigned to property commentsNumber
+     */
+    public void setCommentsNumber(Integer commentsNumber) {
+        this.commentsNumber = commentsNumber;
+    }
+
+    /**
+     * Getter method for property <tt>firstLevelName</tt>.
+     *
+     * @return property value of firstLevelName
+     */
+    public String getFirstLevelName() {
+        return firstLevelName;
+    }
+
+    /**
+     * Setter method for property <tt>firstLevelName</tt>.
+     *
+     * @param firstLevelName value to be assigned to property firstLevelName
+     */
+    public void setFirstLevelName(String firstLevelName) {
+        this.firstLevelName = firstLevelName;
+    }
+
+    /**
+     * Getter method for property <tt>twoLevelName</tt>.
+     *
+     * @return property value of twoLevelName
+     */
+    public String getTwoLevelName() {
+        return twoLevelName;
+    }
+
+    /**
+     * Setter method for property <tt>twoLevelName</tt>.
+     *
+     * @param twoLevelName value to be assigned to property twoLevelName
+     */
+    public void setTwoLevelName(String twoLevelName) {
+        this.twoLevelName = twoLevelName;
     }
 }

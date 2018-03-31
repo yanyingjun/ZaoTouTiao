@@ -4,7 +4,9 @@
  */
 package com.zhishun.zaotoutiao.dal.mapper;
 
+import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.core.model.entity.UserGoldRecord;
+import com.zhishun.zaotoutiao.core.model.vo.ApprenticeRepVO;
 import com.zhishun.zaotoutiao.core.model.vo.UserGoldRecordVO;
 
 import java.math.BigDecimal;
@@ -136,7 +138,7 @@ public interface UserGoldRecordMapper {
      * @param map
      * @return
      */
-    int getOpenGoldToday(Map<String,Object> map);
+    String getOpenGoldToday(Map<String,Object> map);
 
     /**
      * 计算时间差
@@ -185,5 +187,46 @@ public interface UserGoldRecordMapper {
      * @return
      */
     List<UserGoldRecordVO> listGoldCountBySource(Map map);
+
+    /**
+     * 获取活动时间内有效徒弟数量
+     * @param map
+     * @return
+     */
+    int getEffectiveApprenticeNum(Map map);
+
+    /**
+     * 获取活动时间内累计获得的奖励
+     * @param map
+     * @return
+     */
+    int getActivityGoldSum(Map map);
+
+    /**
+     * 获取我的徒弟状态分类列表
+     * @return
+     */
+    List<UserGoldRecordVO> listApprenticeNum(Map map);
+
+    /**
+     * 获取未唤醒徒弟数量
+     * @param map
+     * @return
+     */
+    List<ApprenticeRepVO> listAwakenApprentice(Map map);
+
+    /**
+     * 获取有效徒弟列表
+     * @param map
+     * @return
+     */
+    List<ApprenticeRepVO> listEffectiveApprentice(Map map);
+
+    /**
+     * 获取我的徒弟列表
+     * @param map
+     * @return
+     */
+    List<ApprenticeRepVO> listMyApprentice(Map map);
 
 }

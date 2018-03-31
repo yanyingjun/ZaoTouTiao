@@ -19,7 +19,7 @@ public class Infos implements Serializable{
 
     private Integer imgType;
 
-    private Date publishTime;
+    private String publishTime;
 
     private String source;
 
@@ -27,7 +27,7 @@ public class Infos implements Serializable{
 
     private String title;
 
-    private Date updateTime;
+    private String updateTime;
 
     private String videos;
 
@@ -35,15 +35,15 @@ public class Infos implements Serializable{
 
     private String content;
 
-    private Date createDate;
+    private String createDate;
 
     private Byte isHot;
 
-    private Date pushDate;
+    private String pushDate;
 
-    private Integer firstLevel;
+    private String firstLevel;
 
-    private Integer twoLevel;
+    private String twoLevel;
 
     public Long getId() {
         return id;
@@ -77,11 +77,11 @@ public class Infos implements Serializable{
         this.imgType = imgType;
     }
 
-    public Date getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Date publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 
@@ -109,11 +109,11 @@ public class Infos implements Serializable{
         this.title = title == null ? null : title.trim();
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -133,35 +133,35 @@ public class Infos implements Serializable{
         this.summary = summary == null ? null : summary.trim();
     }
 
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
-    public Date getPushDate() {
+    public String getPushDate() {
         return pushDate;
     }
 
-    public void setPushDate(Date pushDate) {
+    public void setPushDate(String pushDate) {
         this.pushDate = pushDate;
     }
 
-    public Integer getFirstLevel() {
+    public String getFirstLevel() {
         return firstLevel;
     }
 
-    public void setFirstLevel(Integer firstLevel) {
+    public void setFirstLevel(String firstLevel) {
         this.firstLevel = firstLevel;
     }
 
-    public Integer getTwoLevel() {
+    public String getTwoLevel() {
         return twoLevel;
     }
 
-    public void setTwoLevel(Integer twoLevel) {
+    public void setTwoLevel(String twoLevel) {
         this.twoLevel = twoLevel;
     }
 

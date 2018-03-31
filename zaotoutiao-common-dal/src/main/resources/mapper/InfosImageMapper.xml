@@ -103,4 +103,17 @@
       create_date = #{createDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=TINYINT}
   </update>
+
+  <delete id="delInfosImage" parameterType="string">
+    delete from infos_image
+    where info_id = #{infoId,jdbcType=TINYINT}
+  </delete>
+
+  <select id="listInfosImage" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from infos_image
+    where info_id = #{infoId} and pic_type = #{picType}
+  </select>
+
 </mapper>

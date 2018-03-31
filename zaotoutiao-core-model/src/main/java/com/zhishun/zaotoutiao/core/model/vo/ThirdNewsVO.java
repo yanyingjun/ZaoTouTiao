@@ -91,6 +91,11 @@ public class ThirdNewsVO {
     private String rptId;
 
     /**
+     * 阅读数
+     */
+    private Integer readCnt;
+
+    /**
      * Getter method for property <tt>title</tt>.
      *
      * @return property value of title
@@ -376,5 +381,23 @@ public class ThirdNewsVO {
      */
     public void setRptId(String rptId) {
         this.rptId = rptId;
+    }
+
+    /**
+     * Getter method for property <tt>readCnt</tt>.
+     *
+     * @return property value of readCnt
+     */
+    public Integer getReadCnt() {
+        return readCnt;
+    }
+
+    /**
+     * Setter method for property <tt>readCnt</tt>.
+     *
+     * @param readCnt value to be assigned to property readCnt
+     */
+    public void setReadCnt(Integer readCnt) {
+        this.readCnt = readCnt;
     }
 }

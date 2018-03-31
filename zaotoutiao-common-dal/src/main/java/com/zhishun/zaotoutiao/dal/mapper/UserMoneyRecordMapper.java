@@ -90,6 +90,12 @@ public interface UserMoneyRecordMapper {
     List<AllRankingVO> allRankings();
 
     /**
+     * 周排行
+     * @return
+     */
+    List<AllRankingVO> weekRankings();
+
+    /**
      * 获得某个用户是否获得新手红包（1或0）
      * @param userId
      * @return

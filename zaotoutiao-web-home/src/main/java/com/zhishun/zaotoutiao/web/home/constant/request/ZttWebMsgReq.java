@@ -136,6 +136,16 @@ public class ZttWebMsgReq {
     public static final String ZTT_VIDEO_ADD_VIEW = "/content/video";
 
     /**
+     * 修改新闻页面请求
+     */
+    public static final String ZTT_NEWS_UPDATE_VIEW = "/news/updateView";
+
+    /**
+     * 修改视频页面请求
+     */
+    public static final String ZTT_VIDEO_UPDATE_VIEW = "/video/updateView";
+
+    /**
      * 内容列表页面请求
      */
     public static final String ZTT_CONTENT_LIST_VIEW = "/content/list/view";

@@ -21,7 +21,7 @@ public interface INewsService {
      * @param pageRequest
      * @return
      */
-    List<InfosVO> getInfosByType(String type, int channelId,PageRequest pageRequest);
+    List<InfosVO> getInfosByType(String type, int channelId, PageRequest pageRequest);
 
     /**
      * 获取新闻分类列表

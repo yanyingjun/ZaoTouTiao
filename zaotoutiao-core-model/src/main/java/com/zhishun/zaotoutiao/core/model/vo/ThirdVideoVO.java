@@ -61,6 +61,21 @@ public class ThirdVideoVO {
     private String cdnUrl;
 
     /**
+     * 观看人数
+     */
+    private String playCnt;
+
+    /**
+     * 播放时长
+     */
+    private String duration;
+
+    /**
+     * 作者头像
+     */
+    private String avatar;
+
+    /**
      * Getter method for property <tt>title</tt>.
      *
      * @return property value of title
@@ -238,5 +253,59 @@ public class ThirdVideoVO {
      */
     public void setCdnUrl(String cdnUrl) {
         this.cdnUrl = cdnUrl;
+    }
+
+    /**
+     * Getter method for property <tt>playCnt</tt>.
+     *
+     * @return property value of playCnt
+     */
+    public String getPlayCnt() {
+        return playCnt;
+    }
+
+    /**
+     * Setter method for property <tt>playCnt</tt>.
+     *
+     * @param playCnt value to be assigned to property playCnt
+     */
+    public void setPlayCnt(String playCnt) {
+        this.playCnt = playCnt;
+    }
+
+    /**
+     * Getter method for property <tt>duration</tt>.
+     *
+     * @return property value of duration
+     */
+    public String getDuration() {
+        return duration;
+    }
+
+    /**
+     * Setter method for property <tt>duration</tt>.
+     *
+     * @param duration value to be assigned to property duration
+     */
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    /**
+     * Getter method for property <tt>avatar</tt>.
+     *
+     * @return property value of avatar
+     */
+    public String getAvatar() {
+        return avatar;
+    }
+
+    /**
+     * Setter method for property <tt>avatar</tt>.
+     *
+     * @param avatar value to be assigned to property avatar
+     */
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

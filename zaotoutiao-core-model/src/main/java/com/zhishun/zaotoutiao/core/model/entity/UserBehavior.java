@@ -37,7 +37,7 @@ public class UserBehavior {
     /**
      * 渠道ID
      */
-    private Integer channelId;
+    private String channelId;
 
     /**
      * 是否是首次激活
@@ -182,7 +182,7 @@ public class UserBehavior {
      *
      * @return property value of channelId
      */
-    public Integer getChannelId() {
+    public String getChannelId() {
         return channelId;
     }
 
@@ -191,7 +191,7 @@ public class UserBehavior {
      *
      * @param channelId value to be assigned to property channelId
      */
-    public void setChannelId(Integer channelId) {
+    public void setChannelId(String channelId) {
         this.channelId = channelId;
     }
 

@@ -8,15 +8,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zhishun.zaotoutiao.biz.service.IThirdInfoService;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
+import com.zhishun.zaotoutiao.common.util.RedPackUtil;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.thirdVo.ResponseResult;
 import com.zhishun.zaotoutiao.test.common.TestConfig;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
-import java.net.URLEncoder;
 
 /**
  * 测试类
@@ -86,25 +83,25 @@ public class ZttTest extends TestConfig{
 
         /*Date date = new Date(Long.valueOf("1520576377")*1000L);
         System.out.println(DateUtil.toString(date, DateUtil.DEFAULT_DATETIME_FORMAT));*/
-        /*ResponseResult responseResult = thirdInfoService.getToken();
+        /*ResponseResult responseResult = thirdInfoService.getToken("89");
         System.out.println(JSON.toJSON(responseResult));
         String data = responseResult.getData();
-        JSONObject jsonObject = JSONObject.parseObject(data);
-        ResponseResult responseResult1 = thirdInfoService.listInformationFlow("979464897", jsonObject.getString("access_token"), "youlike", "0", 1);
+        JSONObject jsonObject = JSONObject.parseObject(data);*/
+        /*ResponseResult responseResult1 = thirdInfoService.listInformationFlow("979464897", jsonObject.getString("access_token"), "youlike", "0", "89", 10);
         System.out.println(JSON.toJSON(responseResult1));*/
-        /*Boolean flag = null;
+        /*String url = null;
         try {
-            flag = thirdInfoService.pressClick(jsonObject.getString("access_token"), "0", "http://sh.qihoo.com/mob/transcoding?url=http%3A%2F%2Fwww.yidianzixun.com%2F0IWANlSb&check=4c184a3a86ce7c3a&uid=4ba26af089f931bf1184e4353d60065f&sign=ex%5F2eb604c1&sv=1&templetctl=7&360newsdetail=1&hsitetype=1&ucheck=96df9c471c09a05da42d9df8aff21233&hscmt=1",
+            url = thirdInfoService.pressClick(jsonObject.getString("access_token"), "0",
                     "youlike", "h", "funny", "funny,multi,test_filter_V24,normal_op,joke,gif,dfs_monit,gaoxiao,sts1,fts3,,\n" +
                             "nbbn_call_S:5:p8000012:全类:妹子:搞笑,nbbn_cfunny_P:全类:妹子:搞笑,nbbn_cfunny_S:5:16959:搞笑:gif,nbbn_cfunny_S:5:17570:gif:搞笑,nbbn_cfunny_S:5:m30830:gif:搞笑,\n" +
                             "nbbn_kfunny_1:搞笑,nbbn_kfunny_2:搞笑,nbbn_sfunny_搞笑,nbbn_tfunny,,nbbc_tfunny_V153,nbbr_tfunny_V153__100__1660__382300__27__13__100,tag,tagt_91010,\n" +
                             "uusdkother_0,nbbh_merger66.se.bjyt,uusdkother,,nbbs_0:1", "搞笑GIF:媳妇出门不忘带上锅，真正的吃货", "9a0937fcb5a58aa52f8cbdf151f4898d",
-                    "t", "1");
+                    "t", "1","89");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        System.out.println(JSON.toJSON(flag));*/
+        System.out.println(url);*/
 
         /*String str = "{'packageName': 'InternetRadio.all','appVersion': '1.2.3','idIdfa': 'ssss','idImei': 'xxxx','height': 1136,'width': 640," +
                 "'brand': 'apple','model': 'iPhone6','osVersion': '1.1.2','osType': 1,'type': 1,'ip': '218.66.169.71','domain':'78447','urls':'55899','userAgent':'Mozilla/5.0 (Linux; U; android 2.3.7; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1'}";
@@ -114,7 +111,7 @@ public class ZttTest extends TestConfig{
 
         //先随机产生一个下标再获取元素
 
-        int[] doc = {0,1,2,3,4,5,6,7,8,9};
+        /*int[] doc = {0,1,2,3,4,5,6,7,8,9};
 
         for(int i = 0;i<10;i++){
             int index = (int) (Math.random() * doc.length);
@@ -126,7 +123,13 @@ public class ZttTest extends TestConfig{
                 System.out.println("***"+random);
             }
 
-        }
+        }*/
+
+        //Calendar cal = Calendar.getInstance();
+        //System.out.println(cal.get(Calendar.DAY_OF_MONTH));
+
+        /*Random random = new Random();
+        System.out.println(random.nextInt(100));*/
 
 
 

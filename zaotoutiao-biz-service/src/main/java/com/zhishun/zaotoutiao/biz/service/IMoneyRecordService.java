@@ -20,6 +20,12 @@ public interface IMoneyRecordService {
     List<AllRankingVO> allRankings();
 
     /**
+     * 周排行
+     * @return
+     */
+    List<AllRankingVO> weekRankings();
+
+    /**
      * 按日期分组统计零钱数量
      * @param channelId 渠道
      * @param source 金币来源

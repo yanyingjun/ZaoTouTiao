@@ -124,7 +124,6 @@ public class NewsServiceImpl implements INewsService {
         return infosVoList;
     }
 
-
     /**
      * 获取收藏列表
      * @param infosType

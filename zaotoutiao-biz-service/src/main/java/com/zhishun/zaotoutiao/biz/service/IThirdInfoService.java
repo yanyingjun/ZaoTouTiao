@@ -42,7 +42,7 @@ public interface IThirdInfoService {
      * @param device
      * @return
      */
-    Boolean pressClick(String accessToken, String device, String url, String channel, String a, String c, String source, String t, String sid, String s, String style, String userId) throws Exception;
+    String pressClick(String accessToken, String device, String channel, String a, String c, String source, String t, String sid, String s, String style, String userId) throws Exception;
 
     /**
      * 视频频道列表

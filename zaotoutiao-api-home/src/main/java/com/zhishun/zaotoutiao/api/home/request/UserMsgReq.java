@@ -204,4 +204,24 @@ public class UserMsgReq {
      * 获取未读热文条数
      */
     public static final String  UNREAD_HOT_NUM_GET ="unread/hot/num/get";
+
+    /**
+     * 上传头像
+     */
+    public static final String UPLOAD_HEAD = "/upload/head";
+
+    /**
+     * 收入排行榜
+     */
+    public static final String INCOME_RANKINGS = "/income/rankings";
+
+    /**
+     * 活动奖励（段位）
+     */
+    public static final String ACTIVITY_REWARD = "/activity/reward";
+
+    /**
+     * 我的徒弟列表
+     */
+    public static final String LIST_APPRENTICE = "/apprentice/list";
 }

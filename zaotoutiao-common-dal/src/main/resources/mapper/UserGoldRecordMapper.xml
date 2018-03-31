@@ -225,7 +225,7 @@
     SELECT * from user_gold_record where userId = #{userId} order by create_date desc limit 1
   </select>
 
-  <select id="getOpenGoldToday" parameterType="map" resultType="int">
+  <select id="getOpenGoldToday" parameterType="map" resultType="string">
     SELECT SUM(gold) as count FROM user_gold_record WHERE userId = #{userId} AND source = #{source} AND create_date > #{zeroDay}
     group by userId
   </select>
@@ -479,6 +479,80 @@
       </if>
     </if>
     GROUP BY source
+  </select>
+
+  <select id="getEffectiveApprenticeNum" parameterType="map" resultType="int">
+    select count(apprenticeId) from (select sum(gold) as gold,apprenticeId,userId from user_gold_record
+    <where>
+      <if test="source != null">
+        source = #{source}
+      </if>
+      <if test="userId != null">
+        and userId = #{userId}
+      </if>
+      <if test="startDate != null">
+        and create_date &gt;= #{startDate}
+      </if>
+      <if test="endDate != null">
+        and create_date &lt;= #{endDate}
+      </if>
+    </where>
+    group by apprenticeId) as a where a.gold &gt;= 100 group by userId
+  </select>
+
+  <select id="getActivityGoldSum" parameterType="map" resultType="int">
+    select sum(a.gold) from (select sum(gold) as gold,apprenticeId,userId from user_gold_record
+    <where>
+      <if test="source != null">
+        source = #{source}
+      </if>
+      <if test="userId != null">
+        and userId = #{userId}
+      </if>
+      <if test="startDate != null">
+        and create_date &gt;= #{startDate}
+      </if>
+      <if test="endDate != null">
+        and create_date &lt;= #{endDate}
+      </if>
+    </where>
+    group by apprenticeId) as a group by userId
+  </select>
+
+  <!-- 七天内无进贡 -->
+  <select id="listAwakenApprentice" parameterType="map" resultType="com.zhishun.zaotoutiao.core.model.vo.ApprenticeRepVO">
+    select sum(a.gold) as sumGold,b.headpath as headPath,b.nickName
+    from user_gold_record as a
+    LEFT JOIN user as b ON a.apprenticeId = b.userId
+    where a.source =2 and a.userId = #{userId} and a.apprenticeId NOT in (select d.apprenticeId
+    from user_gold_record as d
+    LEFT JOIN user as e ON d.apprenticeId = e.userId
+    where date(d.create_date) &gt; DATE_SUB(CURDATE(), INTERVAL 7 DAY) and date(d.create_date) &lt;= date(CURDATE()) and d.source =2 and d.userId = #{userId} group by d.apprenticeId) group by a.apprenticeId
+    <if test="offset != null and limit != null">
+      limit #{offset},#{limit}
+    </if>
+  </select>
+
+  <!-- 有效徒弟：七天内进贡金币>=100 -->
+  <select id="listEffectiveApprentice" parameterType="map" resultType="com.zhishun.zaotoutiao.core.model.vo.ApprenticeRepVO">
+    select a.sumGold,a.headpath as headPath,a.nickName from (select d.apprenticeId,SUM(d.gold) as sumGold,e.headpath,e.nickName
+    from user_gold_record as d
+    LEFT JOIN user as e ON d.apprenticeId = e.userId
+    where date(d.create_date) &gt; DATE_SUB(CURDATE(), INTERVAL 7 DAY) and date(d.create_date) &lt;= date(CURDATE()) and d.source =2 and d.userId = #{userId} group by d.apprenticeId) as a where a.sumGold &gt;= 100
+    <if test="offset != null and limit != null">
+      limit #{offset},#{limit}
+    </if>
+  </select>
+
+  <!-- 七天内进贡金币<100 -->
+  <select id="listMyApprentice" parameterType="map" resultType="com.zhishun.zaotoutiao.core.model.vo.ApprenticeRepVO">
+    select a.sumGold,a.headpath as headPath,a.nickName from (select d.apprenticeId,SUM(d.gold) as sumGold,e.headpath,e.nickName
+    from user_gold_record as d
+    LEFT JOIN user as e ON d.apprenticeId = e.userId
+    where date(d.create_date) &gt; DATE_SUB(CURDATE(), INTERVAL 7 DAY) and date(d.create_date) &lt;= date(CURDATE()) and d.source =2 and d.userId = #{userId} group by d.apprenticeId) as a where a.sumGold &gt; 0 and a.sumGold &lt; 100
+    <if test="offset != null and limit != null">
+      limit #{offset},#{limit}
+    </if>
   </select>
 
 </mapper>

@@ -19,12 +19,12 @@
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="isHot" jdbcType="TINYINT" property="isHot" />
     <result column="push_date" jdbcType="TIMESTAMP" property="pushDate" />
-    <result column="first_level" jdbcType="INTEGER" property="firstLevel" />
-    <result column="two_level" jdbcType="INTEGER" property="twoLevel" />
+    <result column="first_level" jdbcType="VARCHAR" property="firstLevel" />
+    <result column="two_level" jdbcType="VARCHAR" property="twoLevel" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, info_id, info_type, channel_id, catInfo_name, img_type, publish_time, source,
-    thumbnails, title, update_time, videos, summary, content, create_date, isHot, push_date,
+    id, info_id, info_type, channel_id, catInfo_name, img_type, date_format(publish_time, '%Y-%m-%d %H:%i:%s') as publishTime, source,
+    thumbnails, title, date_format(update_time, '%Y-%m-%d %H:%i:%s') as updateTime, videos, summary, content, date_format(create_date, '%Y-%m-%d %H:%i:%s') as createDate, isHot, push_date,
     first_level, two_level
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -50,8 +50,8 @@
     #{publishTime,jdbcType=TIMESTAMP}, #{source,jdbcType=VARCHAR}, #{thumbnails,jdbcType=VARCHAR},
     #{title,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{videos,jdbcType=VARCHAR},
     #{summary,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},
-    #{isHot,jdbcType=TINYINT}, #{pushDate,jdbcType=TIMESTAMP}, #{firstLevel,jdbcType=INTEGER},
-    #{twoLevel,jdbcType=INTEGER})
+    #{isHot,jdbcType=TINYINT}, #{pushDate,jdbcType=TIMESTAMP}, #{firstLevel,jdbcType=VARCHAR},
+    #{twoLevel,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhishun.zaotoutiao.core.model.entity.Infos">
     insert into infos
@@ -167,10 +167,10 @@
         #{pushDate,jdbcType=TIMESTAMP},
       </if>
       <if test="firstLevel != null">
-        #{firstLevel,jdbcType=INTEGER},
+        #{firstLevel,jdbcType=VARCHAR},
       </if>
       <if test="twoLevel != null">
-        #{twoLevel,jdbcType=INTEGER},
+        #{twoLevel,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -226,10 +226,10 @@
         push_date = #{pushDate,jdbcType=TIMESTAMP},
       </if>
       <if test="firstLevel != null">
-        first_level = #{firstLevel,jdbcType=INTEGER},
+        first_level = #{firstLevel,jdbcType=VARCHAR},
       </if>
       <if test="twoLevel != null">
-        two_level = #{twoLevel,jdbcType=INTEGER},
+        two_level = #{twoLevel,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -252,8 +252,8 @@
       create_date = #{createDate,jdbcType=TIMESTAMP},
       isHot = #{isHot,jdbcType=TINYINT},
       push_date = #{pushDate,jdbcType=TIMESTAMP},
-      first_level = #{firstLevel,jdbcType=INTEGER},
-      two_level = #{twoLevel,jdbcType=INTEGER}
+      first_level = #{firstLevel,jdbcType=VARCHAR},
+      two_level = #{twoLevel,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -287,25 +287,6 @@
     </where>
   </select>
 
-  <select id="getMyCommentsList" parameterType="long" resultMap="BaseResultMap">
-    SELECT user_comments.*,infos.*,channels.name as type
-    FROM infos RIGHT JOIN user_comments ON user_comments.info_id = infos.info_id
-    left join channels ON channels.channelId = infos.channel_id
-    left JOIN user ON user_comments.user_id = user.userId
-    WHERE user.userId = #{userId}
-    <if test="offset != null and limit != null">
-      limit #{offset},#{limit}
-    </if>
-  </select>
-
-  <select id="countMyCommentsList" parameterType="map" resultType="int">
-    SELECT COUNT(0)
-    FROM infos RIGHT JOIN user_comments ON user_comments.info_id = infos.info_id
-    left join channels ON channels.channelId = infos.channel_id
-    left JOIN user ON user_comments.user_id = user.userId
-    WHERE user.userId = #{userId}
-  </select>
-
   <select id="getRandVideoList" parameterType="int" resultMap="BaseResultMap">
     SELECT * FROM infos WHERE info_type='video' AND channel_id = #{channelId} ORDER BY rand() limit 0,6
   </select>
@@ -326,6 +307,68 @@
     FROM infos
     WHERE info_id = #{infoId}
   </select>
+
+  <select id="getInfosPageByMap" parameterType="com.zhishun.zaotoutiao.core.model.vo.ContentQueryVO" resultMap="BaseResultMap">
+    SELECT  a.*,b.count as browsingVolume,c.count as forwardingAmount,d.count as collentAmount, e.count as commentsNumber,
+    f.name as channelName, g.name as firstLevelName, i.name as twoLevelName
+    from infos as a
+    LEFT JOIN (select count(id) as count,infoId from user_read_record GROUP BY infoId) as b ON a.info_id = b.infoId
+    LEFT JOIN (select count(id) as count,infoId from user_share GROUP BY infoId) as c ON a.info_id = c.infoId
+    LEFT JOIN (SELECT count(id) as count,info_id from user_collect GROUP BY info_id) as d ON a.info_id = d.info_id
+    LEFT JOIN (SELECT count(id) as count,info_id from user_comments GROUP  BY info_id) as e ON a.info_id = e.info_id
+    LEFT JOIN channels as f ON a.channel_id = f.channelId
+    LEFT JOIN channels as g ON a.first_level = g.channelId
+    LEFT JOIN channels as i ON a.two_level = i.channelId
+    <where>
+      <if test="keyWord != null">
+          a.catInfo_name LIKE CONCAT('%', #{keyWord}, '%')
+      </if>
+      <if test="infoType != null">
+        and a.info_type = #{infoType}
+      </if>
+      <if test="channelId != null">
+        and a.channel_id = #{channelId}
+      </if>
+      <if test="firstLevel != null">
+        and a.first_level = #{firstLevel}
+      </if>
+      <if test="twoLevel != null">
+        and a.two_level = #{twoLevel}
+      </if>
+      <if test="source != null">
+        and a.source = #{source}
+      </if>
+      <if test="browsingVolumeMin != null">
+        and b.count &gt;= #{browsingVolumeMin}
+      </if>
+      <if test="browsingVolumeMax != null">
+        and b.count &lt;= #{browsingVolumeMax}
+      </if>
+      <if test="forwardingAmountMin != null">
+        and c.count &gt;= #{forwardingAmountMin}
+      </if>
+      <if test="forwardingAmountMax != null">
+        and c.count &lt;= #{forwardingAmountMax}
+      </if>
+      <if test="collentAmountMin != null">
+        and d.count &gt;= #{collentAmountMin}
+      </if>
+      <if test="collentAmountMax != null">
+        and d.count &lt;= #{collentAmountMax}
+      </if>
+      <if test="commentsNumberMin != null">
+        and e.count &gt;= #{commentsNumberMin}
+      </if>
+      <if test="commentsNumberMax != null">
+        and e.count &lt;= #{commentsNumberMax}
+      </if>
+    </where>
+  </select>
+
+  <delete id="delInfos" parameterType="string">
+    delete from infos_image
+    where info_id = #{infoId,jdbcType=TINYINT}
+  </delete>
 
   <select id="listOfTot30" parameterType="java.util.List" resultMap="BaseResultMap">
     SELECT <include refid="Base_Column_List" />

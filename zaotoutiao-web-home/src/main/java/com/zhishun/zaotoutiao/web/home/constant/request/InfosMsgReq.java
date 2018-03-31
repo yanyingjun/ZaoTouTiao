@@ -15,5 +15,20 @@ public class InfosMsgReq {
      */
     public static final String ADD_NEWS_VIDEO_REQ = "/infos/add";
 
+    /**
+     * 获取内容列表
+     */
+    public static final String LIST_INFOS_REQ = "/infos/list";
+
+    /**
+     * 删除视频或新闻
+     */
+    public static final String DEL_NEWS_VIDEO_REQ = "/infos/del";
+
+    /**
+     * 更新视频或新闻
+     */
+    public static final String UPDATE_NEWS_VIDEO_REQ = "/infos/update";
+
 
 }

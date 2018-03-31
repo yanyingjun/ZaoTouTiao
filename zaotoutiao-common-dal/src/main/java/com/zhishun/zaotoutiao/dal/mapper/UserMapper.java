@@ -158,4 +158,11 @@ public interface UserMapper {
      */
     int countCanBePresentedUser(Map map);
 
+    /**
+     * 获取活动时间内新增徒弟数量
+     * @param map
+     * @return
+     */
+    int getActivityApprenticeSum(Map map);
+
 }

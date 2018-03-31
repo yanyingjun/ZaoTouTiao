@@ -43,6 +43,9 @@ public class UploadController extends BaseController{
      */
     private static String NEWS_IMAGE_DIR = "news/image/";
 
+
+    private static String VIDEO_DRI = "video/";
+
     @Autowired
     private IInfosImageService infosImageService;
 
@@ -52,7 +55,7 @@ public class UploadController extends BaseController{
      * @return
      */
     @RequestMapping(value = ZttWebMsgReq.ZTT_UPLOAD_LIST_PIC_REQ)
-    public Map<Object,Object> uploadListPic(final List<MultipartFile> pic){
+    public Map<Object,Object> uploadListPic(final List<MultipartFile> pic, String infoType){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
@@ -66,15 +69,12 @@ public class UploadController extends BaseController{
 
                 try {
                     for(MultipartFile file : pic){
-                        String name = OSSClientUtil.uploadImgOss(file, NEWS_IMAGE_DIR);
+                        String name = OSSClientUtil.uploadImgOss(file, NEWS_IMAGE_DIR, infoType);
                         String imgUrl = OSSClientUtil.getImgUrl(name, NEWS_IMAGE_DIR);
-
                         InfosImage infosImage = new InfosImage();
-                        infosImage.setInfoId("news");
                         infosImage.setPicName(name);
                         infosImage.setPicUrl(imgUrl);
                         infosImage.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
-                        //infosImageService.addImage(infosImage);
                         dataMap.put("infosImage", infosImage);
                     }
                     dataMap.put("result", "success");
@@ -98,30 +98,26 @@ public class UploadController extends BaseController{
      * @return
      */
     @RequestMapping(value = ZttWebMsgReq.ZTT_UPLOAD_VIDEO_REQ)
-    public Map<Object,Object> uploadListVideo(final MultipartFile video){
+    public Map<Object,Object> uploadListVideo(final MultipartFile video, String infoType){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
             public void check() throws ZhiShunException {
-                //AssertsUtil.isNotEmpty(video, ErrorCodeEnum.SYSTEM_ANOMALY);
+                AssertsUtil.isNotNull(video, ErrorCodeEnum.SYSTEM_ANOMALY);
             }
 
             @Override
             public void handle() throws Exception {
 
                 try {
-
-                    String name = OSSClientUtil.uploadImgOss(video, NEWS_IMAGE_DIR);
-                    String imgUrl = OSSClientUtil.getImgUrl(name, NEWS_IMAGE_DIR);
+                    String name = OSSClientUtil.uploadImgOss(video, VIDEO_DRI, infoType);
+                    String videoUrl = OSSClientUtil.getImgUrl(name, VIDEO_DRI);
                     InfosImage infosImage = new InfosImage();
-                    infosImage.setInfoId("news");
                     infosImage.setPicName(name);
-                    infosImage.setPicUrl(imgUrl);
+                    infosImage.setPicUrl(videoUrl);
                     infosImage.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
-                    //infosImageService.addImage(infosImage);
                     dataMap.put("infosImage", infosImage);
-
                     dataMap.put("result", "success");
                     dataMap.put("msg", "上传视频成功");
                     System.out.println(JSON.toJSON(dataMap));

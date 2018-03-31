@@ -44,6 +44,18 @@ public class MoneyRecordServiceImpl implements IMoneyRecordService{
     }
 
     @Override
+    public List<AllRankingVO> weekRankings(){
+        List<AllRankingVO> list = userMoneyRecordMapper.weekRankings();
+        for(AllRankingVO vo : list){
+            int sum = userMapper.getApprenticeSum(vo.getUserId());
+            vo.setApprenticeSum(sum);
+            User user = userMapper.selectByPrimaryKey(vo.getUserId());
+            vo.setName(user.getNickName());
+        }
+        return list;
+    }
+
+    @Override
     public List<UserMoneyRecordVO> listMoneyCount(int channelId, String source, String type, String isNewAndOld, String startDate, String endDate) {
         Map map = Maps.newHashMap();
         if(!StringUtils.isEmpty(channelId) && channelId != 0){

@@ -4,6 +4,7 @@
  */
 package com.zhishun.zaotoutiao.api.home.controller.user;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.api.home.callback.ControllerCallback;
 import com.zhishun.zaotoutiao.api.home.controller.base.BaseController;
@@ -13,6 +14,7 @@ import com.zhishun.zaotoutiao.common.base.pagination.Page;
 import com.zhishun.zaotoutiao.common.base.pagination.PageRequest;
 import com.zhishun.zaotoutiao.common.util.*;
 import com.zhishun.zaotoutiao.core.model.entity.*;
+import com.zhishun.zaotoutiao.core.model.enums.DanRulesEnum;
 import com.zhishun.zaotoutiao.core.model.enums.ErrorCodeEnum;
 import com.zhishun.zaotoutiao.core.model.exception.ZhiShunException;
 import com.zhishun.zaotoutiao.core.model.vo.*;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -857,7 +859,7 @@ public class UserController extends BaseController{
      * @param userRead
      * @return
      */
-    @RequestMapping(value = UserMsgReq.READ_GOLD_GET)
+    @RequestMapping(value = UserMsgReq.READ_GOLD_GET, method = RequestMethod.POST)
     public Map<Object,Object> readGoldGet(final UserReadRecord userRead){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
@@ -916,6 +918,9 @@ public class UserController extends BaseController{
                         dataMap.put("getGold", gold);
                         dataMap.put("data", "true");
                     }else{
+                        //添加阅读记录
+                        userRead.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
+                        userReadService.readRecordAdd(userRead);
                         dataMap.put("result", "success");
                         dataMap.put("msg", "本次浏览没获得金币");
                         dataMap.put("getGold", 0);
@@ -995,8 +1000,9 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = UserMsgReq.OPEN_TREASURE)
-    public Map<Object,Object> openTreasure(final Long userId, final Long isSubmit){
+    public Map<Object,Object> openTreasure(final Long userId, final Long isSubmit, HttpServletResponse response){
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         final Map<Object,Object> dataMap = Maps.newHashMap();
         this.excute(dataMap, null, new ControllerCallback() {
             @Override
@@ -1008,11 +1014,14 @@ public class UserController extends BaseController{
             public void handle() throws Exception {
                 //判断是否超过今天开宝箱可以获得的最大金币数
                 //获取用户当天开宝箱获得的金币总和
-                int goldToday = goldRecordService.getOpenGoldToday(userId, 4);
+                String goldToday = goldRecordService.getOpenGoldToday(userId, 4);
+                if(StringUtils.isEmpty(goldToday)){
+                    goldToday = "0";
+                }
                 //获取用户当天最大可以获得的金币数
                 StaticGoldConfig staticGoldConfig = userService.getReadGoldConfig("OPEN_TREASURE");
                 int openGoldMax = staticGoldConfig.getHighest();
-                if(goldToday < openGoldMax){
+                if(Integer.parseInt(goldToday) < openGoldMax){
                     //判断时间差
                     Map leadTime = goldRecordService.leadTime(userId);
                     //计算下次开宝箱时间
@@ -1079,7 +1088,7 @@ public class UserController extends BaseController{
      * 周排行和总排行列表
      * @return
      */
-    @RequestMapping(value = UserMsgReq.GOLD_RANKINGS)
+    @RequestMapping(value = UserMsgReq.GOLD_RANKINGS, method = RequestMethod.GET)
     public Map<Object,Object> rankings(){
 
         final Map<Object,Object> dataMap = Maps.newHashMap();
@@ -1092,7 +1101,7 @@ public class UserController extends BaseController{
             @Override
             public void handle() throws Exception {
                 //周排行
-                List<Map> list = staticFakeDataService.weekRankings();
+                List<AllRankingVO> list = moneyRecordService.weekRankings();
                 //总排行
                 List<AllRankingVO> listAll = moneyRecordService.allRankings();
                 dataMap.put("result", "success");
@@ -1295,6 +1304,106 @@ public class UserController extends BaseController{
                     dataMap.put("msg", "未找到相关数据");
                     dataMap.put("data", staticFakeDataList);
                 }
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 活动奖励
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.ACTIVITY_REWARD, method = RequestMethod.GET)
+    public Map<Object,Object> activityReward(final Long userId, final String startDate, final String endDate, HttpServletResponse response){
+
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                //获取活动时间内新增徒弟数量
+                int newNum = userService.getActivityApprenticeSum(userId, startDate, endDate);
+                //获取活动时间内的有效徒弟数量
+                int effectiveNum = goldRecordService.getEffectiveApprenticeNum(userId, startDate, endDate);
+                //累计奖励
+                int goldNum = goldRecordService.getActivityGoldSum(userId, startDate, endDate);
+                //段位
+                String dan = "";
+                //需要多少个有效徒弟解锁
+                int unlockDan = 0;
+                if(effectiveNum > 1 && effectiveNum < 3){
+                    dan = DanRulesEnum.BRONZE.getName();
+                    unlockDan = 3 - effectiveNum;
+                }else if(effectiveNum >=3 && effectiveNum < 10){
+                    dan = DanRulesEnum.SILVER.getName();
+                    unlockDan = 10 - effectiveNum;
+                }else if(effectiveNum >= 10 && effectiveNum < 66){
+                    dan = DanRulesEnum.GOLD.getName();
+                    unlockDan = 66 - effectiveNum;
+                }else if(effectiveNum >= 66 && effectiveNum < 200){
+                    dan = DanRulesEnum.PLATINUM.getName();
+                    unlockDan = 200 - effectiveNum;
+                }else if(effectiveNum >= 200 && effectiveNum < 400){
+                    dan = DanRulesEnum.DIAMONDS.getName();
+                    unlockDan = 400 - effectiveNum;
+                }else if(effectiveNum >= 400 && effectiveNum < 1000){
+                    dan = DanRulesEnum.MASTER.getName();
+                    unlockDan = 1000 - effectiveNum;
+                }else if(effectiveNum >= 1000){
+                    dan = DanRulesEnum.KING.getName();
+                }else{
+                    dan = "未知";
+                }
+
+                dataMap.put("dan", dan);
+                dataMap.put("unlockDan", unlockDan);
+                dataMap.put("newNum", newNum);
+                dataMap.put("effectiveNum", effectiveNum);
+                dataMap.put("goldNum", goldNum);
+            }
+        });
+
+        return dataMap;
+    }
+
+    /**
+     * 我的徒弟列表
+     * @return
+     */
+    @RequestMapping(value = UserMsgReq.LIST_APPRENTICE, method = RequestMethod.GET)
+    public Map<Object,Object> getListApprentice(final Long userId, final String type, final PageRequest pageRequest, HttpServletResponse response){
+
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        final Map<Object,Object> dataMap = Maps.newHashMap();
+        this.excute(dataMap, null, new ControllerCallback() {
+            @Override
+            public void check() throws ZhiShunException {
+                AssertsUtil.isNotZero(userId, ErrorCodeEnum.SYSTEM_ANOMALY);
+            }
+
+            @Override
+            public void handle() throws Exception {
+                List<ApprenticeRepVO> list = Lists.newArrayList();
+                if(type.equals("avaken")){
+                    list = goldRecordService.listAwakenApprentice(userId, pageRequest);
+                }
+                if(type.equals("effective")){
+                    list = goldRecordService.listEffectiveApprentice(userId, pageRequest);
+                }
+                if(type.equals("my")){
+                    list = goldRecordService.listMyApprentice(userId, pageRequest);
+
+                }
+
+                dataMap.put("data", list);
+                dataMap.put("state", "success");
+                dataMap.put("msg", "查询成功");
             }
         });
 

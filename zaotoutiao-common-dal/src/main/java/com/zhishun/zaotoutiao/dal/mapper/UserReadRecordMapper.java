@@ -2,7 +2,9 @@ package com.zhishun.zaotoutiao.dal.mapper;
 
 
 import com.zhishun.zaotoutiao.core.model.entity.UserReadRecord;
+import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
 import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
+import com.zhishun.zaotoutiao.core.model.vo.UserReadRecordVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,6 +30,13 @@ public interface UserReadRecordMapper {
      * @return
      */
     UserReadRecord getUserReadRecord(Map<String,Object> map);
+
+    /**
+     * 根据参数获取新闻
+     * @param infoId
+     * @return
+     */
+    UserReadRecord getUserReadRecordByInfoId(String infoId);
 
     /**
      * 更新是否请求过阅读金币的状态
@@ -123,6 +132,13 @@ public interface UserReadRecordMapper {
      * @return
      */
     Long getFirstTabNum(Map<String,Object> map);
+
+    /**
+     * 获取我的评论列表
+     * @param map
+     * @return
+     */
+    List<UserReadRecordVO> getMyCommentsList(Map<String,Object> map);
 
     /**
      * 获取某个二级标签下的所有阅读

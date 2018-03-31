@@ -137,7 +137,7 @@
   </select>
 
   <select id="listWithdrawals" parameterType="map" resultMap="BaseResultMap">
-    select w.userId,w.money,w.bill_no,w.status as auditStatus,u.status,u.nickName,u.telephone,g2.gold/g1.gold as apprenticeRate,
+    select w.userId,w.money,w.bill_no,w.status as auditStatus,u.present_status as presentStatus ,u.nickName,u.telephone,g2.gold/g1.gold as apprenticeRate,
     w.create_date as createDate,u.last_visit_date as lastVisitDate, r.number as readNumber, s.apprenticeNum as apprenticeNum,
     p.channel_name as channelName, u.account_status as accountStatus, u.income_status as incomeStatus, u.present_status as presentStatus,
     u.speech_status as speechStatus

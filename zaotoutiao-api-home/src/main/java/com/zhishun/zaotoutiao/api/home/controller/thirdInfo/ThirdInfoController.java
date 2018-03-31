@@ -34,9 +34,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author 闫迎军(YanYingJun)
@@ -198,14 +200,11 @@ public class ThirdInfoController extends BaseController{
                 }else{
                     JSONObject json = JSONObject.parseObject(responseResult.getData());
                     String accessToken = json.getString("access_token");
-                    Boolean flag = thirdInfoService.pressClick(accessToken, device, url, channel, a, newsType, source, t, sid, s, style, userId);
-                    if(flag){
-                        dataMap.put("result", "success");
-                        dataMap.put("msg", "新闻点击单点请求成功");
-                    }else{
-                        dataMap.put("result", "success");
-                        dataMap.put("msg", "新闻点击单点请求失败");
-                    }
+                    String urlPrefix = thirdInfoService.pressClick(accessToken, device, channel, a, newsType, source, t, sid, s, style, userId);
+                    dataMap.put("state", "success");
+                    dataMap.put("msg", "新闻点击单点请求成功");
+                    dataMap.put("urlPrefix", urlPrefix);
+                    dataMap.put("url", url);
                 }
             }
         });
@@ -300,6 +299,20 @@ public class ThirdInfoController extends BaseController{
 
         return dataMap;
     }
+    /**
+     * 观看人数
+     */
+    private String playCnt;
+
+    /**
+     * 播放时长
+     */
+    private String duration;
+
+    /**
+     * 作者头像
+     */
+    private String avatar;
 
     /**
      * 获取视频列表（综合和频道）
@@ -330,11 +343,14 @@ public class ThirdInfoController extends BaseController{
                     thirdVideoVO.setUrl(json.getString("cover"));
                     JSONObject jsonObject1 = JSONObject.parseObject(json.getString("author"));
                     thirdVideoVO.setAuthor(jsonObject1.getString("name"));
+                    thirdVideoVO.setAvatar(jsonObject1.getString("avatar"));
                     Date date = new Date(Long.valueOf(json.getString("publicTime"))*1000L);
                     thirdVideoVO.setCreateDate(DateUtil.toString(date, DateUtil.DEFAULT_DATETIME_FORMAT));
                     thirdVideoVO.setId(json.getString("id"));
                     thirdVideoVO.setExtdata(json.getString("extData"));
                     thirdVideoVO.setBackdata(jsonObject.getString("backdata"));
+                    thirdVideoVO.setDuration(jsonObject.getString("duration"));
+                    thirdVideoVO.setPlayCnt(jsonObject.getString("playCnt"));
                     thirdVideoVOS.add(thirdVideoVO);
                 }
                 List<Map<String,Object>> listVideos = Lists.newArrayList();
@@ -484,10 +500,13 @@ public class ThirdInfoController extends BaseController{
                     thirdVideoVO.setUrl(json.getString("cover"));
                     JSONObject jsonObject1 = JSONObject.parseObject(json.getString("author"));
                     thirdVideoVO.setAuthor(jsonObject1.getString("name"));
+                    thirdVideoVO.setAvatar(jsonObject1.getString("avatar"));
                     Date date = new Date(Long.valueOf(json.getString("publicTime"))*1000L);
                     thirdVideoVO.setCreateDate(DateUtil.toString(date, DateUtil.DEFAULT_DATETIME_FORMAT));
                     thirdVideoVO.setId(json.getString("id"));
                     thirdVideoVO.setExtdata(json.getString("extData"));
+                    thirdVideoVO.setPlayCnt(json.getString("playCnt"));
+                    thirdVideoVO.setDuration(json.getString("duration"));
                     thirdVideoVOS.add(thirdVideoVO);
                 }
 
@@ -580,6 +599,12 @@ public class ThirdInfoController extends BaseController{
                         thirdNewsVO.setS(job.getString("s"));
                         thirdNewsVO.setPicUrl(job.getString("i"));
                         thirdNewsVO.setRptId(job.getString("r"));
+                        int cmtNum = 0;
+                        if(StringUtils.isEmpty(job.getString("cmt_num"))){
+                            Random random = new Random();
+                            cmtNum = new BigDecimal(job.getString("cmt_num")).multiply(new BigDecimal(100)).add(new BigDecimal(random.nextInt(100))).intValue();
+                        }
+                        thirdNewsVO.setReadCnt(cmtNum);
                         if(!StringUtils.isEmpty(job.getString("style"))){
                             thirdNewsVO.setStyle(job.getString("style"));
                         }else{
@@ -666,11 +691,17 @@ public class ThirdInfoController extends BaseController{
                         thirdNewsVO.setUrl(job.getString("u"));
                         thirdNewsVO.setRawurl(job.getString("rawurl"));
                         thirdNewsVO.setSid(res.getSid());
-                        thirdNewsVO.setChannel(informationVO.getC());
+                        thirdNewsVO.setChannel("youlike");
                         thirdNewsVO.setA(job.getString("a"));
                         thirdNewsVO.setS(job.getString("s"));
                         thirdNewsVO.setPicUrl(job.getString("i"));
                         thirdNewsVO.setRptId(job.getString("r"));
+                        int cmtNum = 0;
+                        if(StringUtils.isEmpty(job.getString("cmt_num"))){
+                            Random random = new Random();
+                            cmtNum = new BigDecimal(job.getString("cmt_num")).multiply(new BigDecimal(100)).add(new BigDecimal(random.nextInt(100))).intValue();
+                        }
+                        thirdNewsVO.setReadCnt(cmtNum);
                         if(!StringUtils.isEmpty(job.getString("style"))){
                             thirdNewsVO.setStyle(job.getString("style"));
                         }else{
