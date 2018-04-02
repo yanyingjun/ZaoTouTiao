@@ -83,7 +83,7 @@ public class ChannelManageController extends BaseController{
      */
     @RequestMapping(value = ChannelMsgReq.CHANNEL_MANAGE_REQ)
     @ResponseBody
-    public List<ChannelsVO> getChannelsList(final String name, final Integer status, final Integer appType, @RequestParam(value="parentId",defaultValue = "0") final Long parentId){
+    public List<ChannelsVO> getChannelsList(final String name, final Integer status, final Integer appType, @RequestParam(value="parentId",defaultValue = "0") final String parentId){
 
         List<Channels> channelsList = channelService.getChannelsList(name,status,appType,parentId);
         List<ChannelsVO> channelsVOList = new ArrayList<ChannelsVO>();
@@ -189,7 +189,7 @@ public class ChannelManageController extends BaseController{
      */
     @RequestMapping(value = ChannelMsgReq.FIRST_TAB_LIST_REQ)
     @ResponseBody
-    public List<ChannelsVO> getFirstTabList(final String name, final Long parentId, final Integer appType){
+    public List<ChannelsVO> getFirstTabList(final String name, final String parentId, final Integer appType){
         List<ChannelsVO> allChannelsVOList = channelService.getTabs(name,parentId,appType);
         List<ChannelsVO> channelsVOList = Lists.newArrayList();
         for(ChannelsVO channelsVO : allChannelsVOList){
@@ -209,7 +209,7 @@ public class ChannelManageController extends BaseController{
      */
     @RequestMapping(value = ChannelMsgReq.SECOND_TAB_LIST_REQ)
     @ResponseBody
-    public List<ChannelsVO> getSecondTabList(final String name, final Long parentId, final Integer appType){
+    public List<ChannelsVO> getSecondTabList(final String name, final String parentId, final Integer appType){
         List<ChannelsVO> allChannelsVOList = channelService.getTabs(name,parentId,appType);
         List<ChannelsVO> channelsVOList = Lists.newArrayList();
         for(ChannelsVO channelsVO : allChannelsVOList){
@@ -230,7 +230,7 @@ public class ChannelManageController extends BaseController{
      */
     @RequestMapping(value = ChannelMsgReq.UPDATE_TAB_REQ)
     @ResponseBody
-    public int updateTab(final Long editId, final String editChannelName, final Long parentIdd){
+    public int updateTab(final Long editId, final String editChannelName, final String parentIdd){
         Channels channels = new Channels();
         channels.setId(editId);
         channels.setName(editChannelName);

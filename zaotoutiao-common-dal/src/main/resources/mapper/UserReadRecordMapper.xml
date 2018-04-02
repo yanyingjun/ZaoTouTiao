@@ -303,7 +303,7 @@
     FROM user_read_record as r
     JOIN channels as c
     ON r.channelId = c.channelId
-    WHERE c.parentId in(select id from channels WHERE parentId = #{parentId})
+    WHERE c.parentId in(select channelId from channels WHERE parentId = #{parentId})
     <if test="date != null">
       AND date( #{date} ) = date(r.create_date)
     </if>
@@ -341,7 +341,7 @@
   <select id="getSecondTabNum" parameterType="Long" resultType="Long">
     SELECT count(channelId) as readNum
     FROM user_read_record
-    WHERE channelId in(select channelId from channels where id = #{id})
+    WHERE channelId = #{channelId}
     <if test="date != null">
       AND date( #{date} ) = date(create_date)
     </if>
@@ -353,7 +353,7 @@
   <select id="getInfoId2RankTop30" parameterType="map" resultType="java.lang.String">
     SELECT infoId
     FROM user_read_record
-    WHERE channelId in(select channelId from channels where parentId in(select id from channels where parentId = #{navId}))
+    WHERE channelId in(select channelId from channels where parentId in(select channelId from channels where parentId = #{navChannelId}))
     <if test="date != null">
       AND date( #{date} ) = date(create_date)
     </if>
@@ -368,7 +368,7 @@
   <select id="getInfoId2RankTop30ByFirst" parameterType="map" resultType="java.lang.String">
     select infoId
     from user_read_record
-    where channelId in( select channelId from channels where parentId = #{navId})
+    where channelId in( select channelId from channels where parentId = #{navChannelId})
     <if test="date != null">
       AND date( #{date} ) = date(create_date)
     </if>
@@ -383,7 +383,7 @@
   <select id="getInfoId2RankTop30BySecond" parameterType="map" resultType="java.lang.String">
     SELECT infoId
     from user_read_record
-    where channelId in(SELECT channelId from channels where id = #{navId})
+    where channelId = #{navChannelId}
     <if test="date != null">
       AND date( #{date} ) = date(create_date)
     </if>
@@ -405,5 +405,20 @@
     <if test="date == null and dateNum != null">
       AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(create_date)
     </if>
+  </select>
+
+  <select id="getInfoId2RankTop100" parameterType="map" resultType="java.lang.String">
+    SELECT infoId
+    from user_read_record
+    where channelId in(SELECT channelId from channels where appType = #{appType})
+    <if test="date != null">
+      AND date( #{date} ) = date(create_date)
+    </if>
+    <if test="date == null and dateNum != null">
+      AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(create_date)
+    </if>
+    group by infoId
+    order by count(infoId) desc
+    limit 100
   </select>
 </mapper>

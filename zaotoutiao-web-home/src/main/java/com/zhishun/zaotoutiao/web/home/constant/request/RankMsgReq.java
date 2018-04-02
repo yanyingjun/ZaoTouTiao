@@ -64,6 +64,11 @@ public class RankMsgReq {
     public static final String GET_INFO_RANK_LIST_REQ = "/info/rank/list";
 
     /**
+     * 获得info总排行100
+     */
+    public static final String GET_ALL_INFO_RANK_LIST_REQ = "/all/info/rank/list";
+
+    /**
      * 获取新闻详情或视频URL
      */
     public static final String GET_INFO_CONTENT_BY_ID_REQ = "/info/rank/content";

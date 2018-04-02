@@ -48,7 +48,7 @@ public class ChannelServiceImpl implements IChannelService{
     }
 
     @Override
-    public List<Channels> getChannelsList(String name, Integer status, Integer appType, Long parentId) {
+    public List<Channels> getChannelsList(String name, Integer status, Integer appType, String parentId) {
         Map<String,Object> map = Maps.newHashMap();
         map.put("name",name);
         map.put("status",status);
@@ -149,7 +149,7 @@ public class ChannelServiceImpl implements IChannelService{
      */
     @Override
     public int addTheChannel(Channels channels) {
-        channels.setParentId(0L);
+        channels.setParentId("0");
         channels.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
         channels.setUpdateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
         //新增排序数字最大，排在最后面
@@ -177,7 +177,7 @@ public class ChannelServiceImpl implements IChannelService{
 
 
     @Override
-    public List<ChannelsVO> getTabs(String name, Long parentId, Integer appType) {
+    public List<ChannelsVO> getTabs(String name, String parentId, Integer appType) {
         Map map = Maps.newHashMap();
         map.put("name",name);
         map.put("parentId",parentId);
@@ -189,6 +189,7 @@ public class ChannelServiceImpl implements IChannelService{
             channelsVO.setName(channels.getName());
             channelsVO.setId(channels.getId());
             channelsVO.setUpdateDate(channels.getUpdateDate());
+            channelsVO.setChannelId(channels.getChannelId());
             //设置类别名
             if(channels.getAppType() == 1){
                 channelsVO.setTypeName("文章");
@@ -196,12 +197,12 @@ public class ChannelServiceImpl implements IChannelService{
                 channelsVO.setTypeName("新闻");
             }
             //设置上一级标签名称
-            channelsVO.setParentTab(channelsMapper.selectByPrimaryKey(channels.getParentId()).getName());
+            channelsVO.setParentTab(channelsMapper.selectByPrimaryKey(channelsMapper.getIdByChannelId(channels.getParentId())).getName());
             //假如该列表是二级标签，那么上一级标签还有导航名
-            Long showId = channelsMapper.selectByPrimaryKey(channels.getParentId()).getParentId();
-            if(0 != showId){
+            String showId = channelsMapper.selectByPrimaryKey(channelsMapper.getIdByChannelId(channels.getParentId())).getParentId();
+            if(!"0".equals(showId)){
                 //设置导航标签名
-                channelsVO.setAncestryTab(channelsMapper.selectByPrimaryKey(showId).getName());
+                channelsVO.setAncestryTab(channelsMapper.selectByPrimaryKey(channelsMapper.getIdByChannelId(showId)).getName());
             }
             channelsVOList.add(channelsVO);
         }

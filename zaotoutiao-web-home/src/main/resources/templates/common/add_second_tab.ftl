@@ -33,13 +33,13 @@
                     <td>导航:</td>
                     <td><input id="parentIdDh" class="easyui-combobox" name="parentIdDh" data-options="
 					method:'get',
-					valueField:'id',
+					valueField:'channelId',
 					textField:'name',
 					panelHeight:'auto'"></td>
                     <td>一级标签:</td>
                     <td><input id="parentId" class="easyui-combobox" name="parentId" data-options="
 					method:'get',
-					valueField:'id',
+					valueField:'channelId',
 					textField:'name',
 					panelHeight:'auto'"></td>
                 <#--<td>状态：</td>-->
@@ -92,7 +92,7 @@
         onSelect: function (row) {
             if (row != null) {
                 $('#parentId').combobox({
-                    url: "/first/tab/list?parentId=" + row.id
+                    url: "/first/tab/list?parentId=" + row.channelId
                 });
             }
         }

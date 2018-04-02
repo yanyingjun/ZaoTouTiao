@@ -53,7 +53,7 @@
                name="parentIdDh"
                data-options="
 					method:'get',
-					valueField:'id',
+					valueField:'channelId',
 					textField:'name',
 					panelHeight:'auto'
 			">
@@ -62,7 +62,7 @@
                name="parentId"
                data-options="
 					method:'get',
-					valueField:'id',
+					valueField:'channelId',
 					textField:'name',
 					panelHeight:'auto'
 			">
@@ -257,7 +257,7 @@
         onSelect: function (row) {
             if (row != null) {
                 $('#parentId').combobox({
-                    url: "/first/tab/list?parentId=" + row.id
+                    url: "/first/tab/list?parentId=" + row.channelId
                 });
             }
         }
@@ -309,7 +309,7 @@
                     <td><input id="parentIdDhh" class="easyui-combobox" name="parentIdDhh"
                                data-options="
                                                 method:'get',
-                                                valueField:'id',
+                                                valueField:'channelId',
                                                 textField:'name',
                                                 panelHeight:'auto'">
                 </tr>
@@ -321,7 +321,7 @@
                     <td><input id="parentIdd" class="easyui-combobox" name="parentIdd"
                                data-options="
                                                 method:'get',
-                                                valueField:'id',
+                                                valueField:'channelId',
                                                 textField:'name',
                                                 panelHeight:'auto'"></td>
                 </tr>
@@ -345,7 +345,7 @@
                 onSelect: function (row) {
                     if (row != null) {
                         $('#parentIdd').combobox({
-                            url: "/first/tab/list?parentId=" + row.id
+                            url: "/first/tab/list?parentId=" + row.channelId
                         });
                     }
                 }

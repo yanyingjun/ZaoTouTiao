@@ -157,7 +157,7 @@ public class ThirdInfoController extends BaseController{
                                 channels.setChannelId(job.getString("c"));
                                 channels.setStatus(1);
                                 channels.setAppType(ChannelEnum.NEWS.getValue());
-                                channels.setParentId(0L);
+                                channels.setParentId("0");
                                 channels.setChannelOrder(i+1);
                                 channels.setChannelType(i+1);
                                 channels.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));
@@ -283,7 +283,7 @@ public class ThirdInfoController extends BaseController{
                             channels.setChannelId(job.getString("id"));
                             channels.setStatus(1);
                             channels.setAppType(ChannelEnum.VIDEO.getValue());
-                            channels.setParentId(0L);
+                            channels.setParentId("0");
                             channels.setChannelOrder(i+1);
                             channels.setChannelType(i+1);
                             channels.setCreateDate(DateUtil.toString(new Date(), DateUtil.DEFAULT_DATETIME_FORMAT));

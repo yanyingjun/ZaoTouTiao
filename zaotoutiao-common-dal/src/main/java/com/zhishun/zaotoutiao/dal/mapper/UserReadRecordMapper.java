@@ -149,29 +149,37 @@ public interface UserReadRecordMapper {
 
     /**
      * 获得导航阅读前30infoId
-     * @param map 导航Id navId
+     * @param map 导航infoId navChannelId
      * @return
      */
     List<String> getInfoId2RankTop30(Map<String,Object> map);
 
     /**
      * 获得一级标签阅读前30infoId
-     * @param map 一级标签Id navId
+     * @param map 一级标签infoId navChannelId
      * @return
      */
     List<String> getInfoId2RankTop30ByFirst(Map<String,Object> map);
 
     /**
      * 获得二级标签阅读前30infoId
-     * @param map 二级标签Id navId
+     * @param map 二级标签infoId navChannelId
      * @return
      */
 
     List<String> getInfoId2RankTop30BySecond(Map<String,Object> map);
+
     /**
      * 获取单个新闻的阅读数
      * @param map infoId
      * @return
      */
     Long getReadNumByOneInfo(Map<String,Object> map);
+
+    /**
+     * 获取新闻或视频总排行的前100
+     * @param map
+     * @return
+     */
+    List<String> getInfoId2RankTop100(Map<String,Object> map);
 }

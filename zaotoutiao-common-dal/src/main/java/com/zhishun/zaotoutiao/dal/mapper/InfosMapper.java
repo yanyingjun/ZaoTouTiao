@@ -74,7 +74,7 @@ public interface InfosMapper {
      * @param infoIdList
      * @return
      */
-    List<InfosVO> listOfTot30(@Param("infoIdList") List<String> infoIdList);
+    List<InfosVO> listOfTot(@Param("infoIdList") List<String> infoIdList);
 
     /**
      * 根据id获得新闻内容

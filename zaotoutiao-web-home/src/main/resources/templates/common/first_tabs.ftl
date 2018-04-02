@@ -50,7 +50,7 @@
                name="parentId"
                data-options="
 					method:'get',
-					valueField:'id',
+					valueField:'channelId',
 					textField:'name',
 					panelHeight:'auto'
 			">
@@ -280,7 +280,7 @@
                         <td>导航</td>
                         <td><input id="parentIdd" class="easyui-combobox" name="parentIdd" data-options="
 					method:'get',
-					valueField:'id',
+					valueField:'channelId',
 					textField:'name',
 					panelHeight:'auto'"></td>
                     </tr>

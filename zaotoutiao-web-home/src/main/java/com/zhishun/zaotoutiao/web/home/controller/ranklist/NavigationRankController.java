@@ -118,7 +118,7 @@ public class NavigationRankController extends BaseController{
      */
     @RequestMapping(value = RankMsgReq.FIRST_TAB_TANK_LIST_REQ)
     @ResponseBody
-    public List<NavigationVO> firstTabList(Integer dateNum, String date, @RequestParam(value = "appType",defaultValue = "1") Integer appType,Long parentId){
+    public List<NavigationVO> firstTabList(Integer dateNum, String date, @RequestParam(value = "appType",defaultValue = "1") Integer appType,String parentId){
         return userReadService.getFirstTabList(dateNum, date, appType,parentId);
     }
 
@@ -132,23 +132,35 @@ public class NavigationRankController extends BaseController{
      */
     @RequestMapping(value = RankMsgReq.SECOND_TAB_TANK_LIST_REQ)
     @ResponseBody
-    public List<NavigationVO> secondTabList(Integer dateNum, String date, @RequestParam(value = "appType",defaultValue = "1") Integer appType, Long parentId){
+    public List<NavigationVO> secondTabList(Integer dateNum, String date, @RequestParam(value = "appType",defaultValue = "1") Integer appType, String parentId){
         return userReadService.getSecondTabList(dateNum, date, appType,parentId);
     }
 
     /**
      * 获得info排行前30
-     * @param navId
+     * @param navChannelId
      * @param theClass
      * @return
      */
     @RequestMapping(value = RankMsgReq.GET_INFO_RANK_LIST_REQ)
     @ResponseBody
-    public List<InfoRankVO> infoList(Long navId,@RequestParam(value = "theClass",defaultValue = "0")int theClass,Integer dateNum, String date){
-        if(null == navId){
+    public List<InfoRankVO> infoList(String navChannelId,@RequestParam(value = "theClass",defaultValue = "0")int theClass,Integer dateNum, String date){
+        if(null == navChannelId || navChannelId.isEmpty()){
             return null;
         }
-        return userReadService.getInfoRankVOList(navId,theClass,dateNum,date);
+        return userReadService.getInfoRankVOList(navChannelId,theClass,dateNum,date);
+    }
+
+    /**
+     * 获得info总排行前100
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @return
+     */
+    @RequestMapping(value = RankMsgReq.GET_ALL_INFO_RANK_LIST_REQ)
+    public List<InfoRankVO> infoAllList(Integer dateNum,String date, @RequestParam(value = "appType",defaultValue = "1")Integer appType){
+        return userReadService.getAllInfoRankVOList(dateNum,date,appType);
     }
 
     /**

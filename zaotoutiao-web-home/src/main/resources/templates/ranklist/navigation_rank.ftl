@@ -236,12 +236,11 @@
 
 
     function doQuery(value,row,index){
-        return  '<a href="#" onclick="doRead('+row.id+',\''+row.readNum+'\')">查看</a>';
-
+        return  '<a href="#" onclick="doRead(\''+row.channelId+'\',\''+row.readNum+'\')">查看</a>';
     }
 
     //查看列表
-    doRead = function (id,readNum){
+    doRead = function (channelId,readNum){
         if(0 == readNum){
             $.messager.alert('获取列表失败', '该标签下阅读量为0', 'error');
         }else{
@@ -270,7 +269,7 @@
             $('#ggg').datagrid('load',{
                 date: date,
                 dateNum: dateNum,
-                navId: id,
+                navChannelId: channelId,
                 theClass: 0
             });
             $('#dlg').dialog('open');

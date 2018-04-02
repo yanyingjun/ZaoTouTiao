@@ -120,7 +120,7 @@ public class ContentController extends BaseController{
      * @return
      */
     @RequestMapping(value = "/subnavigation")
-    public List<Channels> getSubnavigation(Long parentId, Integer appType){
+    public List<Channels> getSubnavigation(String parentId, Integer appType){
         List<Channels> list = channelService.getChannelsList(null, 1, appType, parentId);
         return list;
     }

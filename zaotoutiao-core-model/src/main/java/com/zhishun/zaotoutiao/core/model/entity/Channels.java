@@ -61,9 +61,9 @@ public class Channels implements Serializable {
     private Integer appType;
 
     /**
-     * 父类Id
+     * 父类infoId
      */
-    private Long parentId;
+    private String parentId;
 
     public Integer getAppType() {
         return appType;
@@ -73,11 +73,11 @@ public class Channels implements Serializable {
         this.appType = appType;
     }
 
-    public Long getParentId() {
+    public String getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
     }
 

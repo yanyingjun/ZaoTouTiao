@@ -29,7 +29,7 @@ public interface IChannelService {
      * @param parentId
      * @return
      */
-    List<Channels> getChannelsList(String name, Integer status, Integer appType, Long parentId);
+    List<Channels> getChannelsList(String name, Integer status, Integer appType, String parentId);
 
     /**
      * 新增导航
@@ -125,7 +125,7 @@ public interface IChannelService {
      * @param appType
      * @return
      */
-    List<ChannelsVO> getTabs(String name, Long parentId, Integer appType);
+    List<ChannelsVO> getTabs(String name, String parentId, Integer appType);
 
     /**
      * 获取导航标签类别列表

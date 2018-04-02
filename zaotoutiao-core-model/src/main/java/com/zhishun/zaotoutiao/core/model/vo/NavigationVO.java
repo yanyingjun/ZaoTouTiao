@@ -19,8 +19,19 @@ public class NavigationVO {
      * Id
      */
     private Long id;
+
     /**
-     * 父id
+     * channelId
+     */
+    private String channelId;
+
+    /**
+     * 父channelId
+     */
+    private String parentId;
+
+    /**
+     * 类型
      */
     private Integer appType;
     /**
@@ -37,6 +48,22 @@ public class NavigationVO {
      * 下一级标签（前三）
      */
     private String channelsTop3;
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
     public String getName() {
         return name;

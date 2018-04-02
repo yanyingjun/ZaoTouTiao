@@ -121,11 +121,11 @@ public interface ChannelsMapper {
     List<Channels> channelListByInfoType(Integer appType);
 
     /**
-     * 根据父id获得子标签列表
+     * 根据父channelId获得子标签列表
      * @param parentId
      * @return
      */
-    List<Channels> getChildTabList(Long parentId);
+    List<Channels> getChildTabList(String parentId);
 
     /**
      * 根据父id及类别获得一级标签列表
@@ -146,4 +146,18 @@ public interface ChannelsMapper {
      * @return
      */
     List<Integer> getAppTypeList();
+
+    /**
+     * 新闻根据自己的二级标签channelId获取导航名称
+     * @param channelId
+     * @return
+     */
+    String getNavNameByChannelId(String channelId);
+
+    /**
+     * 根据channelId获得id
+     * @param channelId
+     * @return
+     */
+    Long getIdByChannelId(String channelId);
 }

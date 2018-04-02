@@ -80,7 +80,7 @@ public interface IUserReadService {
      * @param parentId
      * @return
      */
-    List<NavigationVO> getFirstTabList(Integer dateNum, String date, Integer appType, Long parentId);
+    List<NavigationVO> getFirstTabList(Integer dateNum, String date, Integer appType, String parentId);
 
     /**
      * 获得二级标签排行数据
@@ -90,13 +90,22 @@ public interface IUserReadService {
      * @param parentId
      * @return
      */
-    List<NavigationVO> getSecondTabList(Integer dateNum, String date, Integer appType, Long parentId);
+    List<NavigationVO> getSecondTabList(Integer dateNum, String date, Integer appType, String parentId);
 
     /**
      * 获得info排行前30
-     * @param navId
+     * @param navChannelId
      * @param theClass  判断是导航还是几级标签
      * @return
      */
-    List<InfoRankVO> getInfoRankVOList(Long navId,int theClass,Integer dateNum, String date);
+    List<InfoRankVO> getInfoRankVOList(String navChannelId,int theClass,Integer dateNum, String date);
+
+    /**
+     * 获得新闻或视频的总排行榜
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @return
+     */
+    List<InfoRankVO> getAllInfoRankVOList(Integer dateNum,String date, Integer appType);
 }

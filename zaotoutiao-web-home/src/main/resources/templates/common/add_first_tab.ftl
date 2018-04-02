@@ -34,7 +34,7 @@
                     <td>导航:</td>
                     <td><input id="parentId" class="easyui-combobox" name="parentId" data-options="
 					method:'get',
-					valueField:'id',
+					valueField:'channelId',
 					textField:'name',
 					panelHeight:'auto'"></td>
                     <#--<td>状态：</td>-->

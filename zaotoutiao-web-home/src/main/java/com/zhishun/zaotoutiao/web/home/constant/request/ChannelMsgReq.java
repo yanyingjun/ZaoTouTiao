@@ -86,6 +86,8 @@ public class ChannelMsgReq {
     public static final String SECOND_TAB_LIST_REQ = "/second/tab/list";
 
     /**
+     }
+
      * 更新标签
      */
     public static final String UPDATE_TAB_REQ = "/update/tab";
