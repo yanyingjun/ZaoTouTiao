@@ -665,6 +665,7 @@ public class UserReadServiceImpl implements IUserReadService {
             }
         });
     }
+
     /**
      * 获得InfoRankVO的视图
      * @param infoRankVOList
