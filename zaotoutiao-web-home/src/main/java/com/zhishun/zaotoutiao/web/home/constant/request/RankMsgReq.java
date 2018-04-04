@@ -72,4 +72,9 @@ public class RankMsgReq {
      * 获取新闻详情或视频URL
      */
     public static final String GET_INFO_CONTENT_BY_ID_REQ = "/info/rank/content";
+
+    /**
+     * 关键词排行
+     */
+    public static final String GET_KEYWORDS_LIST_REQ = "/keyword/rank/list";
 }

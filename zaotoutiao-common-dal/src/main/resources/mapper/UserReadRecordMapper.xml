@@ -421,4 +421,16 @@
     order by count(infoId) desc
     limit 100
   </select>
+
+  <select id="getKeyWordsList" parameterType="map" resultType="String">
+    SELECT label
+    FROM user_read_record
+    WHERE channelId in(SELECT channelId from channels where appType = #{appType})
+    <if test="date != null">
+      AND date( #{date} ) = date(create_date)
+    </if>
+    <if test="date == null and dateNum != null">
+      AND DATE_SUB(CURDATE(),INTERVAL #{dateNum} DAY) &lt;= date(create_date)
+    </if>
+  </select>
 </mapper>

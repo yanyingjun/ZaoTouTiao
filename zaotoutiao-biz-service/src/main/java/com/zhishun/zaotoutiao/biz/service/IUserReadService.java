@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zhishun.zaotoutiao.core.model.vo.InfoRankVO;
+import com.zhishun.zaotoutiao.core.model.vo.LabelVO;
 import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
 
 /**
@@ -108,4 +109,13 @@ public interface IUserReadService {
      * @return
      */
     List<InfoRankVO> getAllInfoRankVOList(Integer dateNum,String date, Integer appType);
+
+    /**
+     * 关键词排行（前100）
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @return
+     */
+    List<LabelVO> getLabelVOList(Integer dateNum, String date, Integer appType);
 }

@@ -8,13 +8,16 @@ package com.zhishun.zaotoutiao.biz.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.zhishun.zaotoutiao.biz.service.IUserReadService;
 import com.zhishun.zaotoutiao.biz.service.IUserService;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
 import com.zhishun.zaotoutiao.core.model.entity.*;
+import com.zhishun.zaotoutiao.core.model.enums.ChannelEnum;
 import com.zhishun.zaotoutiao.core.model.enums.GoldSourceEnum;
 import com.zhishun.zaotoutiao.core.model.vo.InfoRankVO;
 import com.zhishun.zaotoutiao.core.model.vo.InfosVO;
+import com.zhishun.zaotoutiao.core.model.vo.LabelVO;
 import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
 import com.zhishun.zaotoutiao.dal.mapper.*;
 import groovy.util.MapEntry;
@@ -494,7 +497,7 @@ public class UserReadServiceImpl implements IUserReadService {
     @Override
     public List<InfoRankVO> getInfoRankVOList(String navChannelId,int theClass,Integer dateNum, String date) {
         List<InfoRankVO> infoRankVOList = Lists.newArrayList();
-        String channelName = channelsMapper.selectByPrimaryKey(channelsMapper.getIdByChannelId(navChannelId)).getName();
+        String channelName = "";
         //判断获取infoIdList的途径
         List<String> infoIdList = Lists.newArrayList();
         Map<String,Object> map = Maps.newHashMap();
@@ -507,12 +510,15 @@ public class UserReadServiceImpl implements IUserReadService {
         if(theClass == 0) {
             //导航
             infoIdList = userReadRecordMapper.getInfoId2RankTop30(map);
+            channelName = channelsMapper.selectByPrimaryKey(channelsMapper.getIdByChannelId(navChannelId)).getName();
         }else if(theClass == 1){
             //一级标签
             infoIdList = userReadRecordMapper.getInfoId2RankTop30ByFirst(map);
+            channelName = channelsMapper.selectByPrimaryKey(channelsMapper.getIdByChannelId(channelsMapper.selectByPrimaryKey(channelsMapper.getIdByChannelId(navChannelId)).getParentId())).getName();
         }else if(theClass == 2){
             //二级标签
             infoIdList = userReadRecordMapper.getInfoId2RankTop30BySecond(map);
+            channelName = channelsMapper.getNavNameByChannelId(navChannelId);
         }
         List<InfosVO> infosVOList30 = Lists.newArrayList();
         //根据infoId获得前30的infosVO
@@ -547,7 +553,7 @@ public class UserReadServiceImpl implements IUserReadService {
         }
         map.put("dateNum",dateNum);
         map.put("date",date);
-        map.put("infoType",appType);
+        map.put("appType",appType);
         List<String> infoIdList = userReadRecordMapper.getInfoId2RankTop100(map);
         List<InfosVO> infoVOList100 = Lists.newArrayList();
         //根据infoId获得前100的infosVO
@@ -563,6 +569,85 @@ public class UserReadServiceImpl implements IUserReadService {
             sortInfoRankVOList(infoRankVOList100);
         }
         return infoRankVOList100;
+    }
+
+    /**
+     * 关键词排行（前100）
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @return
+     */
+    @Override
+    public List<LabelVO> getLabelVOList(Integer dateNum, String date, Integer appType) {
+        if("".equals(date)){
+            date = null;
+        }
+        List<LabelVO> labelVOList = Lists.newArrayList();
+        String infoType = "";
+        if(Objects.equals(appType, ChannelEnum.NEWS.getValue())){
+            infoType = ChannelEnum.NEWS.getName();
+        }
+        if(Objects.equals(appType, ChannelEnum.VIDEO.getValue())){
+            infoType = ChannelEnum.VIDEO.getName();
+        }
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("dateNum",dateNum);
+        map.put("date",date);
+        map.put("appType",appType);
+        //关键词字段列表
+        List<String> keyWordsList = userReadRecordMapper.getKeyWordsList(map);
+        //关键词集合
+        Set<String> setKeyWords = Sets.newHashSet();
+        //关键词和数量映射
+        Map<String,Long> mapKeys = Maps.newHashMap();
+        if(keyWordsList.size() > 0) {
+            for (String keyWords : keyWordsList) {
+                //分割每个字段的关键词
+                if (null != keyWords) {
+                    String[] strArray = keyWords.split("\\|");
+                    for (String str : strArray) {
+                        if (null == mapKeys.get(str)) {
+                            mapKeys.put(str, 1L);
+                        } else {
+                            Long value = mapKeys.get(str);
+                            mapKeys.put(str, value + 1L);
+                        }
+                    }
+                }
+            }
+        }else{
+            return labelVOList;
+        }
+        //排序
+        List<Map.Entry<String,Long>> entryList = Lists.newArrayList(mapKeys.entrySet());
+        entryList.sort(new Comparator<Map.Entry<String, Long>>() {
+            @Override
+            public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
+                int n1 = o1.getValue().intValue();
+                int n2 = o2.getValue().intValue();
+                return n2 - n1;
+            }
+        });
+        //返回列表
+        if(entryList.size() <= 100){
+            for(Map.Entry<String,Long> entry : entryList){
+                LabelVO labelVO = new LabelVO();
+                labelVO.setLabel(entry.getKey());
+                labelVO.setReadNum(entry.getValue());
+                labelVO.setInfoType(infoType);
+                labelVOList.add(labelVO);
+            }
+        }else{
+            for(int i=0; i<100; i++){
+                LabelVO labelVO = new LabelVO();
+                labelVO.setLabel(entryList.get(i).getKey());
+                labelVO.setReadNum(entryList.get(i).getValue());
+                labelVO.setInfoType(infoType);
+                labelVOList.add(labelVO);
+            }
+        }
+        return labelVOList;
     }
 
     /**
@@ -598,10 +683,13 @@ public class UserReadServiceImpl implements IUserReadService {
             infoRankVO.setSource(infosVO.getSource());
 
             infoRankVO.setUpdateTime(infosVO.getUpdateTime());
-            if(!channelName.isEmpty()){
+            //导航名
+            if(null !=channelName){
                 infoRankVO.setChannelName(channelName);
             }else{
-                infoRankVO.setChannelName(channelsMapper.getNavNameByChannelId(infosVO.getChannelId()));
+                String infoChannelId = infosVO.getChannelId();
+                String navName = channelsMapper.getNavNameByChannelId(infoChannelId);
+                infoRankVO.setChannelName(navName);
             }
             //获取标签
             if (infosVO.getFirstLevel() != null) {

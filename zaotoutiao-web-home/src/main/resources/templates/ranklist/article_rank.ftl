@@ -11,7 +11,17 @@
 <body>
 <div class="container">
     <table id="dg" class="easyui-datagrid" title="列表展示" style="width:100%;height:554px"
-           data-options="singleSelect:true,collapsible:true,rownumbers:true,url:'/info/rank/list'">
+           data-options="rownumbers:true,
+                singleSelect:false,
+                autoRowHeight:false,
+                pagination:true,
+                fitColumns:true,
+                striped:true,
+                checkOnSelect:false,
+                selectOnCheck:false,
+                collapsible:true,
+                toolbar:'#tb',
+                pageSize:10">
         <thead>
         <tr>
             <th data-options="field:'infoType',width:40,formatter:function (value,row,index) {
@@ -178,7 +188,7 @@
 
     //数据分页
     $(function () {
-        $('#dg').datagrid({url:"/nav/rank/list"}).datagrid('clientPaging');
+        $('#dg').datagrid({url:"/all/info/rank/list"}).datagrid('clientPaging');
 
     });
 
@@ -233,48 +243,6 @@
         })
     }
 
-
-//    function doQuery(value,row,index){
-//        return  '<a href="#" onclick="doRead('+row.id+',\''+row.readNum+'\')">查看</a>';
-//    }
-
-    //查看列表
-//    doRead = function (id,readNum){
-//        if(0 == readNum){
-//            $.messager.alert('获取列表失败', '该标签下阅读量为0', 'error');
-//        }else{
-//            var dateNum;
-//            var date;
-//            dateNum = $("#dateNumGet").val();
-//            date = $('#getDate').val();
-//            if($("#dateNumGet").val() == -1){
-//                dateNum = null;
-//                if($('#getDate').val() == null || $('#getDate').val() == '') {
-//                    date = new Date(new Date() - 86400000);
-//                    date = date.Format("yyyy-MM-dd");
-//                }
-//            }
-//            if($("#dateNumGet").val() == 1){
-//                dateNum = null;
-//                if($('#getDate').val() == null || $('#getDate').val() == '') {
-//                    date = new Date();
-//                    date = date.Format("yyyy-MM-dd");
-//                }
-//            }
-////            if(dateNum == "" && date == ""){
-////                date = new Date();
-////                date = date.Format("yyyy-MM-dd");
-////            }
-//            $('#ggg').datagrid('load',{
-//                date: date,
-//                dateNum: dateNum,
-//                navId: id,
-//                theClass: 0
-//            });
-//            $('#dlg').dialog('open');
-//        }
-//
-//    };
 
     //详情
     function doInfo(value,row,index){

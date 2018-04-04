@@ -11,6 +11,7 @@ import com.zhishun.zaotoutiao.biz.service.IInfosService;
 import com.zhishun.zaotoutiao.biz.service.IUserReadService;
 import com.zhishun.zaotoutiao.core.model.vo.AppTypeVO;
 import com.zhishun.zaotoutiao.core.model.vo.InfoRankVO;
+import com.zhishun.zaotoutiao.core.model.vo.LabelVO;
 import com.zhishun.zaotoutiao.core.model.vo.NavigationVO;
 import com.zhishun.zaotoutiao.web.home.constant.request.RankMsgReq;
 import com.zhishun.zaotoutiao.web.home.constant.view.RankMsgView;
@@ -137,6 +138,19 @@ public class NavigationRankController extends BaseController{
     }
 
     /**
+     * 关键词排行（前100）
+     * @param dateNum
+     * @param date
+     * @param appType
+     * @return
+     */
+    @RequestMapping(value = RankMsgReq.GET_KEYWORDS_LIST_REQ)
+    @ResponseBody
+    public List<LabelVO> labelVOList(Integer dateNum, String date, @RequestParam(value = "appType",defaultValue = "1") Integer appType){
+        return userReadService.getLabelVOList(dateNum,date,appType);
+    }
+
+    /**
      * 获得info排行前30
      * @param navChannelId
      * @param theClass
@@ -159,6 +173,7 @@ public class NavigationRankController extends BaseController{
      * @return
      */
     @RequestMapping(value = RankMsgReq.GET_ALL_INFO_RANK_LIST_REQ)
+    @ResponseBody
     public List<InfoRankVO> infoAllList(Integer dateNum,String date, @RequestParam(value = "appType",defaultValue = "1")Integer appType){
         return userReadService.getAllInfoRankVOList(dateNum,date,appType);
     }

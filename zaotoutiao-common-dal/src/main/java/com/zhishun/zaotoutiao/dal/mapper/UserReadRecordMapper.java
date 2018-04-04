@@ -182,4 +182,11 @@ public interface UserReadRecordMapper {
      * @return
      */
     List<String> getInfoId2RankTop100(Map<String,Object> map);
+
+    /**
+     * 获取关键词列表
+     * @param map
+     * @return
+     */
+    List<String> getKeyWordsList(Map<String,Object> map);
 }
