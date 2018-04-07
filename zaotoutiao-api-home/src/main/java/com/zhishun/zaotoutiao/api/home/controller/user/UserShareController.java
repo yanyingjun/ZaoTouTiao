@@ -102,6 +102,7 @@ public class UserShareController extends BaseController {
         return dataMap;
     }
 
+
     /**
      * 返回某用户赚取零钱总额和相关页面图片URL
      * @param userId
