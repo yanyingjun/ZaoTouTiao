@@ -510,11 +510,15 @@ public class UserReadServiceImpl implements IUserReadService {
         if(theClass == 0) {
             //导航
             infoIdList = userReadRecordMapper.getInfoId2RankTop30(map);
-            channelName = channelsMapper.selectByPrimaryKey(channelsMapper.getIdByChannelId(navChannelId)).getName();
+            channelName = channelsMapper.selectByPrimaryKey(
+                    channelsMapper.getIdByChannelId(navChannelId)).getName();
         }else if(theClass == 1){
             //一级标签
             infoIdList = userReadRecordMapper.getInfoId2RankTop30ByFirst(map);
-            channelName = channelsMapper.selectByPrimaryKey(channelsMapper.getIdByChannelId(channelsMapper.selectByPrimaryKey(channelsMapper.getIdByChannelId(navChannelId)).getParentId())).getName();
+            channelName = channelsMapper.selectByPrimaryKey(
+                    channelsMapper.getIdByChannelId(
+                            channelsMapper.selectByPrimaryKey(
+                                    channelsMapper.getIdByChannelId(navChannelId)).getParentId())).getName();
         }else if(theClass == 2){
             //二级标签
             infoIdList = userReadRecordMapper.getInfoId2RankTop30BySecond(map);
@@ -674,7 +678,8 @@ public class UserReadServiceImpl implements IUserReadService {
      * @param channelName
      * @return
      */
-    private void getRankVOByInfoVO(List<InfoRankVO> infoRankVOList, List<InfosVO> infoVOList, Map<String,Object> map, String channelName){
+    private void getRankVOByInfoVO(List<InfoRankVO> infoRankVOList, List<InfosVO> infoVOList,
+                                   Map<String,Object> map, String channelName){
         for(InfosVO infosVO : infoVOList){
             InfoRankVO infoRankVO = new InfoRankVO();
             infoRankVO.setId(infosVO.getId());

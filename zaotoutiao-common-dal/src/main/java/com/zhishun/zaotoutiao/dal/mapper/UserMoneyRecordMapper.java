@@ -115,4 +115,11 @@ public interface UserMoneyRecordMapper {
      * @return
      */
     List<UserMoneyRecordVO> listMoneyCountBySource(Map map);
+
+    /**
+     * 根据userId获得用户的总零钱
+     * @param userId
+     * @return
+     */
+    BigDecimal getMoneyByUserId(Long userId);
 }

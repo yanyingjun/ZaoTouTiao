@@ -6,19 +6,25 @@
 
 package com.zhishun.zaotoutiao.biz.service.impl;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zhishun.zaotoutiao.biz.service.IGoldRecordService;
 import com.zhishun.zaotoutiao.biz.service.IUserShareService;
 import com.zhishun.zaotoutiao.common.util.DateUtil;
+import com.zhishun.zaotoutiao.core.model.constant.ImgUrlConstant;
 import com.zhishun.zaotoutiao.core.model.entity.User;
 import com.zhishun.zaotoutiao.core.model.entity.UserShare;
+import com.zhishun.zaotoutiao.core.model.vo.IncomeAndImgUrlVO;
 import com.zhishun.zaotoutiao.dal.mapper.UserGoldRecordMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserMapper;
+import com.zhishun.zaotoutiao.dal.mapper.UserMoneyRecordMapper;
 import com.zhishun.zaotoutiao.dal.mapper.UserShareMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,13 +39,10 @@ public class UserShareServiceImpl implements IUserShareService{
     private UserShareMapper userShareMapper;
 
     @Autowired
-    private UserGoldRecordMapper userGoldRecordMapper;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
     private IGoldRecordService goldRecordService;
+
+    @Autowired
+    private UserMoneyRecordMapper userMoneyRecordMapper;
 
     @Override
     public UserShare getUserShare(Long userId, String type, String source, String infoId, String apprenticeId) {
@@ -105,5 +108,29 @@ public class UserShareServiceImpl implements IUserShareService{
         }
         map.put("type",shareType);
         return map;
+    }
+
+
+    /**
+     * 返回某用户总赚取零钱及相关imgUrl
+     * @param userId
+     * @return
+     */
+    @Override
+    public IncomeAndImgUrlVO getShareIncome(Long userId){
+        //获得某个用户已经获得的零钱总和
+        BigDecimal income = userMoneyRecordMapper.getMoneyByUserId(userId);
+        //封装图片地址
+        List<String> imgUrls = Lists.newArrayList();
+        imgUrls.add(ImgUrlConstant.IMG_1_URL);
+        imgUrls.add(ImgUrlConstant.IMG_2_URL);
+        imgUrls.add(ImgUrlConstant.IMG_3_URL);
+        imgUrls.add(ImgUrlConstant.IMG_4_URL);
+        imgUrls.add(ImgUrlConstant.IMG_5_URL);
+        imgUrls.add(ImgUrlConstant.IMG_6_URL);
+        IncomeAndImgUrlVO incomeAndImgUrlVO = new IncomeAndImgUrlVO();
+        incomeAndImgUrlVO.setMoney(income);
+        incomeAndImgUrlVO.setImgUrls(imgUrls);
+        return incomeAndImgUrlVO;
     }
 }

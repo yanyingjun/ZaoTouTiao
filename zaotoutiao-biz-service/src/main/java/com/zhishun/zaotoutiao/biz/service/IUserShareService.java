@@ -1,6 +1,7 @@
 package com.zhishun.zaotoutiao.biz.service;
 
 import com.zhishun.zaotoutiao.core.model.entity.UserShare;
+import com.zhishun.zaotoutiao.core.model.vo.IncomeAndImgUrlVO;
 
 import java.util.Map;
 
@@ -29,4 +30,11 @@ public interface IUserShareService {
      * @return
      */
     Map<String,Object> shareSuccessGet(Long userId, Long shareId);
+
+    /**
+     * 获取某用户赚取零钱总数及相关url
+     * @param userId
+     * @return
+     */
+    IncomeAndImgUrlVO getShareIncome(Long userId);
 }

@@ -21,6 +21,11 @@ public class ShareMsgReq {
     /**
      * 分享回掉
      */
-    public static final String SHARE_SUCCESS_GET = "Share/success/get";
+    public static final String SHARE_SUCCESS_GET = "/Share/success/get";
+
+    /**
+     * 返回某用户赚取零钱总额和相关页面图片URL
+     */
+    public static final String INCOME_IMG_URL_REQ = "/income/img/url";
 
 }

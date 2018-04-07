@@ -394,4 +394,10 @@
     GROUP BY user_money_record.userId
     ORDER BY sum(user_money_record.money) DESC LIMIT 0,100
   </select>
+
+  <select id="getMoneyByUserId" parameterType="Long" resultType="decimal">
+    SELECT SUM(money) as income
+    FROM user_money_record
+    WHERE userId = #{userId} AND type = 1 GROUP by userId
+  </select>
 </mapper>
